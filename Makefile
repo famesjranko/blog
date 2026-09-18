@@ -39,6 +39,7 @@ build: ## Build dist/ (BASE_PATH=/repo for project-site URLs, empty locally)
 	npm run build
 
 preview: build ## Serve dist/ locally at http://localhost:8000 (PORT=8001 to override)
+	@echo "Preview at http://localhost:$(PORT)/"
 	python3 -m http.server $(PORT) -d dist
 
 clean: ## Remove build output
