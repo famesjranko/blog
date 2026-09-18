@@ -1,0 +1,20 @@
+import type { Essay } from "../content.js";
+import { escapeHtml, page } from "./layout.js";
+
+export function essayPage(essay: Essay): string {
+	const subtitle =
+		essay.description !== undefined
+			? `<p>${escapeHtml(essay.description)}</p>`
+			: "";
+	return page({
+		title: essay.title,
+		content: `<article class="prose">
+<header>
+<h1>${escapeHtml(essay.title)}</h1>
+${subtitle}
+<time datetime="${essay.date.toISOString()}">${escapeHtml(essay.date.toISOString().slice(0, 10))}</time>
+</header>
+${essay.html}
+</article>`,
+	});
+}

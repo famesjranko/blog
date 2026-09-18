@@ -1,0 +1,25 @@
+:root {
+	color-scheme: light dark;
+	--measure: 72ch;
+}
+
+body {
+	margin: 0;
+	font-family: Georgia, "Times New Roman", serif;
+	line-height: 1.6;
+}
+
+main {
+	max-width: var(--measure);
+	margin-inline: auto;
+	padding: 2rem 1rem 4rem;
+}
+
+article p {
+	line-height: 1.75;
+}
+
+blockquote {
+	margin-inline: 2rem;
+	font-style: italic;
+}
