@@ -1,0 +1,67 @@
+---
+title: "On Dretske and the Rejection of the Closure Principle"
+author:
+  name = "Andrew McDonald"
+date: 2020-03-09T03:54:16+11:00
+draft: false
+toc: false
+type:
+  - essays
+  - essay
+tags:
+  - philosophy
+  - essay
+  - dretske
+  - closure
+---
+
+![rope](/img/rope_dretske.jpg)
+
+Fred Dretske (2005) rejects the claim that closure holds over known entailment. Dretske argues that propositions, P, have heavyweight implications, Q, which cannot be known by the same reasons that P is known by; and that if closure holds this leads to scepticism. However, Dretske argues that we can rule out closure by acknowledging that relevant alternatives for P are distinct and separate from those for Q. Thus closure fails and scepticism is avoided. Intuitively I find myself agreeing with Dretske, but think that this intuition itself is part of the larger problem within epistemology. Using ideas from Nagel et al, I contend that the analytic approach to the problems of closure and knowledge itself is potentially limited; that gaps between thought modes can explain cases of apparent loss of knowledge as exposed by Dretske. Moreover, that if we want to further success regarding problems within epistemology a new approach may be needed. I suggest we look toward the rational sciences, and towards a form of experimental epistemology.
+
+It’s commonly thought and reasonable to expect that if we know that a given proposition is true, that we can thereby deduce and know what is subsequent to it, its implications, are true also. If this is the case, knowledge would appear to be closed under known entailment, otherwise known as the closure principle.
+
+>**Closure Principle**: if, while knowing **P**, **S** believes **Q** because **S** knows that **P** entails **Q**, then **S** knows **Q** 
+>
+>(Luper 2016).
+
+However, according to Dretske, knowledge is not closed under known entailment. He argues there are things implied by what we know, that not only do we not know, we can’t know, even if we know they have to be true. This counterintuitive proposal is one that many struggle to accept. He refers to these unknowable implications as heavyweight (hw). Distinguishing them from knowable implications, which are lightweight (lw).  The key difference between heavyweight and lightweight implications is that lightweights can be known by the same reasons that P is known; whereas heavyweights cannot. For Dretske, heavyweight implications are pervasive and irreversibly deleterious to closure, and are what lead to closure failure.
+
+For example, when we see a jar with cookies in it, we come to know P – that there are cookies in the jar – by reason of seeing it. This implies an lw-implication, that the jar is empty is false. I can come to know this lw by the same reason as knowing P, by seeing it. However, there are some implications of cookies-being-in-the-jar, that according to Dretske, are simply “too remote, too distant, to inherit...the sensory evidence [for that] P” (2005 p.30). These are hw-implications. As Dretske points out, the experience of seeing cookies in a cookie jar “is not good reason to believe that idealism is false” (2005 p.30) as it lacks transmissibility for knowing the truth of mind independent objects. This is because “[o]ur ways of discovering P are not necessarily ways of discovering what we know to be implied by P” (2005 p.28). If I was to claim that I knew the physical world was real and my evidence for such a claim was my observance of it, I would instantly fall prey to the sceptical position – I can’t rule out deception from Cartesian demon.  Therefore as Dretske states, “Seeing that P does not mean you can see that Q just because you know P implies Q” (2005 p.29). Dretske calls this type of knowledge “protoknowledge”; things that must be true given what you perceive to be, but that cannot be perceived to be true, even if it is known that it has to be true (2005 p.29).
+
+For instance, imagine you are at an ordinary zoo and you are standing in front of a pen with a sign that reads ‘zebra.’ In this pen there is a zebra, and you believe that in the pen the animal is a zebra. Suddenly you realise that your belief that there is a zebra in the pen implies that it isn’t a cleverly disguised mule. According to Dretske, though you can deduce *not-mule* from your knowledge that there is a zebra in the pen, you can’t know not-mule as you have no method for detecting when it is false. However, if this is the case, then closure across simplification and equivalence fail also. This is because if P entails Q, then P is equivalent to the conjunction of P & Q.
+
+>**The equivalence principle**: **P** entails **Q**; therefore **P** is equal to the conjunction of **P**&**Q**.
+
+>**The simplification principle**: if I know **P**, I can deduce **Q** from **P**, as **P** is equal to **P**&**Q**.
+
+Assuming that closure holds across equivalence, if we know zebra we also know the conjunction zebra and not-mule. Moreover, if we accept that closure holds across simplification, then we will be able to know not-mule from the conjunction of zebra and not-mule. If Dretske is right and we don’t know not-mule from zebra, then we also have to accept that closure fails for equivalence and simplification. For some this cost is too high; contra, Dretske thinks the cost is too high not to as the alternative may be rampant scepticism (2005 p.31).
+
+According to Dretske, heavyweight implications force us to either reject closure or accept rampant scepticism. If closure holds and hw-implications are beyond the measure that P is known, we cannot be sure to know P in the first instance. He thinks if we rule out closure by acknowledging that relevant alternatives for P are distinct and separate from those needed for its hw-implications, that we can avoid this conclusion.  How we come to P, while implying hw-Q, is never the way in which we come to know hw-Q. This is because reasons for hw-Q aren’t relevant given our reasons for detecting P (2005 p.33). Moreover, by retaining closure we actually lose the ordinary “homely” truths that we take for granted; by questioning heavyweight implications of P, knowledge of P seems to evaporate (2005 p.32). 
+
+In essence, this is the Harman-Vogel Paradox (Nagel 2011 2016).  Essentially, there are two questions being asked: the first question is easy; whereas the second question is hard. The easy question implies the hard. For instance, when we’re asked an easy question like ‘who is the current President of the United States?,’ we easily answer that Barak Obama is. However, when asked a question implied by the first, such as ‘do you know that Obama has not died in the last ten minutes?,’ we find ourselves unable to confidently respond. Consequently, this also implies that we don’t know the first question either! It seems by asking the second harder question we have somehow lost knowledge that we once appeared to have. By invoking that very attractive principle of closure, it feels like we have lost knowledge rather than gained it.
+
+Jennifer Nagel suggests that this apparent loss of knowledge may in fact be just that, an appearance of lost knowledge caused by a “switch over” between two types of thinking that we normally have at our disposal (2011 p.3). That these types of cases are exploiting a gap between modes of thought that are both natural to us, but are non-compatible; that of intuitive and reflective thinking (2016). Essentially, when we are asked the first questions and answer confidently that ‘Barak is,’ we’re engaging in intuitive thinking; this is executed without awareness of any sequential progression of thought, it is immediate and confident. Reflective thinking, on the other hand, is the kind we use when working on a mathematical proof; it is sequential, with each step of the process being the beginning of the next and so on. Moreover, each step of the process is retained in “working memory” readily accessible for the following steps of thought. It is this retaining of prior steps that Nagel thinks leads to our apparent loss of knowledge (2016). 
+
+Essentially, we are forced into answering an intuitive type question with our reflective mode of thought, which leads to our apparent loss of previously held knowledge. We engage the first question with our intuitive mode of thought and respectively our reflective mode of thought when we are asked the second harder question; but as we still retain the first question in our working memory, we are forced to reengage the easy question except now with the wrong mode of thought. This leads to cognitive dissonance; where we know yet seemingly don’t know the answer to the first question. I think it is this gap between two modes of thought that is at the heart of the closure debate. 
+
+Regarding this problem, I find my intuitions matching Dretske’s. However, this is part of the problem. The problems of knowledge are essentially problems of intuition; of finding an analysis that best fits our experience of knowledge. Additionally, as Dretske rightly points out, merely matching intuitions against each other won’t resolve them; which is exactly what we’ve been doing, contrasting intuitions through the language of analysis. The underlying assumption being that this is possible; that intuition can be written analytically without loss. This approach assumes a singular, uniform answer is possible. If so, consensus is possible. However, consensus on a theory of knowledge is lacking. This may be because philosophy holds no knowledge (Armstrong 1999). Armstrong contends that the only disciplines that genuinely hold knowledge are the rational sciences. And that it is their ability to build robust consensus on fundamental problems within their domain that display this knowledge. 
+
+If we wish to build genuine knowledge and solve the fundamental problems of epistemology, we may have to find a new approach beyond the analytical. As the rational sciences have shown, there comes a time when we must move from the theoretical to the experimental. I think that time is now for analytic epistemology; at least when it comes to the problems of closure and knowledge as “*the pursuit of analysis [has thus far been] a degenerative research program*” (2000 p.31). I’m not suggesting that Philosophy is dead, that is far too strong a claim to make. Rather, I’m asking an open question against the analytical approach to the problem of knowledge. That epistemology, as approached analytically, has possibly reached its end, that a further approach is needed. In this sense, I think we need to follow suit with the rational sciences and turn towards a form of experimental epistemology. Alternative approaches such as Nagel’s show promise to finally provide data which could move epistemology beyond the purely intuitive, beyond the analytical and into the evidential. To this end the cognitive science would be a natural fit.
+
+In sum, Dretske has shown that there are serious problems with closure that need to be addressed. His solution is to reject closure by accepting a limit on what we can know as implied by P by reference to relevant alternatives, which are determined by how we come to know P. However, we reject closure at the cost of the principles of simplification and equivalence, as the conjunction of P and Q is equal to P; if we can’t necessarily know Q from P, we also can’t necessarily know P or Q respectively by deduction from the conjunction of P&Q. While some think this cost is too great, I agree with Dretske that the alternative cost is higher; that by accepting closure we undermine the homely truths we take for granted and open the way for scepticism. Additionally, in response to Dretske concerns, I raise an open question against epistemic philosophy, questioning the suitability of the analytical approach to the problems of knowledge; the problems of knowledge being problems of intuition. Moreover, with this in mind, alternative interpretations outside of philosophy are not only possible, but that these fields may in fact be better suited for resolving them. For this reason, I suggest a move beyond the analytical and toward experiment; that a form of experimental epistemology is needed if we are ever going to resolve the problems inherent within the intuitive-analytico account of knowledge and thus closure. 
+\
+\
+**References:**
+
+Armstrong, D 1999, ‘Naturalist Program: Epistemology and Ontology’, Proceedings and Addresses of the American Philosophical Association, vol. 73, no. 2, pp. 77-89.
+
+Luper, S 2016, Epistemic Closure, The Stanford Encyclopedia of Philosophy (Spring 2016 Edition), Edward N. Zalta (ed.), viewed 15 October 2016, [link](http://plato.stanford.edu/archives/spr2016/entries/closure-epistemic/).
+
+Nagel, J 2016, Jennifer Nagel: Closure and Defeat, online video, 2 June, Philosophy at the University of Edinburgh. Viewed 14 October 2016, [link](https://www.youtube.com/watch?v=gyySntqfAik).
+
+Nagel, J 2011, ‘The psychological basis of the Harman‐Vogel paradox’, Philosophers' Imprint, vol. 11, no. 5, pp. 1‐28.
+
+Steup, M, & Sosa, E 2005, Contemporary debates in epistemology, 2nd ed. MA: Blackwell Pub.
+
+Williamson, T 2000, Knowledge and its limits, Oxford, Oxford University Press.
