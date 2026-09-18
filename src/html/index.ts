@@ -36,7 +36,7 @@ function essayEntry(essay: Essay): string {
 			: "";
 	const topics =
 		essay.topics.length > 0
-			? `<span>${essay.topics.map((topic) => escapeHtml(topic)).join(" · ")}</span>`
+			? `<span class="entry-topics">${essay.topics.map((topic) => escapeHtml(topic)).join(" · ")}</span>`
 			: "";
 	return `<li><article class="entry">
 <h3><a href="${siteUrl(`/essays/${essay.slug}/`)}">${escapeHtml(essay.title)}</a></h3>
@@ -60,6 +60,7 @@ export function homePage(essays: Essay[]): string {
 		title: "Andrew J. McDonald",
 		description: HERO_STANDFIRST,
 		scripts: [siteUrl("/hero.js")],
+		styles: [siteUrl("/styles.css"), siteUrl("/hero.css")],
 		content: `<section class="hero" data-hero>
 <div class="hero-visual" aria-hidden="true"><span></span><span></span><span></span></div>
 <div class="wrap hero-inner">

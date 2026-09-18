@@ -47,3 +47,11 @@ describe("homePage", () => {
 		expect(html).not.toContain("About");
 	});
 });
+
+describe("stylesheets", () => {
+	it("links the shared and hero stylesheets on the homepage", () => {
+		const html = homePage([sampleEssay()]);
+		expect(html).toContain('<link rel="stylesheet" href="/styles.css">');
+		expect(html).toContain('<link rel="stylesheet" href="/hero.css">');
+	});
+});

@@ -15,7 +15,11 @@ export function header(): string {
 	return (
 		`<header class="site-header"><div class="wrap header-inner">` +
 		`<a class="site-name" href="${siteUrl("/")}">${escapeHtml(SITE_NAME)}</a>` +
-		`<nav aria-label="Primary"><a href="${siteUrl("/essays/")}">Essays</a></nav></div></header>`
+		`<nav class="desktop-nav" aria-label="Primary"><a href="${siteUrl("/essays/")}">Essays</a></nav>` +
+		`<button class="menu-toggle" type="button" popovertarget="mobile-nav" aria-label="Open navigation">` +
+		`<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M2 4h12M2 8h12M2 12h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg>` +
+		`</button>` +
+		`<nav id="mobile-nav" popover aria-label="Mobile"><a href="${siteUrl("/essays/")}">Essays</a></nav></div></header>`
 	);
 }
 
@@ -32,11 +36,13 @@ export function page({
 	content,
 	description,
 	scripts = [],
+	styles = [siteUrl("/styles.css")],
 }: {
 	title: string;
 	content: string;
 	description?: string;
 	scripts?: string[];
+	styles?: string[];
 }): string {
 	return `<!doctype html>
 <html lang="en">
@@ -49,8 +55,7 @@ ${
 		? `<meta name="description" content="${escapeHtml(description)}">
 `
 		: ""
-}<link rel="stylesheet" href="${siteUrl("/styles.css")}">
-${scripts
+}${styles.map((href) => `<link rel="stylesheet" href="${escapeHtml(href)}">\n`).join("")}${scripts
 	.map(
 		(src) => `<script src="${escapeHtml(src)}" defer></script>
 `,

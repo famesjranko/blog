@@ -14,5 +14,6 @@ await generateSite(essays, outDir);
 // checkout without optional assets still builds.
 await cp("static", outDir, { recursive: true }).catch(() => {});
 await cp("styles/main.css", `${outDir}/styles.css`).catch(() => {});
+await cp("styles/hero.css", `${outDir}/hero.css`).catch(() => {});
 
 console.log(`Built ${essays.length} essay(s) -> ${outDir}/`);
