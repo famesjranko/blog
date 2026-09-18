@@ -21,9 +21,15 @@ export const RawFrontmatterSchema = z.object({
 	date: z.unknown(),
 	description: z.string().optional(),
 	draft: z.boolean().default(false),
-	// Hugo legacy
+	// Hugo legacy taxonomy: topics wins over tags, which wins over categories.
 	tags: z.array(z.string()).optional(),
 	categories: z.array(z.string()).optional(),
+	// Hugo legacy presentation metadata. Accepted but deliberately
+	// discarded: never forwarded to EssayMeta.
+	author: z.unknown().optional(),
+	toc: z.unknown().optional(),
+	type: z.unknown().optional(),
+	images: z.unknown().optional(),
 	// New fields
 	topics: z.array(z.string()).optional(),
 	philosophers: z.array(z.string()).optional(),
