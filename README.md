@@ -4,7 +4,7 @@ Tiny custom static-site pipeline: `content/essays/*.md` → TypeScript → `dist
 
 ## Conventions (mechanical layer)
 
-- `make check` / `./check.sh` is the canonical gate; CI runs exactly this.
+- `make check` is the canonical gate (sole definition); `./check.sh` and `npm run check` are compatibility entry points that delegate to it. CI runs `make check`.
 - Order is fast-first: `format:check` → `lint` → `guard` → `typecheck` → `test` → `build`.
 - Biome owns lint + format (`biome.json`); `tsc --noEmit` owns types; Vitest owns tests; `scripts/guard.ts` owns structural budgets.
 - Content model is a typed API: `src/schema.ts` (`EssaySchema`). Malformed frontmatter fails the build.

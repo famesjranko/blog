@@ -10,12 +10,12 @@
 	"scripts": {
 		"build": "tsx src/build.ts",
 		"typecheck": "tsc --noEmit",
-		"lint": "biome lint .",
+		"lint": "biome lint --error-on-warnings .",
 		"guard": "tsx scripts/guard.ts",
 		"format": "biome format --write .",
 		"format:check": "biome format .",
 		"test": "vitest run",
-		"check": "./check.sh"
+		"check": "make check"
 	},
 	"dependencies": {
 		"gray-matter": "^4.0.3",

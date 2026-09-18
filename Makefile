@@ -9,7 +9,13 @@ install: ## Install dependencies
 	npm ci
 
 check: ## Canonical gate (same as CI): format-check + lint + guard + typecheck + test + build
-	./check.sh
+	$(MAKE) --no-print-directory format-check
+	$(MAKE) --no-print-directory lint
+	$(MAKE) --no-print-directory guard
+	$(MAKE) --no-print-directory typecheck
+	$(MAKE) --no-print-directory test
+	$(MAKE) --no-print-directory build
+	echo "OK: all checks passed."
 
 typecheck: ## tsc --noEmit
 	npm run typecheck

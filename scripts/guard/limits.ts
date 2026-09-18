@@ -1,7 +1,7 @@
 import type * as ts from "typescript";
 
-// Structural budgets. Every number here is enforced by ./check.sh,
-// not advisory. Tests get a larger file budget; nothing is excluded.
+// Structural budgets. Every number here is enforced by `make check`
+// (via `make guard`), not advisory. Tests get a larger file budget; nothing is excluded.
 export const MAX_SOURCE_LINES = 250;
 export const MAX_TEST_LINES = 400;
 export const MAX_STYLE_LINES = 400;
