@@ -56,6 +56,7 @@ helper in `src/site.ts` so both rules stay enabled.
 | `make guard`         | Structural budgets (LOC, params, classes, mutations, suppressions) |
 | `make format`        | Rewrite with Biome                        |
 | `npm run build`      | `tsx src/build.ts` → `dist/`              |
+| `make preview`       | Build + serve `dist/` at http://localhost:8000 (`PORT=8001` to override) |
 | `npm run typecheck`  | `tsc --noEmit`                            |
 | `npm test`           | `vitest run`                              |
 

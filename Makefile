@@ -1,7 +1,9 @@
-.PHONY: install check typecheck lint guard format format-check test build clean help
+.PHONY: install check typecheck lint guard format format-check test build preview clean help
+
+PORT ?= 8000
 
 help: ## Show targets
-	@grep -E '^[a-z-]+: ## ' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS=": ## "} {printf "%-12s %s\n", $$1, $$2}'
+	@grep -E '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | sed 's/: [^#]*## /: ## /' | sort | awk 'BEGIN {FS=": ## "} {printf "%-12s %s\n", $$1, $$2}'
 
 install: ## Install dependencies
 	npm ci
@@ -29,6 +31,9 @@ test: ## vitest run
 
 build: ## Build dist/ (BASE_PATH=/repo for project-site URLs, empty locally)
 	npm run build
+
+preview: build ## Serve dist/ locally at http://localhost:8000 (PORT=8001 to override)
+	python3 -m http.server $(PORT) -d dist
 
 clean: ## Remove build output
 	rm -rf dist
