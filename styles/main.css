@@ -241,6 +241,10 @@
 		text-wrap: balance;
 	}
 
+	.prose p {
+		line-height: 1.8;
+	}
+
 	.prose header p {
 		margin: 0 0 0.75rem;
 		color: var(--color-muted);
@@ -252,10 +256,6 @@
 		color: var(--color-muted);
 		font-family: var(--font-ui);
 		font-size: 0.9rem;
-	}
-
-	.prose p {
-		line-height: 1.8;
 	}
 
 	.prose h2,
