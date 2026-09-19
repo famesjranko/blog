@@ -15,6 +15,14 @@ function imageSrc(path: string): string {
 	return path;
 }
 
+function isExternalLink(href: string): boolean {
+	return (
+		href.startsWith("http://") ||
+		href.startsWith("https://") ||
+		href.startsWith("//")
+	);
+}
+
 const ATTRIBUTION_PATTERN = /^\([^()]*\)\.?$/;
 
 type MarkdownToken = ReturnType<MarkdownIt["parse"]>[number];
@@ -165,6 +173,7 @@ function asFigure(
 }
 
 type ImageRenderRule = NonNullable<MarkdownIt["renderer"]["rules"]["image"]>;
+type LinkRenderRule = NonNullable<MarkdownIt["renderer"]["rules"]["link_open"]>;
 
 interface ImageRenderContext {
 	md: MarkdownIt;
@@ -210,6 +219,18 @@ function buildRenderer(): MarkdownIt {
 			return `<figure>${body}<figcaption>${caption}</figcaption></figure>`;
 		};
 	}
+	const renderExternalLink: LinkRenderRule = (tokens, idx, options) => {
+		const link = tokens[idx];
+		if (link !== undefined) {
+			const href = link.attrGet("href");
+			if (href !== null && isExternalLink(href)) {
+				link.attrSet("target", "_blank");
+				link.attrSet("rel", "noopener noreferrer");
+			}
+		}
+		return md.renderer.renderToken(tokens, idx, options);
+	};
+	Object.assign(md.renderer.rules, { link_open: renderExternalLink });
 	return md;
 }
 

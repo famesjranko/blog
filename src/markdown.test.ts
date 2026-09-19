@@ -72,6 +72,28 @@ describe("legacy image paths", () => {
 	});
 });
 
+describe("external links", () => {
+	it("opens external HTTP links in a new tab safely", () => {
+		const html = renderMarkdown("[example](https://example.com)");
+		expect(html).toContain(
+			'<a href="https://example.com" target="_blank" rel="noopener noreferrer">',
+		);
+	});
+
+	it("opens protocol-relative links in a new tab safely", () => {
+		const html = renderMarkdown("[example](//example.com)");
+		expect(html).toContain(
+			'<a href="//example.com" target="_blank" rel="noopener noreferrer">',
+		);
+	});
+
+	it("keeps internal links in the current tab", () => {
+		const html = renderMarkdown("[essay](/essays/something/)");
+		expect(html).toContain('<a href="/essays/something/">');
+		expect(html).not.toContain('target="_blank"');
+	});
+});
+
 describe("jpeg picture fallback", () => {
 	it("wraps internal jpeg images in a picture element with a webp source", () => {
 		const html = renderMarkdown("![watch](/img/essays/x/cover.jpg)");
