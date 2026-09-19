@@ -14,7 +14,6 @@ export function essayPage(essay: Essay): string {
 <header>
 <h1>${escapeHtml(essay.title)}</h1>
 ${subtitle}
-<time datetime="${essay.date.toISOString()}">${escapeHtml(essay.date.toISOString().slice(0, 10))}</time>
 </header>
 ${essay.html}
 </article></div>`,

@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { Essay, Project } from "../content.js";
-import { essayEntry, essayIndexPage, formatDate, homePage } from "./index.js";
-import { cardCover, placeholderStyle } from "./layout.js";
+import { essayEntry, essayIndexPage, homePage } from "./index.js";
+import { cardCover, formatDate, placeholderStyle } from "./layout.js";
 import { projectEntry, projectIndexPage } from "./project.js";
 import { page } from "./layout.js";
 
@@ -86,12 +86,12 @@ describe("homePage hero copy", () => {
 });
 
 describe("homePage featured essays", () => {
-	it("lists the featured essays with metadata", () => {
+	it("lists the featured essays with descriptions and no dates", () => {
 		const html = homePage([sampleEssay()]);
 		expect(html).toContain("Featured essays");
 		expect(html).toContain("On Privacy");
 		expect(html).toContain("A short description.");
-		expect(html).toContain("14 May 2020");
+		expect(html).not.toContain("<time");
 	});
 
 	it("shows two featured essays", () => {
@@ -257,9 +257,10 @@ describe("essayEntry content", () => {
 		expect(html).toContain("entry-topics");
 	});
 
-	it("places the facets row before the date row", () => {
+	it("renders topics without a date row", () => {
 		const html = essayEntry(sampleEssay());
-		expect(html.indexOf("entry-topics")).toBeLessThan(html.indexOf("<time"));
+		expect(html).toContain("entry-topics");
+		expect(html).not.toContain("<time");
 	});
 });
 
@@ -382,9 +383,9 @@ describe("index page parity", () => {
 			"card-media",
 			"card-body",
 			"card-title",
+			"entry-desc",
 			"entry-meta",
 			"entry-topics",
-			"<time",
 		];
 		const entries = [essayEntry(sampleEssay()), projectEntry(sampleProject())];
 		for (const html of entries) {

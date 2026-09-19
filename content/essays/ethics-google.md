@@ -1,5 +1,6 @@
 ---
-title: "On the Ethics of Google’s Use of User Data for Covid-19 Mobility Reporting"
+title: "On Google, User Data, and the Pandemic"
+description: "Kant and Mill on the use of Google user data to track a pandemic."
 date: 2020-08-12T14:18:23+11:00
 cover: /img/essays/ethics-google/cover.jpg
 coverAlt: "google"
@@ -10,13 +11,11 @@ type:
   - essays
   - essay
 tags:
-  - essay
   - ethics
   - kant
   - utilitarianism
-  - google
+  - privacy
   - data
-  - covid-19
 ---
 
 ![google](/img/essays/ethics-google/cover.jpg)

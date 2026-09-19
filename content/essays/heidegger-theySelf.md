@@ -1,5 +1,6 @@
 ---
-title: " \"The Self of everyday Dasein is the they-self, which we distinguish from the authentic Self …\" "
+title: "On Heidegger’s They-Self"
+description: "Heidegger on the they-self, idle talk, and what owning oneself would take."
 author:
   name = "Andrew McDonald"
 date: 2020-09-19T16:51:27+11:00
@@ -10,12 +11,11 @@ toc: false
 type:
   - essays
   - essay
-tags: 
-  - philosophy
-  - essay
+tags:
   - heidegger
   - dasein
   - authenticity
+  - phenomenology
 ---
 
 ![they-self](/img/essays/heidegger-theyself/cover.jpg)

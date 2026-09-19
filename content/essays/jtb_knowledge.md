@@ -1,5 +1,6 @@
 ---
-title: "Analysis: Justified True Belief as Knowledge?"
+title: "Is Justified True Belief Knowledge?"
+description: "Gettier cases and a fourth clause: knowledge as belief tested against the world."
 author:
   name = "Andrew McDonald"
 date: 2016-08-03
@@ -11,8 +12,7 @@ type:
   - essays
   - essay
 tags:
-  - philosophy
-  - essay
+  - epistemology
   - knowledge
   - belief
 ---

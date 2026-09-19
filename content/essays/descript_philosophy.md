@@ -1,5 +1,6 @@
 ---
-title: '"To Know Oneself" or "Caring for Oneself" in both Definition and Description, as it Relates to Philosophy'
+title: "On Knowing Oneself and Caring for Oneself"
+description: "Why 'know thyself' fails as a definition but works as advice on who should philosophise."
 author:
   name = "Andrew McDonald"
 date: 2016-07-22
@@ -11,8 +12,8 @@ type:
   - essays
   - essay
 tags:
-  - philosophy
-  - essay
+  - metaphilosophy
+  - self-knowledge
 ---
 
 ![rocks](/img/essays/descript-philosophy/cover.jpg)

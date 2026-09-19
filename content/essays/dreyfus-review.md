@@ -1,5 +1,6 @@
 ---
-title: "REVIEW: ‘What Could Be More Intelligible Than Everyday Intelligibility? Reinterpreting Division I of Being and Time in the Light of Division II’ (Dreyfus 2005)" 
+title: "On Dreyfus and Everyday Intelligibility"
+description: "Dreyfus on skill, mastery, and world transformation, and where his Heidegger falls short."
 date: 2020-10-10T17:39:34+11:00
 cover: /img/essays/dreyfus-review/cover.jpg
 coverAlt: "transformations"
@@ -9,14 +10,11 @@ toc: false
 type:
   - essays
   - essay
-tags: 
-  - philosophy
-  - essay
+tags:
   - dreyfus
   - heidegger
-  - world-transformers
   - authenticity
-  - intelligibility
+  - phenomenology
 ---
 
 ![transformations](/img/essays/dreyfus-review/cover.jpg)

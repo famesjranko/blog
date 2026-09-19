@@ -1,6 +1,6 @@
 import type { Project } from "../content.js";
 import { siteUrl } from "../site.js";
-import { cardCover, escapeHtml, formatDate, page } from "./layout.js";
+import { cardCover, escapeHtml, page } from "./layout.js";
 
 export function originLabel(origin: Project["origin"]): string {
 	return origin === "university" ? "University project" : "Personal project";
@@ -39,7 +39,7 @@ export function projectEntry(project: Project): string {
 	return `<li><article class="card">${cover}<div class="card-body">
 <h3 class="card-title"><a href="${url}">${escapeHtml(project.title)}</a></h3>
 ${description}
-<p class="entry-meta">${facetList(project)}<time datetime="${project.date.toISOString()}">${formatDate(project.date)}</time></p>
+<p class="entry-meta">${facetList(project)}</p>
 </div></article></li>`;
 }
 
@@ -95,7 +95,7 @@ export function projectPage(project: Project): string {
 		styles: [siteUrl("/styles.css"), siteUrl("/prose.css")],
 		content: `<div class="wrap"><article class="prose project">
 <header class="project-header">
-<p class="project-eyebrow">${originLabel(project.origin)} &middot; <time datetime="${project.date.toISOString()}">${formatDate(project.date)}</time></p>
+<p class="project-eyebrow">${originLabel(project.origin)}</p>
 <h1>${escapeHtml(project.title)}</h1>
 ${lede}
 </header>

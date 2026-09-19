@@ -90,10 +90,11 @@ describe("topicPage", () => {
 		expect(html).toContain("On Privacy");
 	});
 
-	it("renders full entries with links and dates", () => {
+	it("renders full entries with links, descriptions, and no dates", () => {
 		const html = topicPage(ethics, [sampleEssay()]);
 		expect(html).toContain('href="/essays/on-privacy/"');
-		expect(html).toContain("14 May 2020");
+		expect(html).toContain("A short description.");
+		expect(html).not.toContain("<time");
 	});
 
 	it("renders entries as cards in a grid", () => {

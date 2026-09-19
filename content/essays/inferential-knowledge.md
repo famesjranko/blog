@@ -1,5 +1,6 @@
 ---
-title: "On the Evaluation of Human-Like Artificial Intelligence"
+title: "On Evaluating Human-Like AI"
+description: "Turing and Searle on why judging AI is a matter of perspective, not definition."
 author:
   name = "Andrew McDonald"
 date: 2016-07-20
@@ -12,11 +13,8 @@ type:
   - essays
   - essay
 tags:
-  - philosophy
-  - essay
-  - turing
   - ai
-  - knowledge
+  - turing
 ---
 
 ![city](/img/essays/inferential-knowledge/cover.jpg)

@@ -1,5 +1,6 @@
 ---
-title: "On Dretske and the Rejection of the Closure Principle"
+title: "On Dretske and Closure"
+description: "Dretske against closure, Nagel on two minds, and the case for experimental epistemology."
 author:
   name = "Andrew McDonald"
 date: 2020-03-09T03:54:16+11:00
@@ -11,8 +12,7 @@ type:
   - essays
   - essay
 tags:
-  - philosophy
-  - essay
+  - epistemology
   - dretske
   - closure
 ---

@@ -5,10 +5,8 @@ import {
 	topicSlug,
 } from "../content.js";
 import { siteUrl } from "../site.js";
-import { cardCover, escapeHtml, formatDate, page } from "./layout.js";
+import { cardCover, escapeHtml, page } from "./layout.js";
 import { projectEntry } from "./project.js";
-
-export { formatDate };
 
 // Homepage hero copy. Edit freely; no logic depends on it.
 const HERO_EYEBROW = "ANDREW MCDONALD · BACKEND & SYSTEMS ENGINEER · MELBOURNE";
@@ -31,7 +29,7 @@ export function essayEntry(essay: Essay): string {
 ${cover}<div class="card-body">
 <h3 class="card-title"><a href="${url}">${escapeHtml(essay.title)}</a></h3>
 ${description}
-<p class="entry-meta">${topics}<time datetime="${essay.date.toISOString()}">${formatDate(essay.date)}</time></p>
+<p class="entry-meta">${topics}</p>
 </div></article></li>`;
 }
 

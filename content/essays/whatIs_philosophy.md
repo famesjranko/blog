@@ -1,5 +1,6 @@
 ---
-title: "What is Philosophy"
+title: "What Is Philosophy?"
+description: "Thinking about thinking across metaphysics, epistemology, and ethics."
 author:
   name = "Andrew McDonald"
 date: 2016-07-22
@@ -11,9 +12,9 @@ type:
   - essays
   - essay
 tags:
-  - philosophy
-  - essay
-  - knowledge
+  - metaphysics
+  - epistemology
+  - ethics
 ---
 
 ![city](/img/essays/whatis-philosophy/cover.jpg)

@@ -43,11 +43,11 @@ describe("projectEntry card", () => {
 		expect(html).toContain("Connect-4 web");
 	});
 
-	it("shows the origin badge, stack, and date", () => {
+	it("shows the origin badge and stack without a date", () => {
 		const html = projectEntry(sampleProject());
 		expect(html).toContain("Personal project");
 		expect(html).toContain("lisp");
-		expect(html).toContain("15 Mar 2026");
+		expect(html).not.toContain("<time");
 	});
 
 	it("renders a placeholder cover derived from the slug", () => {
@@ -111,9 +111,10 @@ describe("projectEntry meta structure", () => {
 		expect(html).not.toContain("<span>lisp</span>");
 	});
 
-	it("places the facets row before the date row", () => {
+	it("renders facets without a date row", () => {
 		const html = projectEntry(sampleProject());
-		expect(html.indexOf("entry-topics")).toBeLessThan(html.indexOf("<time"));
+		expect(html).toContain("entry-topics");
+		expect(html).not.toContain("<time");
 	});
 });
 
@@ -145,11 +146,11 @@ describe("projectPage header", () => {
 		expect(html).toContain('<div class="project-grid">');
 	});
 
-	it("shows the origin and human date in the eyebrow", () => {
+	it("shows the origin without a date in the eyebrow", () => {
 		const html = projectPage(sampleProject());
 		expect(html).toContain('class="project-eyebrow"');
 		expect(html).toContain("Personal project");
-		expect(html).toContain("15 Mar 2026");
+		expect(html).not.toContain("<time");
 	});
 
 	it("uses the description as the lede and meta description", () => {

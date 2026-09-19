@@ -1,5 +1,6 @@
 ---
-title: "An Exploration of Plato’s Allegory of the Cave"
+title: "On Plato’s Allegory of the Cave"
+description: "The Divided Line, the Forms, and philosophical education through the Cave."
 author:
   name = "Andrew McDonald"
 date: 2016-07-22
@@ -12,9 +13,9 @@ type:
   - essays
   - essay
 tags:
-  - philosophy
-  - essay
   - plato
+  - forms
+  - education
 ---
 
 ![cave](/img/essays/plato-allegory/cover.jpg)

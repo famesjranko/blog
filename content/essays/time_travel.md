@@ -1,5 +1,6 @@
 ---
-title: "Discussion: The Problem of Time Travel to the Past"
+title: "On Time Travel to the Past"
+description: "Reverse causation, causal loops, and why the past stays out of reach."
 author:
   name = "Andrew McDonald"
 date: 2016-07-29
@@ -11,9 +12,9 @@ type:
   - essays
   - essay
 tags:
-  - philosophy
-  - essay
+  - metaphysics
   - time
+  - causation
 ---
 
 ![watch](/img/essays/time-travel/cover.jpg)

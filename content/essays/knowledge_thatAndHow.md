@@ -1,5 +1,6 @@
 ---
-title: "A Naive Exploration on Propositional Knowledge and Counterfactuals"
+title: "On Knowing That and Knowing How"
+description: "Why knowing that grows by negation while knowing how demands lived experience."
 author:
   name = "Andrew McDonald"
 date: 2016-08-06
@@ -11,10 +12,9 @@ type:
   - essays
   - essay
 tags:
-  - philosophy
-  - essay
+  - epistemology
   - knowledge
-  - counter-factuals
+  - counterfactuals
 ---
 
 ![watch](/img/essays/knowledge-thatandhow/cover.jpg)

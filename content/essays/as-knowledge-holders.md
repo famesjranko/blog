@@ -1,15 +1,12 @@
 ---
 title: "Who are we as knowledge holders?"
+description: "Intuitively foundationalists, operationally coherentists, bound by observation and test."
 date: 2016-10-30
 cover: /img/essays/as-knowledge-holders/cover.jpg
 coverAlt: "we as knowers"
-topics:
+tags:
   - epistemology
-  - introspective
-  - intuition
   - knowledge
-  - philosophy
-  - who-are-we
 draft: false
 ---
 

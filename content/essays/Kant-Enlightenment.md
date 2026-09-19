@@ -1,5 +1,6 @@
 ---
-title: "Immanuel Kant, Enlightenment, and the Categories of Reason"
+title: "On Kant and Enlightenment"
+description: "Against Kant's public and private reason, for an Enlightenment of reason alone."
 author:
   name = "Andrew McDonald"
 date: 2016-07-22
@@ -10,9 +11,8 @@ toc: false
 type:
   - essays
   - essay
-tags: 
-  - philosophy
-  - essay
+tags:
+  - enlightenment
   - kant
 ---
 
