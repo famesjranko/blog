@@ -90,7 +90,7 @@ If the time on the clock at the time of the observation matches up with the time
 It is only by further appropriate tests, say checking another clock, looking outside and seeing the Sun is at the expected place in the sky, etc, that the knowledge she has acquired by test can be somewhat retained. Worryingly for some, this may be the best knowledge level that can ever be justifiably known from any position that necessarily entails a first person internalistic perspective as part of the justificational framework. In other words, knowledge is fleeting and momentary. We need to constantly test our internal theories against the world in order to have any form of consistent knowledge. And since it’s always possible that our beliefs could in the future fail such an appropriate test, any knowledge acquired at any moment can only ever be provisional.\
 \
 \
-**A Possible Revision to the *Knowledge* Problem**
+## A Possible Revision to the *Knowledge* Problem
 
 As per Gettier’s examples, it doesn’t appear that we can ever truly avoid the possibility of having justified *false* beliefs. If this is the case as it appears to be, then perhaps we should reverse the knowledge narrative and instead of trying to define what we know to be true, we should try to define what we know not to be true. As the boundary of what we know to be false expands, we also limit what can be true. In this sense knowledge is asymptotic; we aim for truth, but never fully realise it absolutely.
 
@@ -111,7 +111,7 @@ If you made it this far and are interested in a broader overview of knowledge, t
 ___
 \
 \
-**References:**
+## References
 
 Gettier, E 1963, Is Justified True Belief Knowledge?, Analysis, 23:6, pp.121-123.
 

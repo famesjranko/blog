@@ -97,7 +97,7 @@ Finally, in his re-raising the question of Being, Heidegger arguably reorients b
 for oneself.  For my part, within the scope of this discussion, my intention was to do justice in my exposition of them.\
 \
 \
-**References:**
+## References
 
 Daves, S 2013, 'On the Permanence of Heideggerian Authenticity ', in _Theses and Dissertations_, University of Arkansas, < http://scholarworks.uark.edu/etd/842>.
 

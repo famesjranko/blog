@@ -23,7 +23,7 @@ The question of whether or not time travel into the past is possible can be appr
 
 This brief discussion will employ the second approach, examining logical problems that arise by the proposition of time travel to the past; such as the reversal of causation, the emergence of causal loops, and the deficiencies within ordinary language to describe time.
 
-**1. Cause and Effect**
+## 1. Cause and Effect
 
 In our observable universe effects always appear to proceed from prior causes, where every event has a preceding cause; which itself is an effect of a further preceding cause, ad infinitum. This is commonly referred to as the principle of causation and it appears to be a fundamental of nature.  Moreover, causation only ever goes in one direction, from the past to the future. A world in which causation is free to move backwards would look very different to the world we currently observe. If we did live in such a world it wouldn’t be strange to observe events such as an eggs being unscrambled, chocolate and milk being separated from a milkshake, or a window being unbroken by a rock. Modern video recording has allowed us to easily see what this reversible world would look like and it’s an oddly strange one that challenges our perception. These examples showcase the relationship that exists between time and causation; time, like causation, appears to have a preferred direction, commonly referred to as the arrow of time. And with modern recording tech, we’re able to wind the clock backwards and reverse the causal direction.
 
@@ -31,7 +31,7 @@ A key problem of travelling to the past is the problem of reverse-causation. Rev
 
 >“For the slightest impact upon the past will generate a “causal loop,” and thus a familiar paradox of time travel.” (Read 2012)
 
-**2. Causal Loops**
+## 2. Causal Loops
 
 If scenarios where reverse causation is permitted exist, then it may also be possible for causal loops to exist. These causal loops would exhibit events as being both effect and a cause depending on where in the loop you started the clock. An example of such a scenario is presented by Steven Law in his book, The Philosophy Gym (2003):
 
@@ -47,7 +47,7 @@ Lewis’ solution is to say that while it would be strange, it might be possible
 
 In other words, if we go far enough back along any particular series of causes and effects we inevitably reach an aporia, where our explanatory powers ultimately run out. This solution isn’t very satisfactory as it seems to only deflect the problem rather than solve it.  In essence, it’s a non-answer to the problem. Moreover, the idea that there exist real uncaused causes is a highly controversial one. Contra Lewis, Mellor (1998) argues that causal loops are simply impossible on grounds that causality must always progress in the same direction. Additionally, Horwich (1987) argues that while they may in principle be possible, due to physical constraints caused by the extreme energy requirements needed, they are events of high improbability near enough to impossible in practical terms.
 
-**3. The Grandfather Paradox**
+## 3. The Grandfather Paradox
 
 There are further causal loops that are of different types.  One example is the famous Grandfather Paradox. The Grandfather Paradox is a type of causal loop, where instead of lacking an obvious starting point, such as the example of who wrote Superman’s autobiography exposed, creates a contradiction of possible outcomes dependent on events transpiring after the initial action. In this case, rather than needing to explain where the causal chain of events begins, we are faced with the paradox that what we do after effects what happens before. In short, the paradox is caused by the apparent reversal of causal events, where effects precede their causes.
 
@@ -66,7 +66,7 @@ With this approach the causal chain is upheld, we avoid paradoxes and don’t ne
 
 Though, while this approach does resolve the causal problems association with backwards time travel, it’s hard to fully accept this time of travel as time travel in the classic sense. While this may evidentially be the case if backwards time travel was ever to be tested, it is essentially beyond the scope of a philosophical approach to the problem. At the point of testing such a scenario we have crossed from philosophical reasoning to evidentiary reasoning; from philosophy to science.
 
-**4. The Linguistics of Time**
+## 4. The Linguistics of Time
 
 Language has the capacity to trick us into attaching intuitive understandings to counter intuitive concepts. For instance, the terms used for events in time are the same as those used for events in space. We refer to time as moving, passing, and standing still. This shared vocabulary between time and space fools us into presupposing that temporal events share similar qualities to spatial events. According to Read (2012) it is this linguistic sleight of hand that might be the cause for many, if not all of the problems which arise when discussing the possibility of time travel.
 
@@ -88,7 +88,7 @@ As the notion of time travel is counter intuitive and devoid from experience, an
 It is here that I will end this discussion.\
 \
 \
-**References:**
+## References
 
 Friedman, et al 1990, Cauchy Problem in Spacetimes with Closed Timelike Curves, Physical Review, vol. 42, no 6, pp. 1916-1929
 

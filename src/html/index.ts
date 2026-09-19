@@ -29,7 +29,7 @@ export function formatDate(date: Date): string {
 	return `${date.getUTCDate()} ${month} ${date.getUTCFullYear()}`;
 }
 
-function essayEntry(essay: Essay): string {
+export function essayEntry(essay: Essay): string {
 	const description =
 		essay.description !== undefined
 			? `<p class="entry-desc">${escapeHtml(essay.description)}</p>`

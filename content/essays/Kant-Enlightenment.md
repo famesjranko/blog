@@ -41,7 +41,7 @@ Finally, while I agree with Kant’s definition of Enlightenment and his descrip
 In all, abandonment of authority and tradition as valid means of knowledge will be difficult, even destructive, but it is by dismantling that we gain opportunities to rebuild.  Kant’s version of Enlightenment is individualistic, requiring preconditionals to reach humanity as a whole; whereas with addition of Aristotle’s definition of Man and Nietzsche’s view of a fully self actualised Man, a societal level *neo-Enlightenment*, where reason par excellence is the means, in and of itself may be possible.  While this is not the Enlightenment Kant set out to describe it could very well lead to the bettering of Man which Kant was hoping for.\
 \
 \
-**References:**
+## References
 
 Aristotle, ., & Ross, W. D 1981, Aristotle’s Metaphysics, Clarendon Press, Oxford
 

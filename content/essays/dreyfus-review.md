@@ -53,7 +53,7 @@ Considering the above, we need to acknowledge that Heidegger’s complex and sel
 In sum, Dreyfus' take on Heidegger is interesting: on one level he is very considered and well thought out, but on another, there appears to be something fundamentally lacking in his reading of Heidegger, specifically, Being and Time.  In his attempt to correct his mistake, Dreyfus manages to successfully incorporate elements from Kisiel and Kierkegaard, contextualising them within his original reading of Division I.  However, in doing so, Dreyfus highlights the weakness of textual interpretation: it is not clear where Heidegger ends, and Dreyfus begins.  He weighs his reading heavily on equipmentality and skill as practical wisdom, takes an overly optimistic interpretation of possible Heideggerian transformations, and seems to underestimate the role of temporality in primordial intelligibility.  However, we should give Dreyfus a degree of charity in his reading of Heidegger due to its susceptibility to misinterpretation.  While, this seems fair of primordial intelligibility, on the biased progressive direction of authenticity and world transformations, not so much.  So, while Dreyfus succeeds in extending his earlier work on Heidegger toward correcting his mistake, he does not go far enough and remains open to further criticism.\
 \
 \
-**References:**
+## References
 
 Dreyfus, H 2004, ‘What Could Be More Intelligible Than Everyday Intelligibility? Reinterpreting Division I of Being and Time in the Light of Division II’, _Bulletin of Science, Technology & Society_, vol. 24, no. 3, pp. 265-274
 

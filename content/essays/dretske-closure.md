@@ -52,7 +52,7 @@ If we wish to build genuine knowledge and solve the fundamental problems of epis
 In sum, Dretske has shown that there are serious problems with closure that need to be addressed. His solution is to reject closure by accepting a limit on what we can know as implied by P by reference to relevant alternatives, which are determined by how we come to know P. However, we reject closure at the cost of the principles of simplification and equivalence, as the conjunction of P and Q is equal to P; if we can’t necessarily know Q from P, we also can’t necessarily know P or Q respectively by deduction from the conjunction of P&Q. While some think this cost is too great, I agree with Dretske that the alternative cost is higher; that by accepting closure we undermine the homely truths we take for granted and open the way for scepticism. Additionally, in response to Dretske concerns, I raise an open question against epistemic philosophy, questioning the suitability of the analytical approach to the problems of knowledge; the problems of knowledge being problems of intuition. Moreover, with this in mind, alternative interpretations outside of philosophy are not only possible, but that these fields may in fact be better suited for resolving them. For this reason, I suggest a move beyond the analytical and toward experiment; that a form of experimental epistemology is needed if we are ever going to resolve the problems inherent within the intuitive-analytico account of knowledge and thus closure. 
 \
 \
-**References:**
+## References
 
 Armstrong, D 1999, ‘Naturalist Program: Epistemology and Ontology’, Proceedings and Addresses of the American Philosophical Association, vol. 73, no. 2, pp. 77-89.
 

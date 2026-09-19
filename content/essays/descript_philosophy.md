@@ -37,6 +37,6 @@ Like Magee, I too think that personal problems of a philosophical nature are of 
 In this last descriptive sense, we can unpack the two terms ‘caring for oneself’ and ‘know oneself’ further, respectively as: the personal exploration of one’s philosophical problems in a self-less manner and without proprietary.\
 \
 \
-**References:**
+## References
 
 Magee, B 1997, Confessions of a philosopher, Random House, NY

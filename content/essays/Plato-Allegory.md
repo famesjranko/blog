@@ -46,7 +46,7 @@ Upon his return, the prisoner now changed by his education of the Forms, struggl
 In sum, the strength of Plato’s Allegory is its ability to touch on so many distinct areas of thought.  Using knowledge as an example we can see he touches on ideas such as: what is knowledge and how we come to know it; how society views and values knowledge; the limitation of the senses and the potential scope of the intellect.  The fact that his allegory has remained relevant to this day is incredible when considering the developments throughout the history of western philosophy.  The story underscores the intuitive position that we all find ourselves in regarding the world which we inhabit, of knowing what is real and what is illusory.  Plato’s solution of the Forms may be limited by modern evidential reasoning, but it still finds a home in areas of modern metaphysical logic, and, not least, society as a whole.  We intuitively find ourselves within Plato’s cave and for this reason the problems raised by it have endured and will continue to.\
 \
 \
-**References:**
+## References
 
 Groarke, L 2016,  Aristotle: Logic, Internet Encyclopedia of Philosophy, viewed 22 April 2016, [link](http://www.iep.utm.edu/aris-log/).
 
