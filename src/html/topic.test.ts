@@ -95,6 +95,12 @@ describe("topicPage", () => {
 		expect(html).toContain("14 May 2020");
 	});
 
+	it("renders entries as cards in a grid", () => {
+		const html = topicPage(ethics, [sampleEssay()]);
+		expect(html).toContain('<ol class="card-grid">');
+		expect(html).toContain('<article class="card">');
+	});
+
 	it("escapes the topic heading", () => {
 		const entry = { name: "<ethics>", slug: topicSlug("<ethics>") };
 		const html = topicPage(entry, [sampleEssay({ topics: ["<ethics>"] })]);

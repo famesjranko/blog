@@ -1,6 +1,12 @@
 import { describe, expect, it } from "vitest";
 import type { Essay } from "../content.js";
-import { formatDate, homePage } from "./index.js";
+import {
+	essayEntry,
+	essayIndexPage,
+	extractCover,
+	formatDate,
+	homePage,
+} from "./index.js";
 
 function sampleEssay(overrides: Partial<Essay> = {}): Essay {
 	return {
@@ -64,5 +70,88 @@ describe("stylesheets", () => {
 		const html = homePage([sampleEssay()]);
 		expect(html).toContain('<link rel="stylesheet" href="/styles.css">');
 		expect(html).toContain('<link rel="stylesheet" href="/hero.css">');
+	});
+});
+
+describe("extractCover", () => {
+	it("returns the first image source and alt text", () => {
+		const html =
+			'<p><img src="/img/jtb_knowledge.jpg" alt="jtb"></p><p><img src="/img/other.jpg" alt="other"></p>';
+		expect(extractCover(html)).toEqual({
+			src: "/img/jtb_knowledge.jpg",
+			alt: "jtb",
+		});
+	});
+
+	it("returns undefined when there is no image", () => {
+		expect(extractCover("<p>Body.</p>")).toBeUndefined();
+	});
+
+	it("returns undefined when the image has no usable source", () => {
+		expect(extractCover('<p><img alt="no source"></p>')).toBeUndefined();
+		expect(extractCover('<p><img src="" alt="empty"></p>')).toBeUndefined();
+	});
+
+	it("defaults missing alt text to an empty string", () => {
+		expect(extractCover('<p><img src="/img/cave_plato.jpg"></p>')).toEqual({
+			src: "/img/cave_plato.jpg",
+			alt: "",
+		});
+	});
+});
+
+describe("essayEntry", () => {
+	it("renders a card with a lazy-loaded cover from the lead image", () => {
+		const html = essayEntry(
+			sampleEssay({
+				html: '<p><img src="/img/jtb_knowledge.jpg" alt="jtb"></p>',
+			}),
+		);
+		expect(html).toContain('<article class="card">');
+		expect(html).toContain('class="card-media"');
+		expect(html).toContain('src="/img/jtb_knowledge.jpg"');
+		expect(html).toContain('loading="lazy"');
+	});
+
+	it("omits the cover block when the essay has no image", () => {
+		const html = essayEntry(sampleEssay());
+		expect(html).toContain('<article class="card">');
+		expect(html).not.toContain("card-media");
+		expect(html).toContain("On Privacy");
+	});
+
+	it("escapes cover alt text", () => {
+		const html = essayEntry(
+			sampleEssay({
+				html: '<p><img src="/img/x.jpg" alt="<evil>"></p>',
+			}),
+		);
+		expect(html).toContain('alt="&lt;evil&gt;"');
+		expect(html).not.toContain('alt="<evil>"');
+	});
+});
+
+describe("essayIndexPage", () => {
+	it("renders a two-column card grid with an essay count", () => {
+		const html = essayIndexPage([
+			sampleEssay(),
+			sampleEssay({ slug: "other", title: "Other" }),
+		]);
+		expect(html).toContain('<ol class="card-grid">');
+		expect(html).toContain("2 essays");
+	});
+
+	it("uses singular wording for a single essay", () => {
+		expect(essayIndexPage([sampleEssay()])).toContain("1 essay");
+	});
+
+	it("renders cards on the homepage recent list", () => {
+		const html = homePage([
+			sampleEssay({
+				html: '<p><img src="/img/jtb_knowledge.jpg" alt="jtb"></p>',
+			}),
+		]);
+		expect(html).toContain('<ol class="card-grid">');
+		expect(html).toContain('class="card-media"');
 	});
 });
