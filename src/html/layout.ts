@@ -73,6 +73,20 @@ export function footer(): string {
 	);
 }
 
+export interface PageScript {
+	src: string;
+	type: "classic" | "module";
+}
+
+function renderScript(script: string | PageScript): string {
+	const src = typeof script === "string" ? script : script.src;
+	const moduleScript = typeof script !== "string" && script.type === "module";
+	const tag = moduleScript
+		? `<script type="module" src="${escapeHtml(src)}"></script>\n`
+		: `<script src="${escapeHtml(src)}" defer></script>\n`;
+	return tag;
+}
+
 export function page({
 	title,
 	content,
@@ -83,7 +97,7 @@ export function page({
 	title: string;
 	content: string;
 	description?: string;
-	scripts?: string[];
+	scripts?: Array<string | PageScript>;
 	styles?: string[];
 }): string {
 	return `<!doctype html>
@@ -91,18 +105,14 @@ export function page({
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="${siteUrl("/favicon.svg")}">
 <title>${escapeHtml(title)}</title>
 ${
 	description !== undefined
 		? `<meta name="description" content="${escapeHtml(description)}">
 `
 		: ""
-}${styles.map((href) => `<link rel="stylesheet" href="${escapeHtml(href)}">\n`).join("")}${scripts
-	.map(
-		(src) => `<script src="${escapeHtml(src)}" defer></script>
-`,
-	)
-	.join("")}</head>
+}${styles.map((href) => `<link rel="stylesheet" href="${escapeHtml(href)}">\n`).join("")}${scripts.map(renderScript).join("")}</head>
 <body>
 ${header()}
 <main>${content}</main>

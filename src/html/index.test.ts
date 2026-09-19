@@ -8,6 +8,7 @@ import {
 	homePage,
 } from "./index.js";
 import { placeholderStyle } from "./layout.js";
+import { page } from "./layout.js";
 
 function sampleEssay(overrides: Partial<Essay> = {}): Essay {
 	return {
@@ -45,6 +46,25 @@ describe("homePage hero", () => {
 		const html = homePage([sampleEssay()]);
 		expect(html).toContain('href="/essays/"');
 		expect(html).not.toContain("About");
+	});
+
+	it("renders the thought-field canvas outside the accessibility tree", () => {
+		const html = homePage([sampleEssay()]);
+		expect(html).toContain('data-thought-field aria-hidden="true"');
+	});
+
+	it("keeps the CSS wash fallback behind the canvas", () => {
+		const html = homePage([sampleEssay()]);
+		expect(html).toContain('class="hero-visual"');
+		expect(html.indexOf("hero-visual")).toBeLessThan(
+			html.indexOf("data-thought-field"),
+		);
+	});
+
+	it("loads the hero field as a deferred-by-default module script", () => {
+		const html = homePage([sampleEssay()]);
+		expect(html).toContain('<script type="module" src="/hero.js"></script>');
+		expect(html).not.toContain('<script src="/hero.js" defer>');
 	});
 });
 
@@ -112,6 +132,29 @@ describe("stylesheets", () => {
 		const html = homePage([sampleEssay()]);
 		expect(html).toContain('<link rel="stylesheet" href="/styles.css">');
 		expect(html).toContain('<link rel="stylesheet" href="/hero.css">');
+	});
+});
+
+describe("page scripts", () => {
+	it("renders classic scripts with defer", () => {
+		const html = page({ title: "T", content: "<p>x</p>", scripts: ["/a.js"] });
+		expect(html).toContain('<script src="/a.js" defer></script>');
+	});
+
+	it("renders module scripts as closed elements without defer", () => {
+		const html = page({
+			title: "T",
+			content: "<p>x</p>",
+			scripts: [{ src: "/a.js", type: "module" }],
+		});
+		expect(html).toContain('<script type="module" src="/a.js"></script>');
+	});
+
+	it("links the svg favicon so browsers skip the default ico request", () => {
+		const html = page({ title: "T", content: "<p>x</p>" });
+		expect(html).toContain(
+			'<link rel="icon" type="image/svg+xml" href="/favicon.svg">',
+		);
 	});
 });
 

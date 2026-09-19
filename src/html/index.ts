@@ -110,10 +110,11 @@ export function homePage(essays: Essay[], projects: Project[] = []): string {
 	return page({
 		title: "Andrew J. McDonald",
 		description: HERO_STANDFIRST,
-		scripts: [siteUrl("/hero.js")],
+		scripts: [{ src: siteUrl("/hero.js"), type: "module" }],
 		styles: [siteUrl("/styles.css"), siteUrl("/hero.css")],
 		content: `<section class="hero" data-hero>
 <div class="hero-visual" aria-hidden="true"><span></span><span></span><span></span></div>
+<canvas class="hero-canvas" data-thought-field aria-hidden="true"></canvas>
 <div class="wrap hero-inner">
 <h1>${escapeHtml(HERO_TITLE)}</h1>
 <p class="hero-standfirst">${escapeHtml(HERO_STANDFIRST)}</p>
