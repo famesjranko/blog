@@ -63,6 +63,28 @@ describe("homePage hero", () => {
 	});
 });
 
+describe("homePage hero copy", () => {
+	it("renders the eyebrow before the headline", () => {
+		const html = homePage([sampleEssay()]);
+		expect(html).toContain(
+			"ANDREW MCDONALD · BACKEND &amp; SYSTEMS ENGINEER · MELBOURNE",
+		);
+		expect(html.indexOf("hero-eyebrow")).toBeLessThan(html.indexOf("<h1>"));
+	});
+
+	it("renders the hero headline across two lines", () => {
+		const html = homePage([sampleEssay()]);
+		expect(html).toContain("From philosophy<br>to software<");
+	});
+
+	it("renders the personal-collection standfirst", () => {
+		const html = homePage([sampleEssay()]);
+		expect(html).toContain(
+			"A personal collection of essays, projects, and notes.",
+		);
+	});
+});
+
 describe("homePage featured essays", () => {
 	it("lists the featured essays with metadata", () => {
 		const html = homePage([sampleEssay()]);
