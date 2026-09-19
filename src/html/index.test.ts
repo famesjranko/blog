@@ -7,6 +7,7 @@ import {
 	formatDate,
 	homePage,
 } from "./index.js";
+import { placeholderStyle } from "./layout.js";
 
 function sampleEssay(overrides: Partial<Essay> = {}): Essay {
 	return {
@@ -154,11 +155,17 @@ describe("essayEntry", () => {
 		expect(html).toContain('loading="lazy"');
 	});
 
-	it("omits the cover block when the essay has no image", () => {
+	it("renders a placeholder cover when the essay has no image", () => {
 		const html = essayEntry(sampleEssay());
 		expect(html).toContain('<article class="card">');
-		expect(html).not.toContain("card-media");
+		expect(html).toContain("card-media--placeholder");
+		expect(html).toContain("--placeholder-hue:");
 		expect(html).toContain("On Privacy");
+	});
+
+	it("derives the essay placeholder from the slug", () => {
+		const html = essayEntry(sampleEssay({ slug: "other" }));
+		expect(html).toContain(`style="${placeholderStyle("other")}"`);
 	});
 
 	it("escapes cover alt text", () => {
@@ -169,6 +176,48 @@ describe("essayEntry", () => {
 		);
 		expect(html).toContain('alt="&lt;evil&gt;"');
 		expect(html).not.toContain('alt="<evil>"');
+	});
+
+	it("omits the description when the essay has none", () => {
+		const html = essayEntry(sampleEssay({ description: undefined }));
+		expect(html).toContain("On Privacy");
+		expect(html).not.toContain("entry-desc");
+	});
+
+	it("keeps the facets row even when the essay has no topics", () => {
+		const html = essayEntry(sampleEssay({ topics: [] }));
+		expect(html).toContain("entry-topics");
+	});
+
+	it("places the facets row before the date row", () => {
+		const html = essayEntry(sampleEssay());
+		expect(html.indexOf("entry-topics")).toBeLessThan(html.indexOf("<time"));
+	});
+});
+
+describe("placeholderStyle", () => {
+	it("is deterministic for the same seed", () => {
+		expect(placeholderStyle("musicmeta")).toBe(placeholderStyle("musicmeta"));
+	});
+
+	it("differs across slugs", () => {
+		expect(placeholderStyle("musicmeta")).not.toBe(
+			placeholderStyle("ip-camera"),
+		);
+	});
+
+	it("emits a hue in range and an offset in range", () => {
+		const style = placeholderStyle("musicmeta");
+		const hue = Number(/--placeholder-hue: (\d+)/.exec(style)?.[1]);
+		const offset = Number(/--placeholder-offset: (\d+)/.exec(style)?.[1]);
+		expect(hue).toBeGreaterThanOrEqual(0);
+		expect(hue).toBeLessThan(360);
+		expect(offset).toBeGreaterThanOrEqual(10);
+		expect(offset).toBeLessThanOrEqual(89);
+	});
+
+	it("emits unitless numbers so CSS can apply its own units", () => {
+		expect(placeholderStyle("musicmeta")).not.toContain("%");
 	});
 });
 

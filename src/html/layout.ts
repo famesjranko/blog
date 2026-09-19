@@ -31,6 +31,28 @@ export function escapeHtml(value: string): string {
 		.replaceAll("'", "&#39;");
 }
 
+function hashSeed(seed: string): number {
+	let hash = 2166136261;
+	for (let index = 0; index < seed.length; index += 1) {
+		hash ^= seed.charCodeAt(index);
+		hash = Math.imul(hash, 16777619);
+	}
+	return hash >>> 0;
+}
+
+/**
+ * Deterministic placeholder artwork values for imageless cards.
+ * Same seed always yields the same hue/offset; unitless numbers only,
+ * safe for inline style attributes. Units are applied in CSS, where
+ * the offset doubles as gradient angle and motif position.
+ */
+export function placeholderStyle(seed: string): string {
+	const hash = hashSeed(seed);
+	const hue = hash % 360;
+	const offset = (Math.floor(hash / 360) % 80) + 10;
+	return `--placeholder-hue: ${hue}; --placeholder-offset: ${offset};`;
+}
+
 export function header(): string {
 	return (
 		`<header class="site-header"><div class="wrap header-inner">` +

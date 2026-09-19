@@ -50,10 +50,21 @@ describe("projectEntry", () => {
 		expect(html).toContain("15 Mar 2026");
 	});
 
-	it("omits the stack block when the project has none", () => {
-		const html = projectEntry(sampleProject({ stack: [] }));
-		expect(html).toContain("Connect-4 web");
-		expect(html).not.toContain("entry-topics");
+	it("renders a placeholder cover derived from the slug", () => {
+		const html = projectEntry(sampleProject());
+		expect(html).toContain("card-media--placeholder");
+		expect(html).toContain("--placeholder-hue:");
+		expect(html).toContain('style="--placeholder-hue:');
+	});
+
+	it("gives distinct placeholders to distinct slugs", () => {
+		const first = projectEntry(sampleProject({ slug: "musicmeta" }));
+		const second = projectEntry(sampleProject({ slug: "ip-camera" }));
+		const styleOf = (html: string): string =>
+			/style="([^"]*)"/.exec(html)?.[1] ?? "";
+		expect(styleOf(first)).not.toBe("");
+		expect(styleOf(second)).not.toBe("");
+		expect(styleOf(first)).not.toBe(styleOf(second));
 	});
 
 	it("omits the description when absent", () => {
@@ -66,6 +77,21 @@ describe("projectEntry", () => {
 		const html = projectEntry(sampleProject({ title: "<evil>" }));
 		expect(html).toContain("&lt;evil&gt;");
 		expect(html).not.toContain("<evil>");
+	});
+});
+
+describe("projectEntry meta structure", () => {
+	it("keeps the facets row with the origin when the project has no stack", () => {
+		const html = projectEntry(sampleProject({ stack: [] }));
+		expect(html).toContain("Connect-4 web");
+		expect(html).toContain("entry-topics");
+		expect(html).toContain("Personal project");
+		expect(html).not.toContain("<span>lisp</span>");
+	});
+
+	it("places the facets row before the date row", () => {
+		const html = projectEntry(sampleProject());
+		expect(html.indexOf("entry-topics")).toBeLessThan(html.indexOf("<time"));
 	});
 });
 

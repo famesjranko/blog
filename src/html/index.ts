@@ -5,7 +5,7 @@ import {
 	topicSlug,
 } from "../content.js";
 import { siteUrl } from "../site.js";
-import { escapeHtml, formatDate, page } from "./layout.js";
+import { escapeHtml, formatDate, page, placeholderStyle } from "./layout.js";
 import { projectEntry } from "./project.js";
 
 export { formatDate };
@@ -40,7 +40,7 @@ export function extractCover(html: string): Cover | undefined {
 function essayCover(essay: Essay): string {
 	const cover = extractCover(essay.html);
 	if (cover === undefined) {
-		return "";
+		return `<div class="card-media card-media--placeholder" style="${placeholderStyle(essay.slug)}" aria-hidden="true"></div>`;
 	}
 	return `<div class="card-media"><img src="${escapeHtml(cover.src)}" alt="${escapeHtml(cover.alt)}" loading="lazy" decoding="async"></div>`;
 }
@@ -52,10 +52,7 @@ export function essayEntry(essay: Essay): string {
 		essay.description !== undefined
 			? `<p class="entry-desc">${escapeHtml(essay.description)}</p>`
 			: "";
-	const topics =
-		essay.topics.length > 0
-			? `<span class="entry-topics">${essay.topics.map((topic) => topicLink(topic)).join("")}</span>`
-			: "";
+	const topics = `<span class="entry-topics">${essay.topics.map((topic) => topicLink(topic)).join("")}</span>`;
 	return `<li><article class="card">
 ${cover}<div class="card-body">
 <h3 class="card-title"><a href="${url}">${escapeHtml(essay.title)}</a></h3>
