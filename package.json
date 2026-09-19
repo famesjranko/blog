@@ -15,6 +15,8 @@
 		"format": "biome format --write .",
 		"format:check": "biome format .",
 		"test": "vitest run",
+		"images": "tsx scripts/optimize-images.ts",
+		"images:check": "tsx scripts/optimize-images.ts --check",
 		"check": "make check"
 	},
 	"dependencies": {
@@ -28,6 +30,7 @@
 		"@biomejs/biome": "^2.5.0",
 		"@types/markdown-it": "^14.1.2",
 		"@types/node": "^22.0.0",
+		"sharp": "^0.35.4",
 		"tsx": "^4.19.0",
 		"typescript": "^5.9.0",
 		"vitest": "^3.2.0"

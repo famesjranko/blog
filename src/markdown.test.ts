@@ -49,3 +49,55 @@ describe("legacy image paths", () => {
 		expect(html).toContain('href="/essays/something/"');
 	});
 });
+
+describe("jpeg picture fallback", () => {
+	it("wraps internal jpeg images in a picture element with a webp source", () => {
+		const html = renderMarkdown("![watch](/img/essays/x/cover.jpg)");
+		expect(html).toContain("<picture>");
+		expect(html).toContain(
+			'<source type="image/webp" srcset="/img/essays/x/cover.webp">',
+		);
+		expect(html).toContain('src="/img/essays/x/cover.jpg"');
+		expect(html).toContain('alt="watch"');
+	});
+
+	it("prefixes both the webp source and the fallback with the base path", () => {
+		vi.stubEnv("BASE_PATH", "/blog");
+		const html = renderMarkdown("![watch](/img/essays/x/cover.jpg)");
+		expect(html).toContain('srcset="/blog/img/essays/x/cover.webp"');
+		expect(html).toContain('src="/blog/img/essays/x/cover.jpg"');
+	});
+
+	it("preserves the image title attribute inside the fallback", () => {
+		const html = renderMarkdown('![watch](/img/essays/x/cover.jpg "My title")');
+		expect(html).toContain("<picture>");
+		expect(html).toContain('title="My title"');
+		expect(html).toContain('src="/img/essays/x/cover.jpg"');
+	});
+
+	it("does not lazy-load markdown images", () => {
+		const html = renderMarkdown("![watch](/img/essays/x/cover.jpg)");
+		expect(html).not.toContain('loading="lazy"');
+	});
+});
+
+describe("non-jpeg images stay plain", () => {
+	it("leaves png images as plain img elements", () => {
+		const html = renderMarkdown("![table](/img/essays/x/table1.png)");
+		expect(html).not.toContain("<picture>");
+		expect(html).toContain('src="/img/essays/x/table1.png"');
+	});
+
+	it("leaves svg images as plain img elements", () => {
+		const html = renderMarkdown("![diagram](/img/projects/c/diagram.svg)");
+		expect(html).not.toContain("<picture>");
+		expect(html).toContain('src="/img/projects/c/diagram.svg"');
+	});
+
+	it("leaves external jpeg images as plain img elements", () => {
+		vi.stubEnv("BASE_PATH", "/blog");
+		const html = renderMarkdown("![x](https://example.com/foo.jpg)");
+		expect(html).not.toContain("<picture>");
+		expect(html).toContain('src="https://example.com/foo.jpg"');
+	});
+});

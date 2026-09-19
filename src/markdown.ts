@@ -1,4 +1,5 @@
 import MarkdownIt from "markdown-it";
+import { webpSrc } from "./images.js";
 import { siteUrl } from "./site.js";
 
 let renderer: MarkdownIt | undefined;
@@ -27,7 +28,13 @@ function buildRenderer(): MarkdownIt {
 			if (typeof src === "string") {
 				tokens[idx]?.attrSet("src", imageSrc(src));
 			}
-			return fallback(tokens, idx, options, env, md.renderer);
+			const img = fallback(tokens, idx, options, env, md.renderer);
+			const webp = typeof src === "string" ? webpSrc(src) : undefined;
+			if (webp === undefined) {
+				return img;
+			}
+			const webpUrl = md.utils.escapeHtml(imageSrc(webp));
+			return `<picture><source type="image/webp" srcset="${webpUrl}">${img}</picture>`;
 		};
 	}
 	return md;

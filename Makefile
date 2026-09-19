@@ -1,4 +1,4 @@
-.PHONY: install check typecheck lint guard format format-check test build preview clean help
+.PHONY: install check typecheck lint guard format format-check test build images images-check preview clean help
 
 PORT ?= 8000
 
@@ -8,12 +8,13 @@ help: ## Show targets
 install: ## Install dependencies
 	npm ci
 
-check: ## Canonical gate (same as CI): format-check + lint + guard + typecheck + test + build
+check: ## Canonical gate (same as CI): format-check + lint + guard + typecheck + test + images-check + build
 	$(MAKE) --no-print-directory format-check
 	$(MAKE) --no-print-directory lint
 	$(MAKE) --no-print-directory guard
 	$(MAKE) --no-print-directory typecheck
 	$(MAKE) --no-print-directory test
+	$(MAKE) --no-print-directory images-check
 	$(MAKE) --no-print-directory build
 	echo "OK: all checks passed."
 
@@ -37,6 +38,12 @@ test: ## vitest run
 
 build: ## Build dist/ (BASE_PATH=/repo for project-site URLs, empty locally)
 	npm run build
+
+images: ## Regenerate WebP sidecars for JPEGs under static/img
+	npm run images
+
+images-check: ## Fail when a JPEG lacks its required WebP sidecar (no conversion)
+	npm run images:check
 
 preview: build ## Serve dist/ locally at http://localhost:8000 (PORT=8001 to override)
 	@echo "Preview at http://localhost:$(PORT)/"

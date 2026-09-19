@@ -1,3 +1,4 @@
+import { webpSrc } from "../images.js";
 import { siteUrl } from "../site.js";
 
 export const SITE_NAME = "Andrew J. McDonald";
@@ -57,6 +58,9 @@ export function placeholderStyle(seed: string): string {
  * Card cover: explicit image when set, deterministic placeholder otherwise.
  * Root-relative sources are prefixed with the site base path, mirroring
  * the markdown image rule, so covers keep working under BASE_PATH.
+ * Internal JPEG covers render as `<picture>` with a WebP source; the
+ * original file remains the fallback `<img>`. All other sources keep
+ * the existing plain `<img>` rendering.
  */
 export function cardCover(
 	src: string | undefined,
@@ -67,7 +71,12 @@ export function cardCover(
 		return `<div class="card-media card-media--placeholder" style="${placeholderStyle(slug)}" aria-hidden="true"></div>`;
 	}
 	const url = src.startsWith("/") && !src.startsWith("//") ? siteUrl(src) : src;
-	return `<div class="card-media"><img src="${escapeHtml(url)}" alt="${escapeHtml(alt ?? "")}" loading="lazy" decoding="async"></div>`;
+	const webp = webpSrc(src);
+	if (webp === undefined) {
+		return `<div class="card-media"><img src="${escapeHtml(url)}" alt="${escapeHtml(alt ?? "")}" loading="lazy" decoding="async"></div>`;
+	}
+	const webpUrl = siteUrl(webp);
+	return `<div class="card-media"><picture><source type="image/webp" srcset="${escapeHtml(webpUrl)}"><img src="${escapeHtml(url)}" alt="${escapeHtml(alt ?? "")}" loading="lazy" decoding="async"></picture></div>`;
 }
 
 export function header(): string {
