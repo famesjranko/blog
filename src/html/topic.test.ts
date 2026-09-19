@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import type { Essay } from "../content.js";
-import { topicPage } from "./topic.js";
+import { type Essay, topicSlug } from "../content.js";
+import { allTopics, topicPage } from "./topic.js";
 
 function sampleEssay(overrides: Partial<Essay> = {}): Essay {
 	return {
@@ -17,9 +17,57 @@ function sampleEssay(overrides: Partial<Essay> = {}): Essay {
 	};
 }
 
+const ethics = { name: "ethics", slug: "ethics" };
+
+describe("topicSlug", () => {
+	it("lowercases and hyphenates spaces", () => {
+		expect(topicSlug("Philosophy of Mind")).toBe("philosophy-of-mind");
+	});
+
+	it("keeps existing hyphens and digits", () => {
+		expect(topicSlug("Covid-19")).toBe("covid-19");
+	});
+
+	it("turns punctuation into hyphens", () => {
+		expect(topicSlug("mind & body")).toBe("mind-body");
+	});
+
+	it("throws instead of producing an empty slug", () => {
+		expect(() => topicSlug("!!!")).toThrow();
+	});
+});
+
+describe("allTopics", () => {
+	it("returns name and slug entries sorted by slug", () => {
+		const entries = allTopics([
+			sampleEssay(),
+			sampleEssay({
+				slug: "on-mind",
+				title: "On Mind",
+				topics: ["Philosophy of Mind"],
+			}),
+		]);
+		expect(entries).toContainEqual({ name: "ethics", slug: "ethics" });
+		expect(entries).toContainEqual({
+			name: "Philosophy of Mind",
+			slug: "philosophy-of-mind",
+		});
+		const slugs = entries.map((e) => e.slug);
+		expect([...slugs].sort()).toEqual(slugs);
+	});
+
+	it("throws when distinct names collapse to one slug", () => {
+		const essays = [
+			sampleEssay({ topics: ["Covid-19"] }),
+			sampleEssay({ slug: "other", title: "Other", topics: ["covid 19"] }),
+		];
+		expect(() => allTopics(essays)).toThrow(/share slug/);
+	});
+});
+
 describe("topicPage", () => {
 	it("uses the shared content column like other index pages", () => {
-		const html = topicPage("ethics", [sampleEssay()]);
+		const html = topicPage(ethics, [sampleEssay()]);
 		expect(html).toContain('<div class="wrap topic-page">');
 	});
 
@@ -30,19 +78,26 @@ describe("topicPage", () => {
 			title: "On Time",
 			topics: ["time"],
 		});
-		const html = topicPage("ethics", [tagged, untagged]);
+		const html = topicPage(ethics, [tagged, untagged]);
 		expect(html).toContain("On Privacy");
 		expect(html).not.toContain("On Time");
 	});
 
+	it("groups essays by slug, not exact spelling", () => {
+		const variant = sampleEssay({ topics: ["Ethics"] });
+		const html = topicPage(ethics, [variant]);
+		expect(html).toContain("On Privacy");
+	});
+
 	it("renders full entries with links and dates", () => {
-		const html = topicPage("ethics", [sampleEssay()]);
+		const html = topicPage(ethics, [sampleEssay()]);
 		expect(html).toContain('href="/essays/on-privacy/"');
 		expect(html).toContain("14 May 2020");
 	});
 
 	it("escapes the topic heading", () => {
-		const html = topicPage("<ethics>", [sampleEssay({ topics: ["<ethics>"] })]);
+		const entry = { name: "<ethics>", slug: topicSlug("<ethics>") };
+		const html = topicPage(entry, [sampleEssay({ topics: ["<ethics>"] })]);
 		expect(html).toContain("<h1>&lt;ethics&gt;</h1>");
 		expect(html).not.toContain("<h1><ethics></h1>");
 	});

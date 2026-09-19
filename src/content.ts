@@ -15,12 +15,27 @@ export interface Essay extends EssayMeta {
 	sourcePath: string;
 }
 
-export function makeSlug(filePath: string): string {
-	const base = path.basename(filePath, path.extname(filePath));
-	return base
+export function slugify(value: string): string {
+	return value
 		.toLowerCase()
 		.replace(/[^a-z0-9]+/g, "-")
 		.replace(/^-+|-+$/g, "");
+}
+
+export function makeSlug(filePath: string): string {
+	return slugify(path.basename(filePath, path.extname(filePath)));
+}
+
+/**
+ * URL slug for a frontmatter topic. Throws on empty results so a
+ * garbage topic fails the build loudly instead of producing /topics//.
+ */
+export function topicSlug(topic: string): string {
+	const slug = slugify(topic);
+	if (slug === "") {
+		throw new Error(`topic ${JSON.stringify(topic)} produces an empty slug`);
+	}
+	return slug;
 }
 
 export async function loadEssay(filePath: string): Promise<Essay> {

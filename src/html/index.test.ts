@@ -37,8 +37,19 @@ describe("homePage", () => {
 		const html = homePage([sampleEssay()]);
 		expect(html).toContain("On Privacy");
 		expect(html).toContain("A short description.");
-		expect(html).toContain("ethics · privacy");
 		expect(html).toContain("14 May 2020");
+	});
+
+	it("links entry topics to their slugified topic pages", () => {
+		const html = homePage([sampleEssay()]);
+		expect(html).toContain('href="/topics/ethics/"');
+		expect(html).toContain('href="/topics/privacy/"');
+	});
+
+	it("slugifies topic links with spaces and capitals", () => {
+		const html = homePage([sampleEssay({ topics: ["Philosophy of Mind"] })]);
+		expect(html).toContain('href="/topics/philosophy-of-mind/"');
+		expect(html).toContain(">Philosophy of Mind</a>");
 	});
 
 	it("links the essays index, not an about page that does not exist", () => {

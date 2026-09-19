@@ -85,9 +85,9 @@ Since we can’t simply ‘walk’ back in time to see if events have changed, w
 
 As the notion of time travel is counter intuitive and devoid from experience, and we have to assume contradictions can’t exist, we are therefore forced to accept that time travel is both logically and experientially impermissible.
 
-It is here that I will end this discussion.\
-\
-\
+It is here that I will end this discussion.
+
+
 ## References
 
 Friedman, et al 1990, Cauchy Problem in Spacetimes with Closed Timelike Curves, Physical Review, vol. 42, no 6, pp. 1916-1929

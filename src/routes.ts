@@ -23,7 +23,11 @@ export async function generateSite(
 	await write(outDir, "index.html", homePage(essays));
 	await write(outDir, "essays/index.html", essayIndexPage(essays));
 	for (const topic of allTopics(essays)) {
-		await write(outDir, `topics/${topic}/index.html`, topicPage(topic, essays));
+		await write(
+			outDir,
+			`topics/${topic.slug}/index.html`,
+			topicPage(topic, essays),
+		);
 	}
 	await write(outDir, "rss.xml", rss(essays));
 	await write(outDir, "sitemap.xml", sitemap(essays));
@@ -40,7 +44,12 @@ function rss(essays: Essay[]): string {
 }
 
 function sitemap(essays: Essay[]): string {
-	const urls = ["", "essays/", ...essays.map((e) => `essays/${e.slug}/`)];
+	const urls = [
+		"",
+		"essays/",
+		...essays.map((e) => `essays/${e.slug}/`),
+		...allTopics(essays).map((t) => `topics/${t.slug}/`),
+	];
 	const items = urls
 		.map((u) => `<url><loc>${siteUrl(`/${u}`)}</loc></url>`)
 		.join("\n");

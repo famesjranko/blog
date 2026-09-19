@@ -21,4 +21,10 @@ describe("essayPage", () => {
 		const html = essayPage(sampleEssay());
 		expect(html).toContain('<div class="wrap"><article class="prose">');
 	});
+
+	it("links the shared and prose stylesheets", () => {
+		const html = essayPage(sampleEssay());
+		expect(html).toContain('<link rel="stylesheet" href="/styles.css">');
+		expect(html).toContain('<link rel="stylesheet" href="/prose.css">');
+	});
 });

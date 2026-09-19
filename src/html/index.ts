@@ -1,4 +1,4 @@
-import type { Essay } from "../content.js";
+import { type Essay, topicSlug } from "../content.js";
 import { siteUrl } from "../site.js";
 import { escapeHtml, page } from "./layout.js";
 
@@ -29,6 +29,10 @@ export function formatDate(date: Date): string {
 	return `${date.getUTCDate()} ${month} ${date.getUTCFullYear()}`;
 }
 
+export function topicLink(topic: string): string {
+	return `<a href="${siteUrl(`/topics/${topicSlug(topic)}/`)}">${escapeHtml(topic)}</a>`;
+}
+
 export function essayEntry(essay: Essay): string {
 	const description =
 		essay.description !== undefined
@@ -36,7 +40,7 @@ export function essayEntry(essay: Essay): string {
 			: "";
 	const topics =
 		essay.topics.length > 0
-			? `<span class="entry-topics">${essay.topics.map((topic) => escapeHtml(topic)).join(" · ")}</span>`
+			? `<span class="entry-topics">${essay.topics.map((topic) => topicLink(topic)).join(" · ")}</span>`
 			: "";
 	return `<li><article class="entry">
 <h3><a href="${siteUrl(`/essays/${essay.slug}/`)}">${escapeHtml(essay.title)}</a></h3>
