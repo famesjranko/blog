@@ -1,6 +1,6 @@
 ---
 title: "Connect-4 web"
-description: "The Connect-4 Lisp heuristic rebuilt as a containerised, horizontally-scalable web service."
+description: "The Connect-4 Lisp heuristic rebuilt as a containerised web service with a browser UI."
 date: 2026-03-15
 draft: false
 featured: true
@@ -16,12 +16,10 @@ stack:
   - javascript
 ---
 
-A web front end and HTTP API around the [Connect-4 heuristic](/projects/connect4-heuristic/). The original game was a terminal toy — load three files, type `(play)`, play in a REPL. This rebuild asks what it takes to put the same AI on the open internet: containerised service, horizontal-scaling story, abuse protection, and a polished UI. The heuristic's ideas are preserved, re-implemented on optimised data structures.
+A web interface around the [Connect-4 heuristic](/projects/connect4-heuristic/). The original game is a terminal toy: load three files, type `(play)`, play in a REPL. This rebuild puts the same AI behind an SBCL + Hunchentoot HTTP API with a vanilla-JS browser frontend, keeping the heuristic's ideas while reworking the engine for server use.
 
-The AI engine was reworked for server use. The board moved from nested lists to a 7×6 array with constant-time access; win detection, move generation, and scoring were rewritten against it. Zobrist hashing with a transposition table caches evaluated positions across the search, and the root search parallelises across a worker pool. Search depth is adjustable per request, from fast-and-casual to slow-and-brutal.
+The AI engine was reworked for performance. The board moved from nested lists to an array with constant-time access, with win detection, move generation, and scoring rewritten against it. A Zobrist-hashed transposition table caches evaluated positions, and the root search parallelises across a worker pool. Search depth is adjustable per request, from fast-and-casual up to depth 7–8.
 
-Game state lives server-side in Redis rather than trusting the client: each browser session holds only a token while the board lives in a capped pool of game slots, allocated atomically with expiry for abandoned games and rate limiting per client. Five REST endpoints cover new games, moves, resignation, board evaluation, and health checks.
+Game state lives server-side in Redis rather than trusting the client: each browser session holds only a token while the board lives in a capped pool of game slots, allocated atomically via a Lua script with heartbeat and inactivity expiry, plus per-client rate limiting. Five endpoints cover new games, moves, resignation, board evaluation, and health checks.
 
 The frontend is framework-free HTML, CSS, and JavaScript with eight visual themes sharing one game module, full keyboard play, and a debug overlay showing the AI's per-column scores.
-
-A working containerised service and public repo — a portfolio piece. The value is the implementation: a 2018 heuristic, unchanged in spirit, serving moves over HTTP.

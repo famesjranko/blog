@@ -134,4 +134,16 @@
 		border: 1px solid var(--color-border);
 		font-size: 0.85rem;
 	}
+
+	.prose p:has(> img + img) {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 1.5rem;
+		justify-content: center;
+	}
+
+	.prose p:has(> img + img) img {
+		border: 1px solid var(--color-border);
+		border-radius: 0.5rem;
+	}
 }
