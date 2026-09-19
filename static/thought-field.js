@@ -202,7 +202,10 @@ function stepParticles(state, count, aspect, time, dt, pointer, meteors) {
 }
 
 const METEOR_SLOTS = 2;
-const METEOR_TRAIL = 22;
+// 40 trail points keeps adjacent soft discs overlapping at DPR 1 even for
+// the fastest meteors (~6px spacing vs ~6px mid-tail diameter); the tail
+// tip stays tapered via the (1-t)^2 alpha falloff in writeSlot.
+const METEOR_TRAIL = 40;
 
 // Rare streaks crossing the field: each meteor is a head point plus a trail
 // of fading points laid along its velocity. Spawns are timed in the render
@@ -253,16 +256,17 @@ function makeMeteors(accent) {
 	};
 }
 
-// Organic pacing: sometimes a lone streak after a long quiet gap,
-// sometimes a volley of two or three in quick succession.
+// Quiet-first pacing: mostly lone streaks after a long gap, with a rarer
+// second streak close behind (a pair, never more — there are only two
+// slots, so a larger volley would smear into a straggler).
 function scheduleNext(meteors, now) {
 	if (meteors.burstLeft > 0) {
 		meteors.burstLeft -= 1;
 		meteors.nextAt = now + 0.8 + Math.random() * 1.7;
 		return;
 	}
-	if (Math.random() < 0.25) {
-		meteors.burstLeft = 1 + Math.floor(Math.random() * 2);
+	if (Math.random() < 0.15) {
+		meteors.burstLeft = 1;
 		meteors.nextAt = now + 0.8 + Math.random() * 1.7;
 		return;
 	}
@@ -311,12 +315,15 @@ function writeSlot(meteors, slot, index, aspect, dt) {
 	slot.age += dt;
 	slot.x += slot.vx * dt;
 	slot.y += slot.vy * dt;
+	// Cull margins exceed the longest possible trail (~1.3 world units),
+	// so the whole streak is offscreen before the slot deactivates —
+	// otherwise the visible trail tip would pop out in one frame.
 	const gone =
 		slot.age >= slot.life ||
-		slot.x < -aspect - 0.7 ||
-		slot.x > aspect + 0.7 ||
-		slot.y < -1.7 ||
-		slot.y > 1.7;
+		slot.x < -aspect - 1.5 ||
+		slot.x > aspect + 1.5 ||
+		slot.y < -2.5 ||
+		slot.y > 2.5;
 	if (gone) {
 		slot.active = false;
 		for (let j = 0; j < METEOR_TRAIL; j += 1) {
@@ -327,8 +334,12 @@ function writeSlot(meteors, slot, index, aspect, dt) {
 	const speed = Math.sqrt(slot.vx * slot.vx + slot.vy * slot.vy);
 	const dx = slot.vx / speed;
 	const dy = slot.vy / speed;
+	// Fade-in is deliberately quicker than the fastest edge entry (~0.15s
+	// from spawn to crossing): the whole ramp happens offscreen, so every
+	// meteor arrives at full brightness instead of materialising mid-frame.
+	// The life fade-out stays slow — slow meteors visibly burn out mid-flight.
 	const fade = Math.min(
-		Math.min(slot.age / 0.25, 1),
+		Math.min(slot.age / 0.12, 1),
 		Math.max(Math.min((slot.life - slot.age) / 0.8, 1), 0),
 	);
 	for (let j = 0; j < METEOR_TRAIL; j += 1) {
@@ -345,7 +356,10 @@ function writeSlot(meteors, slot, index, aspect, dt) {
 function stepMeteors(meteors, aspect, now, dt) {
 	if (!meteors.started) {
 		meteors.started = true;
-		meteors.nextAt = now + 4 + Math.random() * 4;
+		// Short fuse on purpose: wall-clock first streak already includes
+		// the idle wait plus the three.js download/compile, so the
+		// field-relative delay stays small (~1–3s) to land one early.
+		meteors.nextAt = now + 1.2 + Math.random() * 1.8;
 	}
 	if (now >= meteors.nextAt) {
 		const slot = meteors.slots.find((s) => !s.active);
