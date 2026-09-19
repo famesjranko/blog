@@ -26,12 +26,14 @@ function listFiles(dir: string): string[] {
 
 function targetFiles(): string[] {
 	const files: string[] = [];
-	for (const root of ["src", "scripts", "styles"]) {
+	for (const root of ["src", "scripts", "styles", "static"]) {
 		if (existsSync(root)) {
 			files.push(...listFiles(root));
 		}
 	}
-	return files.filter((f) => f.endsWith(".ts") || f.endsWith(".css")).sort();
+	return files
+		.filter((f) => f.endsWith(".ts") || f.endsWith(".css") || f.endsWith(".js"))
+		.sort();
 }
 
 function countLines(text: string): number {
@@ -83,7 +85,7 @@ function main(): number {
 		const text = readFileSync(file, "utf8");
 		violations.push(...checkSuppressions(file, text));
 		violations.push(...checkFileLength(file, text));
-		if (file.endsWith(".ts")) {
+		if (file.endsWith(".ts") || file.endsWith(".js")) {
 			const sourceFile = ts.createSourceFile(
 				file,
 				text,

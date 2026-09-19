@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { basePath, siteUrl } from "./site.js";
+import { absoluteSiteUrl, basePath, siteUrl } from "./site.js";
 
 afterEach(() => {
 	vi.unstubAllEnvs();
@@ -25,5 +25,20 @@ describe("siteUrl", () => {
 		vi.stubEnv("BASE_PATH", "/personal_blog");
 		expect(siteUrl("/essays/")).toBe("/personal_blog/essays/");
 		expect(siteUrl("/styles.css")).toBe("/personal_blog/styles.css");
+	});
+});
+
+describe("absoluteSiteUrl", () => {
+	it("combines the configured origin, base path, and site path", () => {
+		vi.stubEnv("SITE_ORIGIN", "https://example.com/");
+		vi.stubEnv("BASE_PATH", "/blog");
+		expect(absoluteSiteUrl("/essays/on-mind/")).toBe(
+			"https://example.com/blog/essays/on-mind/",
+		);
+	});
+
+	it("rejects an origin containing a path", () => {
+		vi.stubEnv("SITE_ORIGIN", "https://example.com/blog");
+		expect(() => absoluteSiteUrl("/")).toThrow(/SITE_ORIGIN/);
 	});
 });

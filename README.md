@@ -58,6 +58,8 @@ dist/       Generated site output
 
 GitHub Pages serves this repository under `/blog/`. Internal URLs use
 `BASE_PATH`, which is empty locally and `/blog` in the Pages build.
+RSS and sitemap URLs use `SITE_ORIGIN`, which the Pages workflow derives
+from the repository owner.
 
 </details>
 

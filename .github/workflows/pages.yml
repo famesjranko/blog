@@ -18,11 +18,13 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci
+      - run: make check
       - run: npm run build
         env:
           # Project site: served from https://<user>.github.io/<repo>/,
           # so internal links must carry the repo name as a prefix.
           BASE_PATH: /${{ github.event.repository.name }}
+          SITE_ORIGIN: https://${{ github.repository_owner }}.github.io
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

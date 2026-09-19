@@ -6,7 +6,7 @@ import { essayIndexPage, homePage } from "./html/index.js";
 import { projectIndexPage, projectPage } from "./html/project.js";
 import { allTopics, topicPage } from "./html/topic.js";
 import { escapeHtml } from "./html/layout.js";
-import { siteUrl } from "./site.js";
+import { absoluteSiteUrl } from "./site.js";
 
 async function write(outDir: string, rel: string, body: string): Promise<void> {
 	const full = path.join(outDir, rel);
@@ -19,6 +19,8 @@ export async function generateSite(
 	projects: Project[],
 	outDir = "dist",
 ): Promise<void> {
+	assertUniqueSlugs("essay", essays);
+	assertUniqueSlugs("project", projects);
 	assertPredecessorsResolve(projects);
 	for (const essay of essays) {
 		await write(outDir, `essays/${essay.slug}/index.html`, essayPage(essay));
@@ -44,6 +46,29 @@ export async function generateSite(
 	await write(outDir, "sitemap.xml", sitemap(essays, projects));
 }
 
+interface SluggedContent {
+	slug: string;
+	sourcePath: string;
+}
+
+function assertUniqueSlugs(kind: string, items: SluggedContent[]): void {
+	const seen = new Map<string, string>();
+	for (const item of items) {
+		if (item.slug === "") {
+			throw new Error(
+				`${kind} ${JSON.stringify(item.sourcePath)} has an empty slug`,
+			);
+		}
+		const first = seen.get(item.slug);
+		if (first !== undefined) {
+			throw new Error(
+				`${kind}s ${JSON.stringify(first)} and ${JSON.stringify(item.sourcePath)} share slug ${JSON.stringify(item.slug)}`,
+			);
+		}
+		seen.set(item.slug, item.sourcePath);
+	}
+}
+
 /**
  * A predecessor link must resolve to a real project page, otherwise
  * the build would publish a dead cross-link. Fail loudly instead.
@@ -63,10 +88,10 @@ function rss(essays: Essay[]): string {
 	const items = essays
 		.map(
 			(e) =>
-				`<item><title>${escapeHtml(e.title)}</title><link>${siteUrl(`/essays/${e.slug}/`)}</link><pubDate>${e.date.toUTCString()}</pubDate></item>`,
+				`<item><title>${escapeHtml(e.title)}</title><link>${absoluteSiteUrl(`/essays/${e.slug}/`)}</link><pubDate>${e.date.toUTCString()}</pubDate></item>`,
 		)
 		.join("\n");
-	return `<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title>Philosophy</title><link>${siteUrl("/")}</link>${items}</channel></rss>`;
+	return `<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title>Philosophy</title><link>${absoluteSiteUrl("/")}</link>${items}</channel></rss>`;
 }
 
 function sitemap(essays: Essay[], projects: Project[]): string {
@@ -79,7 +104,7 @@ function sitemap(essays: Essay[], projects: Project[]): string {
 		...allTopics(essays).map((t) => `topics/${t.slug}/`),
 	];
 	const items = urls
-		.map((u) => `<url><loc>${siteUrl(`/${u}`)}</loc></url>`)
+		.map((u) => `<url><loc>${absoluteSiteUrl(`/${u}`)}</loc></url>`)
 		.join("\n");
 	return `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${items}</urlset>`;
 }

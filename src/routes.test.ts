@@ -1,9 +1,13 @@
 import { mkdtemp, readFile, stat } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import type { Essay, Project } from "./content.js";
 import { generateSite } from "./routes.js";
+
+afterEach(() => {
+	vi.unstubAllEnvs();
+});
 
 function sampleEssay(overrides: Partial<Essay> = {}): Essay {
 	return {
@@ -75,6 +79,46 @@ describe("generateSite topics", () => {
 		const dir = await generate([sampleEssay()]);
 		const index = await readFile(path.join(dir, "essays/index.html"), "utf8");
 		expect(index).toContain("/topics/philosophy-of-mind/");
+	});
+});
+
+describe("generateSite feeds", () => {
+	it("writes absolute canonical URLs including the deployment base path", async () => {
+		vi.stubEnv("SITE_ORIGIN", "https://example.com");
+		vi.stubEnv("BASE_PATH", "/blog");
+		const dir = await generate([sampleEssay()]);
+		const sitemap = await readFile(path.join(dir, "sitemap.xml"), "utf8");
+		const rss = await readFile(path.join(dir, "rss.xml"), "utf8");
+		expect(sitemap).toContain(
+			"<loc>https://example.com/blog/essays/on-mind/</loc>",
+		);
+		expect(rss).toContain(
+			"<link>https://example.com/blog/essays/on-mind/</link>",
+		);
+	});
+});
+
+describe("generateSite slugs", () => {
+	it("rejects an empty essay slug before writing pages", async () => {
+		await expect(generate([sampleEssay({ slug: "" })])).rejects.toThrow(
+			/essay.*empty slug/,
+		);
+	});
+
+	it("rejects duplicate essay slugs and names both sources", async () => {
+		const duplicate = sampleEssay({ sourcePath: "content/essays/other.md" });
+		await expect(generate([sampleEssay(), duplicate])).rejects.toThrow(
+			/on-mind\.md.*other\.md/,
+		);
+	});
+
+	it("rejects duplicate project slugs and names both sources", async () => {
+		const duplicate = sampleProject({
+			sourcePath: "content/projects/other.md",
+		});
+		await expect(generate([], [sampleProject(), duplicate])).rejects.toThrow(
+			/connect4-lisp-web\.md.*other\.md/,
+		);
 	});
 });
 

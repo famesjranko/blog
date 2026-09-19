@@ -1,4 +1,5 @@
 import { cp, mkdir, rm } from "node:fs/promises";
+import { copySiteAssets } from "./assets.js";
 import { loadEssays, loadProjects } from "./content.js";
 import { generateSite } from "./routes.js";
 
@@ -11,12 +12,7 @@ const essays = await loadEssays();
 const projects = await loadProjects();
 await generateSite(essays, projects, outDir);
 
-// Copy static assets when present; ignore when absent so a fresh
-// checkout without optional assets still builds.
-await cp("static", outDir, { recursive: true }).catch(() => {});
-await cp("styles/main.css", `${outDir}/styles.css`).catch(() => {});
-await cp("styles/prose.css", `${outDir}/prose.css`).catch(() => {});
-await cp("styles/hero.css", `${outDir}/hero.css`).catch(() => {});
+await copySiteAssets(".", outDir);
 // Required, not optional: the hero field imports this sibling module.
 // A declared dependency, so a missing file fails the build loudly.
 // Note: three.module.min.js is a facade that statically imports
