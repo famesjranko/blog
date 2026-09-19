@@ -1,8 +1,9 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
-import type { Essay } from "./content.js";
+import type { Essay, Project } from "./content.js";
 import { essayPage } from "./html/essay.js";
 import { essayIndexPage, homePage } from "./html/index.js";
+import { projectIndexPage, projectPage } from "./html/project.js";
 import { allTopics, topicPage } from "./html/topic.js";
 import { escapeHtml } from "./html/layout.js";
 import { siteUrl } from "./site.js";
@@ -15,13 +16,23 @@ async function write(outDir: string, rel: string, body: string): Promise<void> {
 
 export async function generateSite(
 	essays: Essay[],
+	projects: Project[],
 	outDir = "dist",
 ): Promise<void> {
+	assertPredecessorsResolve(projects);
 	for (const essay of essays) {
 		await write(outDir, `essays/${essay.slug}/index.html`, essayPage(essay));
 	}
-	await write(outDir, "index.html", homePage(essays));
+	for (const project of projects) {
+		await write(
+			outDir,
+			`projects/${project.slug}/index.html`,
+			projectPage(project),
+		);
+	}
+	await write(outDir, "index.html", homePage(essays, projects));
 	await write(outDir, "essays/index.html", essayIndexPage(essays));
+	await write(outDir, "projects/index.html", projectIndexPage(projects));
 	for (const topic of allTopics(essays)) {
 		await write(
 			outDir,
@@ -30,7 +41,22 @@ export async function generateSite(
 		);
 	}
 	await write(outDir, "rss.xml", rss(essays));
-	await write(outDir, "sitemap.xml", sitemap(essays));
+	await write(outDir, "sitemap.xml", sitemap(essays, projects));
+}
+
+/**
+ * A predecessor link must resolve to a real project page, otherwise
+ * the build would publish a dead cross-link. Fail loudly instead.
+ */
+function assertPredecessorsResolve(projects: Project[]): void {
+	const slugs = new Set(projects.map((p) => p.slug));
+	for (const project of projects) {
+		if (project.predecessor !== undefined && !slugs.has(project.predecessor)) {
+			throw new Error(
+				`project ${JSON.stringify(project.slug)} has unknown predecessor ${JSON.stringify(project.predecessor)}`,
+			);
+		}
+	}
 }
 
 function rss(essays: Essay[]): string {
@@ -43,11 +69,13 @@ function rss(essays: Essay[]): string {
 	return `<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title>Philosophy</title><link>${siteUrl("/")}</link>${items}</channel></rss>`;
 }
 
-function sitemap(essays: Essay[]): string {
+function sitemap(essays: Essay[], projects: Project[]): string {
 	const urls = [
 		"",
 		"essays/",
+		"projects/",
 		...essays.map((e) => `essays/${e.slug}/`),
+		...projects.map((p) => `projects/${p.slug}/`),
 		...allTopics(essays).map((t) => `topics/${t.slug}/`),
 	];
 	const items = urls

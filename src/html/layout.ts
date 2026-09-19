@@ -2,6 +2,26 @@ import { siteUrl } from "../site.js";
 
 export const SITE_NAME = "Andrew J. McDonald";
 
+const MONTHS = [
+	"Jan",
+	"Feb",
+	"Mar",
+	"Apr",
+	"May",
+	"Jun",
+	"Jul",
+	"Aug",
+	"Sep",
+	"Oct",
+	"Nov",
+	"Dec",
+];
+
+export function formatDate(date: Date): string {
+	const month = MONTHS[date.getUTCMonth()] ?? "???";
+	return `${date.getUTCDate()} ${month} ${date.getUTCFullYear()}`;
+}
+
 export function escapeHtml(value: string): string {
 	return value
 		.replaceAll("&", "&amp;")
@@ -15,11 +35,11 @@ export function header(): string {
 	return (
 		`<header class="site-header"><div class="wrap header-inner">` +
 		`<a class="site-name" href="${siteUrl("/")}">${escapeHtml(SITE_NAME)}</a>` +
-		`<nav class="desktop-nav" aria-label="Primary"><a href="${siteUrl("/essays/")}">Essays</a></nav>` +
+		`<nav class="desktop-nav" aria-label="Primary"><a href="${siteUrl("/essays/")}">Essays</a><a href="${siteUrl("/projects/")}">Projects</a></nav>` +
 		`<button class="menu-toggle" type="button" popovertarget="mobile-nav" aria-label="Open navigation">` +
 		`<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M2 4h12M2 8h12M2 12h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg>` +
 		`</button>` +
-		`<nav id="mobile-nav" popover aria-label="Mobile"><a href="${siteUrl("/essays/")}">Essays</a></nav></div></header>`
+		`<nav id="mobile-nav" popover aria-label="Mobile"><a href="${siteUrl("/essays/")}">Essays</a><a href="${siteUrl("/projects/")}">Projects</a></nav></div></header>`
 	);
 }
 

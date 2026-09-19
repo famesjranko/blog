@@ -9,6 +9,7 @@ function sampleEssay(): Essay {
 		date: new Date("2020-05-14T00:00:00Z"),
 		topics: ["ethics", "privacy"],
 		philosophers: ["Kant"],
+		featured: false,
 		draft: false,
 		slug: "on-privacy",
 		html: "<p>Body.</p>",

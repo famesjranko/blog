@@ -1,33 +1,19 @@
-import { type Essay, topicSlug } from "../content.js";
+import {
+	type Essay,
+	type Project,
+	pickFeatured,
+	topicSlug,
+} from "../content.js";
 import { siteUrl } from "../site.js";
-import { escapeHtml, page } from "./layout.js";
+import { escapeHtml, formatDate, page } from "./layout.js";
+import { projectEntry } from "./project.js";
+
+export { formatDate };
 
 // Provisional homepage copy. Edit freely; no logic depends on it.
 const HERO_TITLE = "Philosophy, technology, and the human condition.";
 const HERO_STANDFIRST =
 	"Essays and notes on ethics, phenomenology, technology, software, and related questions.";
-
-const RECENT_COUNT = 5;
-
-const MONTHS = [
-	"Jan",
-	"Feb",
-	"Mar",
-	"Apr",
-	"May",
-	"Jun",
-	"Jul",
-	"Aug",
-	"Sep",
-	"Oct",
-	"Nov",
-	"Dec",
-];
-
-export function formatDate(date: Date): string {
-	const month = MONTHS[date.getUTCMonth()] ?? "???";
-	return `${date.getUTCDate()} ${month} ${date.getUTCFullYear()}`;
-}
 
 export function topicLink(topic: string): string {
 	return `<a href="${siteUrl(`/topics/${topicSlug(topic)}/`)}">${escapeHtml(topic)}</a>`;
@@ -87,9 +73,43 @@ export function essayIndexPage(essays: Essay[]): string {
 	});
 }
 
-export function homePage(essays: Essay[]): string {
-	const recent = essays.slice(0, RECENT_COUNT);
-	const entries = recent.map((essay) => essayEntry(essay)).join("\n");
+function featuredSection(options: {
+	headingId: string;
+	heading: string;
+	indexUrl: string;
+	indexLabel: string;
+	entry: string;
+}): string {
+	return `<section class="wrap recent" aria-labelledby="${options.headingId}">
+<h2 id="${options.headingId}">${options.heading}</h2>
+<ol class="card-grid">${options.entry}</ol>
+<p class="more-link"><a href="${options.indexUrl}">${options.indexLabel}</a></p>
+</section>`;
+}
+
+export function homePage(essays: Essay[], projects: Project[] = []): string {
+	const featuredEssays = pickFeatured(essays);
+	const featuredProjects = pickFeatured(projects);
+	const essaySection =
+		featuredEssays.length === 0
+			? ""
+			: featuredSection({
+					headingId: "featured-essays-heading",
+					heading: "Featured essays",
+					indexUrl: siteUrl("/essays/"),
+					indexLabel: "More essays",
+					entry: featuredEssays.map((e) => essayEntry(e)).join("\n"),
+				});
+	const projectsSection =
+		featuredProjects.length === 0
+			? ""
+			: featuredSection({
+					headingId: "featured-projects-heading",
+					heading: "Featured projects",
+					indexUrl: siteUrl("/projects/"),
+					indexLabel: "More projects",
+					entry: featuredProjects.map((p) => projectEntry(p)).join("\n"),
+				});
 	return page({
 		title: "Andrew J. McDonald",
 		description: HERO_STANDFIRST,
@@ -100,12 +120,9 @@ export function homePage(essays: Essay[]): string {
 <div class="wrap hero-inner">
 <h1>${escapeHtml(HERO_TITLE)}</h1>
 <p class="hero-standfirst">${escapeHtml(HERO_STANDFIRST)}</p>
-<p class="hero-cta"><a href="${siteUrl("/essays/")}">Read essays</a></p>
+<p class="hero-cta"><a href="${siteUrl("/essays/")}">Read essays</a> <a href="${siteUrl("/projects/")}">Browse projects</a></p>
 </div>
 </section>
-<section class="wrap recent" aria-labelledby="recent-heading">
-<h2 id="recent-heading">Recent essays</h2>
-<ol class="card-grid">${entries}</ol>
-</section>`,
+${essaySection}${projectsSection}`,
 	});
 }

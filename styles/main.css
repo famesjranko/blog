@@ -164,6 +164,10 @@
 		padding-block: clamp(3rem, 7svh, 5rem);
 	}
 
+	.recent + .recent {
+		padding-block-start: 0;
+	}
+
 	.essays-page {
 		padding-block: clamp(2rem, 5svh, 3.5rem);
 	}
@@ -181,6 +185,11 @@
 		color: var(--color-muted);
 		font-size: 0.9rem;
 		letter-spacing: 0.035em;
+	}
+
+	.more-link {
+		margin: 1.5rem 0 0;
+		text-align: right;
 	}
 
 	.card-grid {

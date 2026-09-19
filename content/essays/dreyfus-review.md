@@ -2,6 +2,7 @@
 title: "REVIEW: ‘What Could Be More Intelligible Than Everyday Intelligibility? Reinterpreting Division I of Being and Time in the Light of Division II’ (Dreyfus 2005)" 
 date: 2020-10-10T17:39:34+11:00
 draft: false
+featured: true
 toc: false
 type:
   - essays

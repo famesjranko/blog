@@ -1,7 +1,11 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import matter from "gray-matter";
-import { normalizeFrontmatter, RawFrontmatterSchema } from "./schema.js";
+import {
+	normalizeFrontmatter,
+	normalizeProjectFrontmatter,
+	RawFrontmatterSchema,
+} from "./schema.js";
 
 const legacyFixture = new URL("./fixtures/hugo-jtb.md", import.meta.url);
 
@@ -96,5 +100,143 @@ describe("legacy Hugo fixture", () => {
 		expect(meta).not.toHaveProperty("images");
 		expect(meta).not.toHaveProperty("tags");
 		expect(meta).not.toHaveProperty("categories");
+	});
+});
+
+describe("project origin", () => {
+	it("defaults origin to personal when absent", () => {
+		const meta = normalizeProjectFrontmatter({
+			title: "Musicmeta",
+			date: "2026-03-20",
+			draft: false,
+		});
+		expect(meta.origin).toBe("personal");
+		expect(meta.stack).toEqual([]);
+		expect(meta.draft).toBe(false);
+	});
+
+	it("keeps an explicit university origin", () => {
+		const meta = normalizeProjectFrontmatter({
+			title: "Connect-4 heuristic",
+			date: "2018-10-15",
+			origin: "university",
+			draft: false,
+		});
+		expect(meta.origin).toBe("university");
+	});
+
+	it("rejects an unknown origin instead of guessing", () => {
+		expect(() =>
+			normalizeProjectFrontmatter({
+				title: "Something",
+				date: "2026-01-01",
+				origin: "coursework",
+				draft: false,
+			}),
+		).toThrow();
+	});
+});
+
+describe("project stack", () => {
+	it("falls back to Hugo tags for the stack", () => {
+		const meta = normalizeProjectFrontmatter({
+			title: "Connect-4 heuristic",
+			date: "2018-10-15",
+			tags: ["lisp", "heuristic"],
+			draft: false,
+		});
+		expect(meta.stack).toEqual(["lisp", "heuristic"]);
+	});
+
+	it("prefers stack over Hugo tags", () => {
+		const meta = normalizeProjectFrontmatter({
+			title: "Connect-4 web",
+			date: "2026-03-15",
+			stack: ["sbcl", "redis"],
+			tags: ["lisp"],
+			draft: false,
+		});
+		expect(meta.stack).toEqual(["sbcl", "redis"]);
+	});
+});
+
+describe("project links", () => {
+	it("keeps repo and predecessor links", () => {
+		const meta = normalizeProjectFrontmatter({
+			title: "Connect-4 web",
+			date: "2026-03-15",
+			repo: "https://github.com/famesjranko/Connect4-Lisp-Web",
+			predecessor: "connect4-heuristic",
+			draft: false,
+		});
+		expect(meta.repo).toContain("Connect4-Lisp-Web");
+		expect(meta.predecessor).toBe("connect4-heuristic");
+	});
+
+	it("rejects a non-URL repo", () => {
+		expect(() =>
+			normalizeProjectFrontmatter({
+				title: "Something",
+				date: "2026-01-01",
+				repo: "not-a-url",
+				draft: false,
+			}),
+		).toThrow();
+	});
+
+	it("never forwards legacy presentation fields to ProjectMeta", () => {
+		const meta = normalizeProjectFrontmatter({
+			title: "Something",
+			date: "2026-01-01",
+			tags: ["lisp"],
+			author: "Andrew McDonald",
+			toc: false,
+			type: ["projects", "project"],
+			draft: false,
+		});
+		expect(meta).not.toHaveProperty("author");
+		expect(meta).not.toHaveProperty("toc");
+		expect(meta).not.toHaveProperty("type");
+		expect(meta).not.toHaveProperty("tags");
+	});
+});
+
+describe("featured flag", () => {
+	it("defaults essays to unfeatured", () => {
+		const meta = normalizeFrontmatter({
+			title: "On Privacy",
+			date: "2020-05-14",
+			draft: false,
+		});
+		expect(meta.featured).toBe(false);
+	});
+
+	it("keeps a featured essay", () => {
+		const meta = normalizeFrontmatter({
+			title: "On Privacy",
+			date: "2020-05-14",
+			featured: true,
+			draft: false,
+		});
+		expect(meta.featured).toBe(true);
+	});
+
+	it("defaults projects to unfeatured", () => {
+		const meta = normalizeProjectFrontmatter({
+			title: "Something",
+			date: "2026-01-01",
+			draft: false,
+		});
+		expect(meta.featured).toBe(false);
+	});
+
+	it("keeps a featured project", () => {
+		const meta = normalizeProjectFrontmatter({
+			title: "Something",
+			date: "2026-01-01",
+			featured: true,
+			draft: false,
+		});
+		expect(meta.featured).toBe(true);
 	});
 });

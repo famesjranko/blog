@@ -5,11 +5,20 @@ import { glob } from "tinyglobby";
 import { renderMarkdown } from "./markdown.js";
 import {
 	type EssayMeta,
+	type ProjectMeta,
 	RawFrontmatterSchema,
+	RawProjectFrontmatterSchema,
 	normalizeFrontmatter,
+	normalizeProjectFrontmatter,
 } from "./schema.js";
 
 export interface Essay extends EssayMeta {
+	slug: string;
+	html: string;
+	sourcePath: string;
+}
+
+export interface Project extends ProjectMeta {
 	slug: string;
 	html: string;
 	sourcePath: string;
@@ -59,4 +68,49 @@ export async function loadEssays(
 	return essays
 		.filter((e) => !e.draft)
 		.sort((a, b) => b.date.getTime() - a.date.getTime());
+}
+
+export async function loadProject(filePath: string): Promise<Project> {
+	const source = await readFile(filePath, "utf8");
+	const { data, content } = matter(source);
+	const raw = RawProjectFrontmatterSchema.parse(data);
+	const meta = normalizeProjectFrontmatter(raw);
+	return {
+		...meta,
+		slug: makeSlug(filePath),
+		html: renderMarkdown(content),
+		sourcePath: filePath,
+	};
+}
+
+export async function loadProjects(
+	pattern = "content/projects/**/*.md",
+): Promise<Project[]> {
+	const files = await glob(pattern);
+	const projects = await Promise.all(files.map((f) => loadProject(f)));
+	return projects
+		.filter((p) => !p.draft)
+		.sort((a, b) => b.date.getTime() - a.date.getTime());
+}
+
+export interface Featureable {
+	featured: boolean;
+	date: Date;
+}
+
+export const FEATURED_COUNT = 2;
+
+/**
+ * Homepage picks: newest flagged items first, backfilled with the newest
+ * unflagged items so each section always shows a full row. An empty
+ * collection yields an empty row and its section is omitted.
+ */
+export function pickFeatured<T extends Featureable>(
+	items: T[],
+	count: number = FEATURED_COUNT,
+): T[] {
+	const newestFirst = (a: T, b: T) => b.date.getTime() - a.date.getTime();
+	const flagged = items.filter((i) => i.featured).sort(newestFirst);
+	const unflagged = items.filter((i) => !i.featured).sort(newestFirst);
+	return [...flagged, ...unflagged].slice(0, count);
 }

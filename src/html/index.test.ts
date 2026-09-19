@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { Essay } from "../content.js";
+import type { Essay, Project } from "../content.js";
 import {
 	essayEntry,
 	essayIndexPage,
@@ -15,6 +15,7 @@ function sampleEssay(overrides: Partial<Essay> = {}): Essay {
 		date: new Date("2020-05-14T00:00:00Z"),
 		topics: ["ethics", "privacy"],
 		philosophers: ["Kant"],
+		featured: false,
 		draft: false,
 		slug: "on-privacy",
 		html: "<p>Body.</p>",
@@ -33,19 +34,65 @@ describe("formatDate", () => {
 	});
 });
 
-describe("homePage", () => {
+describe("homePage hero", () => {
 	it("renders a hero visual container outside the accessibility tree", () => {
 		const html = homePage([sampleEssay()]);
 		expect(html).toContain('class="hero-visual" aria-hidden="true"');
 	});
 
-	it("lists recent real essays with metadata", () => {
+	it("links the essays index, not an about page that does not exist", () => {
 		const html = homePage([sampleEssay()]);
+		expect(html).toContain('href="/essays/"');
+		expect(html).not.toContain("About");
+	});
+});
+
+describe("homePage featured essays", () => {
+	it("lists the featured essays with metadata", () => {
+		const html = homePage([sampleEssay()]);
+		expect(html).toContain("Featured essays");
 		expect(html).toContain("On Privacy");
 		expect(html).toContain("A short description.");
 		expect(html).toContain("14 May 2020");
 	});
 
+	it("shows two featured essays", () => {
+		const html = homePage([
+			sampleEssay(),
+			sampleEssay({ slug: "other", title: "Other" }),
+		]);
+		expect(html).toContain("On Privacy");
+		expect(html).toContain("Other");
+	});
+
+	it("puts the flagged essay first and backfills the second slot", () => {
+		const html = homePage([
+			sampleEssay({ slug: "new", title: "New" }),
+			sampleEssay({
+				slug: "middle",
+				title: "Middle",
+				date: new Date("2019-06-01T00:00:00Z"),
+			}),
+			sampleEssay({
+				slug: "pick",
+				title: "Pick",
+				date: new Date("2019-01-01T00:00:00Z"),
+				featured: true,
+			}),
+		]);
+		expect(html).toContain("Pick");
+		expect(html).toContain("New");
+		expect(html).not.toContain(">Middle</a>");
+	});
+
+	it("links onward to the full essays index", () => {
+		const html = homePage([sampleEssay()]);
+		expect(html).toContain("More essays");
+		expect(html).toContain('href="/essays/"');
+	});
+});
+
+describe("homePage topic links", () => {
 	it("links entry topics to their slugified topic pages", () => {
 		const html = homePage([sampleEssay()]);
 		expect(html).toContain('href="/topics/ethics/"');
@@ -56,12 +103,6 @@ describe("homePage", () => {
 		const html = homePage([sampleEssay({ topics: ["Philosophy of Mind"] })]);
 		expect(html).toContain('href="/topics/philosophy-of-mind/"');
 		expect(html).toContain(">Philosophy of Mind</a>");
-	});
-
-	it("links the essays index, not an about page that does not exist", () => {
-		const html = homePage([sampleEssay()]);
-		expect(html).toContain('href="/essays/"');
-		expect(html).not.toContain("About");
 	});
 });
 
@@ -145,7 +186,7 @@ describe("essayIndexPage", () => {
 		expect(essayIndexPage([sampleEssay()])).toContain("1 essay");
 	});
 
-	it("renders cards on the homepage recent list", () => {
+	it("renders the featured card on the homepage", () => {
 		const html = homePage([
 			sampleEssay({
 				html: '<p><img src="/img/jtb_knowledge.jpg" alt="jtb"></p>',
@@ -153,5 +194,47 @@ describe("essayIndexPage", () => {
 		]);
 		expect(html).toContain('<ol class="card-grid">');
 		expect(html).toContain('class="card-media"');
+	});
+});
+
+function sampleProject(overrides: Partial<Project> = {}): Project {
+	return {
+		title: "Connect-4 web",
+		description: "A Lisp web service.",
+		date: new Date("2026-03-15T00:00:00Z"),
+		origin: "personal",
+		repo: "https://github.com/famesjranko/Connect4-Lisp-Web",
+		stack: ["lisp"],
+		predecessor: undefined,
+		featured: false,
+		draft: false,
+		slug: "connect4-lisp-web",
+		html: "<p>Body.</p>",
+		sourcePath: "content/projects/connect4-lisp-web.md",
+		...overrides,
+	};
+}
+
+describe("homePage projects", () => {
+	it("links the projects index from the hero", () => {
+		const html = homePage([sampleEssay()]);
+		expect(html).toContain('href="/projects/"');
+	});
+
+	it("lists the featured projects when present", () => {
+		const html = homePage(
+			[sampleEssay()],
+			[sampleProject(), sampleProject({ slug: "other", title: "Other" })],
+		);
+		expect(html).toContain("Featured projects");
+		expect(html).toContain("Connect-4 web");
+		expect(html).toContain("Other");
+		expect(html).toContain("Personal project");
+		expect(html).toContain("More projects");
+	});
+
+	it("omits the projects section when there are none", () => {
+		const html = homePage([sampleEssay()]);
+		expect(html).not.toContain("Featured projects");
 	});
 });

@@ -2,6 +2,7 @@
 title: "On the Ethics of Google’s Use of User Data for Covid-19 Mobility Reporting"
 date: 2020-08-12T14:18:23+11:00
 draft: false
+featured: true
 toc: false
 type:
   - essays
