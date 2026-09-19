@@ -83,7 +83,11 @@ export function homePage(essays: Essay[], projects: Project[] = []): string {
 		title: "Andrew J. McDonald",
 		description: HERO_STANDFIRST,
 		scripts: [{ src: siteUrl("/hero.js"), type: "module" }],
-		styles: [siteUrl("/styles.css"), siteUrl("/hero.css")],
+		styles: [
+			siteUrl("/styles.css"),
+			siteUrl("/header.css"),
+			siteUrl("/hero.css"),
+		],
 		content: `<section class="hero" data-hero>
 <div class="hero-visual" aria-hidden="true"><span></span><span></span><span></span></div>
 <canvas class="hero-canvas" data-thought-field aria-hidden="true"></canvas>

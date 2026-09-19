@@ -71,94 +71,6 @@
 	}
 }
 
-@layer header {
-	.site-header {
-		border-bottom: 1px solid var(--color-border);
-	}
-
-	.header-inner {
-		display: flex;
-		align-items: baseline;
-		justify-content: space-between;
-		gap: 1rem;
-		padding-block: 1.1rem;
-	}
-
-	.site-name {
-		color: var(--color-text);
-		font-family: var(--font-reading);
-		font-size: 1.15rem;
-		text-decoration: none;
-	}
-
-	.desktop-nav {
-		display: flex;
-		gap: 1.25rem;
-	}
-
-	.desktop-nav a {
-		color: var(--color-muted);
-		text-decoration: none;
-	}
-
-	.desktop-nav a:hover {
-		color: var(--color-text);
-		text-decoration: underline;
-	}
-
-	.menu-toggle {
-		display: none;
-		align-items: center;
-		justify-content: center;
-		width: 2.5rem;
-		height: 2.5rem;
-		padding: 0;
-		border: 1px solid var(--color-border);
-		border-radius: 0.5rem;
-		background: transparent;
-		color: var(--color-text);
-		cursor: pointer;
-	}
-
-	.menu-toggle svg {
-		width: 1.25rem;
-		height: 1.25rem;
-	}
-
-	/* The left edge is constructed to equal the right-anchored position,
-	so the panel lands flush with the burger button (same wrap gutter)
-	whether a browser resolves left or right when over-constrained. */
-	#mobile-nav {
-		position: fixed;
-		top: 5rem;
-		right: clamp(1rem, 4vw, 2.5rem);
-		bottom: auto;
-		left: calc(100% - 12rem - clamp(1rem, 4vw, 2.5rem));
-		width: 12rem;
-		margin: 0;
-		padding: 0.5rem 0;
-		border: 1px solid var(--color-border);
-		border-radius: 0.75rem;
-		background: var(--color-bg);
-		color: var(--color-text);
-	}
-
-	#mobile-nav a {
-		display: block;
-		padding: 0.75rem 1.5rem;
-		color: var(--color-text);
-		text-decoration: none;
-	}
-
-	#mobile-nav a:hover {
-		text-decoration: underline;
-	}
-
-	#mobile-nav::backdrop {
-		background: color-mix(in srgb, var(--color-text) 15%, transparent);
-	}
-}
-
 @layer entries {
 	.recent {
 		padding-block: clamp(3rem, 7svh, 5rem);
@@ -367,16 +279,6 @@
 	@media (min-width: 42rem) {
 		.card-grid {
 			grid-template-columns: repeat(2, 1fr);
-		}
-	}
-
-	@media (max-width: 42rem) {
-		.desktop-nav {
-			display: none;
-		}
-
-		.menu-toggle {
-			display: inline-flex;
 		}
 	}
 

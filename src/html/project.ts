@@ -92,7 +92,11 @@ export function projectPage(project: Project): string {
 		...(project.description === undefined
 			? {}
 			: { description: project.description }),
-		styles: [siteUrl("/styles.css"), siteUrl("/prose.css")],
+		styles: [
+			siteUrl("/styles.css"),
+			siteUrl("/header.css"),
+			siteUrl("/prose.css"),
+		],
 		content: `<div class="wrap"><article class="prose project">
 <header class="project-header">
 <p class="project-eyebrow">${originLabel(project.origin)}</p>

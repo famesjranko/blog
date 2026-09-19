@@ -118,7 +118,7 @@ export function page({
 	content,
 	description,
 	scripts = [],
-	styles = [siteUrl("/styles.css")],
+	styles = [siteUrl("/styles.css"), siteUrl("/header.css")],
 }: {
 	title: string;
 	content: string;

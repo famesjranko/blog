@@ -1,7 +1,7 @@
 import { cp } from "node:fs/promises";
 import path from "node:path";
 
-const STYLES = ["main.css", "prose.css", "hero.css"];
+const STYLES = ["main.css", "prose.css", "hero.css", "header.css"];
 
 export async function copySiteAssets(
 	sourceRoot: string,
