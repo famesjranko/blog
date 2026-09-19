@@ -24,7 +24,7 @@ tags:
 
 **Outline:** Throughout section 1, I explore Google's Community Mobility Report and look for inconsistencies and conflicts, which may lead to an ethical dilemma. In Section 2, I apply an ethical analysis on the dilemma found in section 1, focusing on Kantian and Utilitarian ethics. Lastly, in section 3, I summarise and reflect on my findings.
 
-## 1. Overview of the Google Article
+## Overview of the Google Article
 On first viewing of Google's COVID-19 Community Mobility Report for Australia (Google, 2020a), there does not appear to be an ethical dilemma, in so far as Google is concerned, related to user privacy concerns beyond the basic question of whether or not we should be freely allowing the large collection and storage of user’s data by governments or private industry. This lack of ethical concern is due to Google’s stated data collection methods.
 
 The report outlines that the datasets used for the report were obtained by the same method that Google uses to collect, aggregate, and anonymise Google maps data. The report also states that this mapping data is only collected where user’s privacy settings are set to share such data; moreover, that this is an “opt-in” setting and is set to not share such data by default.
@@ -50,12 +50,12 @@ Under normal circumstances, the above privacy concerns alone would be enough for
 
 Thus, taking all the above into account, the main ethical issue stands to be Google’s apparent conflicting position on user privacy and the possible use of non-anonymised user data without user consent. Which raises the generalised ethical question: Does the current pandemic situation allow for such ethical slipperiness in relation to the use of non-anonymised user data for the greater good?
 
-## 2. An Ethical Analysis
+## An Ethical Analysis
 In this section I will apply two ethical theories, Mill’s utilitarianism (Brink, 2018) and Kant’s deontological moral theory of The Categorical Imperative (Johnson & Cureton, 2019), to the problem: Does the current pandemic situation allow for such ethical slipperiness in relation to the use of non-anonymised user data for the greater good?
 
 I have chosen to use the generalised form of the ethical dilemma as the Kantian analysis is better suited to individual’s and their actions, rather than organisation and governmental agencies and their respective actions. Moreover, as indicated by the conflicts within the Google report, Google itself may be acting against its own ethical guidelines in its joint actions with Taiwan. And regarding Taiwan, the analysis that follows will be considered on the individual user and their respective user-data, which will account for the Taiwanese populace.
 
-### The Kantian Analysis
+## The Kantian Analysis
 
 According to Rachels & Rachels (1986), Kant’s ethics are built from the idea that human beings, being the only rational animal, hold a unique and special place within the world. And that because of this rationality are above all other species, above all ends, and are never to be used as means to an end. Moreover, as the focus is on the value of humans, and specifically their rational agency, his ethics are primarily interested in the intentions and motivations guiding one’s actions, rather than the consequences of one’s actions.
 
@@ -104,7 +104,7 @@ Thankfully, this is a much easier question to answers. If 3a were a natural law,
 
 In following Kant’s Formula, that we should act only on that maxim through which you can at the same time will that it should become a universal law, in regards to the current ethical dilemma, we would then have the imperative to not act in accordance.
 
-### The Utilitarian Analysis
+## The Utilitarian Analysis
 
 Utilitarianism can be summed up simply as the view that “the morally right action is the one that produces the most good” (Driver, 2014). It is a form of consequentialism, which is a class of normative ethic theories in which the moral value of one’s actions is predicated on the consequences of said actions. This contrasts with Kantian ethics, where the ultimate outcome is not relevant to the moral question of right or wrong, but rather the moral focus is directed towards the intention motivating the act. Moreover, there are various versions of utilitarianism, with differing influences ranging from the theological to the Epicurean, each having their own description of what is ‘good’ and its antithesis, the ‘bad’. For the sake of this discussion, I will generalise this antithetical to the form ‘betterment vs harm’.
 
@@ -159,7 +159,7 @@ While it is relatively close between the two options, there is a slightly better
 
 However, there is a caveat: one of the main problems for any utilitarian calculation, and one that is apparent here, is the difficulty to ascribe probability and utility values for a given act. Hence why this cannot be considered necessarily the morally right choice; given more information and a better metric, a different and possibly better outcome is very likely.
 
-## 3. Summary
+## Summary
 Google reports that its data collection methods are both anonymised and optional for the user. They also state the limited use range of the data specific to the generated report of user activity during the Covid-19 isolation period; specifying that it should not be used for medical diagnostics, prognostics, or treatment purpose, and further, that is not intended to be used for guidance on personal travel plans.
 
 However, Taiwan’s apparent ability to use Google’s data to both monitor and “electronically fence” quarantined citizens raises questions of Google’s credibility and introduces doubt regarding their officially stated position of user anonymity, along with an apparent conflict with their own data use policies. This raises the ethical question of whether the current Covid-19 pandemic situation allows for such ethical slipperiness in relation to the use of non-anonymised user data for the greater good? I then turned to two distinct forms of philosophical ethics attempting to analyse and answer this ethical dilemma, Kantian Ethics and Utilitarianism
@@ -168,11 +168,11 @@ Given the distinct and separate approaches to ethical analysis as presented by K
 
 One further thought, this ethical question was analysed in the generalised form and directed towards the individual and their respective choices. However, this may be moot when considering Google’s possible breaking of its own privacy guidelines, which raises doubts against their privacy policies, specifically their ‘opt-in’ data-collection policy. Regardless of choice, users may, in fact, be powerless to act on who controls and has access to their private user-data, moving the analysis from the personal ethical dilemma of users to the unethical acts by organisations.
 
-Lastly, on self-reflection, if I were to apply my own ethical intuition to the case in hand, I find myself leaning towards the Kantian choice as the risk to personal liberty by loss of privacy seems far greater in the long term then the short term benefits of giving them up. However, like the utilitarian, I too would feel the need to apply the utilitarian qualifier that there may be a better, more morally right choice to be made beyond the choices presented. That with further knowledge of the moral landscape and the choices therein my response to this dilemma may change. Consequently, the morally right choice appears a moving target; one that is aimed for but not necessarily ever caught.\
+Lastly, on self-reflection, if I were to apply my own ethical intuition to the case in hand, I find myself leaning towards the Kantian choice as the risk to personal liberty by loss of privacy seems far greater in the long term then the short term benefits of giving them up. However, like the utilitarian, I too would feel the need to apply the utilitarian qualifier that there may be a better, more morally right choice to be made beyond the choices presented. That with further knowledge of the moral landscape and the choices therein my response to this dilemma may change. Consequently, the morally right choice appears a moving target; one that is aimed for but not necessarily ever caught.
 
-### References
+## References
 
-Brink, David. (2018). Mill’s Moral and Political Philosophy. Retrieved from https://plato.stanford.edu/archives/win2018/entries/mill-moral-political /
+Brink, David. (2018). Mill’s Moral and Political Philosophy. Retrieved from https://plato.stanford.edu/archives/win2018/entries/mill-moral-political
 
 California State University. (2020). Kantian Ethics. Retrieved from https://www.csus.edu/indiv/g/gaskilld/ethics/kantian%20ethics.htm
 

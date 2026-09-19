@@ -40,9 +40,8 @@ In order to get to an Enlightenment that fits Kant’s definition all that may b
 
 Finally, while I agree with Kant’s definition of Enlightenment and his description of categories of reason, I disagree with his preconditionals for the success of Enlightenment as Kant makes a category error regarding reasons operative description that leads to a contradiction.  All reason needs to succeed is the freedom to reason; whereas power demands obedience for its constancy.  Ultimately, Kant’s reflections are historical in nature and therefore it is history by which they are tested. And that through Aristotle’s definition of Man as a reasoning animal, and Nietzsche’s concept of Man beyond his reliance on authority and otherworldliness, that fear of civic collapse is surely a false one.
 
-In all, abandonment of authority and tradition as valid means of knowledge will be difficult, even destructive, but it is by dismantling that we gain opportunities to rebuild.  Kant’s version of Enlightenment is individualistic, requiring preconditionals to reach humanity as a whole; whereas with addition of Aristotle’s definition of Man and Nietzsche’s view of a fully self actualised Man, a societal level *neo-Enlightenment*, where reason par excellence is the means, in and of itself may be possible.  While this is not the Enlightenment Kant set out to describe it could very well lead to the bettering of Man which Kant was hoping for.\
-\
-\
+In all, abandonment of authority and tradition as valid means of knowledge will be difficult, even destructive, but it is by dismantling that we gain opportunities to rebuild.  Kant’s version of Enlightenment is individualistic, requiring preconditionals to reach humanity as a whole; whereas with addition of Aristotle’s definition of Man and Nietzsche’s view of a fully self actualised Man, a societal level *neo-Enlightenment*, where reason par excellence is the means, in and of itself may be possible.  While this is not the Enlightenment Kant set out to describe it could very well lead to the bettering of Man which Kant was hoping for.
+
 ## References
 
 Aristotle, ., & Ross, W. D 1981, Aristotle’s Metaphysics, Clarendon Press, Oxford

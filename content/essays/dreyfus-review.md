@@ -34,24 +34,27 @@ The first thing that stands out in Dreyfus’ essay is the strength of his pheno
 Two examples of such weakness: 1. Heidegger’s own words contradict Dreyfus’ progressive outline of possible modification to the background practices in his description and examples of world transformers; and 2. Dreyfus’ commitment to viewing Heidegger through an equipmental lens, seems to blind him to the primordial relevance of _temporality_ as Dasein’s horizon for understanding Being.
 
 Regarding the first weakness, Dreyfus connects the Kierkegaardian term Augenblick with Heidegger's conception of anticipatory resoluteness and repetition to get to such cases of world transformers through reciprocal rejoinder.  In defence of this Dreyfus quotes Heidegger: 
->“Repetition makes a reciprocal rejoinder to the possibility of existence that has-been-there....  But when such a rejoinder is made to this possibility in a resolution, it is made in an _Augenblick_; and as such it is at the same time a _disavowal of that which in the today, is working itself out as the “past._”
-><div align="right">(Dreyfus 2005, p. 8, emphasis in original).</div>
+> “Repetition makes a reciprocal rejoinder to the possibility of existence that has-been-there....  But when such a rejoinder is made to this possibility in a resolution, it is made in an _Augenblick_; and as such it is at the same time a _disavowal of that which in the today, is working itself out as the “past._”
+>
+> (Dreyfus 2005, p. 8, emphasis in original).
 
 However, directly following this, Heidegger states: 
->“Repetition does not abandon itself to that which is past, nor does it aim at progress.  In the moment of vision [Augenblick] authentic existence is indifferent to both these alternatives”
-><div align="right">(Heidegger 1962, p. 438).</div>
+> “Repetition does not abandon itself to that which is past, nor does it aim at progress.  In the moment of vision [Augenblick] authentic existence is indifferent to both these alternatives”
+>
+> (Heidegger 1962, p. 438).
 
 According to Heidegger, any such authentic transformation via reciprocal rejoinder is blind to what is good or bad, benefit or detriment.  This is problematic for Dreyfus as his examples of world transformers all share the characteristic of progress: Jesus, Martin Luther King Jnr, Michael Jordan, each represent a progression forward from an earlier way of doing things.  This positive account of authenticity is Dreyfus’ not Heidegger’s: where Dreyfus sees a positive direction, Heidegger sees _neutrality_.  For Heidegger, authenticity is the constitutive account of who we are as Dasein in our being as our own most owned.  Heidegger was not outlining a path of values; he was revealing our being as ourselves in relation to Being ontologically; what is before and the basis on which all interpretations of human-being is possible.  Thus, Dreyfus seems to hold an idealistic interpretation of such Heideggerian transformations, which does not appear supported by the text.
 
 Regarding the second weakness, in Being and Time, Heidegger appears to be working towards something much more fundamental than practical wisdom in his pursuit of the primordialism of Dasein.  Dreyfus does a fine job explicating the practicality of Dasein’s skill acquisition within the world and how it could lead to changes in the background practices and norms to which they relate.  However, he does not appear to capture Heidegger’s primordial intelligibility in doing this.  Dasein’s practical comportment is but one part of a much deeper ontological landscape as _being-in-the-world_.  For instance, there is textual evidence connecting temporality with primordial intelligibility.  Near the beginning of Being and Time, Heidegger writes: 
->“time needs to be explicated primordially as the horizon for the understanding of Being, and in terms of temporality as the Being of Dasein, which understands Being” 
-><div align="right">(Heidegger 1962, p. 39).</div>
+> “time needs to be explicated primordially as the horizon for the understanding of Being, and in terms of temporality as the Being of Dasein, which understands Being”
+>
+> (Heidegger 1962, p. 39).
 
 Keller (1999) presents a strong argument against Dreyfus that time as the contextualiser of meaning is the primordial intelligibility Heidegger reveals in Division II.  According to Keller, time is the “original possibilizer … the source of possibility itself” and thus “temporality becomes the condition under which all the conditions of the possibility of human existence … is possible” (1999, p.182).  So even if Dreyfus is right in his description of Dasein’s skill acquisition through Techne and Phronesis, it does not appear to be a full account of Dasein’s primordial intelligibility.
 
 Considering the above, we need to acknowledge that Heidegger’s complex and self-referencing style of prose, along with his original verbiage seems tailor-made for such contradictory interpretations.  With this in mind, we should give Dreyfus room for further argumentation on the degree of significance temporality plays within Heidegger’s ontological structure of Dasein’s intelligibility.  However, it is hard to blame Heidegger’s writing for Dreyfus’ bias toward a positive account of authenticity, when directly following the quote Dreyfus uses to support it, Heidegger undermines it.
 
-In sum, Dreyfus' take on Heidegger is interesting: on one level he is very considered and well thought out, but on another, there appears to be something fundamentally lacking in his reading of Heidegger, specifically, Being and Time.  In his attempt to correct his mistake, Dreyfus manages to successfully incorporate elements from Kisiel and Kierkegaard, contextualising them within his original reading of Division I.  However, in doing so, Dreyfus highlights the weakness of textual interpretation: it is not clear where Heidegger ends, and Dreyfus begins.  He weighs his reading heavily on equipmentality and skill as practical wisdom, takes an overly optimistic interpretation of possible Heideggerian transformations, and seems to underestimate the role of temporality in primordial intelligibility.  However, we should give Dreyfus a degree of charity in his reading of Heidegger due to its susceptibility to misinterpretation.  While, this seems fair of primordial intelligibility, on the biased progressive direction of authenticity and world transformations, not so much.  So, while Dreyfus succeeds in extending his earlier work on Heidegger toward correcting his mistake, he does not go far enough and remains open to further criticism.\
+In sum, Dreyfus' take on Heidegger is interesting: on one level he is very considered and well thought out, but on another, there appears to be something fundamentally lacking in his reading of Heidegger, specifically, Being and Time.  In his attempt to correct his mistake, Dreyfus manages to successfully incorporate elements from Kisiel and Kierkegaard, contextualising them within his original reading of Division I.  However, in doing so, Dreyfus highlights the weakness of textual interpretation: it is not clear where Heidegger ends, and Dreyfus begins.  He weighs his reading heavily on equipmentality and skill as practical wisdom, takes an overly optimistic interpretation of possible Heideggerian transformations, and seems to underestimate the role of temporality in primordial intelligibility.  However, we should give Dreyfus a degree of charity in his reading of Heidegger due to its susceptibility to misinterpretation.  While, this seems fair of primordial intelligibility, on the biased progressive direction of authenticity and world transformations, not so much.  So, while Dreyfus succeeds in extending his earlier work on Heidegger toward correcting his mistake, he does not go far enough and remains open to further criticism.
 
 ## References
 
@@ -63,6 +66,4 @@ Heidegger, M 1962, _Being and time_, trans. Macquarrie, J, & Robinson, E, Malden
 
 Keller, P 1999, _Husserl and Heidegger on Human Experience_, Cambridge UP, Cambridge.
 
-Korab-Karpowicz, W. J 2020, 'Martin Heidegger', _The Internet Encyclopedia of Philosophy_, viewed 15 September 2020, < https://iep.utm.edu/heidegge/>.
-
-
+Korab-Karpowicz, W. J 2020, 'Martin Heidegger', _The Internet Encyclopedia of Philosophy_, viewed 15 September 2020, <https://iep.utm.edu/heidegge/>.

@@ -65,7 +65,7 @@ aware of it as a fact, that this turn towards the ownmost Self is possible: “[
 it is ours and ours alone as “the end of Dasein, is Dasein' s ownmost possibility” (Heidegger 1962, p. 303).  Moreover, it is that possibility that is both factually certain, yet temporally indeterminate - we know it is inevitable, yet it is 
 always the possibility temporally ahead of us.  In its ahead-ness, we perceive ourselves in temporal terms.  Our possibilities temporally projected towards death as beings existing now, with our past behind us and our future ahead, the 
 future closed off by the horizon of death.  Moreover, this horizon is “non-relational” (Heidegger 1962, p. 303).  As such, in non-relation, we are detached from the world of ‘they’ and from ourselves as they-Self - we become free as 
-foreign.  Essentially, existential anxiety signifies our first experience of freedom the objectification of the world as thing.  However, this freedom also reveals to us the consequential truth of our finitude, the cost of choice 
+foreign.  Essentially, existential anxiety signifies our first experience of freedom from the objectification of the world as *thing*.  However, this freedom also reveals to us the consequential truth of our finitude, the cost of choice
 (Heidegger 1962, p. 313).
 
 It is often stated that truth is both a good and desired thing, exemplified by the phrase “the truth will set you free.”  However, less noted is the cost that comes with truth: truth implies facticity, which implies concreteness, which 
@@ -80,7 +80,8 @@ ourselves as Beings-in-the-world as our choices concretises us factually.  It is
 
 
 > _“When Dasein thus brings itself back from the ‘they’, the they‑[S]elf is modified in an existentiell manner so that it becomes authentic Being‑one’s‑Self [Self-they].  This must be accomplished by making up for not choosing.  But ‘making up’ for not choosing signifies choosing to make this choice – deciding for a potentiality‑for‑Being, and making this decision from one’s own Self.  In choosing to make this choice, Dasein makes possible, first and foremost, its authentic potentiality-for-Being."_
-> <div align="right">(Heidegger 1962, p. 313).</div>
+>
+> (Heidegger 1962, p. 313).
 
 In sum, we have defined Dasein as the being which is the unification of Subject and Object: a being not only in the world, but inseparable from it; a being that cares for its own existence; Dasein as Being-in-the-world.  Additionally, 
 that we as beings that care for own existence are ourselves Dasein.  Moreover, that in asking who we are as Dasein, we answer as the subjective I of ourselves as Self.  That we see this I as separate to the world through distortion of 
@@ -96,9 +97,8 @@ being as finite, we can recapture and take hold of our Self as they-Self by taki
 choice originally.  As Such, by relating our Self to our Being-in-the-world, they-Self becomes Self-they and thus becomes authentic.
 
 Finally, in his re-raising the question of Being, Heidegger arguably reorients both the perspectives of ourselves and the Western Philosophical tradition.  In this respect, nothing quite compares to reading his arguments in his own words 
-for oneself.  For my part, within the scope of this discussion, my intention was to do justice in my exposition of them.\
-\
-\
+for oneself.  For my part, within the scope of this discussion, my intention was to do justice in my exposition of them.
+
 ## References
 
 Daves, S 2013, 'On the Permanence of Heideggerian Authenticity ', in _Theses and Dissertations_, University of Arkansas, < http://scholarworks.uark.edu/etd/842>.

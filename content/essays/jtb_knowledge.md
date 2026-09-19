@@ -83,15 +83,14 @@ For instance, let’s look at Bertrand Russell’s well known example of the sto
 
 >Alice sees a clock that reads two o’clock, and believes that the time is two o’clock. It is in fact two o’clock. There’s a problem, however: unknown to Alice, the clock she’s looking at stopped twelve hours ago. Alice thus has an accidentally true, justified belief.
 >
->Wikipedia
+> (Wikipedia)
 
 Alice clearly does not hold what we would classify as a genuine case of knowledge in this scenario, as it is by sheer luck that the broken clock’s hands happen to correlate with the actual time that it happens to be when Alice makers her observation. This particular case also aids to highlight just how often these scenarios can arise, as the broken clock will always be exactly correct at two separate times of every day. But what if Alice, instead of ending her inquiry at the initial observation, had taken the time to inspect the clock to test its working state? If we add the clause that the clock must be tested at the time of the first observation for working order, we can provisionally test its truthfulness and therefore also its knowledge claim.
 
 If the time on the clock at the time of the observation matches up with the time it actually is, then at that moment this has to be considered knowledge, albeit only the provisional type. While at any other time it would not. Given this new approach of only ever having any kind of knowledge after testing it, Alice would actually have knowledge even when the clock is broken. She would gain knew reliable, testable, and justifiable knowledge that the clock isn’t working. In one case, Alice discovers the clock is broken and has obtained knowledge that the clock probably is not showing the correct time. On the other, she discovers that the clock appears to be functioning normally and can therefore reasonably declare, that if there is no discordance with other facts that are contingent to knowing what time it is, that the clock is showing the real time and thus has knowledge of what time it is. Though, even this new knowledge is still only ever provisional.
 
-It is only by further appropriate tests, say checking another clock, looking outside and seeing the Sun is at the expected place in the sky, etc, that the knowledge she has acquired by test can be somewhat retained. Worryingly for some, this may be the best knowledge level that can ever be justifiably known from any position that necessarily entails a first person internalistic perspective as part of the justificational framework. In other words, knowledge is fleeting and momentary. We need to constantly test our internal theories against the world in order to have any form of consistent knowledge. And since it’s always possible that our beliefs could in the future fail such an appropriate test, any knowledge acquired at any moment can only ever be provisional.\
-\
-\
+It is only by further appropriate tests, say checking another clock, looking outside and seeing the Sun is at the expected place in the sky, etc, that the knowledge she has acquired by test can be somewhat retained. Worryingly for some, this may be the best knowledge level that can ever be justifiably known from any position that necessarily entails a first person internalistic perspective as part of the justificational framework. In other words, knowledge is fleeting and momentary. We need to constantly test our internal theories against the world in order to have any form of consistent knowledge. And since it’s always possible that our beliefs could in the future fail such an appropriate test, any knowledge acquired at any moment can only ever be provisional.
+
 ## A Possible Revision to the *Knowledge* Problem
 
 As per Gettier’s examples, it doesn’t appear that we can ever truly avoid the possibility of having justified *false* beliefs. If this is the case as it appears to be, then perhaps we should reverse the knowledge narrative and instead of trying to define what we know to be true, we should try to define what we know not to be true. As the boundary of what we know to be false expands, we also limit what can be true. In this sense knowledge is asymptotic; we aim for truth, but never fully realise it absolutely.
@@ -108,11 +107,12 @@ There are many things that we aren’t absolutely sure of, but at the same time 
 
 Lastly, in trying to gain the type of resilient knowledge that JTB arguments and the like seek, we only expose ourselves to the problem of scepticism; which may be the truer account of what is really the case when it comes to our ability to know. But that doesn’t mean we can’t hold a type of provisional knowledge, based on internal mechanisms of justification in concert with further external means, by way of appropriate tests. We just have to accept that knowledge may be asymptotic by nature, and as such never fully realisable. While this may be an unwelcome fact, it doesn’t need to lead to fatalism, as it does not entail that we are any more limited than we have ever been. By simply adding the clause that the demarcation between belief and knowledge is crossed by an appropriate test, and further that the test is limited to that moment, we are able to justifiably hold a type of knowledge of the world, albeit provisional.
 
-___
+---
+
 If you made it this far and are interested in a broader overview of knowledge, the Gettier cases, and responses to scepticism check out Wireless Philosophy‘s YouTube series: [Epistemology: Introduction to Theory of Knowledge](https://www.youtube.com/watch?v=xehTcQeqDWs&list=PLtKNX4SfKpzUxuye9OdaRfL5fbpGa3bH5). It’s definitely worth checking out.
-___
-\
-\
+
+---
+
 ## References
 
 Gettier, E 1963, Is Justified True Belief Knowledge?, Analysis, 23:6, pp.121-123.

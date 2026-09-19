@@ -90,7 +90,6 @@ As the notion of time travel is counter intuitive and devoid from experience, an
 
 It is here that I will end this discussion.
 
-
 ## References
 
 Friedman, et al 1990, Cauchy Problem in Spacetimes with Closed Timelike Curves, Physical Review, vol. 42, no 6, pp. 1916-1929

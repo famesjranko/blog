@@ -123,6 +123,10 @@
 		font-style: italic;
 	}
 
+	.prose blockquote p.attribution {
+		text-align: right;
+	}
+
 	.prose img {
 		max-width: 100%;
 		height: auto;
@@ -133,6 +137,24 @@
 		padding: 1rem 1.25rem;
 		border: 1px solid var(--color-border);
 		font-size: 0.85rem;
+	}
+
+	.prose figure {
+		margin-block: 2rem;
+		text-align: center;
+	}
+
+	.prose figure picture,
+	.prose figure img {
+		display: block;
+		width: min(100%, 19rem);
+		margin-inline: auto;
+	}
+
+	.prose figure figcaption {
+		margin-top: 0.75rem;
+		color: var(--color-muted);
+		text-align: left;
 	}
 
 	.prose p:has(> img + img) {

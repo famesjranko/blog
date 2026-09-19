@@ -39,10 +39,9 @@ Given the limitations of what we can know internally, both of others and possibl
 
 In sum, there are many approaches to this problem and, in a Russellian sense, the approach is dependent on the question we’re asking – this is highlighted by Searle’s response to the OMR.  When it comes to the problem of artificial intelligence we can look at from an explanatory position; where the aim is to understand it, predict it, and even replicate it.  However, we can also view it from a practical and ethical position where the question is framed very differently.  It can be seen that the problem faced by the internalist perspective is answering how intelligence, and particularly conscious intelligence, comes about.  Whereas the problem faced by the externalist perspective is that of how to evaluate and respond to apparent intelligence, artificial or otherwise.
 
-The one assumption made by both perspectives is that we do actually have meaningful knowledge and experiences, and aren’t just suffering from a first-hand information problem; where our inner mental self-awareness is merely a function of formal symbol manipulation with the illusion of being uniquely qualitative.  And worse still, we have no internal method for confirming or denying it.  Given this assumption, the best fit method for evaluating potential human-like AI is an intuitive behaviourist methodology.  The real question is not *if* a particular AI system is human-like, but whether or not we believe that it is human-like.\
-\
-\
-**References:** 
+The one assumption made by both perspectives is that we do actually have meaningful knowledge and experiences, and aren’t just suffering from a first-hand information problem; where our inner mental self-awareness is merely a function of formal symbol manipulation with the illusion of being uniquely qualitative.  And worse still, we have no internal method for confirming or denying it.  Given this assumption, the best fit method for evaluating potential human-like AI is an intuitive behaviourist methodology.  The real question is not *if* a particular AI system is human-like, but whether or not we believe that it is human-like.
+
+## References
 
 Cole, D 2014, ‘The Chinese Room Argument’, The Stanford Encyclopedia of Philosophy, Edward N. Zalta (ed.) [link](http://plato.stanford.edu/entries/chinese-room/).
 

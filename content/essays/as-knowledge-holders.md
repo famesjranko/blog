@@ -12,6 +12,10 @@ draft: false
 
 ![we as knowers](/img/essays/as-knowledge-holders/cover.jpg)
 
-As knowledge holders, who are we? Does our identification of holding knowledge match how we, in an operative sense, actually know?
+Does our self identification of holding knowledge match how we, in an operative sense, actually know?
 
-I think, intuitively, we are ***foundationalists***; operationally, we are ***coherentists***; and ultimately, inescapably, we are limited by ***observation***, ***test***, and ***measurement***.
+I think, intuitively, we are ***[foundationalists](https://plato.stanford.edu/entries/justep-foundational/)***.
+
+operationally, we are ***[coherentists](https://plato.stanford.edu/entries/justep-coherence/)***.
+
+and ultimately, inescapably, we are limited by ***[observation](https://plato.stanford.edu/entries/science-theory-observation/)***, ***[test](https://plato.stanford.edu/entries/scientific-method/)***, and ***[measurement](https://plato.stanford.edu/entries/measurement-science/)***.
