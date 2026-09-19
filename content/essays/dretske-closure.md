@@ -3,6 +3,8 @@ title: "On Dretske and the Rejection of the Closure Principle"
 author:
   name = "Andrew McDonald"
 date: 2020-03-09T03:54:16+11:00
+cover: /img/essays/dretske-closure/cover.jpg
+coverAlt: "rope"
 draft: false
 toc: false
 type:
@@ -15,7 +17,7 @@ tags:
   - closure
 ---
 
-![rope](/img/rope_dretske.jpg)
+![rope](/img/essays/dretske-closure/cover.jpg)
 
 Fred Dretske (2005) rejects the claim that closure holds over known entailment. Dretske argues that propositions, P, have heavyweight implications, Q, which cannot be known by the same reasons that P is known by; and that if closure holds this leads to scepticism. However, Dretske argues that we can rule out closure by acknowledging that relevant alternatives for P are distinct and separate from those for Q. Thus closure fails and scepticism is avoided. Intuitively I find myself agreeing with Dretske, but think that this intuition itself is part of the larger problem within epistemology. Using ideas from Nagel et al, I contend that the analytic approach to the problems of closure and knowledge itself is potentially limited; that gaps between thought modes can explain cases of apparent loss of knowledge as exposed by Dretske. Moreover, that if we want to further success regarding problems within epistemology a new approach may be needed. I suggest we look toward the rational sciences, and towards a form of experimental epistemology.
 

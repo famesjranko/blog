@@ -3,6 +3,8 @@ title: '"To Know Oneself" or "Caring for Oneself" in both Definition and Descrip
 author:
   name = "Andrew McDonald"
 date: 2016-07-22
+cover: /img/essays/descript-philosophy/cover.jpg
+coverAlt: "rocks"
 draft: false
 images:
 type:
@@ -13,7 +15,7 @@ tags:
   - essay
 ---
 
-![rocks](/img/rocks_philosophy.jpg)
+![rocks](/img/essays/descript-philosophy/cover.jpg)
 
 In relation to philosophy, these two terms, ‘know oneself’ and ‘caring for oneself,’ can be thought of in two ways: definitively and descriptively.  As a definition for what philosophy is I find it lacking due to its ambiguous nature and the implications from which it draws.  While on the other hand as a description of who should do philosophy, I find it rather insightful.
 

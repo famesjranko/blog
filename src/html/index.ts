@@ -5,7 +5,7 @@ import {
 	topicSlug,
 } from "../content.js";
 import { siteUrl } from "../site.js";
-import { escapeHtml, formatDate, page, placeholderStyle } from "./layout.js";
+import { cardCover, escapeHtml, formatDate, page } from "./layout.js";
 import { projectEntry } from "./project.js";
 
 export { formatDate };
@@ -19,35 +19,9 @@ export function topicLink(topic: string): string {
 	return `<a href="${siteUrl(`/topics/${topicSlug(topic)}/`)}">${escapeHtml(topic)}</a>`;
 }
 
-export interface Cover {
-	src: string;
-	alt: string;
-}
-
-export function extractCover(html: string): Cover | undefined {
-	const tag = /<img\b(?:[^>"']|"[^"]*"|'[^']*')*>/i.exec(html)?.[0];
-	if (tag === undefined) {
-		return undefined;
-	}
-	const src = /src="([^"]*)"/i.exec(tag)?.[1];
-	if (src === undefined || src === "") {
-		return undefined;
-	}
-	const alt = /alt="([^"]*)"/i.exec(tag)?.[1] ?? "";
-	return { src, alt };
-}
-
-function essayCover(essay: Essay): string {
-	const cover = extractCover(essay.html);
-	if (cover === undefined) {
-		return `<div class="card-media card-media--placeholder" style="${placeholderStyle(essay.slug)}" aria-hidden="true"></div>`;
-	}
-	return `<div class="card-media"><img src="${escapeHtml(cover.src)}" alt="${escapeHtml(cover.alt)}" loading="lazy" decoding="async"></div>`;
-}
-
 export function essayEntry(essay: Essay): string {
 	const url = siteUrl(`/essays/${essay.slug}/`);
-	const cover = essayCover(essay);
+	const cover = cardCover(essay.cover, essay.coverAlt, essay.slug);
 	const description =
 		essay.description !== undefined
 			? `<p class="entry-desc">${escapeHtml(essay.description)}</p>`
@@ -66,7 +40,7 @@ export function essayIndexPage(essays: Essay[]): string {
 	const count = essays.length === 1 ? "1 essay" : `${essays.length} essays`;
 	return page({
 		title: "Essays",
-		content: `<div class="wrap essays-page"><h1>Essays</h1><p class="essay-count">${count}</p><ol class="card-grid">${entries}</ol></div>`,
+		content: `<div class="wrap index-page"><h1>Essays</h1><p class="index-count">${count}</p><ol class="card-grid">${entries}</ol></div>`,
 	});
 }
 

@@ -7,6 +7,8 @@ export const EssaySchema = z.object({
 	date: z.coerce.date(),
 	topics: z.array(z.string()).default([]),
 	philosophers: z.array(z.string()).default([]),
+	cover: z.string().min(1).optional(),
+	coverAlt: z.string().optional(),
 	featured: z.boolean().default(false),
 	draft: z.boolean().default(false),
 });
@@ -35,6 +37,8 @@ export const RawFrontmatterSchema = z.object({
 	// New fields
 	topics: z.array(z.string()).optional(),
 	philosophers: z.array(z.string()).optional(),
+	cover: z.string().optional(),
+	coverAlt: z.string().optional(),
 });
 
 export type RawFrontmatter = z.infer<typeof RawFrontmatterSchema>;
@@ -48,6 +52,8 @@ export function normalizeFrontmatter(
 		date: raw.date,
 		topics: raw.topics ?? raw.tags ?? raw.categories ?? [],
 		philosophers: raw.philosophers ?? [],
+		cover: raw.cover,
+		coverAlt: raw.coverAlt,
 		featured: raw.featured ?? false,
 		draft: raw.draft ?? false,
 	});
@@ -71,6 +77,8 @@ export const ProjectSchema = z.object({
 	repo: z.string().url().optional(),
 	stack: z.array(z.string()).default([]),
 	predecessor: z.string().min(1).optional(),
+	cover: z.string().min(1).optional(),
+	coverAlt: z.string().optional(),
 	featured: z.boolean().default(false),
 	draft: z.boolean().default(false),
 });
@@ -94,6 +102,8 @@ export const RawProjectFrontmatterSchema = z.object({
 	stack: z.array(z.string()).optional(),
 	tags: z.array(z.string()).optional(),
 	predecessor: z.string().optional(),
+	cover: z.string().optional(),
+	coverAlt: z.string().optional(),
 	// Hugo legacy presentation metadata. Accepted but deliberately
 	// discarded: never forwarded to ProjectMeta.
 	author: z.unknown().optional(),
@@ -115,6 +125,8 @@ export function normalizeProjectFrontmatter(
 		repo: raw.repo,
 		stack: raw.stack ?? raw.tags ?? [],
 		predecessor: raw.predecessor,
+		cover: raw.cover,
+		coverAlt: raw.coverAlt,
 		featured: raw.featured ?? false,
 		draft: raw.draft ?? false,
 	});

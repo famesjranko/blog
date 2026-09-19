@@ -1,6 +1,6 @@
 import type { Project } from "../content.js";
 import { siteUrl } from "../site.js";
-import { escapeHtml, formatDate, page, placeholderStyle } from "./layout.js";
+import { cardCover, escapeHtml, formatDate, page } from "./layout.js";
 
 export function originLabel(origin: Project["origin"]): string {
 	return origin === "university" ? "University project" : "Personal project";
@@ -31,7 +31,7 @@ function repoLink(repo: string | undefined): string {
 
 export function projectEntry(project: Project): string {
 	const url = siteUrl(`/projects/${project.slug}/`);
-	const cover = `<div class="card-media card-media--placeholder" style="${placeholderStyle(project.slug)}" aria-hidden="true"></div>`;
+	const cover = cardCover(project.cover, project.coverAlt, project.slug);
 	const description =
 		project.description !== undefined
 			? `<p class="entry-desc">${escapeHtml(project.description)}</p>`
@@ -49,7 +49,7 @@ export function projectIndexPage(projects: Project[]): string {
 		projects.length === 1 ? "1 project" : `${projects.length} projects`;
 	return page({
 		title: "Projects",
-		content: `<div class="wrap projects-page"><h1>Projects</h1><p class="project-count">${count}</p><ol class="card-grid">${entries}</ol></div>`,
+		content: `<div class="wrap index-page"><h1>Projects</h1><p class="index-count">${count}</p><ol class="card-grid">${entries}</ol></div>`,
 	});
 }
 

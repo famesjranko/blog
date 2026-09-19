@@ -3,6 +3,8 @@ title: "Immanuel Kant, Enlightenment, and the Categories of Reason"
 author:
   name = "Andrew McDonald"
 date: 2016-07-22
+cover: /img/essays/kant-enlightenment/cover.jpg
+coverAlt: "city"
 draft: false
 toc: false
 type:
@@ -14,7 +16,7 @@ tags:
   - kant
 ---
 
-![city](/img/cityline_kant.jpg)
+![city](/img/essays/kant-enlightenment/cover.jpg)
 
 Kant outlines his position on what Enlightenment is in his essay, An Answer to the Question: What is Enlightenment, stating that Enlightenment is “man’s emergence from his self-imposed immaturity;” essentially a growing up and a choice to think for one’s self in accordance with reason as an end-in-itself.  Moreover, that there are two distinct categories of reason – public and private – and though Kant states that only unrestricted public reason is needed to achieve Enlightenment, he also argues the need for both elements of reason to exist for there to be Enlightenment.  In response I contend that Kant makes a category error in the operative description of reason, leading to unnecessary preconditionals for the success of the Enlightenment.  And that by including Aristotle’s definition of Man and Nietzsche’s concept of the Übermensch, it may be possible to achieve Kant’s definition of Enlightenment without the need for authority, nor obedience in any form other than to reason itself; in essence, a type of neo-Enlightenment.
 

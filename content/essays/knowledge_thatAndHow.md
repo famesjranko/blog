@@ -3,6 +3,8 @@ title: "A Naive Exploration on Propositional Knowledge and Counterfactuals"
 author:
   name = "Andrew McDonald"
 date: 2016-08-06
+cover: /img/essays/knowledge-thatandhow/cover.jpg
+coverAlt: "watch"
 draft: false
 toc: false
 type:
@@ -15,7 +17,7 @@ tags:
   - counter-factuals
 ---
 
-![watch](/img/plane_propositional.jpg)
+![watch](/img/essays/knowledge-thatandhow/cover.jpg)
 
 Propositional knowledge, or knowledge-that, has a reversible quality to it. Meaning, that by having propositional knowledge of something, I can create further examples of this kind by means of counterfactuals that are negations of the original proposition. Simply put, if I know something-is, then I am also able to know by inference what it is-not. If I know what a chair is, by definition I am also capable of knowing what a chair is not.
 

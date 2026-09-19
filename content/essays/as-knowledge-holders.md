@@ -1,6 +1,8 @@
 ---
 title: "Who are we as knowledge holders?"
 date: 2016-10-30
+cover: /img/essays/as-knowledge-holders/cover.jpg
+coverAlt: "we as knowers"
 topics:
   - epistemology
   - introspective
@@ -11,7 +13,7 @@ topics:
 draft: false
 ---
 
-![we as knowers](/img/we-as-knowers1.jpg)
+![we as knowers](/img/essays/as-knowledge-holders/cover.jpg)
 
 As knowledge holders, who are we? Does our identification of holding knowledge match how we, in an operative sense, actually know?
 

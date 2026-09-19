@@ -3,6 +3,8 @@ title: " \"The Self of everyday Dasein is the they-self, which we distinguish fr
 author:
   name = "Andrew McDonald"
 date: 2020-09-19T16:51:27+11:00
+cover: /img/essays/heidegger-theyself/cover.jpg
+coverAlt: "they-self"
 draft: false
 toc: false
 type:
@@ -16,7 +18,7 @@ tags:
   - authenticity
 ---
 
-![they-self](/img/self_heidegger.jpg)
+![they-self](/img/essays/heidegger-theyself/cover.jpg)
 
 The above quotation is from Martin Heidegger’s magnum opus, _Being and Time_.  Wherein he sets himself the task of answering the question of The Meaning of Being.  My aim for this discussion is to explain what Heidegger means by the 
 titular quotation; to do so as simply as possible and avoid the barrier imposed by his complex prose and unique terminology as used throughout Being and Time.  Having said that, a detailed account of Heidegger’s unique verbiage must be 

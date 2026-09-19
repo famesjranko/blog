@@ -201,6 +201,65 @@ describe("project links", () => {
 	});
 });
 
+describe("essay cover fields", () => {
+	it("keeps an explicit essay cover and alt", () => {
+		const meta = normalizeFrontmatter({
+			title: "On Privacy",
+			date: "2020-05-14",
+			cover: "/img/essays/on-privacy/cover.jpg",
+			coverAlt: "privacy",
+			draft: false,
+		});
+		expect(meta.cover).toBe("/img/essays/on-privacy/cover.jpg");
+		expect(meta.coverAlt).toBe("privacy");
+	});
+
+	it("leaves essay covers undefined when absent", () => {
+		const meta = normalizeFrontmatter({
+			title: "On Privacy",
+			date: "2020-05-14",
+			draft: false,
+		});
+		expect(meta.cover).toBeUndefined();
+		expect(meta.coverAlt).toBeUndefined();
+	});
+
+	it("rejects an empty essay cover", () => {
+		expect(() =>
+			normalizeFrontmatter({
+				title: "On Privacy",
+				date: "2020-05-14",
+				cover: "",
+				draft: false,
+			}),
+		).toThrow();
+	});
+});
+
+describe("project cover fields", () => {
+	it("keeps an explicit project cover and alt", () => {
+		const meta = normalizeProjectFrontmatter({
+			title: "Something",
+			date: "2026-01-01",
+			cover: "/img/projects/something/cover.jpg",
+			coverAlt: "something",
+			draft: false,
+		});
+		expect(meta.cover).toBe("/img/projects/something/cover.jpg");
+		expect(meta.coverAlt).toBe("something");
+	});
+
+	it("leaves project covers undefined when absent", () => {
+		const meta = normalizeProjectFrontmatter({
+			title: "Something",
+			date: "2026-01-01",
+			draft: false,
+		});
+		expect(meta.cover).toBeUndefined();
+		expect(meta.coverAlt).toBeUndefined();
+	});
+});
+
 describe("featured flag", () => {
 	it("defaults essays to unfeatured", () => {
 		const meta = normalizeFrontmatter({

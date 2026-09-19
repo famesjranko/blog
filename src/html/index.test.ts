@@ -1,13 +1,8 @@
 import { describe, expect, it } from "vitest";
 import type { Essay, Project } from "../content.js";
-import {
-	essayEntry,
-	essayIndexPage,
-	extractCover,
-	formatDate,
-	homePage,
-} from "./index.js";
-import { placeholderStyle } from "./layout.js";
+import { essayEntry, essayIndexPage, formatDate, homePage } from "./index.js";
+import { cardCover, placeholderStyle } from "./layout.js";
+import { projectEntry, projectIndexPage } from "./project.js";
 import { page } from "./layout.js";
 
 function sampleEssay(overrides: Partial<Essay> = {}): Essay {
@@ -158,47 +153,47 @@ describe("page scripts", () => {
 	});
 });
 
-describe("extractCover", () => {
-	it("returns the first image source and alt text", () => {
-		const html =
-			'<p><img src="/img/jtb_knowledge.jpg" alt="jtb"></p><p><img src="/img/other.jpg" alt="other"></p>';
-		expect(extractCover(html)).toEqual({
-			src: "/img/jtb_knowledge.jpg",
-			alt: "jtb",
-		});
+describe("cardCover", () => {
+	it("renders the explicit cover image with lazy loading", () => {
+		const html = cardCover(
+			"/img/essays/jtb-knowledge/cover.jpg",
+			"jtb",
+			"jtb-knowledge",
+		);
+		expect(html).toContain('class="card-media"');
+		expect(html).toContain('src="/img/essays/jtb-knowledge/cover.jpg"');
+		expect(html).toContain('alt="jtb"');
+		expect(html).toContain('loading="lazy"');
 	});
 
-	it("returns undefined when there is no image", () => {
-		expect(extractCover("<p>Body.</p>")).toBeUndefined();
+	it("renders a slug-derived placeholder when no cover is set", () => {
+		const html = cardCover(undefined, undefined, "other");
+		expect(html).toContain("card-media--placeholder");
+		expect(html).toContain(`style="${placeholderStyle("other")}"`);
 	});
 
-	it("returns undefined when the image has no usable source", () => {
-		expect(extractCover('<p><img alt="no source"></p>')).toBeUndefined();
-		expect(extractCover('<p><img src="" alt="empty"></p>')).toBeUndefined();
-	});
-
-	it("defaults missing alt text to an empty string", () => {
-		expect(extractCover('<p><img src="/img/cave_plato.jpg"></p>')).toEqual({
-			src: "/img/cave_plato.jpg",
-			alt: "",
-		});
+	it("escapes cover alt text", () => {
+		const html = cardCover("/img/x.jpg", "<evil>", "x");
+		expect(html).toContain('alt="&lt;evil&gt;"');
+		expect(html).not.toContain('alt="<evil>"');
 	});
 });
 
-describe("essayEntry", () => {
-	it("renders a card with a lazy-loaded cover from the lead image", () => {
+describe("essayEntry cover", () => {
+	it("renders a card with the explicit cover image", () => {
 		const html = essayEntry(
 			sampleEssay({
-				html: '<p><img src="/img/jtb_knowledge.jpg" alt="jtb"></p>',
+				cover: "/img/essays/jtb-knowledge/cover.jpg",
+				coverAlt: "jtb",
 			}),
 		);
 		expect(html).toContain('<article class="card">');
 		expect(html).toContain('class="card-media"');
-		expect(html).toContain('src="/img/jtb_knowledge.jpg"');
+		expect(html).toContain('src="/img/essays/jtb-knowledge/cover.jpg"');
 		expect(html).toContain('loading="lazy"');
 	});
 
-	it("renders a placeholder cover when the essay has no image", () => {
+	it("renders a placeholder cover when no cover is set", () => {
 		const html = essayEntry(sampleEssay());
 		expect(html).toContain('<article class="card">');
 		expect(html).toContain("card-media--placeholder");
@@ -211,16 +206,24 @@ describe("essayEntry", () => {
 		expect(html).toContain(`style="${placeholderStyle("other")}"`);
 	});
 
+	it("never uses body images for the card", () => {
+		const html = essayEntry(
+			sampleEssay({ html: '<p><img src="/img/x.jpg" alt="x"></p>' }),
+		);
+		expect(html).not.toContain('src="/img/x.jpg"');
+		expect(html).toContain("card-media--placeholder");
+	});
+
 	it("escapes cover alt text", () => {
 		const html = essayEntry(
-			sampleEssay({
-				html: '<p><img src="/img/x.jpg" alt="<evil>"></p>',
-			}),
+			sampleEssay({ cover: "/img/x.jpg", coverAlt: "<evil>" }),
 		);
 		expect(html).toContain('alt="&lt;evil&gt;"');
 		expect(html).not.toContain('alt="<evil>"');
 	});
+});
 
+describe("essayEntry content", () => {
 	it("omits the description when the essay has none", () => {
 		const html = essayEntry(sampleEssay({ description: undefined }));
 		expect(html).toContain("On Privacy");
@@ -278,10 +281,17 @@ describe("essayIndexPage", () => {
 		expect(essayIndexPage([sampleEssay()])).toContain("1 essay");
 	});
 
+	it("uses the shared index shell", () => {
+		const html = essayIndexPage([sampleEssay()]);
+		expect(html).toContain('<div class="wrap index-page">');
+		expect(html).toContain('<p class="index-count">');
+	});
+
 	it("renders the featured card on the homepage", () => {
 		const html = homePage([
 			sampleEssay({
-				html: '<p><img src="/img/jtb_knowledge.jpg" alt="jtb"></p>',
+				cover: "/img/essays/jtb-knowledge/cover.jpg",
+				coverAlt: "jtb",
 			}),
 		]);
 		expect(html).toContain('<ol class="card-grid">');
@@ -328,5 +338,37 @@ describe("homePage projects", () => {
 	it("omits the projects section when there are none", () => {
 		const html = homePage([sampleEssay()]);
 		expect(html).not.toContain("Featured projects");
+	});
+});
+
+describe("index page parity", () => {
+	it("gives essays and projects the same shell", () => {
+		const pages = [
+			essayIndexPage([sampleEssay()]),
+			projectIndexPage([sampleProject()]),
+		];
+		for (const html of pages) {
+			expect(html).toContain('<div class="wrap index-page">');
+			expect(html).toContain('<p class="index-count">');
+			expect(html).toContain('<ol class="card-grid">');
+		}
+	});
+
+	it("orders card hooks identically in essay and project entries", () => {
+		const hooks = [
+			"<li><article",
+			"card-media",
+			"card-body",
+			"card-title",
+			"entry-meta",
+			"entry-topics",
+			"<time",
+		];
+		const entries = [essayEntry(sampleEssay()), projectEntry(sampleProject())];
+		for (const html of entries) {
+			const at = hooks.map((hook) => html.indexOf(hook));
+			expect(Math.min(...at)).toBeGreaterThanOrEqual(0);
+			expect([...at].sort((a, b) => a - b)).toEqual(at);
+		}
 	});
 });

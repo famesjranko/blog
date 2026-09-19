@@ -1,6 +1,8 @@
 ---
 title: "REVIEW: ‘What Could Be More Intelligible Than Everyday Intelligibility? Reinterpreting Division I of Being and Time in the Light of Division II’ (Dreyfus 2005)" 
 date: 2020-10-10T17:39:34+11:00
+cover: /img/essays/dreyfus-review/cover.jpg
+coverAlt: "transformations"
 draft: false
 featured: true
 toc: false
@@ -17,7 +19,7 @@ tags:
   - intelligibility
 ---
 
-![transformations](/img/dreyfus.jpg)
+![transformations](/img/essays/dreyfus-review/cover.jpg)
 
 Hubert L. Dreyfus is a leading yet controversial interpreter of the work of Martin Heidegger.  He was criticised for his focus on Division I and rejection of Division II, in his interpretation of Heidegger’s Being and Time, _Being-in-the-World: A Commentary on Heidegger's Being in Time, Division I_.  Ultimately, Dreyfus came to accept that by exclusively focusing on Division I he did make at least one serious mistake: overlooking that Heidegger would introduce a richer and more primordial understanding than the average intelligibility described in Division I (2004, p. 2).  The titular essay of this review is his response to that mistake.
 

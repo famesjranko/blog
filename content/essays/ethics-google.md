@@ -1,13 +1,15 @@
 ---
 title: "On the Ethics of Google’s Use of User Data for Covid-19 Mobility Reporting"
 date: 2020-08-12T14:18:23+11:00
+cover: /img/essays/ethics-google/cover.jpg
+coverAlt: "google"
 draft: false
 featured: true
 toc: false
 type:
   - essays
   - essay
-tags: 
+tags:
   - essay
   - ethics
   - kant
@@ -17,7 +19,7 @@ tags:
   - covid-19
 ---
 
-![google](/img/google.jpg)
+![google](/img/essays/ethics-google/cover.jpg)
 
 *Written in 2020 for a La Trobe University ethics unit. The report discussed is Google's COVID-19 Community Mobility Report for Australia (29 March 2020). The assignment brief also raised Taiwan's COVID-19 "electronic fence" as an example drawn "from the same data source," and the essay's ethical dilemma was developed from that comparison. Subsequent verification indicates that Taiwan's electronic-fence system relied on telecommunications-network location data rather than Google's anonymised Community Mobility Report data. Accordingly, references in the original essay to Taiwan identifying individuals using Google's dataset, or to Google acting jointly with Taiwan, should be understood as reflecting the premise presented in the assignment material rather than an established factual connection.*
 
@@ -145,7 +147,7 @@ Regarding steps 3 and 4: Evaluating a given consequences respective probability 
 * Allowing the use of personal user data helps many in some cases and hurts individuals in most cases.
 * Preventing the use of personal user data hurts many in few cases and benefits individuals in most cases.
 
-![table1](/img/table1.png)
+![table1](/img/essays/ethics-google/table1.png)
 
 Using the table above, we can identify the best utilitarian prospect by applying a metric to the probability and utility columns, such that: Very Low = 1, Low = 2, Med = 3, High = 4, Very High = 5.
 

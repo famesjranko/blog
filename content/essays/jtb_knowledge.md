@@ -3,6 +3,8 @@ title: "Analysis: Justified True Belief as Knowledge?"
 author:
   name = "Andrew McDonald"
 date: 2016-08-03
+cover: /img/essays/jtb-knowledge/cover.jpg
+coverAlt: "jtb"
 draft: false
 toc: false
 type:
@@ -15,7 +17,7 @@ tags:
   - belief
 ---
 
-![jtb](/img/jtb_knowledge.jpg)
+![jtb](/img/essays/jtb-knowledge/cover.jpg)
 
 What do we mean when we say we know something?  The long held thought in philosophy was that for a belief to be considered knowledge it had to have three characteristics.  First that it was true in accordance with a fact of the world. Second, that the holder of the belief holds it with conviction. And lastly, that the believer has justification for holding the belief. This proposal for analysis of knowledge is commonly referred to as Justified True Belief (JTB).
 

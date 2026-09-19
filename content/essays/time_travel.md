@@ -3,6 +3,8 @@ title: "Discussion: The Problem of Time Travel to the Past"
 author:
   name = "Andrew McDonald"
 date: 2016-07-29
+cover: /img/essays/time-travel/cover.jpg
+coverAlt: "watch"
 draft: false
 toc: false
 type:
@@ -14,7 +16,7 @@ tags:
   - time
 ---
 
-![watch](/img/clock_time.jpg)
+![watch](/img/essays/time-travel/cover.jpg)
 
 The question of whether or not time travel into the past is possible can be approached in two ways.
 

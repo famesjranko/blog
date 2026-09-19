@@ -53,6 +53,23 @@ export function placeholderStyle(seed: string): string {
 	return `--placeholder-hue: ${hue}; --placeholder-offset: ${offset};`;
 }
 
+/**
+ * Card cover: explicit image when set, deterministic placeholder otherwise.
+ * Root-relative sources are prefixed with the site base path, mirroring
+ * the markdown image rule, so covers keep working under BASE_PATH.
+ */
+export function cardCover(
+	src: string | undefined,
+	alt: string | undefined,
+	slug: string,
+): string {
+	if (src === undefined) {
+		return `<div class="card-media card-media--placeholder" style="${placeholderStyle(slug)}" aria-hidden="true"></div>`;
+	}
+	const url = src.startsWith("/") && !src.startsWith("//") ? siteUrl(src) : src;
+	return `<div class="card-media"><img src="${escapeHtml(url)}" alt="${escapeHtml(alt ?? "")}" loading="lazy" decoding="async"></div>`;
+}
+
 export function header(): string {
 	return (
 		`<header class="site-header"><div class="wrap header-inner">` +

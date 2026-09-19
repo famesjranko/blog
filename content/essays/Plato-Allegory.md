@@ -3,6 +3,8 @@ title: "An Exploration of Plato’s Allegory of the Cave"
 author:
   name = "Andrew McDonald"
 date: 2016-07-22
+cover: /img/essays/plato-allegory/cover.jpg
+coverAlt: "cave"
 draft: false
 toc: false
 images:
@@ -15,7 +17,7 @@ tags:
   - plato
 ---
 
-![cave](/img/cave_plato.jpg)
+![cave](/img/essays/plato-allegory/cover.jpg)
 
 Drawing on guidance from Heidegger and Kenny, and a direct reading of Plato’s Allegory of the Cave, this essay contends that the Allegory has had such an enduring and influential effect on philosophy, history, and western culture at large, due to its successful synthesis of so many of his ideas into a single narrative.  In support of this contention, three parallels will be explored: the Divided Line; the Forms; and the importance of philosophical education.
 

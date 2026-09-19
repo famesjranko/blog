@@ -3,6 +3,8 @@ title: "What is Philosophy"
 author:
   name = "Andrew McDonald"
 date: 2016-07-22
+cover: /img/essays/whatis-philosophy/cover.jpg
+coverAlt: "city"
 draft: false
 toc: false
 type:
@@ -14,7 +16,7 @@ tags:
   - knowledge
 ---
 
-![city](/img/desert_philosophy.jpg)
+![city](/img/essays/whatis-philosophy/cover.jpg)
 
 What we consider to be the domain of Philosophy has changed during the course of history, making any definitions difficult and open to controversy.  Philosophy has traditionally been divided into three major branches, natural, moral, and metaphysical. Additionally, many areas of inquiry which were once part of philosophy have since detached and become fields of their own, respectfully; for example, modern science, which once was known as Natural Philosophy.
 

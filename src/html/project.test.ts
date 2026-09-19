@@ -35,7 +35,7 @@ describe("originLabel", () => {
 	});
 });
 
-describe("projectEntry", () => {
+describe("projectEntry card", () => {
 	it("links the card title to the project page", () => {
 		const html = projectEntry(sampleProject());
 		expect(html).toContain('<article class="card">');
@@ -57,6 +57,26 @@ describe("projectEntry", () => {
 		expect(html).toContain('style="--placeholder-hue:');
 	});
 
+	it("renders the explicit cover image when set", () => {
+		const html = projectEntry(
+			sampleProject({
+				cover: "/img/projects/connect4-lisp-web/cover.jpg",
+				coverAlt: "connect4",
+			}),
+		);
+		expect(html).toContain('src="/img/projects/connect4-lisp-web/cover.jpg"');
+		expect(html).toContain('alt="connect4"');
+		expect(html).toContain('loading="lazy"');
+	});
+
+	it("never uses body images for the card", () => {
+		const html = projectEntry(
+			sampleProject({ html: '<p><img src="/img/x.svg" alt="x"></p>' }),
+		);
+		expect(html).not.toContain('src="/img/x.svg"');
+		expect(html).toContain("card-media--placeholder");
+	});
+
 	it("gives distinct placeholders to distinct slugs", () => {
 		const first = projectEntry(sampleProject({ slug: "musicmeta" }));
 		const second = projectEntry(sampleProject({ slug: "ip-camera" }));
@@ -66,7 +86,9 @@ describe("projectEntry", () => {
 		expect(styleOf(second)).not.toBe("");
 		expect(styleOf(first)).not.toBe(styleOf(second));
 	});
+});
 
+describe("projectEntry content", () => {
 	it("omits the description when absent", () => {
 		const html = projectEntry(sampleProject({ description: undefined }));
 		expect(html).toContain("Connect-4 web");
@@ -107,6 +129,12 @@ describe("projectIndexPage", () => {
 
 	it("uses singular wording for a single project", () => {
 		expect(projectIndexPage([sampleProject()])).toContain("1 project");
+	});
+
+	it("uses the shared index shell", () => {
+		const html = projectIndexPage([sampleProject()]);
+		expect(html).toContain('<div class="wrap index-page">');
+		expect(html).toContain('<p class="index-count">');
 	});
 });
 

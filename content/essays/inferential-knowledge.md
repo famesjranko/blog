@@ -3,6 +3,8 @@ title: "On the Evaluation of Human-Like Artificial Intelligence"
 author:
   name = "Andrew McDonald"
 date: 2016-07-20
+cover: /img/essays/inferential-knowledge/cover.jpg
+coverAlt: "city"
 draft: false
 toc: false
 images:
@@ -17,7 +19,7 @@ tags:
   - knowledge
 ---
 
-![city](/img/ai_turing.jpg)
+![city](/img/essays/inferential-knowledge/cover.jpg)
 
 Drawing on arguments made by Turing, Searle, Saygin, and others, this paper contends that any evaluation for artificial intelligence is dependent on two observational perspectives, internalist and externalist, and that it is the observational perspective that determines which questions are meaningful and which are not.  Artificial intelligence need only be capable of displaying outwardly the behaviours and qualities that we currently perceive as being uniquely human to be considered human-like.  Not only does the externalistic behaviourist model hold best fit for such an evaluation criteria, it is we, as observers and evaluators, who are really tested.  I will then argue that while it is indeed possible for a computer to display the qualities necessary for being human-like – it is not reliant on any particular capability but rather the system as a whole.
 
