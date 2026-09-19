@@ -27,10 +27,10 @@ Below are the final positions from those runs, as recorded in the assignment.
 
 **Search depth 1** (heuristic win, 121 nodes) · **Search depth 2** (heuristic win, 438 nodes)
 
-![Final board at search depth 1, heuristic win, 121 nodes](/img/connect4-depth1.png) ![Final board at search depth 2, heuristic win, 438 nodes](/img/connect4-depth2.png)
+![Final board at search depth 1, heuristic win, 121 nodes](/img/connect4-depth1.svg) ![Final board at search depth 2, heuristic win, 438 nodes](/img/connect4-depth2.svg)
 
 **Search depth 3** (heuristic win, 1775 nodes) · **Search depth 4** (heuristic win, 6038 nodes)
 
-![Final board at search depth 3, heuristic win, 1775 nodes](/img/connect4-depth3.png) ![Final board at search depth 4, heuristic win, 6038 nodes](/img/connect4-depth4.png)
+![Final board at search depth 3, heuristic win, 1775 nodes](/img/connect4-depth3.svg) ![Final board at search depth 4, heuristic win, 6038 nodes](/img/connect4-depth4.svg)
 
 Years later this heuristic became the AI core of a containerised web rebuild (see [Connect-4 web](/projects/connect4-lisp-web/)).

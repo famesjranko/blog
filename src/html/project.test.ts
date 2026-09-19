@@ -110,16 +110,49 @@ describe("projectIndexPage", () => {
 	});
 });
 
-describe("projectPage", () => {
+describe("projectPage header", () => {
 	it("constrains the article to the shared content column", () => {
 		const html = projectPage(sampleProject());
-		expect(html).toContain('<div class="wrap"><article class="prose">');
+		expect(html).toContain('<div class="wrap"><article class="prose project">');
+		expect(html).toContain('<div class="project-grid">');
+	});
+
+	it("shows the origin and human date in the eyebrow", () => {
+		const html = projectPage(sampleProject());
+		expect(html).toContain('class="project-eyebrow"');
+		expect(html).toContain("Personal project");
+		expect(html).toContain("15 Mar 2026");
+	});
+
+	it("uses the description as the lede and meta description", () => {
+		const html = projectPage(sampleProject());
+		expect(html).toContain('class="project-lede"');
+		expect(html).toContain("A Lisp web service.");
+		expect(html).toContain('<meta name="description"');
 	});
 
 	it("links the shared and prose stylesheets", () => {
 		const html = projectPage(sampleProject());
 		expect(html).toContain('<link rel="stylesheet" href="/styles.css">');
 		expect(html).toContain('<link rel="stylesheet" href="/prose.css">');
+	});
+});
+
+describe("projectPage sidebar", () => {
+	it("renders labeled facts in a sidebar before the body", () => {
+		const html = projectPage(sampleProject());
+		expect(html).toContain('aria-label="Project facts"');
+		expect(html).toContain("<dt>Stack</dt>");
+		expect(html).toContain("<dt>Code</dt>");
+		expect(html.indexOf("project-side")).toBeLessThan(
+			html.indexOf("project-main"),
+		);
+	});
+
+	it("omits the sidebar when there are no facts", () => {
+		const html = projectPage(sampleProject({ stack: [], repo: undefined }));
+		expect(html).toContain("Connect-4 web");
+		expect(html).not.toContain("project-side");
 	});
 
 	it("links the repository when present", () => {
@@ -138,6 +171,7 @@ describe("projectPage", () => {
 			sampleProject({ predecessor: "connect4-heuristic" }),
 		);
 		expect(html).toContain('href="/projects/connect4-heuristic/"');
+		expect(html).toContain("<dt>Lineage</dt>");
 	});
 
 	it("omits the predecessor block when absent", () => {

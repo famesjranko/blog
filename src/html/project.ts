@@ -53,27 +53,53 @@ export function projectIndexPage(projects: Project[]): string {
 	});
 }
 
+function factRow(label: string, body: string): string {
+	return `<div class="project-fact"><dt>${label}</dt><dd>${body}</dd></div>`;
+}
+
+function projectFacts(project: Project): string {
+	const rows: string[] = [];
+	const stack = stackList(project.stack);
+	if (stack !== "") {
+		rows.push(factRow("Stack", stack));
+	}
+	const repo = repoLink(project.repo);
+	if (repo !== "") {
+		rows.push(factRow("Code", repo));
+	}
+	if (project.predecessor !== undefined) {
+		const url = siteUrl(`/projects/${project.predecessor}/`);
+		const body = `<span class="project-predecessor">Extended from <a href="${url}">${escapeHtml(project.predecessor)}</a>.</span>`;
+		rows.push(factRow("Lineage", body));
+	}
+	if (rows.length === 0) {
+		return "";
+	}
+	return `<dl class="project-facts">${rows.join("")}</dl>`;
+}
 export function projectPage(project: Project): string {
-	const subtitle =
+	const lede =
 		project.description !== undefined
-			? `<p>${escapeHtml(project.description)}</p>`
+			? `<p class="project-lede">${escapeHtml(project.description)}</p>`
 			: "";
-	const predecessor =
-		project.predecessor !== undefined
-			? `<p class="project-predecessor">Extended from <a href="${siteUrl(`/projects/${project.predecessor}/`)}">${escapeHtml(project.predecessor)}</a>.</p>`
-			: "";
+	const facts = projectFacts(project);
+	const side =
+		facts === ""
+			? ""
+			: `<aside class="project-side" aria-label="Project facts">${facts}</aside>`;
 	return page({
 		title: project.title,
+		...(project.description === undefined
+			? {}
+			: { description: project.description }),
 		styles: [siteUrl("/styles.css"), siteUrl("/prose.css")],
-		content: `<div class="wrap"><article class="prose">
-<header>
+		content: `<div class="wrap"><article class="prose project">
+<header class="project-header">
+<p class="project-eyebrow">${originLabel(project.origin)} &middot; <time datetime="${project.date.toISOString()}">${formatDate(project.date)}</time></p>
 <h1>${escapeHtml(project.title)}</h1>
-${subtitle}
-<p class="project-meta"><span class="project-origin">${originLabel(project.origin)}</span>${stackList(project.stack)}${repoLink(project.repo)}</p>
-<time datetime="${project.date.toISOString()}">${escapeHtml(project.date.toISOString().slice(0, 10))}</time>
-${predecessor}
+${lede}
 </header>
-${project.html}
+<div class="project-grid">${side}<div class="project-main">${project.html}</div></div>
 </article></div>`,
 	});
 }
