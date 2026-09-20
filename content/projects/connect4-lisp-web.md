@@ -7,8 +7,8 @@ featured: true
 origin: personal
 predecessor: connect4-heuristic
 repo: https://github.com/famesjranko/Connect4-Lisp-Web
-cover: /img/projects/connect4-lisp-web/connect4-debug-scores.jpg
-coverAlt: "Connect-4 board mid-game with the debug panel showing a score for each column"
+cover: /img/projects/connect4-lisp-web/cover.jpg
+coverAlt: "Connect-4 running on an Amiga-style computer with a joystick beside it"
 stack:
   - common-lisp
   - sbcl
@@ -17,6 +17,8 @@ stack:
   - docker
   - javascript
 ---
+
+![Connect-4 on a retro home computer](/img/projects/connect4-lisp-web/cover.jpg)
 
 In 2018 I wrote a [heuristic evaluation function for Connect-4](/projects/connect4-heuristic/) in Common Lisp for an Artificial Intelligence subject at university. It only ran in a REPL: load three source files, call `play`, type a column number at each prompt. I was proud of it and wanted something more user friendly than a terminal, and I wanted the technical challenge of doing that with Lisp tooling rather than porting the game to something else. So the server is SBCL running Hunchentoot, state is kept in Redis through cl-redis, and the search is parallelised with lparallel. The heuristic is the 2018 file.
 
