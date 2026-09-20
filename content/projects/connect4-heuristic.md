@@ -201,9 +201,9 @@ heuristic value = player score - opponent score
 
 I played two games at each search depth from one through four and was unable to best the heuristic in any of them. The final board from one game at each depth is shown below.
 
-![Final board at search depth 1](/img/projects/connect4-heuristic/connect4-depth1.svg "<span style='font-size: 0.8rem'>Search depth 1 (heuristic win, 121 nodes)</span>") ![Final board at search depth 2](/img/projects/connect4-heuristic/connect4-depth2.svg "<span style='font-size: 0.8rem'>Search depth 2 (heuristic win, 438 nodes)</span>")
+![Final board at search depth 1](/img/projects/connect4-heuristic/connect4-depth1.svg "Search depth 1 (heuristic win, 121 nodes)") ![Final board at search depth 2](/img/projects/connect4-heuristic/connect4-depth2.svg "Search depth 2 (heuristic win, 438 nodes)")
 
-![Final board at search depth 3](/img/projects/connect4-heuristic/connect4-depth3.svg "<span style='font-size: 0.8rem'>Search depth 3 (heuristic win, 1775 nodes)</span>") ![Final board at search depth 4](/img/projects/connect4-heuristic/connect4-depth4.svg "<span style='font-size: 0.8rem'>Search depth 4 (heuristic win, 6038 nodes)</span>")
+![Final board at search depth 3](/img/projects/connect4-heuristic/connect4-depth3.svg "Search depth 3 (heuristic win, 1775 nodes)") ![Final board at search depth 4](/img/projects/connect4-heuristic/connect4-depth4.svg "Search depth 4 (heuristic win, 6038 nodes)")
 
 Finally, a caveat. While I am not the most accomplished Connect-4 player, I did find myself improving through testing the heuristic. I eventually felt that I had reached the limit of my playing ability. The heuristic played about as well as, or better than, I could at each search depth, including depth one. With further testing of the weight factors and a better player to compare against, I feel the heuristic could be further improved.
 

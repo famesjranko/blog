@@ -1,24 +1,41 @@
 import { pointerStrength, stepParticles } from "./thought-field-particles.js";
 import { stepMeteors } from "./thought-field-meteors.js";
 
+/**
+ * @typedef {{
+ *   renderer: { render: () => void },
+ *   field: import("./thought-field-particles.js").Field,
+ *   pointer: import("./thought-field-particles.js").Pointer,
+ *   hero: Element | null,
+ *   meteors: import("./thought-field-meteors.js").Meteors,
+ *   dims: { aspect: number },
+ * }} LoopOptions
+ */
+
+/**
+ * @param {LoopOptions} options
+ * @param {number} now
+ * @param {number} dt
+ */
 function renderFrame(options, now, dt) {
-	const { renderer, scene, camera, field, pointer, meteors, dims } = options;
+	const { renderer, field, pointer, meteors, dims } = options;
 	const aspect = dims.aspect;
 	const time = now / 1000;
 	pointer.strength = pointerStrength(pointer.lastMove, now);
 	stepMeteors(meteors, aspect, time, dt);
 	stepParticles({ field, aspect, time, dt, pointer, meteors });
-	field.geometry.attributes.position.needsUpdate = true;
-	meteors.geometry.attributes.position.needsUpdate = true;
-	meteors.geometry.attributes.aAlpha.needsUpdate = true;
-	meteors.geometry.attributes.aScale.needsUpdate = true;
-	renderer.render(scene, camera);
+	renderer.render();
 }
 
+/**
+ * @param {LoopOptions} options
+ * @returns {{ start: () => void, stop: () => void, destroy: () => void }}
+ */
 export function createLoop(options) {
 	let frame = 0;
 	let running = false;
 	let last = performance.now();
+	/** @param {number} now */
 	const tick = (now) => {
 		frame = 0;
 		if (!running) {
@@ -62,6 +79,12 @@ export function createLoop(options) {
 	return { start, stop, destroy };
 }
 
+/**
+ * @param {Element | null} hero
+ * @param {() => void} onChange
+ * @param {() => void} stop
+ * @returns {IntersectionObserver | null}
+ */
 function observeHero(hero, onChange, stop) {
 	if (!("IntersectionObserver" in window) || hero === null) {
 		return null;
@@ -77,6 +100,10 @@ function observeHero(hero, onChange, stop) {
 	return seen;
 }
 
+/**
+ * @param {Element | null} hero
+ * @returns {boolean}
+ */
 function heroVisible(hero) {
 	if (hero === null || !("IntersectionObserver" in window)) {
 		return true;

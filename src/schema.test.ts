@@ -173,6 +173,17 @@ describe("project links", () => {
 		expect(meta.predecessor).toBe("connect4-heuristic");
 	});
 
+	it("rejects a repo link that is not http(s)", () => {
+		expect(() =>
+			normalizeProjectFrontmatter({
+				title: "Something",
+				date: "2026-01-01",
+				repo: "javascript:alert(1)",
+				draft: false,
+			}),
+		).toThrow();
+	});
+
 	it("rejects a non-URL repo", () => {
 		expect(() =>
 			normalizeProjectFrontmatter({

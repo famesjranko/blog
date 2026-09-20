@@ -1,18 +1,25 @@
+// GLSL ES 1.00, which WebGL2 still accepts. The vertex stage projects
+// straight from world space: uProjection already folds in the camera
+// translation, so there is no separate model-view matrix.
+
 export const FIELD_VERTEX_SHADER = `
+precision highp float;
+attribute vec3 position;
 attribute vec3 aColor;
 attribute float aScale;
+uniform mat4 uProjection;
 uniform float uSize;
 uniform float uPixelRatio;
 varying vec3 vColor;
 void main() {
 	vColor = aColor;
-	vec4 mv = modelViewMatrix * vec4(position, 1.0);
 	gl_PointSize = uSize * aScale * uPixelRatio;
-	gl_Position = projectionMatrix * mv;
+	gl_Position = uProjection * vec4(position, 1.0);
 }
 `;
 
 export const FIELD_FRAGMENT_SHADER = `
+precision highp float;
 varying vec3 vColor;
 uniform float uGlow;
 uniform float uAlpha;
@@ -28,9 +35,12 @@ void main() {
 `;
 
 export const METEOR_VERTEX_SHADER = `
+precision highp float;
+attribute vec3 position;
 attribute vec3 aColor;
 attribute float aScale;
 attribute float aAlpha;
+uniform mat4 uProjection;
 uniform float uSize;
 uniform float uPixelRatio;
 varying vec3 vColor;
@@ -38,13 +48,13 @@ varying float vAlpha;
 void main() {
 	vColor = aColor;
 	vAlpha = aAlpha;
-	vec4 mv = modelViewMatrix * vec4(position, 1.0);
 	gl_PointSize = uSize * aScale * uPixelRatio;
-	gl_Position = projectionMatrix * mv;
+	gl_Position = uProjection * vec4(position, 1.0);
 }
 `;
 
 export const METEOR_FRAGMENT_SHADER = `
+precision highp float;
 varying vec3 vColor;
 varying float vAlpha;
 uniform float uGlow;

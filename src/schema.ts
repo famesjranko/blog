@@ -74,7 +74,7 @@ export const ProjectSchema = z.object({
 	description: z.string().optional(),
 	date: z.coerce.date(),
 	origin: ProjectOriginSchema,
-	repo: z.string().url().optional(),
+	repo: z.url({ protocol: /^https?$/ }).optional(),
 	stack: z.array(z.string()).default([]),
 	predecessor: z.string().min(1).optional(),
 	cover: z.string().min(1).optional(),

@@ -103,6 +103,12 @@ describe("topicPage", () => {
 		expect(html).toContain('<article class="card">');
 	});
 
+	it("nests card titles directly under the topic heading", () => {
+		const html = topicPage(ethics, [sampleEssay()]);
+		expect(html).toContain('<h2 class="card-title">');
+		expect(html).not.toContain("<h3");
+	});
+
 	it("escapes the topic heading", () => {
 		const entry = { name: "<ethics>", slug: topicSlug("<ethics>") };
 		const html = topicPage(entry, [sampleEssay({ topics: ["<ethics>"] })]);

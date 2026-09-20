@@ -17,7 +17,10 @@ export function topicLink(topic: string): string {
 	return `<a href="${siteUrl(`/topics/${topicSlug(topic)}/`)}">${escapeHtml(topic)}</a>`;
 }
 
-export function essayEntry(essay: Essay): string {
+/** Card title level: h2 straight under a page h1, h3 inside a homepage section. */
+export type CardHeading = 2 | 3;
+
+export function essayEntry(essay: Essay, heading: CardHeading = 2): string {
 	const url = siteUrl(`/essays/${essay.slug}/`);
 	const cover = cardCover(essay.cover, essay.coverAlt, essay.slug);
 	const description =
@@ -27,7 +30,7 @@ export function essayEntry(essay: Essay): string {
 	const topics = `<span class="entry-topics">${essay.topics.map((topic) => topicLink(topic)).join("")}</span>`;
 	return `<li><article class="card">
 ${cover}<div class="card-body">
-<h3 class="card-title"><a href="${url}">${escapeHtml(essay.title)}</a></h3>
+<h${heading} class="card-title"><a href="${url}">${escapeHtml(essay.title)}</a></h${heading}>
 ${description}
 <p class="entry-meta">${topics}</p>
 </div></article></li>`;
@@ -42,18 +45,35 @@ export function essayIndexPage(essays: Essay[]): string {
 	});
 }
 
+/** Served by GitHub Pages for any unknown path under the site. */
+export function notFoundPage(): string {
+	return page({
+		title: "Page not found",
+		content: `<div class="wrap index-page"><h1>Page not found</h1><p class="index-count">There is nothing at this address.</p><p><a href="${siteUrl("/")}">Home</a> · <a href="${siteUrl("/essays/")}">Essays</a> · <a href="${siteUrl("/projects/")}">Projects</a></p></div>`,
+	});
+}
+
 function featuredSection(options: {
-	headingId: string;
+	id: string;
 	heading: string;
 	indexUrl: string;
 	indexLabel: string;
 	entry: string;
 }): string {
-	return `<section class="wrap recent" aria-labelledby="${options.headingId}">
-<h2 id="${options.headingId}">${options.heading}</h2>
+	const headingId = `${options.id}-heading`;
+	return `<section id="${options.id}" class="wrap recent" aria-labelledby="${headingId}">
+<h2 id="${headingId}">${options.heading}</h2>
 <ol class="card-grid">${options.entry}</ol>
 <p class="more-link"><a href="${options.indexUrl}">${options.indexLabel}</a></p>
 </section>`;
+}
+
+/** The hero is decoration, so the skip link lands on the first real section. */
+function skipTarget(essayCount: number, projectCount: number): string {
+	if (essayCount > 0) {
+		return "featured-essays";
+	}
+	return projectCount > 0 ? "featured-projects" : "main";
 }
 
 export function homePage(essays: Essay[], projects: Project[] = []): string {
@@ -63,30 +83,31 @@ export function homePage(essays: Essay[], projects: Project[] = []): string {
 		featuredEssays.length === 0
 			? ""
 			: featuredSection({
-					headingId: "featured-essays-heading",
+					id: "featured-essays",
 					heading: "Featured essays",
 					indexUrl: siteUrl("/essays/"),
 					indexLabel: "More essays",
-					entry: featuredEssays.map((e) => essayEntry(e)).join("\n"),
+					entry: featuredEssays.map((e) => essayEntry(e, 3)).join("\n"),
 				});
 	const projectsSection =
 		featuredProjects.length === 0
 			? ""
 			: featuredSection({
-					headingId: "featured-projects-heading",
+					id: "featured-projects",
 					heading: "Featured projects",
 					indexUrl: siteUrl("/projects/"),
 					indexLabel: "More projects",
-					entry: featuredProjects.map((p) => projectEntry(p)).join("\n"),
+					entry: featuredProjects.map((p) => projectEntry(p, 3)).join("\n"),
 				});
 	return page({
 		title: "Andrew J. McDonald",
 		description: HERO_STANDFIRST,
-		scripts: [{ src: siteUrl("/hero.js"), type: "module" }],
+		skipTo: skipTarget(featuredEssays.length, featuredProjects.length),
+		scripts: [{ src: siteUrl("/js/hero.js"), type: "module" }],
 		styles: [
-			siteUrl("/styles.css"),
-			siteUrl("/header.css"),
-			siteUrl("/hero.css"),
+			siteUrl("/css/main.css"),
+			siteUrl("/css/header.css"),
+			siteUrl("/css/hero.css"),
 		],
 		content: `<section class="hero" data-hero>
 <div class="hero-visual" aria-hidden="true"><span></span><span></span><span></span></div>

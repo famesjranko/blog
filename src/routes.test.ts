@@ -98,6 +98,68 @@ describe("generateSite feeds", () => {
 	});
 });
 
+describe("generateSite rss", () => {
+	it("names the channel after the site and describes each item", async () => {
+		const dir = await generate([sampleEssay()]);
+		const rss = await readFile(path.join(dir, "rss.xml"), "utf8");
+		expect(rss).toContain("<title>Andrew J. McDonald</title>");
+		expect(rss).toContain("<description>A short description.</description>");
+		expect(rss).toContain(
+			'<guid isPermaLink="true">https://famesjranko.github.io/essays/on-mind/</guid>',
+		);
+	});
+
+	it("escapes markup in titles and descriptions", async () => {
+		const dir = await generate([
+			sampleEssay({ title: "A & B <c>", description: 'Say "hi" & <b>' }),
+		]);
+		const rss = await readFile(path.join(dir, "rss.xml"), "utf8");
+		expect(rss).toContain("<title>A &amp; B &lt;c&gt;</title>");
+		expect(rss).toContain("Say &quot;hi&quot; &amp; &lt;b&gt;");
+		expect(rss).not.toContain("<c>");
+	});
+
+	it("dates the build from the newest essay, not the clock", async () => {
+		const dir = await generate([
+			sampleEssay({ slug: "old", date: new Date("2019-01-01T00:00:00Z") }),
+			sampleEssay(),
+		]);
+		const rss = await readFile(path.join(dir, "rss.xml"), "utf8");
+		expect(rss).toContain(
+			"<lastBuildDate>Thu, 14 May 2020 00:00:00 GMT</lastBuildDate>",
+		);
+	});
+
+	it("points the self link at the feed's own absolute URL", async () => {
+		vi.stubEnv("SITE_ORIGIN", "https://example.com");
+		vi.stubEnv("BASE_PATH", "/blog");
+		const dir = await generate([sampleEssay()]);
+		const rss = await readFile(path.join(dir, "rss.xml"), "utf8");
+		expect(rss).toContain('xmlns:atom="http://www.w3.org/2005/Atom"');
+		expect(rss).toContain(
+			'<atom:link href="https://example.com/blog/rss.xml" rel="self" type="application/rss+xml"/>',
+		);
+	});
+});
+
+describe("generateSite not-found page", () => {
+	it("writes a styled 404 page at the site root", async () => {
+		vi.stubEnv("BASE_PATH", "/blog");
+		const dir = await generate([sampleEssay()]);
+		const html = await readFile(path.join(dir, "404.html"), "utf8");
+		expect(html).toContain("<title>Page not found</title>");
+		expect(html).toContain('<link rel="stylesheet" href="/blog/css/main.css">');
+		expect(html).toContain('href="/blog/"');
+		expect(html).toContain('href="/blog/essays/"');
+	});
+
+	it("keeps the 404 page out of the sitemap", async () => {
+		const dir = await generate([sampleEssay()]);
+		const sitemap = await readFile(path.join(dir, "sitemap.xml"), "utf8");
+		expect(sitemap).not.toContain("404");
+	});
+});
+
 describe("generateSite slugs", () => {
 	it("rejects an empty essay slug before writing pages", async () => {
 		await expect(generate([sampleEssay({ slug: "" })])).rejects.toThrow(

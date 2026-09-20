@@ -98,11 +98,30 @@ describe("legacy image paths", () => {
 		const html = renderMarkdown("![x](img/foo.jpg)");
 		expect(html).toContain('src="img/foo.jpg"');
 	});
+});
 
-	it("does not rewrite link hrefs", () => {
+describe("internal link hrefs", () => {
+	it("prefixes root-relative hrefs with the base path", () => {
 		vi.stubEnv("BASE_PATH", "/blog");
 		const html = renderMarkdown("[x](/essays/something/)");
+		expect(html).toContain('href="/blog/essays/something/"');
+	});
+
+	it("leaves root-relative hrefs alone without a base path", () => {
+		const html = renderMarkdown("[x](/essays/something/)");
 		expect(html).toContain('href="/essays/something/"');
+	});
+
+	it("leaves anchors, mailto, relative, and protocol-relative hrefs alone", () => {
+		vi.stubEnv("BASE_PATH", "/blog");
+		const html = renderMarkdown(
+			"[a](#section) [b](mailto:me@example.com) [c](../other/) [d](//example.com/x)",
+		);
+		expect(html).toContain('href="#section"');
+		expect(html).toContain('href="mailto:me@example.com"');
+		expect(html).toContain('href="../other/"');
+		expect(html).toContain('href="//example.com/x"');
+		expect(html).not.toContain("/blog/");
 	});
 });
 
@@ -188,6 +207,22 @@ describe("figure captions", () => {
 		const html = renderMarkdown('![d](/img/x/d.svg "**Bold** caption")');
 		expect(html.startsWith("<figure>")).toBe(true);
 		expect(html).not.toContain("</figure></p>");
+	});
+});
+
+describe("image dimensions", () => {
+	it("sizes shipped internal images so the layout reserves their box", () => {
+		const html = renderMarkdown(
+			"![euler](/img/essays/dretske-closure/euler-diagram.svg)",
+		);
+		expect(html).toContain('width="376"');
+		expect(html).toContain('height="376"');
+	});
+
+	it("leaves unknown images unsized", () => {
+		const html = renderMarkdown("![x](/img/essays/x/cover.jpg)");
+		expect(html).not.toContain("width=");
+		expect(html).not.toContain("height=");
 	});
 });
 

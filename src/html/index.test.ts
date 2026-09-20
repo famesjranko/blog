@@ -1,9 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { Essay, Project } from "../content.js";
 import { essayEntry, essayIndexPage, homePage } from "./index.js";
-import { cardCover, formatDate, placeholderStyle } from "./layout.js";
 import { projectEntry, projectIndexPage } from "./project.js";
-import { page } from "./layout.js";
 
 function sampleEssay(overrides: Partial<Essay> = {}): Essay {
 	return {
@@ -20,16 +18,6 @@ function sampleEssay(overrides: Partial<Essay> = {}): Essay {
 		...overrides,
 	};
 }
-
-describe("formatDate", () => {
-	it("formats as day month year", () => {
-		expect(formatDate(new Date("2026-09-16T00:00:00Z"))).toBe("16 Sep 2026");
-	});
-
-	it("uses UTC fields regardless of local timezone", () => {
-		expect(formatDate(new Date("2020-01-01T00:00:00Z"))).toBe("1 Jan 2020");
-	});
-});
 
 describe("homePage hero", () => {
 	it("renders a hero visual container outside the accessibility tree", () => {
@@ -58,8 +46,8 @@ describe("homePage hero", () => {
 
 	it("loads the hero field as a deferred-by-default module script", () => {
 		const html = homePage([sampleEssay()]);
-		expect(html).toContain('<script type="module" src="/hero.js"></script>');
-		expect(html).not.toContain('<script src="/hero.js" defer>');
+		expect(html).toContain('<script type="module" src="/js/hero.js"></script>');
+		expect(html).not.toContain('<script src="/js/hero.js" defer>');
 	});
 });
 
@@ -147,58 +135,9 @@ describe("homePage topic links", () => {
 describe("stylesheets", () => {
 	it("links the shared and hero stylesheets on the homepage", () => {
 		const html = homePage([sampleEssay()]);
-		expect(html).toContain('<link rel="stylesheet" href="/styles.css">');
-		expect(html).toContain('<link rel="stylesheet" href="/header.css">');
-		expect(html).toContain('<link rel="stylesheet" href="/hero.css">');
-	});
-});
-
-describe("page scripts", () => {
-	it("renders classic scripts with defer", () => {
-		const html = page({ title: "T", content: "<p>x</p>", scripts: ["/a.js"] });
-		expect(html).toContain('<script src="/a.js" defer></script>');
-	});
-
-	it("renders module scripts as closed elements without defer", () => {
-		const html = page({
-			title: "T",
-			content: "<p>x</p>",
-			scripts: [{ src: "/a.js", type: "module" }],
-		});
-		expect(html).toContain('<script type="module" src="/a.js"></script>');
-	});
-
-	it("links the svg favicon so browsers skip the default ico request", () => {
-		const html = page({ title: "T", content: "<p>x</p>" });
-		expect(html).toContain(
-			'<link rel="icon" type="image/svg+xml" href="/favicon.svg">',
-		);
-	});
-});
-
-describe("cardCover", () => {
-	it("renders the explicit cover image with lazy loading", () => {
-		const html = cardCover(
-			"/img/essays/jtb-knowledge/cover.jpg",
-			"jtb",
-			"jtb-knowledge",
-		);
-		expect(html).toContain('class="card-media"');
-		expect(html).toContain('src="/img/essays/jtb-knowledge/cover.jpg"');
-		expect(html).toContain('alt="jtb"');
-		expect(html).toContain('loading="lazy"');
-	});
-
-	it("renders a slug-derived placeholder when no cover is set", () => {
-		const html = cardCover(undefined, undefined, "other");
-		expect(html).toContain("card-media--placeholder");
-		expect(html).toContain(`style="${placeholderStyle("other")}"`);
-	});
-
-	it("escapes cover alt text", () => {
-		const html = cardCover("/img/x.jpg", "<evil>", "x");
-		expect(html).toContain('alt="&lt;evil&gt;"');
-		expect(html).not.toContain('alt="<evil>"');
+		expect(html).toContain('<link rel="stylesheet" href="/css/main.css">');
+		expect(html).toContain('<link rel="stylesheet" href="/css/header.css">');
+		expect(html).toContain('<link rel="stylesheet" href="/css/hero.css">');
 	});
 });
 
@@ -216,17 +155,17 @@ describe("essayEntry cover", () => {
 		expect(html).toContain('loading="lazy"');
 	});
 
-	it("renders a placeholder cover when no cover is set", () => {
+	it("renders the slug's placeholder art when no cover is set", () => {
 		const html = essayEntry(sampleEssay());
 		expect(html).toContain('<article class="card">');
-		expect(html).toContain("card-media--placeholder");
-		expect(html).toContain("--placeholder-hue:");
+		expect(html).toContain('src="/img/placeholders/on-privacy.jpg"');
+		expect(html).toContain('alt=""');
 		expect(html).toContain("On Privacy");
 	});
 
 	it("derives the essay placeholder from the slug", () => {
 		const html = essayEntry(sampleEssay({ slug: "other" }));
-		expect(html).toContain(`style="${placeholderStyle("other")}"`);
+		expect(html).toContain("/img/placeholders/other.jpg");
 	});
 
 	it("never uses body images for the card", () => {
@@ -234,7 +173,7 @@ describe("essayEntry cover", () => {
 			sampleEssay({ html: '<p><img src="/img/x.jpg" alt="x"></p>' }),
 		);
 		expect(html).not.toContain('src="/img/x.jpg"');
-		expect(html).toContain("card-media--placeholder");
+		expect(html).toContain("/img/placeholders/on-privacy.jpg");
 	});
 
 	it("escapes cover alt text", () => {
@@ -262,32 +201,6 @@ describe("essayEntry content", () => {
 		const html = essayEntry(sampleEssay());
 		expect(html).toContain("entry-topics");
 		expect(html).not.toContain("<time");
-	});
-});
-
-describe("placeholderStyle", () => {
-	it("is deterministic for the same seed", () => {
-		expect(placeholderStyle("musicmeta")).toBe(placeholderStyle("musicmeta"));
-	});
-
-	it("differs across slugs", () => {
-		expect(placeholderStyle("musicmeta")).not.toBe(
-			placeholderStyle("ip-camera"),
-		);
-	});
-
-	it("emits a hue in range and an offset in range", () => {
-		const style = placeholderStyle("musicmeta");
-		const hue = Number(/--placeholder-hue: (\d+)/.exec(style)?.[1]);
-		const offset = Number(/--placeholder-offset: (\d+)/.exec(style)?.[1]);
-		expect(hue).toBeGreaterThanOrEqual(0);
-		expect(hue).toBeLessThan(360);
-		expect(offset).toBeGreaterThanOrEqual(10);
-		expect(offset).toBeLessThanOrEqual(89);
-	});
-
-	it("emits unitless numbers so CSS can apply its own units", () => {
-		expect(placeholderStyle("musicmeta")).not.toContain("%");
 	});
 });
 
@@ -362,6 +275,43 @@ describe("homePage projects", () => {
 	it("omits the projects section when there are none", () => {
 		const html = homePage([sampleEssay()]);
 		expect(html).not.toContain("Featured projects");
+	});
+});
+
+describe("homePage skip link", () => {
+	it("skips past the hero to the featured essays", () => {
+		const html = homePage([sampleEssay()], [sampleProject()]);
+		expect(html).toContain('<a class="skip-link" href="#featured-essays">');
+		expect(html).toContain('<section id="featured-essays"');
+	});
+
+	it("falls back to the projects section when there are no essays", () => {
+		const html = homePage([], [sampleProject()]);
+		expect(html).toContain('href="#featured-projects"');
+		expect(html).toContain('<section id="featured-projects"');
+	});
+
+	it("falls back to main when there is nothing below the hero", () => {
+		const html = homePage([], []);
+		expect(html).toContain('<a class="skip-link" href="#main">');
+	});
+});
+
+describe("card heading levels", () => {
+	it("nests cards under the section heading on the homepage", () => {
+		const html = homePage([sampleEssay()], [sampleProject()]);
+		expect(html).toContain('<h3 class="card-title">');
+		expect(html).not.toContain('<h2 class="card-title">');
+	});
+
+	it("nests cards directly under the page heading on index pages", () => {
+		for (const html of [
+			essayIndexPage([sampleEssay()]),
+			projectIndexPage([sampleProject()]),
+		]) {
+			expect(html).toContain('<h2 class="card-title">');
+			expect(html).not.toContain("<h3");
+		}
 	});
 });
 

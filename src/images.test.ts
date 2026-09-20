@@ -1,5 +1,23 @@
 import { describe, expect, it } from "vitest";
-import { isInternalJpeg, webpSrc } from "./images.js";
+import { imageSize, isInternalJpeg, webpSrc } from "./images.js";
+
+describe("imageSize", () => {
+	it("returns the pixel size of a shipped internal image", () => {
+		expect(imageSize("/img/essays/dretske-closure/euler-diagram.svg")).toEqual({
+			width: 376,
+			height: 376,
+		});
+	});
+
+	it("returns undefined for an internal path that ships no image", () => {
+		expect(imageSize("/img/essays/x/cover.jpg")).toBeUndefined();
+	});
+
+	it("returns undefined for external and relative sources", () => {
+		expect(imageSize("https://example.com/foo.jpg")).toBeUndefined();
+		expect(imageSize("img/foo.jpg")).toBeUndefined();
+	});
+});
 
 describe("isInternalJpeg", () => {
 	it("accepts root-relative jpg paths", () => {

@@ -9,10 +9,13 @@ export function essayPage(essay: Essay): string {
 			: "";
 	return page({
 		title: essay.title,
+		...(essay.description === undefined
+			? {}
+			: { description: essay.description }),
 		styles: [
-			siteUrl("/styles.css"),
-			siteUrl("/header.css"),
-			siteUrl("/prose.css"),
+			siteUrl("/css/main.css"),
+			siteUrl("/css/header.css"),
+			siteUrl("/css/prose.css"),
 		],
 		content: `<div class="wrap"><article class="prose">
 <header>

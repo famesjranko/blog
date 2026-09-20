@@ -1,15 +1,16 @@
 import MarkdownIt from "markdown-it";
-import { webpSrc } from "./images.js";
+import { imageSize, webpSrc } from "./images.js";
 import { markFigureParagraphs } from "./markdownFigures.js";
 import { siteUrl } from "./site.js";
 
 let renderer: MarkdownIt | undefined;
 
 /**
- * Prefix internal root-relative image URLs with the site base path.
- * Leaves protocol-relative, external, relative, and other schemes alone.
+ * Prefix internal root-relative URLs (image src and link href) with the
+ * site base path. Leaves protocol-relative, external, relative, anchor,
+ * and other schemes alone.
  */
-function imageSrc(path: string): string {
+function internalUrl(path: string): string {
 	if (path.startsWith("/") && !path.startsWith("//")) {
 		return siteUrl(path);
 	}
@@ -144,19 +145,50 @@ interface ImageRenderContext {
 	env: Parameters<ImageRenderRule>[3];
 }
 
+/** Rewrite src for the base path and reserve the box for shipped images. */
+function prepareImageToken(token: MarkdownToken, src: string): void {
+	token.attrSet("src", internalUrl(src));
+	const size = imageSize(src);
+	if (size !== undefined) {
+		token.attrSet("width", String(size.width));
+		token.attrSet("height", String(size.height));
+	}
+}
+
 function renderImageBody(context: ImageRenderContext): string {
 	const { md, fallback, source, options, env } = context;
-	const src = source.tokens[source.index]?.attrGet("src");
-	if (typeof src === "string") {
-		source.tokens[source.index]?.attrSet("src", imageSrc(src));
+	const token = source.tokens[source.index];
+	const src = token?.attrGet("src");
+	if (token !== undefined && typeof src === "string") {
+		prepareImageToken(token, src);
 	}
 	const img = fallback(source.tokens, source.index, options, env, md.renderer);
 	const webp = typeof src === "string" ? webpSrc(src) : undefined;
 	if (webp === undefined) {
 		return img;
 	}
-	const webpUrl = md.utils.escapeHtml(imageSrc(webp));
+	const webpUrl = md.utils.escapeHtml(internalUrl(webp));
 	return `<picture><source type="image/webp" srcset="${webpUrl}">${img}</picture>`;
+}
+
+/**
+ * External links open in a new tab; internal root-relative links get the
+ * site base path so cross-links survive a project-site deployment.
+ */
+function renderLink(md: MarkdownIt): LinkRenderRule {
+	return (tokens, idx, options) => {
+		const link = tokens[idx];
+		const href = link?.attrGet("href") ?? null;
+		if (link !== undefined && href !== null) {
+			if (isExternalLink(href)) {
+				link.attrSet("target", "_blank");
+				link.attrSet("rel", "noopener noreferrer");
+			} else {
+				link.attrSet("href", internalUrl(href));
+			}
+		}
+		return md.renderer.renderToken(tokens, idx, options);
+	};
 }
 
 function buildRenderer(): MarkdownIt {
@@ -192,18 +224,7 @@ function buildRenderer(): MarkdownIt {
 			return `<figure>${body}<figcaption>${caption}</figcaption></figure>`;
 		};
 	}
-	const renderExternalLink: LinkRenderRule = (tokens, idx, options) => {
-		const link = tokens[idx];
-		if (link !== undefined) {
-			const href = link.attrGet("href");
-			if (href !== null && isExternalLink(href)) {
-				link.attrSet("target", "_blank");
-				link.attrSet("rel", "noopener noreferrer");
-			}
-		}
-		return md.renderer.renderToken(tokens, idx, options);
-	};
-	Object.assign(md.renderer.rules, { link_open: renderExternalLink });
+	Object.assign(md.renderer.rules, { link_open: renderLink(md) });
 	return md;
 }
 

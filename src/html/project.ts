@@ -1,5 +1,6 @@
 import type { Project } from "../content.js";
 import { siteUrl } from "../site.js";
+import type { CardHeading } from "./index.js";
 import { cardCover, escapeHtml, page } from "./layout.js";
 
 export function originLabel(origin: Project["origin"]): string {
@@ -29,7 +30,10 @@ function repoLink(repo: string | undefined): string {
 	return `<a href="${escapeHtml(repo)}">Repository</a>`;
 }
 
-export function projectEntry(project: Project): string {
+export function projectEntry(
+	project: Project,
+	heading: CardHeading = 2,
+): string {
 	const url = siteUrl(`/projects/${project.slug}/`);
 	const cover = cardCover(project.cover, project.coverAlt, project.slug);
 	const description =
@@ -37,7 +41,7 @@ export function projectEntry(project: Project): string {
 			? `<p class="entry-desc">${escapeHtml(project.description)}</p>`
 			: "";
 	return `<li><article class="card">${cover}<div class="card-body">
-<h3 class="card-title"><a href="${url}">${escapeHtml(project.title)}</a></h3>
+<h${heading} class="card-title"><a href="${url}">${escapeHtml(project.title)}</a></h${heading}>
 ${description}
 <p class="entry-meta">${facetList(project)}</p>
 </div></article></li>`;
@@ -93,9 +97,9 @@ export function projectPage(project: Project): string {
 			? {}
 			: { description: project.description }),
 		styles: [
-			siteUrl("/styles.css"),
-			siteUrl("/header.css"),
-			siteUrl("/prose.css"),
+			siteUrl("/css/main.css"),
+			siteUrl("/css/header.css"),
+			siteUrl("/css/prose.css"),
 		],
 		content: `<div class="wrap"><article class="prose project">
 <header class="project-header">
