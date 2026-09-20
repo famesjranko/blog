@@ -23,6 +23,18 @@ describe("essayPage", () => {
 		expect(html).toContain('<div class="wrap"><article class="prose">');
 	});
 
+	it("uses the essay description as the meta description", () => {
+		const html = essayPage(sampleEssay());
+		expect(html).toContain(
+			'<meta name="description" content="A short description.">',
+		);
+	});
+
+	it("omits the meta description when the essay has none", () => {
+		const html = essayPage({ ...sampleEssay(), description: undefined });
+		expect(html).not.toContain('<meta name="description"');
+	});
+
 	it("links the shared and prose stylesheets", () => {
 		const html = essayPage(sampleEssay());
 		expect(html).toContain('<link rel="stylesheet" href="/styles.css">');
