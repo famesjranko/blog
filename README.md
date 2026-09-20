@@ -24,10 +24,12 @@ Custom static site built with TypeScript and Markdown.
 | -------------- | ----------------------- |
 | `make install` | Install dependencies    |
 | `make preview` | Build and serve locally |
+| `make preview-wsl` | Build and serve on WSL interfaces |
 | `make check`   | Run the full quality gate |
 
 > [!NOTE]
 > Requires Node 24 (see `.nvmrc`). `make preview` serves `dist/` at `http://localhost:8000` (`PORT=8001` to override).
+> Under WSL2, use `make preview-wsl`; it refreshes the Windows port forwarding and firewall rule, prompting for administrator access when needed.
 
 ## Stack
 

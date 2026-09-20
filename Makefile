@@ -1,4 +1,4 @@
-.PHONY: install check typecheck lint guard format format-check test build images images-check preview clean help
+.PHONY: install check typecheck lint guard format format-check test build images images-check preview preview-wsl clean help
 
 PORT ?= 8000
 
@@ -48,6 +48,11 @@ images-check: ## Fail when a JPEG lacks its required WebP sidecar (no conversion
 preview: build ## Serve dist/ locally at http://localhost:8000 (PORT=8001 to override)
 	@echo "Preview at http://localhost:$(PORT)/"
 	python3 -m http.server $(PORT) -d dist
+
+preview-wsl: build ## Serve dist/ on all WSL interfaces for LAN access (PORT=8001 to override)
+	@powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$$(wslpath -w scripts/preview-wsl.ps1)" -Port $(PORT)
+	@echo "Preview on all interfaces at port $(PORT)"
+	python3 -m http.server $(PORT) --bind 0.0.0.0 -d dist
 
 clean: ## Remove build output
 	rm -rf dist
