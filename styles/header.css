@@ -1,7 +1,7 @@
 @layer header {
 	.site-header {
 		border-bottom: 1px solid var(--color-border);
-		background: var(--color-surface);
+		background: var(--color-chrome);
 	}
 
 	.header-inner {

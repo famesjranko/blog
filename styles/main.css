@@ -9,6 +9,7 @@
 
 		--color-bg: light-dark(#e2e2e2, #121212);
 		--color-surface: light-dark(#f1f1f1, #1c1c1c);
+		--color-chrome: light-dark(#d8d8d8, #0d0d0d);
 		--color-text: light-dark(#161616, #ececec);
 		--color-muted: light-dark(#555555, #a3a3a3);
 		--color-border: light-dark(#c9c9c9, #2e2e2e);
@@ -270,7 +271,7 @@
 @layer footer {
 	.site-footer {
 		border-top: 1px solid var(--color-border);
-		background: var(--color-surface);
+		background: var(--color-chrome);
 		color: var(--color-muted);
 		font-size: 0.9rem;
 	}
