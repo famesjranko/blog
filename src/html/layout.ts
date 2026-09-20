@@ -151,6 +151,7 @@ export function page({
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" type="image/svg+xml" href="${siteUrl("/favicon.svg")}">
+<link rel="alternate" type="application/rss+xml" title="${escapeHtml(SITE_NAME)}" href="${siteUrl("/rss.xml")}">
 <title>${escapeHtml(title)}</title>
 ${
 	description !== undefined

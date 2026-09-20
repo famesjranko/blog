@@ -5,8 +5,10 @@ import { essayPage } from "./html/essay.js";
 import { essayIndexPage, homePage } from "./html/index.js";
 import { projectIndexPage, projectPage } from "./html/project.js";
 import { allTopics, topicPage } from "./html/topic.js";
-import { escapeHtml } from "./html/layout.js";
+import { SITE_NAME, escapeHtml } from "./html/layout.js";
 import { absoluteSiteUrl } from "./site.js";
+
+const FEED_DESCRIPTION = "Essays on philosophy.";
 
 async function write(outDir: string, rel: string, body: string): Promise<void> {
 	const full = path.join(outDir, rel);
@@ -84,14 +86,39 @@ function assertPredecessorsResolve(projects: Project[]): void {
 	}
 }
 
+function rssItem(essay: Essay): string {
+	const url = absoluteSiteUrl(`/essays/${essay.slug}/`);
+	const description =
+		essay.description === undefined
+			? ""
+			: `<description>${escapeHtml(essay.description)}</description>`;
+	return `<item><title>${escapeHtml(essay.title)}</title><link>${url}</link><guid isPermaLink="true">${url}</guid>${description}<pubDate>${essay.date.toUTCString()}</pubDate></item>`;
+}
+
+/**
+ * The newest essay dates the build. Using content rather than the clock
+ * keeps the feed byte-identical across rebuilds of unchanged content.
+ */
 function rss(essays: Essay[]): string {
-	const items = essays
-		.map(
-			(e) =>
-				`<item><title>${escapeHtml(e.title)}</title><link>${absoluteSiteUrl(`/essays/${e.slug}/`)}</link><pubDate>${e.date.toUTCString()}</pubDate></item>`,
-		)
-		.join("\n");
-	return `<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title>Philosophy</title><link>${absoluteSiteUrl("/")}</link>${items}</channel></rss>`;
+	const items = essays.map(rssItem).join("\n");
+	const newest = essays.reduce<Date | undefined>(
+		(latest, e) => (latest === undefined || e.date > latest ? e.date : latest),
+		undefined,
+	);
+	const built =
+		newest === undefined
+			? ""
+			: `<lastBuildDate>${newest.toUTCString()}</lastBuildDate>`;
+	const self = absoluteSiteUrl("/rss.xml");
+	return (
+		`<?xml version="1.0" encoding="UTF-8"?>` +
+		`<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel>` +
+		`<title>${escapeHtml(SITE_NAME)}</title>` +
+		`<link>${absoluteSiteUrl("/")}</link>` +
+		`<description>${escapeHtml(FEED_DESCRIPTION)}</description>` +
+		`<atom:link href="${self}" rel="self" type="application/rss+xml"/>` +
+		`${built}${items}</channel></rss>`
+	);
 }
 
 function sitemap(essays: Essay[], projects: Project[]): string {

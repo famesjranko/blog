@@ -38,6 +38,29 @@ describe("theme toggle", () => {
 	});
 });
 
+describe("feed discovery", () => {
+	it("advertises the rss feed from every page head", () => {
+		const html = page({ title: "t", content: "" });
+		expect(html).toContain(
+			'<link rel="alternate" type="application/rss+xml" title="Andrew J. McDonald" href="/rss.xml">',
+		);
+		expect(html.indexOf("application/rss+xml")).toBeLessThan(
+			html.indexOf("<body>"),
+		);
+	});
+
+	it("prefixes the feed link with the base path", () => {
+		vi.stubEnv("BASE_PATH", "/blog");
+		try {
+			expect(page({ title: "t", content: "" })).toContain(
+				'href="/blog/rss.xml"',
+			);
+		} finally {
+			vi.unstubAllEnvs();
+		}
+	});
+});
+
 describe("cardCover webp sidecars", () => {
 	it("wraps jpeg covers in a picture element with a webp source", () => {
 		const html = cardCover(
