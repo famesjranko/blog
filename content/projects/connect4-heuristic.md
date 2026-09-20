@@ -4,7 +4,7 @@ description: "A heuristic evaluation function for Connect-4, written in Common L
 date: 2018-10-14
 draft: false
 origin: university
-repo: https://github.com/famesjranko/Connect4-Lisp-Web
+repo: https://github.com/famesjranko/Connect4-Heuristic-Player
 cover: /img/projects/connect4-heuristic/cover.jpg
 stack:
   - common-lisp
