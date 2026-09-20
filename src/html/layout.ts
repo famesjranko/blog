@@ -3,26 +3,6 @@ import { siteUrl } from "../site.js";
 
 export const SITE_NAME = "Andrew J. McDonald";
 
-const MONTHS = [
-	"Jan",
-	"Feb",
-	"Mar",
-	"Apr",
-	"May",
-	"Jun",
-	"Jul",
-	"Aug",
-	"Sep",
-	"Oct",
-	"Nov",
-	"Dec",
-];
-
-export function formatDate(date: Date): string {
-	const month = MONTHS[date.getUTCMonth()] ?? "???";
-	return `${date.getUTCDate()} ${month} ${date.getUTCFullYear()}`;
-}
-
 export function escapeHtml(value: string): string {
 	return value
 		.replaceAll("&", "&amp;")

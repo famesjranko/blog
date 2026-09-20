@@ -159,29 +159,6 @@
 		text-align: left;
 	}
 
-	.prose .diagram-label {
-		margin: 0 0 0.75rem;
-		color: var(--color-muted);
-		font-family: var(--font-ui);
-		font-size: var(--diagram-label-size, 0.85rem);
-		line-height: 1.4;
-		text-align: center;
-	}
-
-	.prose p:has(> img + img) {
-		display: flex;
-		flex-wrap: nowrap;
-		gap: 1.5rem;
-		justify-content: center;
-	}
-
-	.prose p:has(> img + img) img {
-		flex: 1 1 14rem;
-		min-width: 0;
-		border: 1px solid var(--color-border);
-		border-radius: 0.5rem;
-	}
-
 	.prose .diagram-pair {
 		display: grid;
 		grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -194,9 +171,8 @@
 		margin-block: 0;
 	}
 
-	.prose figure.figure-narrow picture,
-	.prose figure.figure-narrow img {
-		width: min(100%, 19rem);
+	.prose .diagram-pair figcaption {
+		font-size: 0.8rem;
 	}
 
 	.prose.project {

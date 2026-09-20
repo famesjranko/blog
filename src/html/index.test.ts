@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { Essay, Project } from "../content.js";
 import { essayEntry, essayIndexPage, homePage } from "./index.js";
-import { cardCover, formatDate, placeholderStyle } from "./layout.js";
+import { cardCover, placeholderStyle } from "./layout.js";
 import { projectEntry, projectIndexPage } from "./project.js";
 import { page } from "./layout.js";
 
@@ -20,16 +20,6 @@ function sampleEssay(overrides: Partial<Essay> = {}): Essay {
 		...overrides,
 	};
 }
-
-describe("formatDate", () => {
-	it("formats as day month year", () => {
-		expect(formatDate(new Date("2026-09-16T00:00:00Z"))).toBe("16 Sep 2026");
-	});
-
-	it("uses UTC fields regardless of local timezone", () => {
-		expect(formatDate(new Date("2020-01-01T00:00:00Z"))).toBe("1 Jan 2020");
-	});
-});
 
 describe("homePage hero", () => {
 	it("renders a hero visual container outside the accessibility tree", () => {
