@@ -1,17 +1,20 @@
 @layer tokens, base, header, entries, prose, footer, responsive;
 
 @layer tokens {
+	/* Every colour is a light-dark() pair resolved by the element's
+	color-scheme: the OS preference by default, a stored choice via
+	data-theme, and always dark inside the hero (see hero.css). */
 	:root {
 		color-scheme: light dark;
 
-		--color-bg: #fcfcfc;
-		--color-text: #161616;
-		--color-muted: #666666;
-		--color-border: #e3e3e3;
-		--color-accent: #33594e;
-		--color-wash-1: #dfe4d8;
-		--color-wash-2: #e4e4e4;
-		--color-wash-3: #d3dbe0;
+		--color-bg: light-dark(#ececec, #121212);
+		--color-text: light-dark(#161616, #ececec);
+		--color-muted: light-dark(#5c5c5c, #a3a3a3);
+		--color-border: light-dark(#d4d4d4, #2a2a2a);
+		--color-accent: light-dark(#33594e, #93b8a9);
+		--color-wash-1: light-dark(#d9ded3, #2a332c);
+		--color-wash-2: light-dark(#dedede, #2e2e2e);
+		--color-wash-3: light-dark(#cdd5da, #22303a);
 
 		--content-width: 68rem;
 		--prose-width: 65ch;
@@ -22,17 +25,12 @@
 		--font-reading: Georgia, "Times New Roman", serif;
 	}
 
-	@media (prefers-color-scheme: dark) {
-		:root {
-			--color-bg: #121212;
-			--color-text: #ececec;
-			--color-muted: #a3a3a3;
-			--color-border: #2a2a2a;
-			--color-accent: #93b8a9;
-			--color-wash-1: #2a332c;
-			--color-wash-2: #2e2e2e;
-			--color-wash-3: #22303a;
-		}
+	:root[data-theme="light"] {
+		color-scheme: light;
+	}
+
+	:root[data-theme="dark"] {
+		color-scheme: dark;
 	}
 }
 

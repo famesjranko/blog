@@ -1,5 +1,31 @@
 import { describe, expect, it, vi } from "vitest";
-import { cardCover } from "./layout.js";
+import { cardCover, header, page } from "./layout.js";
+
+describe("theme toggle", () => {
+	it("renders a theme toggle button in the header actions", () => {
+		const html = header();
+		expect(html).toContain('<div class="header-actions">');
+		expect(html).toContain(
+			'<button class="theme-toggle" type="button" data-theme-toggle aria-label="Toggle colour theme">',
+		);
+		expect(html.indexOf("theme-toggle")).toBeLessThan(
+			html.indexOf("menu-toggle"),
+		);
+	});
+
+	it("applies the stored theme before stylesheets load", () => {
+		const html = page({ title: "t", content: "" });
+		const inline = html.indexOf("document.documentElement.dataset.theme");
+		expect(inline).toBeGreaterThan(-1);
+		expect(html).toContain('localStorage.getItem("theme")');
+		expect(inline).toBeLessThan(html.indexOf('<link rel="stylesheet"'));
+	});
+
+	it("loads the toggle handler on every page", () => {
+		const html = page({ title: "t", content: "" });
+		expect(html).toContain('<script src="/theme.js" defer></script>');
+	});
+});
 
 describe("cardCover webp sidecars", () => {
 	it("wraps jpeg covers in a picture element with a webp source", () => {

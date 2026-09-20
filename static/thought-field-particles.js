@@ -1,19 +1,31 @@
 import * as THREE from "./three.module.min.js";
 
-function cssVar(name, fallback) {
-	const value = getComputedStyle(document.documentElement)
-		.getPropertyValue(name)
-		.trim();
-	return value === "" ? fallback : value;
+// Custom properties compute to their raw text, which for a light-dark()
+// token is not a colour THREE can parse. Applying the token to a probe's
+// color inside ELEMENT yields the resolved rgb() for that element's
+// colour scheme.
+function cssVar(element, name, fallback) {
+	const probe = document.createElement("span");
+	probe.style.color = `var(${name})`;
+	element.append(probe);
+	const value = getComputedStyle(probe).color;
+	probe.remove();
+	return value === "" || value === "rgba(0, 0, 0, 0)" ? fallback : value;
 }
 
-export function buildPalette(dark) {
-	const accent = cssVar("--color-accent", dark ? "#93b8a9" : "#33594e");
-	const ink = cssVar("--color-text", dark ? "#e7e0d1" : "#1b1813");
-	const muted = cssVar("--color-muted", dark ? "#a29885" : "#6f675b");
-	const wash1 = cssVar("--color-wash-1", dark ? "#2a332c" : "#dfe4d8");
-	const wash2 = cssVar("--color-wash-2", dark ? "#38311f" : "#e8ddc9");
-	const wash3 = cssVar("--color-wash-3", dark ? "#22303a" : "#d3dbe0");
+// Tokens are read inside ELEMENT so the palette matches that element's
+// resolved colour scheme rather than the document root's.
+export function buildPalette(dark, element = document.documentElement) {
+	const accent = cssVar(
+		element,
+		"--color-accent",
+		dark ? "#93b8a9" : "#33594e",
+	);
+	const ink = cssVar(element, "--color-text", dark ? "#ececec" : "#161616");
+	const muted = cssVar(element, "--color-muted", dark ? "#a3a3a3" : "#5c5c5c");
+	const wash1 = cssVar(element, "--color-wash-1", dark ? "#2a332c" : "#d9ded3");
+	const wash2 = cssVar(element, "--color-wash-2", dark ? "#2e2e2e" : "#dedede");
+	const wash3 = cssVar(element, "--color-wash-3", dark ? "#22303a" : "#cdd5da");
 	const picks = [
 		accent,
 		accent,

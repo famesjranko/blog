@@ -83,11 +83,15 @@ export function header(): string {
 	return (
 		`<header class="site-header"><div class="wrap header-inner">` +
 		`<a class="site-name" href="${siteUrl("/")}">${escapeHtml(SITE_NAME)}</a>` +
+		`<div class="header-actions">` +
 		`<nav class="desktop-nav" aria-label="Primary"><a href="${siteUrl("/essays/")}">Essays</a><a href="${siteUrl("/projects/")}">Projects</a></nav>` +
+		`<button class="theme-toggle" type="button" data-theme-toggle aria-label="Toggle colour theme">` +
+		`<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M8 2a6 6 0 0 0 0 12z" fill="currentColor"/></svg>` +
+		`</button>` +
 		`<button class="menu-toggle" type="button" popovertarget="mobile-nav" aria-label="Open navigation">` +
 		`<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M2 4h12M2 8h12M2 12h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg>` +
 		`</button>` +
-		`<nav id="mobile-nav" popover aria-label="Mobile"><a href="${siteUrl("/essays/")}">Essays</a><a href="${siteUrl("/projects/")}">Projects</a></nav></div></header>`
+		`<nav id="mobile-nav" popover aria-label="Mobile"><a href="${siteUrl("/essays/")}">Essays</a><a href="${siteUrl("/projects/")}">Projects</a></nav></div></div></header>`
 	);
 }
 
@@ -112,6 +116,13 @@ function renderScript(script: string | PageScript): string {
 		: `<script src="${escapeHtml(src)}" defer></script>\n`;
 	return tag;
 }
+
+/**
+ * Runs before any stylesheet so a stored theme choice paints first;
+ * without it the page would flash the OS scheme, then switch.
+ */
+const THEME_BOOT_SCRIPT =
+	'<script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark"){document.documentElement.dataset.theme=t}}catch(e){}</script>';
 
 export function page({
 	title,
@@ -138,7 +149,8 @@ ${
 		? `<meta name="description" content="${escapeHtml(description)}">
 `
 		: ""
-}${styles.map((href) => `<link rel="stylesheet" href="${escapeHtml(href)}">\n`).join("")}${scripts.map(renderScript).join("")}</head>
+}${THEME_BOOT_SCRIPT}
+${styles.map((href) => `<link rel="stylesheet" href="${escapeHtml(href)}">\n`).join("")}${renderScript(siteUrl("/theme.js"))}${scripts.map(renderScript).join("")}</head>
 <body>
 ${header()}
 <main>${content}</main>

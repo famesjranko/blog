@@ -1,9 +1,15 @@
 @layer hero, hero-mobile, motion;
 
 @layer hero {
+	/* The hero is always dark, whatever the page theme: every token
+	inside it resolves to its dark value and the field paints at full
+	strength. */
 	.hero {
+		color-scheme: dark;
 		position: relative;
 		overflow: clip;
+		background: var(--color-bg);
+		color: var(--color-text);
 		display: grid;
 		align-items: center;
 		min-height: 88svh;
@@ -116,13 +122,7 @@
 		width: 100%;
 		height: 100%;
 		pointer-events: none;
-		opacity: 0.85;
-	}
-
-	@media (prefers-color-scheme: dark) {
-		.hero-canvas {
-			opacity: 1;
-		}
+		opacity: 1;
 	}
 
 	@keyframes drift {

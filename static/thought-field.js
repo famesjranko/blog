@@ -83,7 +83,8 @@ function resizeState(options) {
 
 export function initThoughtField(canvas, tier) {
 	const hero = canvas.closest("[data-hero]") ?? canvas.parentElement;
-	const dark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+	// The hero forces a dark colour scheme regardless of the page theme.
+	const dark = true;
 	const renderer = new THREE.WebGLRenderer({
 		canvas,
 		alpha: true,
@@ -96,7 +97,7 @@ export function initThoughtField(canvas, tier) {
 	const scene = new THREE.Scene();
 	const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
 	camera.position.z = 2;
-	const { palette, accent } = buildPalette(dark);
+	const { palette, accent } = buildPalette(dark, hero);
 	const field = makePoints(Math.max(1, Math.floor(tier.count)), palette);
 	const meteors = makeMeteors(accent);
 	const pixelRatio = { value: 1 };

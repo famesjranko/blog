@@ -33,8 +33,15 @@
 		text-decoration: underline;
 	}
 
+	.header-actions {
+		display: flex;
+		align-items: center;
+		gap: 1.25rem;
+	}
+
+	.theme-toggle,
 	.menu-toggle {
-		display: none;
+		display: inline-flex;
 		align-items: center;
 		justify-content: center;
 		width: 2.75rem;
@@ -51,6 +58,8 @@
 			transform 160ms ease;
 	}
 
+	.theme-toggle:hover,
+	.theme-toggle:focus-visible,
 	.menu-toggle:hover,
 	.menu-toggle:focus-visible,
 	.menu-toggle:has(+ #mobile-nav:popover-open) {
@@ -58,13 +67,19 @@
 		background: var(--color-wash-1);
 	}
 
+	.theme-toggle:active,
 	.menu-toggle:active {
 		transform: scale(0.96);
 	}
 
+	.theme-toggle svg,
 	.menu-toggle svg {
 		width: 1.25rem;
 		height: 1.25rem;
+	}
+
+	.menu-toggle {
+		display: none;
 	}
 
 	#mobile-nav {
@@ -156,6 +171,7 @@
 	}
 
 	@media (prefers-reduced-motion: reduce) {
+		.theme-toggle,
 		.menu-toggle,
 		#mobile-nav,
 		#mobile-nav a,
