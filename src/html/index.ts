@@ -54,17 +54,26 @@ export function notFoundPage(): string {
 }
 
 function featuredSection(options: {
-	headingId: string;
+	id: string;
 	heading: string;
 	indexUrl: string;
 	indexLabel: string;
 	entry: string;
 }): string {
-	return `<section class="wrap recent" aria-labelledby="${options.headingId}">
-<h2 id="${options.headingId}">${options.heading}</h2>
+	const headingId = `${options.id}-heading`;
+	return `<section id="${options.id}" class="wrap recent" aria-labelledby="${headingId}">
+<h2 id="${headingId}">${options.heading}</h2>
 <ol class="card-grid">${options.entry}</ol>
 <p class="more-link"><a href="${options.indexUrl}">${options.indexLabel}</a></p>
 </section>`;
+}
+
+/** The hero is decoration, so the skip link lands on the first real section. */
+function skipTarget(essayCount: number, projectCount: number): string {
+	if (essayCount > 0) {
+		return "featured-essays";
+	}
+	return projectCount > 0 ? "featured-projects" : "main";
 }
 
 export function homePage(essays: Essay[], projects: Project[] = []): string {
@@ -74,7 +83,7 @@ export function homePage(essays: Essay[], projects: Project[] = []): string {
 		featuredEssays.length === 0
 			? ""
 			: featuredSection({
-					headingId: "featured-essays-heading",
+					id: "featured-essays",
 					heading: "Featured essays",
 					indexUrl: siteUrl("/essays/"),
 					indexLabel: "More essays",
@@ -84,7 +93,7 @@ export function homePage(essays: Essay[], projects: Project[] = []): string {
 		featuredProjects.length === 0
 			? ""
 			: featuredSection({
-					headingId: "featured-projects-heading",
+					id: "featured-projects",
 					heading: "Featured projects",
 					indexUrl: siteUrl("/projects/"),
 					indexLabel: "More projects",
@@ -93,6 +102,7 @@ export function homePage(essays: Essay[], projects: Project[] = []): string {
 	return page({
 		title: "Andrew J. McDonald",
 		description: HERO_STANDFIRST,
+		skipTo: skipTarget(featuredEssays.length, featuredProjects.length),
 		scripts: [{ src: siteUrl("/hero.js"), type: "module" }],
 		styles: [
 			siteUrl("/styles.css"),

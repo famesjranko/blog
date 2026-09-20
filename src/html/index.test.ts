@@ -279,6 +279,25 @@ describe("homePage projects", () => {
 	});
 });
 
+describe("homePage skip link", () => {
+	it("skips past the hero to the featured essays", () => {
+		const html = homePage([sampleEssay()], [sampleProject()]);
+		expect(html).toContain('<a class="skip-link" href="#featured-essays">');
+		expect(html).toContain('<section id="featured-essays"');
+	});
+
+	it("falls back to the projects section when there are no essays", () => {
+		const html = homePage([], [sampleProject()]);
+		expect(html).toContain('href="#featured-projects"');
+		expect(html).toContain('<section id="featured-projects"');
+	});
+
+	it("falls back to main when there is nothing below the hero", () => {
+		const html = homePage([], []);
+		expect(html).toContain('<a class="skip-link" href="#main">');
+	});
+});
+
 describe("card heading levels", () => {
 	it("nests cards under the section heading on the homepage", () => {
 		const html = homePage([sampleEssay()], [sampleProject()]);

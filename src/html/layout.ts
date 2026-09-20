@@ -116,18 +116,25 @@ function renderScript(script: string | PageScript): string {
 const THEME_BOOT_SCRIPT =
 	'<script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark"){document.documentElement.dataset.theme=t}}catch(e){}</script>';
 
+/**
+ * `skipTo` is the id the skip link jumps to. It defaults to main, and
+ * a page whose main opens with decoration (the homepage hero) passes
+ * the id of its first real content section instead.
+ */
 export function page({
 	title,
 	content,
 	description,
 	scripts = [],
 	styles = [siteUrl("/styles.css"), siteUrl("/header.css")],
+	skipTo = "main",
 }: {
 	title: string;
 	content: string;
 	description?: string;
 	scripts?: Array<string | PageScript>;
 	styles?: string[];
+	skipTo?: string;
 }): string {
 	return `<!doctype html>
 <html lang="en">
@@ -145,7 +152,7 @@ ${
 }${THEME_BOOT_SCRIPT}
 ${styles.map((href) => `<link rel="stylesheet" href="${escapeHtml(href)}">\n`).join("")}${renderScript(siteUrl("/theme.js"))}${scripts.map(renderScript).join("")}</head>
 <body>
-<a class="skip-link" href="#main">Skip to content</a>
+<a class="skip-link" href="#${escapeHtml(skipTo)}">Skip to content</a>
 ${header()}
 <main id="main">${content}</main>
 ${footer()}
