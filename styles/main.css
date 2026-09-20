@@ -274,12 +274,26 @@
 		font-size: 0.9rem;
 	}
 
-	.site-footer .wrap {
+	.footer-inner {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		gap: 0.5rem 1.5rem;
 		padding-block: 1.5rem 2rem;
 	}
 
 	.site-footer p {
 		margin: 0;
+	}
+
+	.footer-link {
+		color: var(--color-muted);
+		text-decoration: none;
+	}
+
+	.footer-link:hover {
+		color: var(--color-text);
+		text-decoration: underline;
 	}
 }
 

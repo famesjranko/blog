@@ -1,5 +1,14 @@
 import { describe, expect, it, vi } from "vitest";
-import { cardCover, header, page } from "./layout.js";
+import { cardCover, footer, header, page } from "./layout.js";
+
+describe("footer", () => {
+	it("links to the GitHub profile in a new tab", () => {
+		const html = footer();
+		expect(html).toContain(
+			'<a class="footer-link" href="https://github.com/famesjranko" rel="me noopener" target="_blank">GitHub</a>',
+		);
+	});
+});
 
 describe("theme toggle", () => {
 	it("renders a theme toggle button in the header actions", () => {

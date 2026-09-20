@@ -95,11 +95,15 @@ export function header(): string {
 	);
 }
 
+const GITHUB_URL = "https://github.com/famesjranko";
+
 export function footer(): string {
 	const year = new Date().getFullYear();
 	return (
-		`<footer class="site-footer"><div class="wrap">` +
-		`<p>${escapeHtml(SITE_NAME)} &middot; &copy; ${year}</p></div></footer>`
+		`<footer class="site-footer"><div class="wrap footer-inner">` +
+		`<p>${escapeHtml(SITE_NAME)} &middot; &copy; ${year}</p>` +
+		`<p><a class="footer-link" href="${GITHUB_URL}" rel="me noopener" target="_blank">GitHub</a></p>` +
+		`</div></footer>`
 	);
 }
 
