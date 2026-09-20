@@ -1,9 +1,8 @@
 import { describe, expect, it } from "vitest";
 import type { Essay, Project } from "../content.js";
 import { essayEntry, essayIndexPage, homePage } from "./index.js";
-import { cardCover, placeholderStyle } from "./layout.js";
+import { placeholderStyle } from "./layout.js";
 import { projectEntry, projectIndexPage } from "./project.js";
-import { page } from "./layout.js";
 
 function sampleEssay(overrides: Partial<Essay> = {}): Essay {
 	return {
@@ -143,55 +142,6 @@ describe("stylesheets", () => {
 	});
 });
 
-describe("page scripts", () => {
-	it("renders classic scripts with defer", () => {
-		const html = page({ title: "T", content: "<p>x</p>", scripts: ["/a.js"] });
-		expect(html).toContain('<script src="/a.js" defer></script>');
-	});
-
-	it("renders module scripts as closed elements without defer", () => {
-		const html = page({
-			title: "T",
-			content: "<p>x</p>",
-			scripts: [{ src: "/a.js", type: "module" }],
-		});
-		expect(html).toContain('<script type="module" src="/a.js"></script>');
-	});
-
-	it("links the svg favicon so browsers skip the default ico request", () => {
-		const html = page({ title: "T", content: "<p>x</p>" });
-		expect(html).toContain(
-			'<link rel="icon" type="image/svg+xml" href="/favicon.svg">',
-		);
-	});
-});
-
-describe("cardCover", () => {
-	it("renders the explicit cover image with lazy loading", () => {
-		const html = cardCover(
-			"/img/essays/jtb-knowledge/cover.jpg",
-			"jtb",
-			"jtb-knowledge",
-		);
-		expect(html).toContain('class="card-media"');
-		expect(html).toContain('src="/img/essays/jtb-knowledge/cover.jpg"');
-		expect(html).toContain('alt="jtb"');
-		expect(html).toContain('loading="lazy"');
-	});
-
-	it("renders a slug-derived placeholder when no cover is set", () => {
-		const html = cardCover(undefined, undefined, "other");
-		expect(html).toContain("card-media--placeholder");
-		expect(html).toContain(`style="${placeholderStyle("other")}"`);
-	});
-
-	it("escapes cover alt text", () => {
-		const html = cardCover("/img/x.jpg", "<evil>", "x");
-		expect(html).toContain('alt="&lt;evil&gt;"');
-		expect(html).not.toContain('alt="<evil>"');
-	});
-});
-
 describe("essayEntry cover", () => {
 	it("renders a card with the explicit cover image", () => {
 		const html = essayEntry(
@@ -252,32 +202,6 @@ describe("essayEntry content", () => {
 		const html = essayEntry(sampleEssay());
 		expect(html).toContain("entry-topics");
 		expect(html).not.toContain("<time");
-	});
-});
-
-describe("placeholderStyle", () => {
-	it("is deterministic for the same seed", () => {
-		expect(placeholderStyle("musicmeta")).toBe(placeholderStyle("musicmeta"));
-	});
-
-	it("differs across slugs", () => {
-		expect(placeholderStyle("musicmeta")).not.toBe(
-			placeholderStyle("ip-camera"),
-		);
-	});
-
-	it("emits a hue in range and an offset in range", () => {
-		const style = placeholderStyle("musicmeta");
-		const hue = Number(/--placeholder-hue: (\d+)/.exec(style)?.[1]);
-		const offset = Number(/--placeholder-offset: (\d+)/.exec(style)?.[1]);
-		expect(hue).toBeGreaterThanOrEqual(0);
-		expect(hue).toBeLessThan(360);
-		expect(offset).toBeGreaterThanOrEqual(10);
-		expect(offset).toBeLessThanOrEqual(89);
-	});
-
-	it("emits unitless numbers so CSS can apply its own units", () => {
-		expect(placeholderStyle("musicmeta")).not.toContain("%");
 	});
 });
 
@@ -352,6 +276,24 @@ describe("homePage projects", () => {
 	it("omits the projects section when there are none", () => {
 		const html = homePage([sampleEssay()]);
 		expect(html).not.toContain("Featured projects");
+	});
+});
+
+describe("card heading levels", () => {
+	it("nests cards under the section heading on the homepage", () => {
+		const html = homePage([sampleEssay()], [sampleProject()]);
+		expect(html).toContain('<h3 class="card-title">');
+		expect(html).not.toContain('<h2 class="card-title">');
+	});
+
+	it("nests cards directly under the page heading on index pages", () => {
+		for (const html of [
+			essayIndexPage([sampleEssay()]),
+			projectIndexPage([sampleProject()]),
+		]) {
+			expect(html).toContain('<h2 class="card-title">');
+			expect(html).not.toContain("<h3");
+		}
 	});
 });
 

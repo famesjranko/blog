@@ -69,7 +69,7 @@ export function header(): string {
 		`<a class="site-name" href="${siteUrl("/")}">${escapeHtml(SITE_NAME)}</a>` +
 		`<div class="header-actions">` +
 		`<nav class="desktop-nav" aria-label="Primary"><a href="${siteUrl("/essays/")}">Essays</a><a href="${siteUrl("/projects/")}">Projects</a></nav>` +
-		`<button class="theme-toggle" type="button" data-theme-toggle aria-label="Toggle colour theme">` +
+		`<button class="theme-toggle" type="button" data-theme-toggle aria-label="Dark theme">` +
 		`<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M8 2a6 6 0 0 0 0 12z" fill="currentColor"/></svg>` +
 		`</button>` +
 		`<button class="menu-toggle" type="button" popovertarget="mobile-nav" aria-label="Open navigation">` +
@@ -145,8 +145,9 @@ ${
 }${THEME_BOOT_SCRIPT}
 ${styles.map((href) => `<link rel="stylesheet" href="${escapeHtml(href)}">\n`).join("")}${renderScript(siteUrl("/theme.js"))}${scripts.map(renderScript).join("")}</head>
 <body>
+<a class="skip-link" href="#main">Skip to content</a>
 ${header()}
-<main>${content}</main>
+<main id="main">${content}</main>
 ${footer()}
 </body>
 </html>

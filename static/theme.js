@@ -15,6 +15,14 @@ function currentTheme() {
 		: "light";
 }
 
+/** The toggle reads as "dark theme on" to assistive technology. */
+function reflectPressed() {
+	const dark = currentTheme() === "dark";
+	for (const button of buttons) {
+		button.setAttribute("aria-pressed", String(dark));
+	}
+}
+
 /** @param {"light" | "dark"} theme */
 function applyTheme(theme) {
 	root.dataset.theme = theme;
@@ -23,6 +31,7 @@ function applyTheme(theme) {
 	} catch {
 		// Storage unavailable: the choice lasts for this page only.
 	}
+	reflectPressed();
 }
 
 for (const button of buttons) {
@@ -30,3 +39,4 @@ for (const button of buttons) {
 		applyTheme(currentTheme() === "dark" ? "light" : "dark");
 	});
 }
+reflectPressed();

@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { cardCover, footer, header, page } from "./layout.js";
+import { cardCover, footer, header, page, placeholderStyle } from "./layout.js";
 
 describe("footer", () => {
 	it("links to the GitHub profile in a new tab", () => {
@@ -17,7 +17,7 @@ describe("theme toggle", () => {
 		const html = header();
 		expect(html).toContain('<div class="header-actions">');
 		expect(html).toContain(
-			'<button class="theme-toggle" type="button" data-theme-toggle aria-label="Toggle colour theme">',
+			'<button class="theme-toggle" type="button" data-theme-toggle aria-label="Dark theme">',
 		);
 		expect(html.indexOf("theme-toggle")).toBeLessThan(
 			html.indexOf("menu-toggle"),
@@ -35,6 +35,17 @@ describe("theme toggle", () => {
 	it("loads the toggle handler on every page", () => {
 		const html = page({ title: "t", content: "" });
 		expect(html).toContain('<script src="/theme.js" defer></script>');
+	});
+});
+
+describe("skip link", () => {
+	it("offers a skip link before the header that targets main", () => {
+		const html = page({ title: "t", content: "<p>x</p>" });
+		expect(html).toContain('<a class="skip-link" href="#main">');
+		expect(html).toContain('<main id="main">');
+		expect(html.indexOf("skip-link")).toBeLessThan(
+			html.indexOf('<header class="site-header">'),
+		);
 	});
 });
 
@@ -113,5 +124,80 @@ describe("cardCover webp sidecars", () => {
 		const html = cardCover("/img/projects/c/diagram.svg", "d", "c");
 		expect(html).not.toContain("<picture>");
 		expect(html).toContain('src="/img/projects/c/diagram.svg"');
+	});
+});
+
+describe("page scripts", () => {
+	it("renders classic scripts with defer", () => {
+		const html = page({ title: "T", content: "<p>x</p>", scripts: ["/a.js"] });
+		expect(html).toContain('<script src="/a.js" defer></script>');
+	});
+
+	it("renders module scripts as closed elements without defer", () => {
+		const html = page({
+			title: "T",
+			content: "<p>x</p>",
+			scripts: [{ src: "/a.js", type: "module" }],
+		});
+		expect(html).toContain('<script type="module" src="/a.js"></script>');
+	});
+
+	it("links the svg favicon so browsers skip the default ico request", () => {
+		const html = page({ title: "T", content: "<p>x</p>" });
+		expect(html).toContain(
+			'<link rel="icon" type="image/svg+xml" href="/favicon.svg">',
+		);
+	});
+});
+
+describe("cardCover", () => {
+	it("renders the explicit cover image with lazy loading", () => {
+		const html = cardCover(
+			"/img/essays/jtb-knowledge/cover.jpg",
+			"jtb",
+			"jtb-knowledge",
+		);
+		expect(html).toContain('class="card-media"');
+		expect(html).toContain('src="/img/essays/jtb-knowledge/cover.jpg"');
+		expect(html).toContain('alt="jtb"');
+		expect(html).toContain('loading="lazy"');
+	});
+
+	it("renders a slug-derived placeholder when no cover is set", () => {
+		const html = cardCover(undefined, undefined, "other");
+		expect(html).toContain("card-media--placeholder");
+		expect(html).toContain(`style="${placeholderStyle("other")}"`);
+	});
+
+	it("escapes cover alt text", () => {
+		const html = cardCover("/img/x.jpg", "<evil>", "x");
+		expect(html).toContain('alt="&lt;evil&gt;"');
+		expect(html).not.toContain('alt="<evil>"');
+	});
+});
+
+describe("placeholderStyle", () => {
+	it("is deterministic for the same seed", () => {
+		expect(placeholderStyle("musicmeta")).toBe(placeholderStyle("musicmeta"));
+	});
+
+	it("differs across slugs", () => {
+		expect(placeholderStyle("musicmeta")).not.toBe(
+			placeholderStyle("ip-camera"),
+		);
+	});
+
+	it("emits a hue in range and an offset in range", () => {
+		const style = placeholderStyle("musicmeta");
+		const hue = Number(/--placeholder-hue: (\d+)/.exec(style)?.[1]);
+		const offset = Number(/--placeholder-offset: (\d+)/.exec(style)?.[1]);
+		expect(hue).toBeGreaterThanOrEqual(0);
+		expect(hue).toBeLessThan(360);
+		expect(offset).toBeGreaterThanOrEqual(10);
+		expect(offset).toBeLessThanOrEqual(89);
+	});
+
+	it("emits unitless numbers so CSS can apply its own units", () => {
+		expect(placeholderStyle("musicmeta")).not.toContain("%");
 	});
 });

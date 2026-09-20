@@ -77,6 +77,24 @@
 		outline: 2px solid var(--color-accent);
 		outline-offset: 3px;
 	}
+
+	/* Off-canvas until a keyboard user tabs to it, then pinned top-left
+	above the header. */
+	.skip-link {
+		position: absolute;
+		top: 0.5rem;
+		left: 0.5rem;
+		z-index: 10;
+		padding: 0.5rem 0.9rem;
+		border-radius: 0.5rem;
+		background: var(--color-surface);
+		color: var(--color-text);
+		transform: translateY(-200%);
+	}
+
+	.skip-link:focus-visible {
+		transform: none;
+	}
 }
 
 @layer entries {

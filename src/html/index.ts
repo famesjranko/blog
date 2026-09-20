@@ -17,7 +17,10 @@ export function topicLink(topic: string): string {
 	return `<a href="${siteUrl(`/topics/${topicSlug(topic)}/`)}">${escapeHtml(topic)}</a>`;
 }
 
-export function essayEntry(essay: Essay): string {
+/** Card title level: h2 straight under a page h1, h3 inside a homepage section. */
+export type CardHeading = 2 | 3;
+
+export function essayEntry(essay: Essay, heading: CardHeading = 2): string {
 	const url = siteUrl(`/essays/${essay.slug}/`);
 	const cover = cardCover(essay.cover, essay.coverAlt, essay.slug);
 	const description =
@@ -27,7 +30,7 @@ export function essayEntry(essay: Essay): string {
 	const topics = `<span class="entry-topics">${essay.topics.map((topic) => topicLink(topic)).join("")}</span>`;
 	return `<li><article class="card">
 ${cover}<div class="card-body">
-<h3 class="card-title"><a href="${url}">${escapeHtml(essay.title)}</a></h3>
+<h${heading} class="card-title"><a href="${url}">${escapeHtml(essay.title)}</a></h${heading}>
 ${description}
 <p class="entry-meta">${topics}</p>
 </div></article></li>`;
@@ -75,7 +78,7 @@ export function homePage(essays: Essay[], projects: Project[] = []): string {
 					heading: "Featured essays",
 					indexUrl: siteUrl("/essays/"),
 					indexLabel: "More essays",
-					entry: featuredEssays.map((e) => essayEntry(e)).join("\n"),
+					entry: featuredEssays.map((e) => essayEntry(e, 3)).join("\n"),
 				});
 	const projectsSection =
 		featuredProjects.length === 0
@@ -85,7 +88,7 @@ export function homePage(essays: Essay[], projects: Project[] = []): string {
 					heading: "Featured projects",
 					indexUrl: siteUrl("/projects/"),
 					indexLabel: "More projects",
-					entry: featuredProjects.map((p) => projectEntry(p)).join("\n"),
+					entry: featuredProjects.map((p) => projectEntry(p, 3)).join("\n"),
 				});
 	return page({
 		title: "Andrew J. McDonald",
