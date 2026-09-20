@@ -1,3 +1,5 @@
+import { densityCount } from "./thought-field-maths.js";
+
 /** @typedef {import("./thought-field.js").Tier} Tier */
 
 const hero = document.querySelector("[data-hero]");
@@ -55,11 +57,13 @@ function setupParallax(hero, disabled) {
 
 /**
  * Tier before downloading anything: data-saver mode keeps the CSS
- * washes, phones get a small low-DPR field, weak laptops a mid one,
- * desktops the full one. Returning null means "skip WebGL entirely".
+ * washes, phones get the desktop density over their smaller hero at a
+ * sharp pixel ratio, weak laptops a mid field, desktops the full one.
+ * Returning null means "skip WebGL entirely".
+ * @param {HTMLElement} hero
  * @returns {Tier | null}
  */
-function pickTier() {
+function pickTier(hero) {
 	const hinted = /** @type {HintedNavigator} */ (navigator);
 	if (hinted.connection?.saveData === true) {
 		return null;
@@ -67,7 +71,8 @@ function pickTier() {
 	const smallScreen = window.matchMedia("(max-width: 42rem)").matches;
 	const coarsePointer = window.matchMedia("(pointer: coarse)").matches;
 	if (smallScreen || coarsePointer) {
-		return { count: 320, pixelRatio: 1 };
+		const rect = hero.getBoundingClientRect();
+		return { count: densityCount(rect.width, rect.height), pixelRatio: 2 };
 	}
 	const memory = hinted.deviceMemory ?? 8;
 	const cores = navigator.hardwareConcurrency ?? 8;
@@ -91,7 +96,7 @@ function scheduleField(hero) {
 	if (!(canvas instanceof HTMLCanvasElement)) {
 		return;
 	}
-	const tier = pickTier();
+	const tier = pickTier(hero);
 	if (tier === null || !webglAvailable()) {
 		return;
 	}

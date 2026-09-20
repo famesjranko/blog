@@ -11,3 +11,4 @@ export interface LinearColour {
 export function srgbToLinear(c: number): number;
 export function parseCssColour(text: string): LinearColour | null;
 export function orthographicProjection(aspect: number): Float32Array;
+export function densityCount(width: number, height: number): number;

@@ -67,6 +67,24 @@ export function parseCssColour(text) {
 	return fromBytes(Number(r), Number(g), Number(b));
 }
 
+// The full field: 1600 particles filling a typical desktop hero. Smaller
+// heroes get the same particles per pixel, never fewer than the floor.
+const FULL_COUNT = 1600;
+const FLOOR_COUNT = 320;
+const REFERENCE_AREA = 1440 * 800;
+
+/**
+ * Particle count that keeps a hero of the given CSS size at the desktop
+ * density, clamped between the floor and the full field.
+ * @param {number} width
+ * @param {number} height
+ * @returns {number}
+ */
+export function densityCount(width, height) {
+	const scaled = Math.round((FULL_COUNT * width * height) / REFERENCE_AREA);
+	return Math.min(FULL_COUNT, Math.max(FLOOR_COUNT, scaled));
+}
+
 /**
  * Column-major 4x4 matrix taking world space straight to clip space for
  * the hero camera: projection multiplied by the camera's inverse

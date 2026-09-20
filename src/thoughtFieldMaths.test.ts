@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+	densityCount,
 	orthographicProjection,
 	parseCssColour,
 	srgbToLinear,
@@ -99,5 +100,24 @@ describe("orthographicProjection", () => {
 			6,
 		);
 		expect(Math.abs(expected)).toBeLessThan(1);
+	});
+});
+
+describe("densityCount", () => {
+	it("gives the reference desktop hero the full field", () => {
+		expect(densityCount(1440, 800)).toBe(1600);
+	});
+
+	it("keeps particles per pixel constant on a phone hero", () => {
+		// 412 x 720 is 0.2575 of the reference area: 1600 * 0.2575 = 412.
+		expect(densityCount(412, 720)).toBe(412);
+	});
+
+	it("never drops below the floor on a tiny hero", () => {
+		expect(densityCount(200, 300)).toBe(320);
+	});
+
+	it("never exceeds the full field on a huge hero", () => {
+		expect(densityCount(3840, 2160)).toBe(1600);
 	});
 });
