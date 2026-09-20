@@ -50,7 +50,6 @@ src/        Site generator
 styles/     Stylesheets
 static/     Static assets
 scripts/    Repository tooling
-typings/    Type shims for checking static/ scripts
 dist/       Generated site output
 ```
 

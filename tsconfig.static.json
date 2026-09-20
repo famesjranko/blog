@@ -14,8 +14,7 @@
 		"noFallthroughCasesInSwitch": true,
 		"forceConsistentCasingInFileNames": true,
 		"skipLibCheck": true,
-		"noEmit": true,
-		"rootDirs": ["static", "typings/static"]
+		"noEmit": true
 	},
-	"include": ["static/**/*.js", "typings/static/*.d.ts"]
+	"include": ["static/**/*.js"]
 }

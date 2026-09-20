@@ -1,6 +1,9 @@
-import * as THREE from "./three.module.min.js";
+import { parseCssColour } from "./thought-field-maths.js";
 
-/** @typedef {import("./thought-field-meteors.js").Meteors} Meteors */
+/**
+ * @typedef {import("./thought-field-maths.js").LinearColour} LinearColour
+ * @typedef {import("./thought-field-meteors.js").Meteors} Meteors
+ */
 
 /**
  * Pointer position in field space, plus how strongly it still repels.
@@ -12,7 +15,7 @@ import * as THREE from "./three.module.min.js";
  * rest position each particle drifts around.
  * @typedef {{
  *   count: number,
- *   palette: THREE.Color[],
+ *   palette: LinearColour[],
  *   pos: Float32Array,
  *   col: Float32Array,
  *   base: Float32Array,
@@ -21,16 +24,27 @@ import * as THREE from "./three.module.min.js";
  * }} Field
  */
 
-/** @typedef {Field & { geometry: THREE.BufferGeometry }} PointField */
-
 /**
- * Custom properties compute to their raw text, which for a light-dark()
- * token is not a colour THREE can parse. Applying the token to a probe's
- * color inside ELEMENT yields the resolved rgb() for that element's
- * colour scheme.
+ * @param {string} hex a literal fallback colour
+ * @returns {LinearColour}
+ */
+function mustParse(hex) {
+	const colour = parseCssColour(hex);
+	if (colour === null) {
+		throw new Error(`unparseable fallback colour: ${hex}`);
+	}
+	return colour;
+}
+
+// Custom properties compute to their raw text, which for a light-dark()
+// token is not a colour we can parse. Applying the token to a probe's
+// color inside ELEMENT yields the resolved rgb() for that element's
+// colour scheme. A transparent or unparseable result takes the fallback.
+/**
  * @param {Element} element
  * @param {string} name
  * @param {string} fallback
+ * @returns {LinearColour}
  */
 function cssVar(element, name, fallback) {
 	const probe = document.createElement("span");
@@ -38,26 +52,26 @@ function cssVar(element, name, fallback) {
 	element.append(probe);
 	const value = getComputedStyle(probe).color;
 	probe.remove();
-	return value === "" || value === "rgba(0, 0, 0, 0)" ? fallback : value;
+	if (value === "rgba(0, 0, 0, 0)") {
+		return mustParse(fallback);
+	}
+	return parseCssColour(value) ?? mustParse(fallback);
 }
 
+// Tokens are read inside ELEMENT so the palette matches that element's
+// resolved colour scheme rather than the document root's. The hero is
+// always dark, so the fallbacks are the dark-scheme tokens.
 /**
- * Tokens are read inside ELEMENT so the palette matches that element's
- * resolved colour scheme rather than the document root's.
- * @param {boolean} dark
- * @param {Element} [element]
+ * @param {Element} element
+ * @returns {{ palette: LinearColour[], accent: LinearColour }}
  */
-export function buildPalette(dark, element = document.documentElement) {
-	const accent = cssVar(
-		element,
-		"--color-accent",
-		dark ? "#93b8a9" : "#33594e",
-	);
-	const ink = cssVar(element, "--color-text", dark ? "#ececec" : "#161616");
-	const muted = cssVar(element, "--color-muted", dark ? "#a3a3a3" : "#5c5c5c");
-	const wash1 = cssVar(element, "--color-wash-1", dark ? "#2a332c" : "#d9ded3");
-	const wash2 = cssVar(element, "--color-wash-2", dark ? "#2e2e2e" : "#dedede");
-	const wash3 = cssVar(element, "--color-wash-3", dark ? "#22303a" : "#cdd5da");
+export function buildPalette(element = document.documentElement) {
+	const accent = cssVar(element, "--color-accent", "#93b8a9");
+	const ink = cssVar(element, "--color-text", "#ececec");
+	const muted = cssVar(element, "--color-muted", "#a3a3a3");
+	const wash1 = cssVar(element, "--color-wash-1", "#2a332c");
+	const wash2 = cssVar(element, "--color-wash-2", "#2e2e2e");
+	const wash3 = cssVar(element, "--color-wash-3", "#22303a");
 	const picks = [
 		accent,
 		accent,
@@ -70,15 +84,13 @@ export function buildPalette(dark, element = document.documentElement) {
 		wash2,
 		wash3,
 	];
-	return {
-		palette: picks.map((hex) => new THREE.Color(hex)),
-		accent: new THREE.Color(accent),
-	};
+	return { palette: picks, accent };
 }
 
 /**
  * @param {number} lastMove
  * @param {number} now
+ * @returns {number}
  */
 export function pointerStrength(lastMove, now) {
 	const age = now - lastMove;
@@ -88,18 +100,25 @@ export function pointerStrength(lastMove, now) {
 	return Math.max(0, 1 - (age - 2000) / 1000);
 }
 
-/** @param {Field} field */
+/**
+ * @param {Field} field
+ */
 function fillField(field) {
 	const { count, palette, pos, col, base, phase, scale } = field;
 	for (let i = 0; i < count; i += 1) {
 		const ix = i * 3;
-		base[ix] = Math.random() * 2 - 1;
-		base[ix + 1] = Math.random() * 2 - 1;
+		const bx = Math.random() * 2 - 1;
+		const by = Math.random() * 2 - 1;
+		base[ix] = bx;
+		base[ix + 1] = by;
 		base[ix + 2] = 0;
-		pos[ix] = base[ix];
-		pos[ix + 1] = base[ix + 1];
+		pos[ix] = bx;
+		pos[ix + 1] = by;
 		pos[ix + 2] = 0;
 		const tint = palette[Math.floor(Math.random() * palette.length)];
+		if (tint === undefined) {
+			throw new Error("palette is empty");
+		}
 		col[ix] = tint.r;
 		col[ix + 1] = tint.g;
 		col[ix + 2] = tint.b;
@@ -111,10 +130,11 @@ function fillField(field) {
 
 /**
  * @param {number} count
- * @param {THREE.Color[]} palette
- * @returns {PointField}
+ * @param {LinearColour[]} palette
+ * @returns {Field}
  */
 export function makePoints(count, palette) {
+	/** @type {Field} */
 	const field = {
 		count,
 		palette,
@@ -125,22 +145,11 @@ export function makePoints(count, palette) {
 		scale: new Float32Array(count),
 	};
 	fillField(field);
-	const geometry = new THREE.BufferGeometry();
-	geometry.setAttribute("position", new THREE.BufferAttribute(field.pos, 3));
-	geometry.setAttribute("aColor", new THREE.BufferAttribute(field.col, 3));
-	geometry.setAttribute("aScale", new THREE.BufferAttribute(field.scale, 1));
-	return { ...field, geometry };
+	return field;
 }
 
 /**
- * @param {{
- *   pos: Float32Array,
- *   ix: number,
- *   cx: number,
- *   cy: number,
- *   radius2: number,
- *   push: number,
- * }} options
+ * @param {{ pos: Float32Array, ix: number, cx: number, cy: number, radius2: number, push: number }} options
  */
 function repel(options) {
 	const { pos, ix, cx, cy, radius2, push } = options;
@@ -157,7 +166,7 @@ function repel(options) {
 
 /**
  * @param {{
- *   field: PointField,
+ *   field: Field,
  *   aspect: number,
  *   time: number,
  *   dt: number,
@@ -188,13 +197,7 @@ export function stepParticles(options) {
 }
 
 /**
- * @param {{
- *   field: PointField,
- *   ix: number,
- *   pointer: Pointer,
- *   meteors: Meteors,
- *   rate: number,
- * }} options
+ * @param {{ field: Field, ix: number, pointer: Pointer, meteors: Meteors, rate: number }} options
  */
 function applyRepulsion(options) {
 	const { field, ix, pointer, meteors, rate } = options;

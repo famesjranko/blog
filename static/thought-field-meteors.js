@@ -1,29 +1,12 @@
-import * as THREE from "./three.module.min.js";
-
-const METEOR_SLOTS = 2;
-const METEOR_TRAIL = 40;
-
 /**
- * One in-flight meteor: head position, velocity, spacing of its trail
- * points, and how far through its life it is.
+ * @typedef {import("./thought-field-maths.js").LinearColour} LinearColour
  * @typedef {{
- *   active: boolean,
- *   x: number,
- *   y: number,
- *   vx: number,
- *   vy: number,
- *   gap: number,
- *   age: number,
- *   life: number,
- *   size: number,
+ *   active: boolean, x: number, y: number, vx: number, vy: number,
+ *   gap: number, age: number, life: number, size: number,
  * }} Slot
- */
-
-/**
- * Trail buffers for every slot plus the spawn schedule.
  * @typedef {{
- *   geometry: THREE.BufferGeometry,
  *   pos: Float32Array,
+ *   col: Float32Array,
  *   alpha: Float32Array,
  *   scale: Float32Array,
  *   slots: Slot[],
@@ -32,6 +15,9 @@ const METEOR_TRAIL = 40;
  *   burstLeft: number,
  * }} Meteors
  */
+
+const METEOR_SLOTS = 2;
+const METEOR_TRAIL = 40;
 
 /** @returns {Slot} */
 function newSlot() {
@@ -49,7 +35,7 @@ function newSlot() {
 }
 
 /**
- * @param {THREE.Color} accent
+ * @param {LinearColour} accent
  * @returns {Meteors}
  */
 export function makeMeteors(accent) {
@@ -65,14 +51,9 @@ export function makeMeteors(accent) {
 		col[i * 3 + 2] = accent.b;
 		scale[i] = 2.2 - 1.4 * (trailIndex / METEOR_TRAIL);
 	}
-	const geometry = new THREE.BufferGeometry();
-	geometry.setAttribute("position", new THREE.BufferAttribute(pos, 3));
-	geometry.setAttribute("aColor", new THREE.BufferAttribute(col, 3));
-	geometry.setAttribute("aScale", new THREE.BufferAttribute(scale, 1));
-	geometry.setAttribute("aAlpha", new THREE.BufferAttribute(alpha, 1));
 	return {
-		geometry,
 		pos,
+		col,
 		alpha,
 		scale,
 		slots: Array.from({ length: METEOR_SLOTS }, newSlot),
@@ -101,7 +82,10 @@ function scheduleNext(meteors, now) {
 	state.nextAt = now + 14 + Math.random() * 18;
 }
 
-/** @param {number} aspect */
+/**
+ * @param {number} aspect
+ * @returns {{ x: number, y: number, angle: number }}
+ */
 function entryVector(aspect) {
 	const edge = Math.floor(Math.random() * 3);
 	if (edge === 0) {
@@ -159,6 +143,7 @@ function clearSlot(alpha, base) {
 /**
  * @param {Slot} slot
  * @param {number} aspect
+ * @returns {boolean}
  */
 function slotIsGone(slot, aspect) {
 	return (
@@ -190,13 +175,7 @@ function writeTrail(options) {
 }
 
 /**
- * @param {{
- *   meteors: Meteors,
- *   slot: Slot,
- *   index: number,
- *   aspect: number,
- *   dt: number,
- * }} options
+ * @param {{ meteors: Meteors, slot: Slot, index: number, aspect: number, dt: number }} options
  */
 function writeSlot(options) {
 	const { meteors, slot, index, aspect, dt } = options;
@@ -224,8 +203,8 @@ function writeSlot(options) {
 /**
  * @param {Meteors} meteors
  * @param {number} aspect
- * @param {number} now
- * @param {number} dt
+ * @param {number} now seconds
+ * @param {number} dt seconds since the last frame
  */
 export function stepMeteors(meteors, aspect, now, dt) {
 	const state = meteors;

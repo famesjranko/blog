@@ -1,22 +1,13 @@
 import { pointerStrength, stepParticles } from "./thought-field-particles.js";
 import { stepMeteors } from "./thought-field-meteors.js";
 
-/** @typedef {import("./three.module.min.js").WebGLRenderer} WebGLRenderer */
-/** @typedef {import("./three.module.min.js").Scene} Scene */
-/** @typedef {import("./three.module.min.js").OrthographicCamera} OrthographicCamera */
-/** @typedef {import("./thought-field-particles.js").PointField} PointField */
-/** @typedef {import("./thought-field-particles.js").Pointer} Pointer */
-/** @typedef {import("./thought-field-meteors.js").Meteors} Meteors */
-
 /**
  * @typedef {{
- *   renderer: WebGLRenderer,
- *   scene: Scene,
- *   camera: OrthographicCamera,
- *   field: PointField,
- *   pointer: Pointer,
+ *   renderer: { render: () => void },
+ *   field: import("./thought-field-particles.js").Field,
+ *   pointer: import("./thought-field-particles.js").Pointer,
  *   hero: Element | null,
- *   meteors: Meteors,
+ *   meteors: import("./thought-field-meteors.js").Meteors,
  *   dims: { aspect: number },
  * }} LoopOptions
  */
@@ -27,20 +18,19 @@ import { stepMeteors } from "./thought-field-meteors.js";
  * @param {number} dt
  */
 function renderFrame(options, now, dt) {
-	const { renderer, scene, camera, field, pointer, meteors, dims } = options;
+	const { renderer, field, pointer, meteors, dims } = options;
 	const aspect = dims.aspect;
 	const time = now / 1000;
 	pointer.strength = pointerStrength(pointer.lastMove, now);
 	stepMeteors(meteors, aspect, time, dt);
 	stepParticles({ field, aspect, time, dt, pointer, meteors });
-	field.geometry.getAttribute("position").needsUpdate = true;
-	meteors.geometry.getAttribute("position").needsUpdate = true;
-	meteors.geometry.getAttribute("aAlpha").needsUpdate = true;
-	meteors.geometry.getAttribute("aScale").needsUpdate = true;
-	renderer.render(scene, camera);
+	renderer.render();
 }
 
-/** @param {LoopOptions} options */
+/**
+ * @param {LoopOptions} options
+ * @returns {{ start: () => void, stop: () => void, destroy: () => void }}
+ */
 export function createLoop(options) {
 	let frame = 0;
 	let running = false;
@@ -93,6 +83,7 @@ export function createLoop(options) {
  * @param {Element | null} hero
  * @param {() => void} onChange
  * @param {() => void} stop
+ * @returns {IntersectionObserver | null}
  */
 function observeHero(hero, onChange, stop) {
 	if (!("IntersectionObserver" in window) || hero === null) {
@@ -109,7 +100,10 @@ function observeHero(hero, onChange, stop) {
 	return seen;
 }
 
-/** @param {Element | null} hero */
+/**
+ * @param {Element | null} hero
+ * @returns {boolean}
+ */
 function heroVisible(hero) {
 	if (hero === null || !("IntersectionObserver" in window)) {
 		return true;
