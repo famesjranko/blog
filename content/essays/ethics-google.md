@@ -146,7 +146,40 @@ Regarding steps 3 and 4: Evaluating a given consequences respective probability 
 * Allowing the use of personal user data helps many in some cases and hurts individuals in most cases.
 * Preventing the use of personal user data hurts many in few cases and benefits individuals in most cases.
 
-![table1](/img/essays/ethics-google/table1.png)
+<table>
+  <thead>
+    <tr>
+      <th>Option</th>
+      <th>Consequence</th>
+      <th>Probability</th>
+      <th>Utility</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td rowspan="2">1a</td>
+      <td>User data is used against the pandemic and it helps</td>
+      <td>Very High</td>
+      <td>Very High</td>
+    </tr>
+    <tr>
+      <td>User data is used to control/monitor citizens</td>
+      <td>High</td>
+      <td>Very Low</td>
+    </tr>
+    <tr>
+      <td rowspan="2">1b</td>
+      <td>User data is not used against the pandemic, pandemic continues longer than needed</td>
+      <td>Medium</td>
+      <td>Low</td>
+    </tr>
+    <tr>
+      <td>User data is not used to control/monitor citizens</td>
+      <td>Low</td>
+      <td>Very High</td>
+    </tr>
+  </tbody>
+</table>
 
 Using the table above, we can identify the best utilitarian prospect by applying a metric to the probability and utility columns, such that: Very Low = 1, Low = 2, Med = 3, High = 4, Very High = 5.
 

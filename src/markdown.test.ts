@@ -11,6 +11,30 @@ describe("renderMarkdown", () => {
 		expect(html).toContain("<h1>Hello</h1>");
 		expect(html).toContain("<p>World.</p>");
 	});
+
+	it("renders trusted table HTML and resumes Markdown after it", () => {
+		const html = renderMarkdown(`
+<table>
+  <thead><tr><th>Option</th><th>Consequence</th></tr></thead>
+  <tbody>
+    <tr><td rowspan="2">1a</td><td>Data helps</td></tr>
+    <tr><td>Data controls citizens</td></tr>
+  </tbody>
+</table>
+
+Using the table above:
+
+- 1a = **15**
+`);
+
+		expect(html).toContain("<table>");
+		expect(html).toContain("<thead>");
+		expect(html).toContain('<td rowspan="2">1a</td>');
+		expect(html).toContain("<td>Data helps</td>");
+		expect(html).not.toContain("&lt;table&gt;");
+		expect(html).toContain("<p>Using the table above:</p>");
+		expect(html).toContain("<li>1a = <strong>15</strong></li>");
+	});
 });
 
 describe("blockquote attributions", () => {

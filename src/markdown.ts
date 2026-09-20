@@ -200,7 +200,7 @@ function renderImageBody(context: ImageRenderContext): string {
 
 function buildRenderer(): MarkdownIt {
 	const md = new MarkdownIt({
-		html: false,
+		html: true,
 		linkify: true,
 		typographer: true,
 	});
