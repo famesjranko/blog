@@ -5,8 +5,10 @@ describe("footer", () => {
 	it("links to the GitHub profile in a new tab", () => {
 		const html = footer();
 		expect(html).toContain(
-			'<a class="footer-link" href="https://github.com/famesjranko" rel="me noopener" target="_blank">GitHub</a>',
+			'<a class="footer-link" href="https://github.com/famesjranko" rel="me noopener" target="_blank">',
 		);
+		expect(html).toContain('<svg class="footer-icon" viewBox="0 0 16 16"');
+		expect(html).toContain("</svg>GitHub</a>");
 	});
 });
 

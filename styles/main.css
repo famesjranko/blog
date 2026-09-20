@@ -287,8 +287,16 @@
 	}
 
 	.footer-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
 		color: var(--color-muted);
 		text-decoration: none;
+	}
+
+	.footer-icon {
+		width: 1.1rem;
+		height: 1.1rem;
 	}
 
 	.footer-link:hover {
