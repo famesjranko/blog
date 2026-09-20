@@ -35,6 +35,16 @@ Using the table above:
 		expect(html).toContain("<p>Using the table above:</p>");
 		expect(html).toContain("<li>1a = <strong>15</strong></li>");
 	});
+
+	it("groups two titled images as a diagram pair", () => {
+		const html = renderMarkdown(
+			'![one](/img/one.svg "First") ![two](/img/two.svg "Second")',
+		);
+		expect(html).toContain('<div class="diagram-pair">');
+		expect(html).toContain("<figcaption>First</figcaption>");
+		expect(html).toContain("<figcaption>Second</figcaption>");
+		expect(html).not.toContain("<p><figure>");
+	});
 });
 
 describe("blockquote attributions", () => {

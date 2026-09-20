@@ -1,5 +1,6 @@
 import MarkdownIt from "markdown-it";
 import { webpSrc } from "./images.js";
+import { markFigureParagraphs } from "./markdownFigures.js";
 import { siteUrl } from "./site.js";
 
 let renderer: MarkdownIt | undefined;
@@ -80,49 +81,6 @@ function trackToken(
 	return tracker;
 }
 
-function isFigureParagraph(
-	open: MarkdownToken | undefined,
-	inline: MarkdownToken | undefined,
-	close: MarkdownToken | undefined,
-): boolean {
-	if (
-		open?.type !== "paragraph_open" ||
-		inline?.type !== "inline" ||
-		close?.type !== "paragraph_close"
-	) {
-		return false;
-	}
-	const children = inline.children ?? [];
-	if (children.length !== 1) {
-		return false;
-	}
-	const image = children[0];
-	if (image?.type !== "image") {
-		return false;
-	}
-	const title = image.attrGet("title");
-	return title !== null && title.trim() !== "";
-}
-
-/**
- * A paragraph holding only a titled image is a figure: hide the paragraph
- * tags so the image rule's figure element is not nested inside a p.
- */
-function untagFigureParagraphs(md: MarkdownIt): void {
-	md.core.ruler.push("figure_paragraphs", (state) => {
-		const tokens = state.tokens;
-		for (let i = 0; i + 2 < tokens.length; i++) {
-			if (isFigureParagraph(tokens[i], tokens[i + 1], tokens[i + 2])) {
-				const open = tokens[i];
-				const close = tokens[i + 2];
-				if (open !== undefined && close !== undefined) {
-					open.hidden = true;
-					close.hidden = true;
-				}
-			}
-		}
-	});
-}
 /**
  * Tag a trailing citation paragraph inside a blockquote so prose styles
  * can right-align it. Only the last block child qualifies, so ordinary
@@ -174,6 +132,9 @@ function asFigure(
 
 type ImageRenderRule = NonNullable<MarkdownIt["renderer"]["rules"]["image"]>;
 type LinkRenderRule = NonNullable<MarkdownIt["renderer"]["rules"]["link_open"]>;
+type ParagraphRenderRule = NonNullable<
+	MarkdownIt["renderer"]["rules"]["paragraph_open"]
+>;
 
 interface ImageRenderContext {
 	md: MarkdownIt;
@@ -205,7 +166,19 @@ function buildRenderer(): MarkdownIt {
 		typographer: true,
 	});
 	markQuoteAttributions(md);
-	untagFigureParagraphs(md);
+	markFigureParagraphs(md);
+	const renderDiagramOpen: ParagraphRenderRule = (tokens, idx, options) =>
+		tokens[idx]?.attrGet("class") === "diagram-pair"
+			? '<div class="diagram-pair">'
+			: md.renderer.renderToken(tokens, idx, options);
+	const renderDiagramClose: ParagraphRenderRule = (tokens, idx, options) =>
+		tokens[idx]?.attrGet("class") === "diagram-pair"
+			? "</div>"
+			: md.renderer.renderToken(tokens, idx, options);
+	Object.assign(md.renderer.rules, {
+		paragraph_open: renderDiagramOpen,
+		paragraph_close: renderDiagramClose,
+	});
 	const fallback = md.renderer.rules.image;
 	if (fallback !== undefined) {
 		md.renderer.rules.image = (tokens, idx, options, env) => {

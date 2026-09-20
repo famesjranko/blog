@@ -23,14 +23,8 @@ Finally, a caveat.  While I am not the most accomplished connect-four player I d
 
 ## Final board states
 
-Below are the final positions from those runs, as recorded in the assignment.
+![Final board at search depth 1](/img/projects/connect4-heuristic/connect4-depth1.svg "<span style='font-size: 0.8rem'>Search depth 1 (heuristic win, 121 nodes)</span>") ![Final board at search depth 2](/img/projects/connect4-heuristic/connect4-depth2.svg "<span style='font-size: 0.8rem'>Search depth 2 (heuristic win, 438 nodes)</span>")
 
-**Search depth 1** (heuristic win, 121 nodes) · **Search depth 2** (heuristic win, 438 nodes)
+![Final board at search depth 3](/img/projects/connect4-heuristic/connect4-depth3.svg "<span style='font-size: 0.8rem'>Search depth 3 (heuristic win, 1775 nodes)</span>") ![Final board at search depth 4](/img/projects/connect4-heuristic/connect4-depth4.svg "<span style='font-size: 0.8rem'>Search depth 4 (heuristic win, 6038 nodes)</span>")
 
-![Final board at search depth 1, heuristic win, 121 nodes](/img/projects/connect4-heuristic/connect4-depth1.svg) ![Final board at search depth 2, heuristic win, 438 nodes](/img/projects/connect4-heuristic/connect4-depth2.svg)
-
-**Search depth 3** (heuristic win, 1775 nodes) · **Search depth 4** (heuristic win, 6038 nodes)
-
-![Final board at search depth 3, heuristic win, 1775 nodes](/img/projects/connect4-heuristic/connect4-depth3.svg) ![Final board at search depth 4, heuristic win, 6038 nodes](/img/projects/connect4-heuristic/connect4-depth4.svg)
-
-Years later this heuristic became the AI core of a containerised web rebuild (see [Connect-4 web](/projects/connect4-lisp-web/)).
+This heuristic became the AI core of a containerised web rebuild (see [Connect-4 web](/projects/connect4-lisp-web/)).
