@@ -126,7 +126,7 @@ export function page({
 	content,
 	description,
 	scripts = [],
-	styles = [siteUrl("/styles.css"), siteUrl("/header.css")],
+	styles = [siteUrl("/css/main.css"), siteUrl("/css/header.css")],
 	skipTo = "main",
 }: {
 	title: string;

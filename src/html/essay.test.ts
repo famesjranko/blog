@@ -37,8 +37,8 @@ describe("essayPage", () => {
 
 	it("links the shared and prose stylesheets", () => {
 		const html = essayPage(sampleEssay());
-		expect(html).toContain('<link rel="stylesheet" href="/styles.css">');
-		expect(html).toContain('<link rel="stylesheet" href="/header.css">');
-		expect(html).toContain('<link rel="stylesheet" href="/prose.css">');
+		expect(html).toContain('<link rel="stylesheet" href="/css/main.css">');
+		expect(html).toContain('<link rel="stylesheet" href="/css/header.css">');
+		expect(html).toContain('<link rel="stylesheet" href="/css/prose.css">');
 	});
 });

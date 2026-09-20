@@ -105,9 +105,9 @@ export function homePage(essays: Essay[], projects: Project[] = []): string {
 		skipTo: skipTarget(featuredEssays.length, featuredProjects.length),
 		scripts: [{ src: siteUrl("/js/hero.js"), type: "module" }],
 		styles: [
-			siteUrl("/styles.css"),
-			siteUrl("/header.css"),
-			siteUrl("/hero.css"),
+			siteUrl("/css/main.css"),
+			siteUrl("/css/header.css"),
+			siteUrl("/css/hero.css"),
 		],
 		content: `<section class="hero" data-hero>
 <div class="hero-visual" aria-hidden="true"><span></span><span></span><span></span></div>

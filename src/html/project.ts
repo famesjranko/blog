@@ -97,9 +97,9 @@ export function projectPage(project: Project): string {
 			? {}
 			: { description: project.description }),
 		styles: [
-			siteUrl("/styles.css"),
-			siteUrl("/header.css"),
-			siteUrl("/prose.css"),
+			siteUrl("/css/main.css"),
+			siteUrl("/css/header.css"),
+			siteUrl("/css/prose.css"),
 		],
 		content: `<div class="wrap"><article class="prose project">
 <header class="project-header">

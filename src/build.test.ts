@@ -22,12 +22,21 @@ describe("build output", () => {
 		}
 	}, 30000);
 
-	it("keeps every script under js/ and none at the site root", async () => {
+	it("keeps scripts under js/ and stylesheets under css/, none at the root", async () => {
 		const outDir = await buildToTemp();
 		const root = await readdir(outDir);
-		expect(root.filter((name) => name.endsWith(".js"))).toEqual([]);
+		expect(root.filter((name) => /\.(js|css)$/.test(name))).toEqual([]);
 		const scripts = await readdir(path.join(outDir, "js"));
 		expect(scripts).toContain("hero.js");
 		expect(scripts).toContain("theme.js");
+		const styles = await readdir(path.join(outDir, "css"));
+		expect(styles).toEqual(
+			expect.arrayContaining([
+				"main.css",
+				"header.css",
+				"prose.css",
+				"hero.css",
+			]),
+		);
 	}, 30000);
 });

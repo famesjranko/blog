@@ -136,9 +136,9 @@ describe("homePage topic links", () => {
 describe("stylesheets", () => {
 	it("links the shared and hero stylesheets on the homepage", () => {
 		const html = homePage([sampleEssay()]);
-		expect(html).toContain('<link rel="stylesheet" href="/styles.css">');
-		expect(html).toContain('<link rel="stylesheet" href="/header.css">');
-		expect(html).toContain('<link rel="stylesheet" href="/hero.css">');
+		expect(html).toContain('<link rel="stylesheet" href="/css/main.css">');
+		expect(html).toContain('<link rel="stylesheet" href="/css/header.css">');
+		expect(html).toContain('<link rel="stylesheet" href="/css/hero.css">');
 	});
 });
 
