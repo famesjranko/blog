@@ -1,9 +1,37 @@
 import * as THREE from "./three.module.min.js";
 
-// Custom properties compute to their raw text, which for a light-dark()
-// token is not a colour THREE can parse. Applying the token to a probe's
-// color inside ELEMENT yields the resolved rgb() for that element's
-// colour scheme.
+/** @typedef {import("./thought-field-meteors.js").Meteors} Meteors */
+
+/**
+ * Pointer position in field space, plus how strongly it still repels.
+ * @typedef {{ x: number, y: number, strength: number, lastMove: number }} Pointer
+ */
+
+/**
+ * Per-particle buffers. `pos` is what the GPU draws; `base` is the
+ * rest position each particle drifts around.
+ * @typedef {{
+ *   count: number,
+ *   palette: THREE.Color[],
+ *   pos: Float32Array,
+ *   col: Float32Array,
+ *   base: Float32Array,
+ *   phase: Float32Array,
+ *   scale: Float32Array,
+ * }} Field
+ */
+
+/** @typedef {Field & { geometry: THREE.BufferGeometry }} PointField */
+
+/**
+ * Custom properties compute to their raw text, which for a light-dark()
+ * token is not a colour THREE can parse. Applying the token to a probe's
+ * color inside ELEMENT yields the resolved rgb() for that element's
+ * colour scheme.
+ * @param {Element} element
+ * @param {string} name
+ * @param {string} fallback
+ */
 function cssVar(element, name, fallback) {
 	const probe = document.createElement("span");
 	probe.style.color = `var(${name})`;
@@ -13,8 +41,12 @@ function cssVar(element, name, fallback) {
 	return value === "" || value === "rgba(0, 0, 0, 0)" ? fallback : value;
 }
 
-// Tokens are read inside ELEMENT so the palette matches that element's
-// resolved colour scheme rather than the document root's.
+/**
+ * Tokens are read inside ELEMENT so the palette matches that element's
+ * resolved colour scheme rather than the document root's.
+ * @param {boolean} dark
+ * @param {Element} [element]
+ */
 export function buildPalette(dark, element = document.documentElement) {
 	const accent = cssVar(
 		element,
@@ -44,6 +76,10 @@ export function buildPalette(dark, element = document.documentElement) {
 	};
 }
 
+/**
+ * @param {number} lastMove
+ * @param {number} now
+ */
 export function pointerStrength(lastMove, now) {
 	const age = now - lastMove;
 	if (age < 2000) {
@@ -52,6 +88,7 @@ export function pointerStrength(lastMove, now) {
 	return Math.max(0, 1 - (age - 2000) / 1000);
 }
 
+/** @param {Field} field */
 function fillField(field) {
 	const { count, palette, pos, col, base, phase, scale } = field;
 	for (let i = 0; i < count; i += 1) {
@@ -72,6 +109,11 @@ function fillField(field) {
 	}
 }
 
+/**
+ * @param {number} count
+ * @param {THREE.Color[]} palette
+ * @returns {PointField}
+ */
 export function makePoints(count, palette) {
 	const field = {
 		count,
@@ -90,6 +132,16 @@ export function makePoints(count, palette) {
 	return { ...field, geometry };
 }
 
+/**
+ * @param {{
+ *   pos: Float32Array,
+ *   ix: number,
+ *   cx: number,
+ *   cy: number,
+ *   radius2: number,
+ *   push: number,
+ * }} options
+ */
 function repel(options) {
 	const { pos, ix, cx, cy, radius2, push } = options;
 	const dx = pos[ix] - cx;
@@ -103,6 +155,16 @@ function repel(options) {
 	}
 }
 
+/**
+ * @param {{
+ *   field: PointField,
+ *   aspect: number,
+ *   time: number,
+ *   dt: number,
+ *   pointer: Pointer,
+ *   meteors: Meteors,
+ * }} options
+ */
 export function stepParticles(options) {
 	const { field, aspect, time, dt, pointer, meteors } = options;
 	const ease = 1 - Math.exp(-dt * 1.1);
@@ -125,6 +187,15 @@ export function stepParticles(options) {
 	}
 }
 
+/**
+ * @param {{
+ *   field: PointField,
+ *   ix: number,
+ *   pointer: Pointer,
+ *   meteors: Meteors,
+ *   rate: number,
+ * }} options
+ */
 function applyRepulsion(options) {
 	const { field, ix, pointer, meteors, rate } = options;
 	if (pointer.strength > 0) {

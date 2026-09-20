@@ -4,6 +4,7 @@
 const root = document.documentElement;
 const buttons = document.querySelectorAll("[data-theme-toggle]");
 
+/** @returns {"light" | "dark"} */
 function currentTheme() {
 	const stored = root.dataset.theme;
 	if (stored === "light" || stored === "dark") {
@@ -14,6 +15,7 @@ function currentTheme() {
 		: "light";
 }
 
+/** @param {"light" | "dark"} theme */
 function applyTheme(theme) {
 	root.dataset.theme = theme;
 	try {

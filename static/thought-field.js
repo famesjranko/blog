@@ -9,6 +9,17 @@ import {
 	METEOR_VERTEX_SHADER,
 } from "./thought-field-shaders.js";
 
+/**
+ * Particle budget and device-pixel cap chosen by the host page before
+ * this module is downloaded.
+ * @typedef {{ count: number, pixelRatio: number }} Tier
+ */
+
+/** @typedef {import("./thought-field-particles.js").Pointer} Pointer */
+
+/**
+ * @param {{ dark: boolean, pixelRatio: { value: number }, meteor: boolean }} options
+ */
 function makeMaterial(options) {
 	const { dark, pixelRatio, meteor } = options;
 	const lightGlow = meteor ? 1 : 0.9;
@@ -30,8 +41,11 @@ function makeMaterial(options) {
 	});
 }
 
+/** @param {Element | null} hero */
 function pointerState(hero) {
+	/** @type {Pointer} */
 	const pointer = { x: 9999, y: 9999, strength: 0, lastMove: -Infinity };
+	/** @param {PointerEvent} event */
 	const onMove = (event) => {
 		if (hero === null) {
 			return;
@@ -53,6 +67,15 @@ function pointerState(hero) {
 	};
 }
 
+/**
+ * @param {{
+ *   hero: Element | null,
+ *   renderer: THREE.WebGLRenderer,
+ *   camera: THREE.OrthographicCamera,
+ *   pixelRatio: { value: number },
+ *   tier: Tier,
+ * }} options
+ */
 function resizeState(options) {
 	const { hero, renderer, camera, pixelRatio, tier } = options;
 	const dims = { aspect: 1 };
@@ -81,10 +104,12 @@ function resizeState(options) {
 	return { dims, destroy: () => observer.disconnect() };
 }
 
-export function initThoughtField(canvas, tier) {
-	const hero = canvas.closest("[data-hero]") ?? canvas.parentElement;
-	// The hero forces a dark colour scheme regardless of the page theme.
-	const dark = true;
+/**
+ * Transparent, low-power context: the field composites over the CSS
+ * washes and never needs depth or stencil.
+ * @param {HTMLCanvasElement} canvas
+ */
+function makeRenderer(canvas) {
 	const renderer = new THREE.WebGLRenderer({
 		canvas,
 		alpha: true,
@@ -94,6 +119,21 @@ export function initThoughtField(canvas, tier) {
 		powerPreference: "low-power",
 	});
 	renderer.setClearColor(0x000000, 0);
+	return renderer;
+}
+
+/**
+ * @param {HTMLCanvasElement} canvas
+ * @param {Tier} tier
+ */
+export function initThoughtField(canvas, tier) {
+	const hero =
+		canvas.closest("[data-hero]") ??
+		canvas.parentElement ??
+		document.documentElement;
+	// The hero forces a dark colour scheme regardless of the page theme.
+	const dark = true;
+	const renderer = makeRenderer(canvas);
 	const scene = new THREE.Scene();
 	const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
 	camera.position.z = 2;

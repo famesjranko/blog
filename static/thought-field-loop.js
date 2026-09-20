@@ -1,6 +1,31 @@
 import { pointerStrength, stepParticles } from "./thought-field-particles.js";
 import { stepMeteors } from "./thought-field-meteors.js";
 
+/** @typedef {import("./three.module.min.js").WebGLRenderer} WebGLRenderer */
+/** @typedef {import("./three.module.min.js").Scene} Scene */
+/** @typedef {import("./three.module.min.js").OrthographicCamera} OrthographicCamera */
+/** @typedef {import("./thought-field-particles.js").PointField} PointField */
+/** @typedef {import("./thought-field-particles.js").Pointer} Pointer */
+/** @typedef {import("./thought-field-meteors.js").Meteors} Meteors */
+
+/**
+ * @typedef {{
+ *   renderer: WebGLRenderer,
+ *   scene: Scene,
+ *   camera: OrthographicCamera,
+ *   field: PointField,
+ *   pointer: Pointer,
+ *   hero: Element | null,
+ *   meteors: Meteors,
+ *   dims: { aspect: number },
+ * }} LoopOptions
+ */
+
+/**
+ * @param {LoopOptions} options
+ * @param {number} now
+ * @param {number} dt
+ */
 function renderFrame(options, now, dt) {
 	const { renderer, scene, camera, field, pointer, meteors, dims } = options;
 	const aspect = dims.aspect;
@@ -8,17 +33,19 @@ function renderFrame(options, now, dt) {
 	pointer.strength = pointerStrength(pointer.lastMove, now);
 	stepMeteors(meteors, aspect, time, dt);
 	stepParticles({ field, aspect, time, dt, pointer, meteors });
-	field.geometry.attributes.position.needsUpdate = true;
-	meteors.geometry.attributes.position.needsUpdate = true;
-	meteors.geometry.attributes.aAlpha.needsUpdate = true;
-	meteors.geometry.attributes.aScale.needsUpdate = true;
+	field.geometry.getAttribute("position").needsUpdate = true;
+	meteors.geometry.getAttribute("position").needsUpdate = true;
+	meteors.geometry.getAttribute("aAlpha").needsUpdate = true;
+	meteors.geometry.getAttribute("aScale").needsUpdate = true;
 	renderer.render(scene, camera);
 }
 
+/** @param {LoopOptions} options */
 export function createLoop(options) {
 	let frame = 0;
 	let running = false;
 	let last = performance.now();
+	/** @param {number} now */
 	const tick = (now) => {
 		frame = 0;
 		if (!running) {
@@ -62,6 +89,11 @@ export function createLoop(options) {
 	return { start, stop, destroy };
 }
 
+/**
+ * @param {Element | null} hero
+ * @param {() => void} onChange
+ * @param {() => void} stop
+ */
 function observeHero(hero, onChange, stop) {
 	if (!("IntersectionObserver" in window) || hero === null) {
 		return null;
@@ -77,6 +109,7 @@ function observeHero(hero, onChange, stop) {
 	return seen;
 }
 
+/** @param {Element | null} hero */
 function heroVisible(hero) {
 	if (hero === null || !("IntersectionObserver" in window)) {
 		return true;

@@ -3,6 +3,37 @@ import * as THREE from "./three.module.min.js";
 const METEOR_SLOTS = 2;
 const METEOR_TRAIL = 40;
 
+/**
+ * One in-flight meteor: head position, velocity, spacing of its trail
+ * points, and how far through its life it is.
+ * @typedef {{
+ *   active: boolean,
+ *   x: number,
+ *   y: number,
+ *   vx: number,
+ *   vy: number,
+ *   gap: number,
+ *   age: number,
+ *   life: number,
+ *   size: number,
+ * }} Slot
+ */
+
+/**
+ * Trail buffers for every slot plus the spawn schedule.
+ * @typedef {{
+ *   geometry: THREE.BufferGeometry,
+ *   pos: Float32Array,
+ *   alpha: Float32Array,
+ *   scale: Float32Array,
+ *   slots: Slot[],
+ *   started: boolean,
+ *   nextAt: number,
+ *   burstLeft: number,
+ * }} Meteors
+ */
+
+/** @returns {Slot} */
 function newSlot() {
 	return {
 		active: false,
@@ -17,6 +48,10 @@ function newSlot() {
 	};
 }
 
+/**
+ * @param {THREE.Color} accent
+ * @returns {Meteors}
+ */
 export function makeMeteors(accent) {
 	const total = METEOR_SLOTS * METEOR_TRAIL;
 	const pos = new Float32Array(total * 3);
@@ -47,6 +82,10 @@ export function makeMeteors(accent) {
 	};
 }
 
+/**
+ * @param {Meteors} meteors
+ * @param {number} now
+ */
 function scheduleNext(meteors, now) {
 	const state = meteors;
 	if (state.burstLeft > 0) {
@@ -62,6 +101,7 @@ function scheduleNext(meteors, now) {
 	state.nextAt = now + 14 + Math.random() * 18;
 }
 
+/** @param {number} aspect */
 function entryVector(aspect) {
 	const edge = Math.floor(Math.random() * 3);
 	if (edge === 0) {
@@ -85,6 +125,9 @@ function entryVector(aspect) {
 	};
 }
 
+/**
+ * @param {{ meteors: Meteors, slot: Slot, aspect: number, now: number }} options
+ */
 function spawnMeteor(options) {
 	const { meteors, slot, aspect, now } = options;
 	const target = slot;
@@ -102,6 +145,10 @@ function spawnMeteor(options) {
 	scheduleNext(meteors, now);
 }
 
+/**
+ * @param {Float32Array} alpha
+ * @param {number} base
+ */
 function clearSlot(alpha, base) {
 	const values = alpha;
 	for (let j = 0; j < METEOR_TRAIL; j += 1) {
@@ -109,6 +156,10 @@ function clearSlot(alpha, base) {
 	}
 }
 
+/**
+ * @param {Slot} slot
+ * @param {number} aspect
+ */
 function slotIsGone(slot, aspect) {
 	return (
 		slot.age >= slot.life ||
@@ -119,6 +170,9 @@ function slotIsGone(slot, aspect) {
 	);
 }
 
+/**
+ * @param {{ meteors: Meteors, slot: Slot, base: number, fade: number }} options
+ */
 function writeTrail(options) {
 	const { meteors, slot, base, fade } = options;
 	const speed = Math.sqrt(slot.vx * slot.vx + slot.vy * slot.vy);
@@ -135,6 +189,15 @@ function writeTrail(options) {
 	}
 }
 
+/**
+ * @param {{
+ *   meteors: Meteors,
+ *   slot: Slot,
+ *   index: number,
+ *   aspect: number,
+ *   dt: number,
+ * }} options
+ */
 function writeSlot(options) {
 	const { meteors, slot, index, aspect, dt } = options;
 	const target = slot;
@@ -158,6 +221,12 @@ function writeSlot(options) {
 	writeTrail({ meteors, slot: target, base, fade });
 }
 
+/**
+ * @param {Meteors} meteors
+ * @param {number} aspect
+ * @param {number} now
+ * @param {number} dt
+ */
 export function stepMeteors(meteors, aspect, now, dt) {
 	const state = meteors;
 	if (!state.started) {

@@ -9,7 +9,7 @@
 	},
 	"scripts": {
 		"build": "tsx src/build.ts",
-		"typecheck": "tsc --noEmit",
+		"typecheck": "tsc --noEmit && tsc -p tsconfig.static.json",
 		"lint": "biome lint --error-on-warnings .",
 		"guard": "tsx scripts/guard.ts",
 		"format": "biome format --write .",
@@ -30,6 +30,7 @@
 		"@biomejs/biome": "^2.5.0",
 		"@types/markdown-it": "^14.1.2",
 		"@types/node": "^22.0.0",
+		"@types/three": "^0.180.0",
 		"sharp": "^0.35.4",
 		"tsx": "^4.19.0",
 		"typescript": "^5.9.0",
