@@ -8,7 +8,9 @@ import path from "node:path";
  * Repository invariants:
  *   1. every `.jpg`/`.jpeg` under `static/img` has a same-name `.webp`
  *      sidecar;
- *   2. `src/image-dimensions.json` lists the pixel size of every image
+ *   2. no JPEG is wider than MAX_WIDTH or heavier than MAX_JPEG_BYTES,
+ *      since the JPEG is the fallback browsers without WebP download;
+ *   3. `src/image-dimensions.json` lists the pixel size of every image
  *      under `static/img`, keyed by its site path.
  *
  * Rendering (`src/images.ts`) maps URLs purely by convention and reads
@@ -16,14 +18,17 @@ import path from "node:path";
  * both guarantees.
  *
  * Usage:
- *   npm run images          regenerate sidecars and the table (always
- *                           rewrites; deterministic output)
- *   npm run images:check    fail when a sidecar is missing or the table
- *                           differs from the images on disk
+ *   npm run images          shrink oversized JPEGs in place, regenerate
+ *                           sidecars and the table
+ *   npm run images:check    fail when a sidecar is missing, a JPEG is
+ *                           oversized, or the table differs from the
+ *                           images on disk
  */
 const IMG_ROOT = "static/img";
 const TABLE_PATH = "src/image-dimensions.json";
 const MAX_WIDTH = 1600;
+const MAX_JPEG_BYTES = 400 * 1024;
+const JPEG_QUALITY = 82;
 const WEBP_QUALITY = 80;
 const IMAGE_EXTENSIONS = [".jpg", ".jpeg", ".png", ".svg", ".webp"];
 
@@ -94,6 +99,35 @@ async function readTable(): Promise<string> {
 	return `${JSON.stringify(table, null, "\t")}\n`;
 }
 
+/**
+ * A JPEG is oversized when it is wider than the cap or heavier than the
+ * byte budget. Both are cheap to test and either one means the file
+ * has not been through `npm run images`.
+ */
+async function oversizedReason(jpeg: string): Promise<string | undefined> {
+	const { default: sharp } = await import("sharp");
+	const { width } = await sharp(jpeg).metadata();
+	if (width !== undefined && width > MAX_WIDTH) {
+		return `${width}px wide (max ${MAX_WIDTH})`;
+	}
+	const bytes = (await stat(jpeg)).size;
+	if (bytes > MAX_JPEG_BYTES) {
+		return `${formatBytes(bytes)} (max ${formatBytes(MAX_JPEG_BYTES)})`;
+	}
+	return undefined;
+}
+
+async function oversizedJpegs(jpegs: string[]): Promise<string[]> {
+	const found: string[] = [];
+	for (const jpeg of jpegs) {
+		const reason = await oversizedReason(jpeg);
+		if (reason !== undefined) {
+			found.push(`${jpeg}: ${reason}`);
+		}
+	}
+	return found;
+}
+
 async function check(): Promise<number> {
 	const jpegs = await listFiles(IMG_ROOT, isJpegFile);
 	const missing = missingSidecars(jpegs, existsSync);
@@ -102,6 +136,16 @@ async function check(): Promise<number> {
 	}
 	if (missing.length > 0) {
 		console.error(`images:check: ${missing.length} missing sidecar(s)`);
+		return 1;
+	}
+	const oversized = await oversizedJpegs(jpegs);
+	for (const line of oversized) {
+		console.error(`oversized JPEG: ${line}`);
+	}
+	if (oversized.length > 0) {
+		console.error(
+			`images:check: ${oversized.length} oversized jpeg(s) (run \`npm run images\`)`,
+		);
 		return 1;
 	}
 	const stored = existsSync(TABLE_PATH)
@@ -136,11 +180,41 @@ async function convertOne(
 	return { before, after };
 }
 
+/**
+ * Shrink an oversized JPEG in place: bake in EXIF orientation, cap the
+ * width, recompress with mozjpeg, drop metadata. Files already within
+ * budget are left byte-for-byte alone so repeated runs never degrade
+ * them. Refuses to leave a file that is still over budget, since the
+ * check would then fail forever.
+ */
+async function shrinkJpeg(jpeg: string): Promise<void> {
+	const reason = await oversizedReason(jpeg);
+	if (reason === undefined) {
+		return;
+	}
+	const { default: sharp } = await import("sharp");
+	const before = (await stat(jpeg)).size;
+	const shrunk = await sharp(jpeg)
+		.rotate()
+		.resize({ width: MAX_WIDTH, withoutEnlargement: true })
+		.jpeg({ quality: JPEG_QUALITY, mozjpeg: true })
+		.toBuffer();
+	await writeFile(jpeg, shrunk);
+	console.log(
+		`${jpeg} (${formatBytes(before)}, ${reason}) -> ${formatBytes(shrunk.length)}`,
+	);
+	const still = await oversizedReason(jpeg);
+	if (still !== undefined) {
+		throw new Error(`${jpeg} is still oversized after shrinking: ${still}`);
+	}
+}
+
 async function generate(): Promise<number> {
 	const jpegs = await listFiles(IMG_ROOT, isJpegFile);
 	let totalBefore = 0;
 	let totalAfter = 0;
 	for (const jpeg of jpegs) {
+		await shrinkJpeg(jpeg);
 		const result = await convertOne(jpeg);
 		totalBefore += result.before;
 		totalAfter += result.after;
