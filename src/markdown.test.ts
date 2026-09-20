@@ -98,11 +98,30 @@ describe("legacy image paths", () => {
 		const html = renderMarkdown("![x](img/foo.jpg)");
 		expect(html).toContain('src="img/foo.jpg"');
 	});
+});
 
-	it("does not rewrite link hrefs", () => {
+describe("internal link hrefs", () => {
+	it("prefixes root-relative hrefs with the base path", () => {
 		vi.stubEnv("BASE_PATH", "/blog");
 		const html = renderMarkdown("[x](/essays/something/)");
+		expect(html).toContain('href="/blog/essays/something/"');
+	});
+
+	it("leaves root-relative hrefs alone without a base path", () => {
+		const html = renderMarkdown("[x](/essays/something/)");
 		expect(html).toContain('href="/essays/something/"');
+	});
+
+	it("leaves anchors, mailto, relative, and protocol-relative hrefs alone", () => {
+		vi.stubEnv("BASE_PATH", "/blog");
+		const html = renderMarkdown(
+			"[a](#section) [b](mailto:me@example.com) [c](../other/) [d](//example.com/x)",
+		);
+		expect(html).toContain('href="#section"');
+		expect(html).toContain('href="mailto:me@example.com"');
+		expect(html).toContain('href="../other/"');
+		expect(html).toContain('href="//example.com/x"');
+		expect(html).not.toContain("/blog/");
 	});
 });
 
