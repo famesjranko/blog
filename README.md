@@ -65,6 +65,21 @@ from the repository owner.
 
 </details>
 
+<details>
+<summary><strong>Cover images</strong></summary>
+
+<br>
+
+An essay or project names its card image with `cover` in frontmatter.
+One without a cover gets generated art instead: `npm run images`
+renders `static/img/placeholders/<slug>.jpg`, a fluid-ink image seeded
+by the slug and coloured from the real covers, and `make check` fails
+until it exists. The file is checked in and only rendered when
+missing, so delete it to re-render. It is removed again once the piece
+gains a cover.
+
+</details>
+
 ## Deployment
 
 The site is intended for:

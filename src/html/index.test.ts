@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { Essay, Project } from "../content.js";
 import { essayEntry, essayIndexPage, homePage } from "./index.js";
-import { placeholderStyle } from "./layout.js";
 import { projectEntry, projectIndexPage } from "./project.js";
 
 function sampleEssay(overrides: Partial<Essay> = {}): Essay {
@@ -156,17 +155,17 @@ describe("essayEntry cover", () => {
 		expect(html).toContain('loading="lazy"');
 	});
 
-	it("renders a placeholder cover when no cover is set", () => {
+	it("renders the slug's placeholder art when no cover is set", () => {
 		const html = essayEntry(sampleEssay());
 		expect(html).toContain('<article class="card">');
-		expect(html).toContain("card-media--placeholder");
-		expect(html).toContain("--placeholder-hue:");
+		expect(html).toContain('src="/img/placeholders/on-privacy.jpg"');
+		expect(html).toContain('alt=""');
 		expect(html).toContain("On Privacy");
 	});
 
 	it("derives the essay placeholder from the slug", () => {
 		const html = essayEntry(sampleEssay({ slug: "other" }));
-		expect(html).toContain(`style="${placeholderStyle("other")}"`);
+		expect(html).toContain("/img/placeholders/other.jpg");
 	});
 
 	it("never uses body images for the card", () => {
@@ -174,7 +173,7 @@ describe("essayEntry cover", () => {
 			sampleEssay({ html: '<p><img src="/img/x.jpg" alt="x"></p>' }),
 		);
 		expect(html).not.toContain('src="/img/x.jpg"');
-		expect(html).toContain("card-media--placeholder");
+		expect(html).toContain("/img/placeholders/on-privacy.jpg");
 	});
 
 	it("escapes cover alt text", () => {

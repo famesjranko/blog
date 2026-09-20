@@ -1,6 +1,7 @@
 import { existsSync } from "node:fs";
 import { readdir, readFile, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { checkPlaceholders, generatePlaceholders } from "./placeholders.js";
 
 /**
  * Image pipeline: WebP sidecars and the pixel-size table.
@@ -11,16 +12,20 @@ import path from "node:path";
  *   2. no JPEG is wider than MAX_WIDTH or heavier than MAX_JPEG_BYTES,
  *      since the JPEG is the fallback browsers without WebP download;
  *   3. `src/image-dimensions.json` lists the pixel size of every image
- *      under `static/img`, keyed by its site path.
+ *      under `static/img`, keyed by its site path;
+ *   4. every published piece without a cover has a rendered placeholder
+ *      under `static/img/placeholders` (see `scripts/placeholders.ts`).
  *
  * Rendering (`src/images.ts`) maps URLs purely by convention and reads
  * the table at import time; it never touches the disk. This script owns
  * both guarantees.
  *
  * Usage:
- *   npm run images          shrink oversized JPEGs in place, regenerate
+ *   npm run images          render missing placeholders, shrink
+ *                           oversized JPEGs in place, regenerate
  *                           sidecars and the table
- *   npm run images:check    fail when a sidecar is missing, a JPEG is
+ *   npm run images:check    fail when a placeholder is missing or
+ *                           stale, a sidecar is missing, a JPEG is
  *                           oversized, or the table differs from the
  *                           images on disk
  */
@@ -129,6 +134,16 @@ async function oversizedJpegs(jpegs: string[]): Promise<string[]> {
 }
 
 async function check(): Promise<number> {
+	const placeholderProblems = await checkPlaceholders();
+	for (const line of placeholderProblems) {
+		console.error(line);
+	}
+	if (placeholderProblems.length > 0) {
+		console.error(
+			`images:check: ${placeholderProblems.length} placeholder problem(s) (run \`npm run images\`)`,
+		);
+		return 1;
+	}
 	const jpegs = await listFiles(IMG_ROOT, isJpegFile);
 	const missing = missingSidecars(jpegs, existsSync);
 	for (const jpeg of missing) {
@@ -158,7 +173,7 @@ async function check(): Promise<number> {
 		return 1;
 	}
 	console.log(
-		`images:check: OK (${jpegs.length} jpeg(s), all sidecars present, size table current)`,
+		`images:check: OK (${jpegs.length} jpeg(s), placeholders and sidecars present, size table current)`,
 	);
 	return 0;
 }
@@ -210,6 +225,7 @@ async function shrinkJpeg(jpeg: string): Promise<void> {
 }
 
 async function generate(): Promise<number> {
+	await generatePlaceholders();
 	const jpegs = await listFiles(IMG_ROOT, isJpegFile);
 	let totalBefore = 0;
 	let totalAfter = 0;

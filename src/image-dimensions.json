@@ -107,6 +107,22 @@
 		"width": 1280,
 		"height": 540
 	},
+	"/img/placeholders/musicmeta.jpg": {
+		"width": 640,
+		"height": 360
+	},
+	"/img/placeholders/musicmeta.webp": {
+		"width": 640,
+		"height": 360
+	},
+	"/img/placeholders/tablescan.jpg": {
+		"width": 640,
+		"height": 360
+	},
+	"/img/placeholders/tablescan.webp": {
+		"width": 640,
+		"height": 360
+	},
 	"/img/projects/connect4-heuristic/connect4-depth1.svg": {
 		"width": 760,
 		"height": 820

@@ -184,25 +184,6 @@
 		object-fit: cover;
 	}
 
-	.card-media--placeholder {
-		background:
-			radial-gradient(
-				circle at calc(var(--placeholder-offset, 40) * 1%) 24%,
-				rgb(255 255 255 / 0.42),
-				transparent 46%
-			),
-			radial-gradient(
-				circle at calc(100% - var(--placeholder-offset, 40) * 1%) 82%,
-				rgb(0 0 0 / 0.16),
-				transparent 48%
-			),
-			linear-gradient(
-				calc(var(--placeholder-offset, 40) * 3.6deg),
-				hsl(var(--placeholder-hue, 210) 45% 72%),
-				hsl(calc(var(--placeholder-hue, 210) + 50) 40% 54%)
-			);
-	}
-
 	.card-body {
 		display: flex;
 		flex-direction: column;

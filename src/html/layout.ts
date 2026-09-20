@@ -1,4 +1,4 @@
-import { imageSize, webpSrc } from "../images.js";
+import { imageSize, placeholderSrc, webpSrc } from "../images.js";
 import { siteUrl } from "../site.js";
 
 export const SITE_NAME = "Andrew J. McDonald";
@@ -12,49 +12,27 @@ export function escapeHtml(value: string): string {
 		.replaceAll("'", "&#39;");
 }
 
-function hashSeed(seed: string): number {
-	let hash = 2166136261;
-	for (let index = 0; index < seed.length; index += 1) {
-		hash ^= seed.charCodeAt(index);
-		hash = Math.imul(hash, 16777619);
-	}
-	return hash >>> 0;
-}
-
 /**
- * Deterministic placeholder artwork values for imageless cards.
- * Same seed always yields the same hue/offset; unitless numbers only,
- * safe for inline style attributes. Units are applied in CSS, where
- * the offset doubles as gradient angle and motif position.
- */
-export function placeholderStyle(seed: string): string {
-	const hash = hashSeed(seed);
-	const hue = hash % 360;
-	const offset = (Math.floor(hash / 360) % 80) + 10;
-	return `--placeholder-hue: ${hue}; --placeholder-offset: ${offset};`;
-}
-
-/**
- * Card cover: explicit image when set, deterministic placeholder otherwise.
- * Root-relative sources are prefixed with the site base path, mirroring
- * the markdown image rule, so covers keep working under BASE_PATH.
- * Internal JPEG covers render as `<picture>` with a WebP source; the
- * original file remains the fallback `<img>`. All other sources keep
- * the existing plain `<img>` rendering.
+ * Card cover: the explicit image when set, otherwise the rendered
+ * placeholder art for the slug, which is decorative and so carries an
+ * empty alt. Root-relative sources are prefixed with the site base
+ * path, mirroring the markdown image rule, so covers keep working
+ * under BASE_PATH. Internal JPEG covers render as `<picture>` with a
+ * WebP source; the original file remains the fallback `<img>`. All
+ * other sources keep the plain `<img>` rendering.
  */
 export function cardCover(
-	src: string | undefined,
-	alt: string | undefined,
+	cover: string | undefined,
+	coverAlt: string | undefined,
 	slug: string,
 ): string {
-	if (src === undefined) {
-		return `<div class="card-media card-media--placeholder" style="${placeholderStyle(slug)}" aria-hidden="true"></div>`;
-	}
+	const src = cover ?? placeholderSrc(slug);
+	const alt = cover === undefined ? "" : (coverAlt ?? "");
 	const url = src.startsWith("/") && !src.startsWith("//") ? siteUrl(src) : src;
 	const size = imageSize(src);
 	const dimensions =
 		size === undefined ? "" : ` width="${size.width}" height="${size.height}"`;
-	const img = `<img src="${escapeHtml(url)}" alt="${escapeHtml(alt ?? "")}"${dimensions} loading="lazy" decoding="async">`;
+	const img = `<img src="${escapeHtml(url)}" alt="${escapeHtml(alt)}"${dimensions} loading="lazy" decoding="async">`;
 	const webp = webpSrc(src);
 	if (webp === undefined) {
 		return `<div class="card-media">${img}</div>`;

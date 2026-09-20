@@ -50,11 +50,11 @@ describe("projectEntry card", () => {
 		expect(html).not.toContain("<time");
 	});
 
-	it("renders a placeholder cover derived from the slug", () => {
-		const html = projectEntry(sampleProject());
-		expect(html).toContain("card-media--placeholder");
-		expect(html).toContain("--placeholder-hue:");
-		expect(html).toContain('style="--placeholder-hue:');
+	it("renders the slug's placeholder art when no cover is set", () => {
+		const html = projectEntry(sampleProject({ slug: "musicmeta" }));
+		expect(html).toContain('src="/img/placeholders/musicmeta.jpg"');
+		expect(html).toContain('srcset="/img/placeholders/musicmeta.webp"');
+		expect(html).toContain('alt=""');
 	});
 
 	it("renders the explicit cover image when set", () => {
@@ -74,17 +74,14 @@ describe("projectEntry card", () => {
 			sampleProject({ html: '<p><img src="/img/x.svg" alt="x"></p>' }),
 		);
 		expect(html).not.toContain('src="/img/x.svg"');
-		expect(html).toContain("card-media--placeholder");
+		expect(html).toContain("/img/placeholders/connect4-lisp-web.jpg");
 	});
 
 	it("gives distinct placeholders to distinct slugs", () => {
 		const first = projectEntry(sampleProject({ slug: "musicmeta" }));
 		const second = projectEntry(sampleProject({ slug: "ip-camera" }));
-		const styleOf = (html: string): string =>
-			/style="([^"]*)"/.exec(html)?.[1] ?? "";
-		expect(styleOf(first)).not.toBe("");
-		expect(styleOf(second)).not.toBe("");
-		expect(styleOf(first)).not.toBe(styleOf(second));
+		expect(first).toContain("/img/placeholders/musicmeta.jpg");
+		expect(second).toContain("/img/placeholders/ip-camera.jpg");
 	});
 });
 

@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { cardCover, footer, header, page, placeholderStyle } from "./layout.js";
+import { cardCover, footer, header, page } from "./layout.js";
 
 describe("footer", () => {
 	it("links to the GitHub profile in a new tab", () => {
@@ -163,41 +163,41 @@ describe("cardCover", () => {
 		expect(html).toContain('loading="lazy"');
 	});
 
-	it("renders a slug-derived placeholder when no cover is set", () => {
+	it("falls back to the slug's rendered placeholder with an empty alt", () => {
 		const html = cardCover(undefined, undefined, "other");
-		expect(html).toContain("card-media--placeholder");
-		expect(html).toContain(`style="${placeholderStyle("other")}"`);
+		expect(html).toContain(
+			'<source type="image/webp" srcset="/img/placeholders/other.webp">',
+		);
+		expect(html).toContain('<img src="/img/placeholders/other.jpg" alt=""');
+		expect(html).not.toContain("card-media--placeholder");
+	});
+
+	it("ignores coverAlt when the cover itself is absent", () => {
+		const html = cardCover(undefined, "described", "other");
+		expect(html).toContain('alt=""');
+		expect(html).not.toContain("described");
+	});
+
+	it("emits the placeholder's size once it is in the table", () => {
+		// tablescan ships a rendered placeholder, so its size is known.
+		const html = cardCover(undefined, undefined, "tablescan");
+		expect(html).toContain('width="640" height="360"');
+	});
+
+	it("prefixes the placeholder path under BASE_PATH", () => {
+		vi.stubEnv("BASE_PATH", "/blog");
+		try {
+			const html = cardCover(undefined, undefined, "other");
+			expect(html).toContain('src="/blog/img/placeholders/other.jpg"');
+			expect(html).toContain('srcset="/blog/img/placeholders/other.webp"');
+		} finally {
+			vi.unstubAllEnvs();
+		}
 	});
 
 	it("escapes cover alt text", () => {
 		const html = cardCover("/img/x.jpg", "<evil>", "x");
 		expect(html).toContain('alt="&lt;evil&gt;"');
 		expect(html).not.toContain('alt="<evil>"');
-	});
-});
-
-describe("placeholderStyle", () => {
-	it("is deterministic for the same seed", () => {
-		expect(placeholderStyle("musicmeta")).toBe(placeholderStyle("musicmeta"));
-	});
-
-	it("differs across slugs", () => {
-		expect(placeholderStyle("musicmeta")).not.toBe(
-			placeholderStyle("ip-camera"),
-		);
-	});
-
-	it("emits a hue in range and an offset in range", () => {
-		const style = placeholderStyle("musicmeta");
-		const hue = Number(/--placeholder-hue: (\d+)/.exec(style)?.[1]);
-		const offset = Number(/--placeholder-offset: (\d+)/.exec(style)?.[1]);
-		expect(hue).toBeGreaterThanOrEqual(0);
-		expect(hue).toBeLessThan(360);
-		expect(offset).toBeGreaterThanOrEqual(10);
-		expect(offset).toBeLessThanOrEqual(89);
-	});
-
-	it("emits unitless numbers so CSS can apply its own units", () => {
-		expect(placeholderStyle("musicmeta")).not.toContain("%");
 	});
 });
