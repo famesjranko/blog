@@ -42,12 +42,21 @@
 		box-sizing: border-box;
 	}
 
+	/* Full-height column so the footer sits at the bottom of the viewport
+	on short pages instead of wherever the content happens to end. */
 	body {
+		display: flex;
+		flex-direction: column;
+		min-height: 100svh;
 		margin: 0;
 		background: var(--color-bg);
 		color: var(--color-text);
 		font-family: var(--font-ui);
 		line-height: 1.6;
+	}
+
+	main {
+		flex: 1;
 	}
 
 	.wrap {
