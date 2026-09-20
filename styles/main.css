@@ -270,6 +270,7 @@
 @layer footer {
 	.site-footer {
 		border-top: 1px solid var(--color-border);
+		background: var(--color-surface);
 		color: var(--color-muted);
 		font-size: 0.9rem;
 	}
