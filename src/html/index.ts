@@ -42,6 +42,14 @@ export function essayIndexPage(essays: Essay[]): string {
 	});
 }
 
+/** Served by GitHub Pages for any unknown path under the site. */
+export function notFoundPage(): string {
+	return page({
+		title: "Page not found",
+		content: `<div class="wrap index-page"><h1>Page not found</h1><p class="index-count">There is nothing at this address.</p><p><a href="${siteUrl("/")}">Home</a> · <a href="${siteUrl("/essays/")}">Essays</a> · <a href="${siteUrl("/projects/")}">Projects</a></p></div>`,
+	});
+}
+
 function featuredSection(options: {
 	headingId: string;
 	heading: string;

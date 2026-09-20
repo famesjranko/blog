@@ -142,6 +142,24 @@ describe("generateSite rss", () => {
 	});
 });
 
+describe("generateSite not-found page", () => {
+	it("writes a styled 404 page at the site root", async () => {
+		vi.stubEnv("BASE_PATH", "/blog");
+		const dir = await generate([sampleEssay()]);
+		const html = await readFile(path.join(dir, "404.html"), "utf8");
+		expect(html).toContain("<title>Page not found</title>");
+		expect(html).toContain('<link rel="stylesheet" href="/blog/styles.css">');
+		expect(html).toContain('href="/blog/"');
+		expect(html).toContain('href="/blog/essays/"');
+	});
+
+	it("keeps the 404 page out of the sitemap", async () => {
+		const dir = await generate([sampleEssay()]);
+		const sitemap = await readFile(path.join(dir, "sitemap.xml"), "utf8");
+		expect(sitemap).not.toContain("404");
+	});
+});
+
 describe("generateSite slugs", () => {
 	it("rejects an empty essay slug before writing pages", async () => {
 		await expect(generate([sampleEssay({ slug: "" })])).rejects.toThrow(
