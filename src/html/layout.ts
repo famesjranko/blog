@@ -1,4 +1,4 @@
-import { webpSrc } from "../images.js";
+import { imageSize, webpSrc } from "../images.js";
 import { siteUrl } from "../site.js";
 
 export const SITE_NAME = "Andrew J. McDonald";
@@ -71,12 +71,16 @@ export function cardCover(
 		return `<div class="card-media card-media--placeholder" style="${placeholderStyle(slug)}" aria-hidden="true"></div>`;
 	}
 	const url = src.startsWith("/") && !src.startsWith("//") ? siteUrl(src) : src;
+	const size = imageSize(src);
+	const dimensions =
+		size === undefined ? "" : ` width="${size.width}" height="${size.height}"`;
+	const img = `<img src="${escapeHtml(url)}" alt="${escapeHtml(alt ?? "")}"${dimensions} loading="lazy" decoding="async">`;
 	const webp = webpSrc(src);
 	if (webp === undefined) {
-		return `<div class="card-media"><img src="${escapeHtml(url)}" alt="${escapeHtml(alt ?? "")}" loading="lazy" decoding="async"></div>`;
+		return `<div class="card-media">${img}</div>`;
 	}
 	const webpUrl = siteUrl(webp);
-	return `<div class="card-media"><picture><source type="image/webp" srcset="${escapeHtml(webpUrl)}"><img src="${escapeHtml(url)}" alt="${escapeHtml(alt ?? "")}" loading="lazy" decoding="async"></picture></div>`;
+	return `<div class="card-media"><picture><source type="image/webp" srcset="${escapeHtml(webpUrl)}">${img}</picture></div>`;
 }
 
 export function header(): string {

@@ -210,6 +210,22 @@ describe("figure captions", () => {
 	});
 });
 
+describe("image dimensions", () => {
+	it("sizes shipped internal images so the layout reserves their box", () => {
+		const html = renderMarkdown(
+			"![euler](/img/essays/dretske-closure/euler-diagram.svg)",
+		);
+		expect(html).toContain('width="376"');
+		expect(html).toContain('height="376"');
+	});
+
+	it("leaves unknown images unsized", () => {
+		const html = renderMarkdown("![x](/img/essays/x/cover.jpg)");
+		expect(html).not.toContain("width=");
+		expect(html).not.toContain("height=");
+	});
+});
+
 describe("non-jpeg images stay plain", () => {
 	it("leaves png images as plain img elements", () => {
 		const html = renderMarkdown("![table](/img/essays/x/table1.png)");

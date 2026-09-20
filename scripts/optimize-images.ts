@@ -1,44 +1,63 @@
 import { existsSync } from "node:fs";
-import { readdir, stat } from "node:fs/promises";
+import { readdir, readFile, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 /**
- * JPEG-only WebP sidecar generator.
+ * Image pipeline: WebP sidecars and the pixel-size table.
  *
- * Repository invariant: every `.jpg`/`.jpeg` under `static/img`
- * has a same-name `.webp` sidecar. Rendering (`src/images.ts`)
- * maps URLs purely by convention and never checks the disk, so
- * this script owns the guarantee.
+ * Repository invariants:
+ *   1. every `.jpg`/`.jpeg` under `static/img` has a same-name `.webp`
+ *      sidecar;
+ *   2. `src/image-dimensions.json` lists the pixel size of every image
+ *      under `static/img`, keyed by its site path.
  *
- * Out of scope by design: PNG diagrams, SVG artwork, existing WebP.
+ * Rendering (`src/images.ts`) maps URLs purely by convention and reads
+ * the table at import time; it never touches the disk. This script owns
+ * both guarantees.
  *
  * Usage:
- *   npm run images          regenerate all sidecars (always rewrites;
- *                           deterministic output, no mtime cleverness)
- *   npm run images:check    verify sidecars exist, without loading sharp
+ *   npm run images          regenerate sidecars and the table (always
+ *                           rewrites; deterministic output)
+ *   npm run images:check    fail when a sidecar is missing or the table
+ *                           differs from the images on disk
  */
 const IMG_ROOT = "static/img";
+const TABLE_PATH = "src/image-dimensions.json";
 const MAX_WIDTH = 1600;
 const WEBP_QUALITY = 80;
+const IMAGE_EXTENSIONS = [".jpg", ".jpeg", ".png", ".svg", ".webp"];
 
 function isJpegFile(name: string): boolean {
 	const lower = name.toLowerCase();
 	return lower.endsWith(".jpg") || lower.endsWith(".jpeg");
 }
 
+function isImageFile(name: string): boolean {
+	const lower = name.toLowerCase();
+	return IMAGE_EXTENSIONS.some((ext) => lower.endsWith(ext));
+}
+
 function webpPath(jpegPath: string): string {
 	return jpegPath.replace(/\.(jpe?g)$/i, ".webp");
 }
 
-async function listJpegs(dir: string): Promise<string[]> {
+/** `static/img/a/b.jpg` -> `/img/a/b.jpg`, the src content refers to. */
+function siteKey(file: string): string {
+	return `/${path.relative("static", file).split(path.sep).join("/")}`;
+}
+
+async function listFiles(
+	dir: string,
+	keep: (name: string) => boolean,
+): Promise<string[]> {
 	const entries = await readdir(dir, { withFileTypes: true });
 	const nested = await Promise.all(
 		entries.map((entry) => {
 			const full = path.join(dir, entry.name);
 			if (entry.isDirectory()) {
-				return listJpegs(full);
+				return listFiles(full, keep);
 			}
-			return Promise.resolve(isJpegFile(entry.name) ? [full] : []);
+			return Promise.resolve(keep(entry.name) ? [full] : []);
 		}),
 	);
 	return nested.flat().sort();
@@ -56,8 +75,27 @@ function formatBytes(bytes: number): string {
 	return `${(bytes / 1024).toFixed(1)} KiB`;
 }
 
+interface Size {
+	width: number;
+	height: number;
+}
+
+async function readTable(): Promise<string> {
+	const { default: sharp } = await import("sharp");
+	const files = await listFiles(IMG_ROOT, isImageFile);
+	const table: Record<string, Size> = {};
+	for (const file of files) {
+		const { width, height } = await sharp(file).metadata();
+		if (width === undefined || height === undefined) {
+			throw new Error(`cannot read pixel size of ${file}`);
+		}
+		table[siteKey(file)] = { width, height };
+	}
+	return `${JSON.stringify(table, null, "\t")}\n`;
+}
+
 async function check(): Promise<number> {
-	const jpegs = await listJpegs(IMG_ROOT);
+	const jpegs = await listFiles(IMG_ROOT, isJpegFile);
 	const missing = missingSidecars(jpegs, existsSync);
 	for (const jpeg of missing) {
 		console.error(`missing WebP sidecar: ${webpPath(jpeg)} (from ${jpeg})`);
@@ -66,8 +104,17 @@ async function check(): Promise<number> {
 		console.error(`images:check: ${missing.length} missing sidecar(s)`);
 		return 1;
 	}
+	const stored = existsSync(TABLE_PATH)
+		? await readFile(TABLE_PATH, "utf8")
+		: "";
+	if (stored !== (await readTable())) {
+		console.error(
+			`images:check: ${TABLE_PATH} is stale (run \`npm run images\`)`,
+		);
+		return 1;
+	}
 	console.log(
-		`images:check: OK (${jpegs.length} jpeg(s), all sidecars present)`,
+		`images:check: OK (${jpegs.length} jpeg(s), all sidecars present, size table current)`,
 	);
 	return 0;
 }
@@ -90,11 +137,7 @@ async function convertOne(
 }
 
 async function generate(): Promise<number> {
-	const jpegs = await listJpegs(IMG_ROOT);
-	if (jpegs.length === 0) {
-		console.log("images: nothing to convert");
-		return 0;
-	}
+	const jpegs = await listFiles(IMG_ROOT, isJpegFile);
 	let totalBefore = 0;
 	let totalAfter = 0;
 	for (const jpeg of jpegs) {
@@ -103,8 +146,10 @@ async function generate(): Promise<number> {
 		totalAfter += result.after;
 	}
 	console.log(
-		`images: ${jpegs.length} file(s), ${formatBytes(totalBefore)} -> ${formatBytes(totalAfter)}`,
+		`images: ${jpegs.length} jpeg(s), ${formatBytes(totalBefore)} -> ${formatBytes(totalAfter)}`,
 	);
+	await writeFile(TABLE_PATH, await readTable(), "utf8");
+	console.log(`images: wrote ${TABLE_PATH}`);
 	return 0;
 }
 

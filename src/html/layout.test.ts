@@ -61,6 +61,22 @@ describe("feed discovery", () => {
 	});
 });
 
+describe("cardCover dimensions", () => {
+	it("sizes a shipped cover image", () => {
+		const html = cardCover(
+			"/img/projects/connect4-lisp-web/cover.jpg",
+			"c",
+			"c",
+		);
+		expect(html).toContain('width="1536" height="1024"');
+	});
+
+	it("leaves an unknown cover unsized", () => {
+		const html = cardCover("/img/essays/x/cover.jpg", "x", "x");
+		expect(html).not.toContain("width=");
+	});
+});
+
 describe("cardCover webp sidecars", () => {
 	it("wraps jpeg covers in a picture element with a webp source", () => {
 		const html = cardCover(

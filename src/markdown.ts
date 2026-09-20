@@ -1,5 +1,5 @@
 import MarkdownIt from "markdown-it";
-import { webpSrc } from "./images.js";
+import { imageSize, webpSrc } from "./images.js";
 import { markFigureParagraphs } from "./markdownFigures.js";
 import { siteUrl } from "./site.js";
 
@@ -145,11 +145,22 @@ interface ImageRenderContext {
 	env: Parameters<ImageRenderRule>[3];
 }
 
+/** Rewrite src for the base path and reserve the box for shipped images. */
+function prepareImageToken(token: MarkdownToken, src: string): void {
+	token.attrSet("src", internalUrl(src));
+	const size = imageSize(src);
+	if (size !== undefined) {
+		token.attrSet("width", String(size.width));
+		token.attrSet("height", String(size.height));
+	}
+}
+
 function renderImageBody(context: ImageRenderContext): string {
 	const { md, fallback, source, options, env } = context;
-	const src = source.tokens[source.index]?.attrGet("src");
-	if (typeof src === "string") {
-		source.tokens[source.index]?.attrSet("src", internalUrl(src));
+	const token = source.tokens[source.index];
+	const src = token?.attrGet("src");
+	if (token !== undefined && typeof src === "string") {
+		prepareImageToken(token, src);
 	}
 	const img = fallback(source.tokens, source.index, options, env, md.renderer);
 	const webp = typeof src === "string" ? webpSrc(src) : undefined;

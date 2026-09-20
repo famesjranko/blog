@@ -1,0 +1,150 @@
+{
+	"/img/essays/as-knowledge-holders/cover.jpg": {
+		"width": 1024,
+		"height": 576
+	},
+	"/img/essays/as-knowledge-holders/cover.webp": {
+		"width": 1024,
+		"height": 576
+	},
+	"/img/essays/descript-philosophy/cover.jpg": {
+		"width": 5896,
+		"height": 2503
+	},
+	"/img/essays/descript-philosophy/cover.webp": {
+		"width": 1600,
+		"height": 679
+	},
+	"/img/essays/dretske-closure/cover.jpg": {
+		"width": 1498,
+		"height": 633
+	},
+	"/img/essays/dretske-closure/cover.webp": {
+		"width": 1498,
+		"height": 633
+	},
+	"/img/essays/dretske-closure/euler-diagram.svg": {
+		"width": 376,
+		"height": 376
+	},
+	"/img/essays/dreyfus-review/cover.jpg": {
+		"width": 1313,
+		"height": 533
+	},
+	"/img/essays/dreyfus-review/cover.webp": {
+		"width": 1313,
+		"height": 533
+	},
+	"/img/essays/ethics-google/cover.jpg": {
+		"width": 1920,
+		"height": 676
+	},
+	"/img/essays/ethics-google/cover.webp": {
+		"width": 1600,
+		"height": 563
+	},
+	"/img/essays/heidegger-theyself/cover.jpg": {
+		"width": 1311,
+		"height": 551
+	},
+	"/img/essays/heidegger-theyself/cover.webp": {
+		"width": 1311,
+		"height": 551
+	},
+	"/img/essays/inferential-knowledge/cover.jpg": {
+		"width": 2106,
+		"height": 837
+	},
+	"/img/essays/inferential-knowledge/cover.webp": {
+		"width": 1600,
+		"height": 636
+	},
+	"/img/essays/jtb-knowledge/cover.jpg": {
+		"width": 1975,
+		"height": 858
+	},
+	"/img/essays/jtb-knowledge/cover.webp": {
+		"width": 1600,
+		"height": 695
+	},
+	"/img/essays/kant-enlightenment/cover.jpg": {
+		"width": 2010,
+		"height": 753
+	},
+	"/img/essays/kant-enlightenment/cover.webp": {
+		"width": 1600,
+		"height": 599
+	},
+	"/img/essays/knowledge-thatandhow/cover.jpg": {
+		"width": 1708,
+		"height": 735
+	},
+	"/img/essays/knowledge-thatandhow/cover.webp": {
+		"width": 1600,
+		"height": 689
+	},
+	"/img/essays/plato-allegory/cover.jpg": {
+		"width": 1293,
+		"height": 543
+	},
+	"/img/essays/plato-allegory/cover.webp": {
+		"width": 1293,
+		"height": 543
+	},
+	"/img/essays/time-travel/cover.jpg": {
+		"width": 2121,
+		"height": 908
+	},
+	"/img/essays/time-travel/cover.webp": {
+		"width": 1600,
+		"height": 685
+	},
+	"/img/essays/whatis-philosophy/cover.jpg": {
+		"width": 1280,
+		"height": 540
+	},
+	"/img/essays/whatis-philosophy/cover.webp": {
+		"width": 1280,
+		"height": 540
+	},
+	"/img/projects/connect4-heuristic/connect4-depth1.svg": {
+		"width": 760,
+		"height": 820
+	},
+	"/img/projects/connect4-heuristic/connect4-depth2.svg": {
+		"width": 760,
+		"height": 820
+	},
+	"/img/projects/connect4-heuristic/connect4-depth3.svg": {
+		"width": 760,
+		"height": 820
+	},
+	"/img/projects/connect4-heuristic/connect4-depth4.svg": {
+		"width": 760,
+		"height": 820
+	},
+	"/img/projects/connect4-heuristic/cover.jpg": {
+		"width": 1672,
+		"height": 941
+	},
+	"/img/projects/connect4-heuristic/cover.webp": {
+		"width": 1600,
+		"height": 900
+	},
+	"/img/projects/connect4-lisp-web/connect4-debug-scores.jpg": {
+		"width": 1986,
+		"height": 1078
+	},
+	"/img/projects/connect4-lisp-web/connect4-debug-scores.webp": {
+		"width": 1600,
+		"height": 868
+	},
+	"/img/projects/connect4-lisp-web/cover.jpg": {
+		"width": 1536,
+		"height": 1024
+	},
+	"/img/projects/connect4-lisp-web/cover.webp": {
+		"width": 1536,
+		"height": 1024
+	}
+}
