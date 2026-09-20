@@ -94,7 +94,7 @@
 		overflow: clip;
 		border: 1px solid var(--color-border);
 		border-radius: 0.85rem;
-		background: var(--color-bg);
+		background: var(--color-surface);
 		color: var(--color-text);
 		box-shadow: 0 1rem 3rem rgb(0 0 0 / 0.2);
 		opacity: 0;

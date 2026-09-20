@@ -7,10 +7,11 @@
 	:root {
 		color-scheme: light dark;
 
-		--color-bg: light-dark(#ececec, #121212);
+		--color-bg: light-dark(#e2e2e2, #121212);
+		--color-surface: light-dark(#f1f1f1, #1c1c1c);
 		--color-text: light-dark(#161616, #ececec);
-		--color-muted: light-dark(#5c5c5c, #a3a3a3);
-		--color-border: light-dark(#d4d4d4, #2a2a2a);
+		--color-muted: light-dark(#555555, #a3a3a3);
+		--color-border: light-dark(#c9c9c9, #2e2e2e);
 		--color-accent: light-dark(#33594e, #93b8a9);
 		--color-wash-1: light-dark(#d9ded3, #2a332c);
 		--color-wash-2: light-dark(#dedede, #2e2e2e);
@@ -125,7 +126,7 @@
 		overflow: clip;
 		border: 1px solid var(--color-border);
 		border-radius: 0.75rem;
-		background: var(--color-bg);
+		background: var(--color-surface);
 		transition:
 			transform 160ms ease,
 			border-color 160ms ease,
