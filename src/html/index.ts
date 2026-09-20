@@ -103,7 +103,7 @@ export function homePage(essays: Essay[], projects: Project[] = []): string {
 		title: "Andrew J. McDonald",
 		description: HERO_STANDFIRST,
 		skipTo: skipTarget(featuredEssays.length, featuredProjects.length),
-		scripts: [{ src: siteUrl("/hero.js"), type: "module" }],
+		scripts: [{ src: siteUrl("/js/hero.js"), type: "module" }],
 		styles: [
 			siteUrl("/styles.css"),
 			siteUrl("/header.css"),

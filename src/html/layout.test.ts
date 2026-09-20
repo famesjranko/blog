@@ -34,7 +34,7 @@ describe("theme toggle", () => {
 
 	it("loads the toggle handler on every page", () => {
 		const html = page({ title: "t", content: "" });
-		expect(html).toContain('<script src="/theme.js" defer></script>');
+		expect(html).toContain('<script src="/js/theme.js" defer></script>');
 	});
 });
 

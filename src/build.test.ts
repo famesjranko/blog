@@ -14,11 +14,20 @@ async function buildToTemp(): Promise<string> {
 describe("build output", () => {
 	it("ships no three.js bundle and no module that imports one", async () => {
 		const outDir = await buildToTemp();
-		const files = await readdir(outDir);
+		const files = await readdir(path.join(outDir, "js"));
 		expect(files.filter((name) => name.startsWith("three"))).toEqual([]);
 		for (const name of files.filter((file) => file.endsWith(".js"))) {
-			const text = await readFile(path.join(outDir, name), "utf8");
+			const text = await readFile(path.join(outDir, "js", name), "utf8");
 			expect(text, name).not.toMatch(/["']\.\/three/);
 		}
+	}, 30000);
+
+	it("keeps every script under js/ and none at the site root", async () => {
+		const outDir = await buildToTemp();
+		const root = await readdir(outDir);
+		expect(root.filter((name) => name.endsWith(".js"))).toEqual([]);
+		const scripts = await readdir(path.join(outDir, "js"));
+		expect(scripts).toContain("hero.js");
+		expect(scripts).toContain("theme.js");
 	}, 30000);
 });

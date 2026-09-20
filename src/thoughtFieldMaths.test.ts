@@ -4,7 +4,7 @@ import {
 	orthographicProjection,
 	parseCssColour,
 	srgbToLinear,
-} from "../static/thought-field-maths.js";
+} from "../static/js/thought-field-maths.js";
 
 // Reference values from the sRGB transfer function worked by hand.
 const LINEAR_128 = ((128 / 255 + 0.055) / 1.055) ** 2.4;

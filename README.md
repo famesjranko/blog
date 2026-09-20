@@ -48,7 +48,7 @@ Custom static site built with TypeScript and Markdown.
 content/    Markdown content
 src/        Site generator
 styles/     Stylesheets
-static/     Static assets
+static/     Static assets, copied as-is (js/ scripts, img/ images)
 scripts/    Repository tooling
 dist/       Generated site output
 ```

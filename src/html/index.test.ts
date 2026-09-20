@@ -47,8 +47,8 @@ describe("homePage hero", () => {
 
 	it("loads the hero field as a deferred-by-default module script", () => {
 		const html = homePage([sampleEssay()]);
-		expect(html).toContain('<script type="module" src="/hero.js"></script>');
-		expect(html).not.toContain('<script src="/hero.js" defer>');
+		expect(html).toContain('<script type="module" src="/js/hero.js"></script>');
+		expect(html).not.toContain('<script src="/js/hero.js" defer>');
 	});
 });
 
