@@ -23,7 +23,7 @@ Custom static site built with TypeScript and Markdown.
 | Command        | Purpose                 |
 | -------------- | ----------------------- |
 | `make install` | Install dependencies    |
-| `make preview` | Build with drafts and serve locally |
+| `make preview` | Build with drafts and serve locally and on the LAN |
 | `make preview-wsl` | Build with drafts and serve on WSL interfaces |
 | `make check`   | Run the full quality gate |
 

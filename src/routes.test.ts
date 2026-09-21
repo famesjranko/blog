@@ -178,7 +178,7 @@ describe("generateSite not-found page", () => {
 		vi.stubEnv("BASE_PATH", "/blog");
 		const dir = await generate([sampleEssay()]);
 		const html = await readFile(path.join(dir, "404.html"), "utf8");
-		expect(html).toContain("<title>Page not found</title>");
+		expect(html).toContain("<title>404 — Page not found</title>");
 		expect(html).toContain('<link rel="stylesheet" href="/blog/css/main.css">');
 		expect(html).toContain('href="/blog/"');
 		expect(html).toContain('href="/blog/essays/"');

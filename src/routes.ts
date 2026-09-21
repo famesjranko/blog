@@ -2,7 +2,8 @@ import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import type { Essay, Project } from "./content.js";
 import { essayPage } from "./html/essay.js";
-import { essayIndexPage, homePage, notFoundPage } from "./html/index.js";
+import { errorPage } from "./html/error.js";
+import { essayIndexPage, homePage } from "./html/index.js";
 import { projectIndexPage, projectPage } from "./html/project.js";
 import { allTopics, topicPage } from "./html/topic.js";
 import { SITE_NAME, escapeHtml } from "./html/layout.js";
@@ -44,7 +45,7 @@ export async function generateSite(
 			topicPage(topic, essays),
 		);
 	}
-	await write(outDir, "404.html", notFoundPage());
+	await write(outDir, "404.html", errorPage(404));
 	await write(outDir, "rss.xml", rss(essays));
 	await write(outDir, "sitemap.xml", sitemap(essays, projects));
 }
