@@ -11,8 +11,6 @@ export interface HeroCopy {
 	titleLines: string[];
 	standfirst: string;
 	actions?: HeroAction[];
-	/** Stretch to the footer: for a page where the hero is the only content. */
-	fill?: boolean;
 }
 
 /** Stylesheets and scripts a page must load for `hero()` to paint. */
@@ -42,7 +40,9 @@ function actionRow(actions: HeroAction[] = []): string {
 
 /**
  * The site's dark hero: CSS wash fallback, WebGL thought field, then
- * the copy. hero.js finds it through `data-hero`; one per page.
+ * the copy. hero.js finds it through `data-hero`; one per page. It takes
+ * whatever height main has left, so a page with nothing else still
+ * reaches the footer.
  */
 export function hero(copy: HeroCopy): string {
 	const eyebrow =
@@ -50,8 +50,7 @@ export function hero(copy: HeroCopy): string {
 			? ""
 			: `<p class="hero-eyebrow">${escapeHtml(copy.eyebrow)}</p>\n`;
 	const title = copy.titleLines.map((line) => escapeHtml(line)).join("<br>");
-	const className = copy.fill === true ? "hero hero-fill" : "hero";
-	return `<section class="${className}" data-hero>
+	return `<section class="hero" data-hero>
 <div class="hero-visual" aria-hidden="true"><span></span><span></span><span></span></div>
 <canvas class="hero-canvas" data-thought-field aria-hidden="true"></canvas>
 <div class="wrap hero-inner">

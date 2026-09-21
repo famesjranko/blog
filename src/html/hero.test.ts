@@ -38,15 +38,6 @@ describe("hero", () => {
 	});
 });
 
-describe("hero fill", () => {
-	it("adds the fill class only when asked to stretch to the footer", () => {
-		expect(hero(base)).toContain('<section class="hero" data-hero>');
-		expect(hero({ ...base, fill: true })).toContain(
-			'<section class="hero hero-fill" data-hero>',
-		);
-	});
-});
-
 describe("hero escaping", () => {
 	it("escapes each title line before the break join", () => {
 		const html = hero({ ...base, titleLines: ["a < b", "c & d"] });
