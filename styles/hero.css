@@ -16,6 +16,17 @@
 		border-bottom: 1px solid var(--color-border);
 	}
 
+	/* A hero that is the page's only content fills main so no ground shows
+	between it and the footer on tall viewports. */
+	main:has(> .hero-fill) {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.hero-fill {
+		flex: 1;
+	}
+
 	.hero-inner {
 		position: relative;
 		padding-block: clamp(4rem, 10svh, 7rem);

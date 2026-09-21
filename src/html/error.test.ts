@@ -21,6 +21,10 @@ describe("errorPage 404", () => {
 			html.indexOf("data-thought-field"),
 		);
 	});
+
+	it("stretches the hero to the footer since it is the only content", () => {
+		expect(errorPage(404)).toContain('class="hero hero-fill"');
+	});
 });
 
 describe("errorPage other statuses", () => {

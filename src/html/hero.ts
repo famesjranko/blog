@@ -11,6 +11,8 @@ export interface HeroCopy {
 	titleLines: string[];
 	standfirst: string;
 	actions?: HeroAction[];
+	/** Stretch to the footer: for a page where the hero is the only content. */
+	fill?: boolean;
 }
 
 /** Stylesheets and scripts a page must load for `hero()` to paint. */
@@ -48,7 +50,8 @@ export function hero(copy: HeroCopy): string {
 			? ""
 			: `<p class="hero-eyebrow">${escapeHtml(copy.eyebrow)}</p>\n`;
 	const title = copy.titleLines.map((line) => escapeHtml(line)).join("<br>");
-	return `<section class="hero" data-hero>
+	const className = copy.fill === true ? "hero hero-fill" : "hero";
+	return `<section class="${className}" data-hero>
 <div class="hero-visual" aria-hidden="true"><span></span><span></span><span></span></div>
 <canvas class="hero-canvas" data-thought-field aria-hidden="true"></canvas>
 <div class="wrap hero-inner">
