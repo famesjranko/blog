@@ -20,15 +20,15 @@ stack:
 
 ![Connect-4 on a retro home computer](/img/projects/connect4-lisp-web/cover.jpg)
 
-In 2018 I wrote a [heuristic evaluation function for Connect-4](/projects/connect4-heuristic/) in Common Lisp for an Artificial Intelligence subject at university. It only ran in a REPL: load three source files, call `play`, type a column number at each prompt. I was proud of it and wanted something more user friendly than a terminal, and I wanted the technical challenge of doing that with Lisp tooling rather than porting the game to something else. So the server is SBCL running Hunchentoot, state is kept in Redis through cl-redis, and the search is parallelised with lparallel. The heuristic is the 2018 file.
+In 2018 I wrote a [heuristic evaluation function for Connect-4](/projects/connect4-heuristic/) in Common Lisp for an Artificial Intelligence subject at university. It only ran in a REPL: load three source files, call `play`, type a column number at each prompt. I was proud of it and wanted something more user friendly than a terminal, and I wanted the technical challenge of doing that with Lisp tooling rather than porting the game to something else. So the server is SBCL running Hunchentoot, state is kept in Redis through cl-redis, and the search is parallelised with lparallel. The heuristic adapts the 2018 implementation.
 
 ## What stayed the same
 
-`heuristic.lisp` still carries its September 2018 header. The line values are unchanged, 97 for a playable three, 9 for a three that needs a future position, 3 for a playable two; so are the strategy maps and the defensive weight of `1.91000008`. The only edit is that the board is now read with `aref` on an array instead of nested list access.
+`heuristic.lisp` still carries its September 2018 header. The line values are unchanged, 97 for a playable three, 9 for a three that needs a future position, 3 for a playable two; so are the strategy maps and the defensive weight of `1.91000008`. The implementation now reads a board array with `aref`, calculates playable positions once per evaluation, and uses loops over the board and its possible winning lines in place of the original list traversals.
 
 ## Playing it
 
-The interface is HTML, CSS and JavaScript with no framework. The game logic is one `game-client.js` file and eight theme pages wrap different layouts around it. You can play with mouse or keyboard, set the depth from one to eight, and choose who moves first. The four winning positions are highlighted when a game ends.
+The interface is HTML, CSS and JavaScript with no framework. The game logic is one `game-client.js` file and eight theme pages wrap different layouts around it. You can play with mouse or keyboard and choose who moves first. The interface offers search depths from one to eight, but the server caps the depth at six by default unless configured otherwise. The four winning positions are highlighted when a game ends.
 
 The part I find most satisfying is the debug view. For every move the server searches each of the seven columns separately at the game's depth and returns a score per column. At depth one these are exactly what the 2018 `heuristic` function returns for that move. The panel shows the seven scores, marks the column the AI chose, and flags whether the move came from an immediate win or block rather than the search. Being able to see the heuristic value of each available move while playing is what I wanted from this; it is also how you notice when the AI prefers a move you would not have.
 
@@ -52,6 +52,6 @@ For depth four and above the root moves are searched through a worker pool. The 
 
 The application runs in an SBCL container as a non-root user, with Redis as a second service under Docker Compose. Depth, worker count, the game cap, the timeouts and the rate limit are environment variables, so `docker compose up` is enough to play it.
 
-Lastly, the heuristic did not get any better here, and I did not set out to make it better. What I have now is a game I can hand to someone as a link, with the numbers behind each of its moves on screen while they play.
+Lastly, the heuristic did not get any better here, and I did not set out to make it better. What I have now is a game someone can run from the linked repository, with the numbers behind each of its moves on screen while they play.
 
 [View Connect4-Lisp-Web on GitHub →](https://github.com/famesjranko/Connect4-Lisp-Web)
