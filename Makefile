@@ -51,13 +51,13 @@ images-check: ## Fail when a JPEG lacks its required WebP sidecar (no conversion
 preview: ## Build and serve dist/ locally at http://localhost:8000 (PORT=8001, DRAFTS=false to override)
 	SHOW_DRAFTS=$(DRAFTS) npm run build
 	@echo "Preview at http://localhost:$(PORT)/ (DRAFTS=$(DRAFTS))"
-	python3 -m http.server $(PORT) -d dist
+	python3 scripts/preview-server.py $(PORT)
 
 preview-wsl: ## Build and serve dist/ on all WSL interfaces for LAN access (PORT=8001, DRAFTS=false to override)
 	SHOW_DRAFTS=$(DRAFTS) npm run build
 	@powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$$(wslpath -w scripts/preview-wsl.ps1)" -Port $(PORT)
 	@echo "Preview at http://localhost:$(PORT)/ and on the LAN (DRAFTS=$(DRAFTS))"
-	python3 -m http.server $(PORT) --bind 0.0.0.0 -d dist
+	python3 scripts/preview-server.py $(PORT) 0.0.0.0
 
 clean: ## Remove build output
 	rm -rf dist
