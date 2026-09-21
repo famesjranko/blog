@@ -48,7 +48,7 @@ images: ## Regenerate WebP sidecars for JPEGs under static/img
 images-check: ## Fail when a JPEG lacks its required WebP sidecar (no conversion)
 	npm run images:check
 
-preview: ## Build and serve dist/ locally at http://localhost:8000 (PORT=8001, DRAFTS=false to override)
+preview: ## Build and serve dist/ at http://localhost:8000 and on the LAN (PORT=8001, DRAFTS=false to override)
 	SHOW_DRAFTS=$(DRAFTS) npm run build
 	@echo "Preview at http://localhost:$(PORT)/ (DRAFTS=$(DRAFTS))"
 	python3 scripts/preview-server.py $(PORT)
