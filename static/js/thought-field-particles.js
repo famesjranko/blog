@@ -68,7 +68,7 @@ function cssVar(element, name, fallback) {
 export function buildPalette(element = document.documentElement) {
 	const accent = cssVar(element, "--color-accent", "#93b8a9");
 	const ink = cssVar(element, "--color-text", "#ececec");
-	const muted = cssVar(element, "--color-muted", "#a3a3a3");
+	const muted = cssVar(element, "--color-muted", "#a8a8a8");
 	const wash1 = cssVar(element, "--color-wash-1", "#2a332c");
 	const wash2 = cssVar(element, "--color-wash-2", "#2e2e2e");
 	const wash3 = cssVar(element, "--color-wash-3", "#22303a");

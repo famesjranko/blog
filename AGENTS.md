@@ -24,6 +24,20 @@ Prefer the smallest change that fits the existing design.
 
 Do not introduce speculative abstractions, generic component systems, dependency injection, unnecessary classes, or utility layers for hypothetical future needs.
 
+## Diagrams
+
+Content SVGs that should follow the light/dark toggle opt in with
+`class="diagram"` on the root `<svg>`. The build (`src/svgInline.ts`)
+inlines them and namespaces their ids; `styles/diagrams.css` supplies every
+colour from the site tokens. A diagram must:
+
+- have a `viewBox`, `role="img"`, and `aria-labelledby` resolving to its own `<title>` (and optional `<desc>`) — the markdown alt is dropped;
+- carry no `<style>`, `style=`, or colour literals; use semantic classes (`heading`, `label`, `muted`, `grid`, `frame`, or a per-drawing class styled in `styles/diagrams.css` with `var(--color-*)`);
+- keep structural attributes (coordinates, stroke widths, filters, clip paths) in the SVG.
+
+`src/diagrams.test.ts` enforces this. An SVG without the class stays an
+ordinary `<img>` — the path for logos and other self-contained artwork.
+
 ## Structural guardrails
 
 The repository deliberately enforces strict structural limits.

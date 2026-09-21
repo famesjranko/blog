@@ -2,7 +2,13 @@ import { cp, mkdir } from "node:fs/promises";
 import path from "node:path";
 
 /** Every stylesheet the pages link. A missing one fails the build. */
-const STYLES = ["main.css", "prose.css", "hero.css", "header.css"];
+const STYLES = [
+	"main.css",
+	"prose.css",
+	"diagrams.css",
+	"hero.css",
+	"header.css",
+];
 
 /**
  * `static/` is copied as-is (js/, img/, favicon); stylesheets land

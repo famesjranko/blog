@@ -2,6 +2,7 @@ import MarkdownIt from "markdown-it";
 import { imageSize, webpSrc } from "./images.js";
 import { markFigureParagraphs } from "./markdownFigures.js";
 import { siteUrl } from "./site.js";
+import { inlineSvg } from "./svgInline.js";
 
 let renderer: MarkdownIt | undefined;
 
@@ -160,6 +161,10 @@ function renderImageBody(context: ImageRenderContext): string {
 	const token = source.tokens[source.index];
 	const src = token?.attrGet("src");
 	if (token !== undefined && typeof src === "string") {
+		const diagram = inlineSvg(src);
+		if (diagram !== undefined) {
+			return diagram;
+		}
 		prepareImageToken(token, src);
 	}
 	const img = fallback(source.tokens, source.index, options, env, md.renderer);

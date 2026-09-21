@@ -12,6 +12,7 @@ describe("copySiteAssets", () => {
 		await mkdir(path.join(root, "styles"));
 		await writeFile(path.join(root, "styles/main.css"), "body {}\n");
 		await writeFile(path.join(root, "styles/prose.css"), ".prose {}\n");
+		await writeFile(path.join(root, "styles/diagrams.css"), ".diagram {}\n");
 
 		await expect(copySiteAssets(root, outDir)).rejects.toThrow(/hero\.css/);
 	});
