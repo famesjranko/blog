@@ -51,5 +51,6 @@ describe("essayPage", () => {
 		expect(html).toContain('<link rel="stylesheet" href="/css/main.css">');
 		expect(html).toContain('<link rel="stylesheet" href="/css/header.css">');
 		expect(html).toContain('<link rel="stylesheet" href="/css/prose.css">');
+		expect(html).toContain('<link rel="stylesheet" href="/css/diagrams.css">');
 	});
 });

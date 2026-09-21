@@ -17,7 +17,7 @@
 
 ## Light-mode SVG contrast
 
-- [ ] Fix SVGs with transparent backgrounds + light/muted colours tuned for dark mode — unreadable/low-contrast on a light background. No `<rect>` background fill in any of them, so they inherit the page background directly:
+- [x] Fix SVGs with transparent backgrounds + light/muted colours tuned for dark mode — unreadable/low-contrast on a light background. No `<rect>` background fill in any of them, so they inherit the page background directly:
   - `static/img/essays/dretske-closure/euler-diagram.svg` — text fill `#dce5ea`
   - `static/img/projects/connect4-heuristic/connect4-depth1.svg` — `#c8d2d9` heading, `#8ba0ad` columns/score, `#496170`/`#688091` grid/frame strokes
   - `static/img/projects/connect4-heuristic/connect4-depth2.svg` (same palette)

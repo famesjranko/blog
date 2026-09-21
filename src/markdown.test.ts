@@ -213,10 +213,10 @@ describe("figure captions", () => {
 describe("image dimensions", () => {
 	it("sizes shipped internal images so the layout reserves their box", () => {
 		const html = renderMarkdown(
-			"![euler](/img/essays/dretske-closure/euler-diagram.svg)",
+			"![cover](/img/essays/as-knowledge-holders/cover.jpg)",
 		);
-		expect(html).toContain('width="376"');
-		expect(html).toContain('height="376"');
+		expect(html).toContain('width="1024"');
+		expect(html).toContain('height="576"');
 	});
 
 	it("leaves unknown images unsized", () => {
@@ -233,10 +233,29 @@ describe("non-jpeg images stay plain", () => {
 		expect(html).toContain('src="/img/essays/x/table1.png"');
 	});
 
-	it("leaves svg images as plain img elements", () => {
+	it("leaves svg images that ship no diagram as plain img elements", () => {
 		const html = renderMarkdown("![diagram](/img/projects/c/diagram.svg)");
 		expect(html).not.toContain("<picture>");
 		expect(html).toContain('src="/img/projects/c/diagram.svg"');
+	});
+});
+
+describe("diagram svgs", () => {
+	const euler = "/img/essays/dretske-closure/euler-diagram.svg";
+
+	it("inlines a shipped diagram in place of the img", () => {
+		const html = renderMarkdown(`![euler](${euler})`);
+		expect(html).toContain('<svg xmlns="http://www.w3.org/2000/svg"');
+		expect(html).toContain('width="376"');
+		expect(html).not.toContain("<img");
+	});
+
+	it("wraps an inlined diagram in a figure when it has a caption", () => {
+		const html = renderMarkdown(`![euler](${euler} "The **equivalence**")`);
+		expect(html).toMatch(/^<figure><svg /);
+		expect(html).toContain(
+			"</svg><figcaption>The <strong>equivalence</strong></figcaption></figure>",
+		);
 	});
 
 	it("leaves external jpeg images as plain img elements", () => {

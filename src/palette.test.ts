@@ -7,6 +7,8 @@ import { parseCssColour } from "../static/js/thought-field-maths.js";
 // afterthought: WCAG AAA (7:1) for every text tone on both the page and the
 // card/code surface, and the light ratio no more than 15% below the dark one.
 const MIN_RATIO = 7;
+// Diagram strokes are graphics, not text: WCAG non-text contrast is 3:1.
+const MIN_GRAPHIC_RATIO = 3;
 const MAX_LIGHT_DEFICIT = 0.15;
 
 type Scheme = "light" | "dark";
@@ -49,6 +51,7 @@ function contrast(a: string, b: string): number {
 
 const palette = readPalette();
 const TEXT_TOKENS = ["text", "muted", "accent"] as const;
+const GRAPHIC_TOKENS = ["diagram-x", "diagram-o"] as const;
 const GROUNDS = ["bg", "surface"] as const;
 const SCHEMES = ["light", "dark"] as const;
 
@@ -74,6 +77,21 @@ describe("colour tokens", () => {
 			const light = contrast(token(name, "light"), token("bg", "light"));
 			const dark = contrast(token(name, "dark"), token("bg", "dark"));
 			expect(light / dark, name).toBeGreaterThanOrEqual(1 - MAX_LIGHT_DEFICIT);
+		},
+	);
+
+	it.each(GRAPHIC_TOKENS)(
+		"keeps %s at non-text contrast on every ground in both schemes",
+		(name) => {
+			for (const scheme of SCHEMES) {
+				for (const ground of GROUNDS) {
+					const ratio = contrast(token(name, scheme), token(ground, scheme));
+					expect(
+						ratio,
+						`${name} on ${ground} in ${scheme}`,
+					).toBeGreaterThanOrEqual(MIN_GRAPHIC_RATIO);
+				}
+			}
 		},
 	);
 });
