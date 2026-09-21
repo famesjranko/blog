@@ -5,6 +5,7 @@ import {
 	topicSlug,
 } from "../content.js";
 import { siteUrl } from "../site.js";
+import { hero, heroAssets } from "./hero.js";
 import { cardClass, cardCover, escapeHtml, page } from "./layout.js";
 import { projectEntry } from "./project.js";
 
@@ -43,15 +44,6 @@ export function essayIndexPage(essays: Essay[]): string {
 		title: "Essays",
 		description: "Essays on philosophy, knowledge, ethics, and technology.",
 		content: `<div class="wrap index-page"><h1>Essays</h1><p class="index-count">${count}</p><ol class="card-grid">${entries}</ol></div>`,
-	});
-}
-
-/** Served by GitHub Pages for any unknown path under the site. */
-export function notFoundPage(): string {
-	return page({
-		title: "Page not found",
-		description: "There is nothing at this address.",
-		content: `<div class="wrap index-page"><h1>Page not found</h1><p class="index-count">There is nothing at this address.</p><p><a href="${siteUrl("/")}">Home</a> · <a href="${siteUrl("/essays/")}">Essays</a> · <a href="${siteUrl("/projects/")}">Projects</a></p></div>`,
 	});
 }
 
@@ -105,22 +97,16 @@ export function homePage(essays: Essay[], projects: Project[] = []): string {
 		title: "Andrew J. McDonald",
 		description: HERO_STANDFIRST,
 		skipTo: skipTarget(featuredEssays.length, featuredProjects.length),
-		scripts: [{ src: siteUrl("/js/hero.js"), type: "module" }],
-		styles: [
-			siteUrl("/css/main.css"),
-			siteUrl("/css/header.css"),
-			siteUrl("/css/hero.css"),
-		],
-		content: `<section class="hero" data-hero>
-<div class="hero-visual" aria-hidden="true"><span></span><span></span><span></span></div>
-<canvas class="hero-canvas" data-thought-field aria-hidden="true"></canvas>
-<div class="wrap hero-inner">
-<p class="hero-eyebrow">${escapeHtml(HERO_EYEBROW)}</p>
-<h1>${HERO_TITLE_LINES.map((line) => escapeHtml(line)).join("<br>")}</h1>
-<p class="hero-standfirst">${escapeHtml(HERO_STANDFIRST)}</p>
-<p class="hero-cta"><a href="${siteUrl("/essays/")}">Read essays</a> <a href="${siteUrl("/projects/")}">Browse projects</a></p>
-</div>
-</section>
+		...heroAssets(),
+		content: `${hero({
+			eyebrow: HERO_EYEBROW,
+			titleLines: HERO_TITLE_LINES,
+			standfirst: HERO_STANDFIRST,
+			actions: [
+				{ label: "Read essays", href: siteUrl("/essays/") },
+				{ label: "Browse projects", href: siteUrl("/projects/") },
+			],
+		})}
 ${essaySection}${projectsSection}`,
 	});
 }
