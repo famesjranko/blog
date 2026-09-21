@@ -2,7 +2,7 @@
 title: "Tablescan"
 description: "A containerised web app that detects and extracts tables from PDF documents into CSV."
 date: 2026-04-10
-draft: false
+draft: true
 origin: personal
 repo: https://github.com/famesjranko/tablescan
 stack:

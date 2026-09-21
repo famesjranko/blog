@@ -2,7 +2,7 @@
 title: "Musicmeta"
 description: "A Kotlin library unifying eleven public music APIs behind one enrichment engine."
 date: 2026-03-20
-draft: false
+draft: true
 featured: true
 origin: personal
 repo: https://github.com/famesjranko/musicmeta
