@@ -20,7 +20,7 @@ function sampleEssay(): Essay {
 describe("essayPage", () => {
 	it("constrains the article to the shared content column", () => {
 		const html = essayPage(sampleEssay());
-		expect(html).toContain('<div class="wrap"><article class="prose">');
+		expect(html).toContain('<div class="wrap"><article class="prose essay">');
 	});
 
 	it("uses the essay description as the meta description", () => {

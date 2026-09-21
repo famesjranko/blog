@@ -19,7 +19,7 @@ export function essayPage(essay: Essay): string {
 			siteUrl("/css/prose.css"),
 			siteUrl("/css/diagrams.css"),
 		],
-		content: `<div class="wrap"><article class="prose">
+		content: `<div class="wrap"><article class="prose essay">
 <header>
 ${draft}<h1>${escapeHtml(essay.title)}</h1>
 ${subtitle}
