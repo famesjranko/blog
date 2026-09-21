@@ -11,9 +11,12 @@
 # same check to gh pr/issue bodies that git never sees.
 PATTERN='co-authored-by:.*(claude|anthropic)|noreply@anthropic\.com|anthropic\.com|claude\.(ai|com)|claude[ -]?(code|opus|sonnet|haiku|fable)|generated with.*claude|\bclaude\b|\banthropic\b'
 
+# The config filename is a legitimate reference and is erased before matching.
+EXEMPT='CLAUDE\.md|\.claude/'
+
 # Ignore the commented-out template lines git appends below the message.
-if sed '/^#/d' "$1" | grep -Eiq "$PATTERN"; then
+if sed -E "/^#/d; s#${EXEMPT}##g" "$1" | grep -Eiq "$PATTERN"; then
 	echo "commit-msg: message names the assistant or its vendor; remove it (CLAUDE.md rule)" >&2
-	sed '/^#/d' "$1" | grep -Ein "$PATTERN" >&2
+	sed -E "/^#/d; s#${EXEMPT}##g" "$1" | grep -Ein "$PATTERN" >&2
 	exit 1
 fi
