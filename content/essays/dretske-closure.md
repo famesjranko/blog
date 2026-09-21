@@ -6,7 +6,7 @@ author:
 date: 2020-03-09T03:54:16+11:00
 cover: /img/essays/dretske-closure/cover.jpg
 coverAlt: "rope"
-draft: false
+draft: true
 toc: false
 type:
   - essays

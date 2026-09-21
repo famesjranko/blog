@@ -6,7 +6,7 @@ author:
 date: 2016-07-29
 cover: /img/essays/time-travel/cover.jpg
 coverAlt: "watch"
-draft: false
+draft: true
 toc: false
 type:
   - essays

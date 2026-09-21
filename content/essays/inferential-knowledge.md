@@ -6,7 +6,7 @@ author:
 date: 2016-07-20
 cover: /img/essays/inferential-knowledge/cover.jpg
 coverAlt: "city"
-draft: false
+draft: true
 toc: false
 images:
 type:

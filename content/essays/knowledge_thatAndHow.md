@@ -6,7 +6,7 @@ author:
 date: 2016-08-06
 cover: /img/essays/knowledge-thatandhow/cover.jpg
 coverAlt: "watch"
-draft: false
+draft: true
 toc: false
 type:
   - essays

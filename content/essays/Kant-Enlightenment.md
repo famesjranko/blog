@@ -6,7 +6,7 @@ author:
 date: 2016-07-22
 cover: /img/essays/kant-enlightenment/cover.jpg
 coverAlt: "city"
-draft: false
+draft: true
 toc: false
 type:
   - essays

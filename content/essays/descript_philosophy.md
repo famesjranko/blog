@@ -6,7 +6,7 @@ author:
 date: 2016-07-22
 cover: /img/essays/descript-philosophy/cover.jpg
 coverAlt: "rocks"
-draft: false
+draft: true
 images:
 type:
   - essays

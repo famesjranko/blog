@@ -6,7 +6,7 @@ author:
 date: 2016-07-22
 cover: /img/essays/plato-allegory/cover.jpg
 coverAlt: "cave"
-draft: false
+draft: true
 toc: false
 images:
 type:

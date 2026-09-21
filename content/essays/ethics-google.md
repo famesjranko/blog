@@ -4,7 +4,7 @@ description: "A 2020 ethics essay applying Kantian and utilitarian analysis to G
 date: 2020-08-12T14:18:23+11:00
 cover: /img/essays/ethics-google/cover.jpg
 coverAlt: "google"
-draft: true
+draft: false
 featured: true
 toc: false
 type:

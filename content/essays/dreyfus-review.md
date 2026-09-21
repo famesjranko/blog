@@ -4,7 +4,7 @@ description: "Dreyfus on skill, mastery, and world transformation, and where his
 date: 2020-10-10T17:39:34+11:00
 cover: /img/essays/dreyfus-review/cover.jpg
 coverAlt: "transformations"
-draft: false
+draft: true
 featured: true
 toc: false
 type:

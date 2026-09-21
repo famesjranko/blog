@@ -6,7 +6,7 @@ author:
 date: 2016-08-03
 cover: /img/essays/jtb-knowledge/cover.jpg
 coverAlt: "jtb"
-draft: false
+draft: true
 toc: false
 type:
   - essays

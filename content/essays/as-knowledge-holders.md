@@ -7,7 +7,7 @@ coverAlt: "we as knowers"
 tags:
   - epistemology
   - knowledge
-draft: false
+draft: true
 ---
 
 ![we as knowers](/img/essays/as-knowledge-holders/cover.jpg)

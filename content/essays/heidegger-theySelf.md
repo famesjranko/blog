@@ -6,7 +6,7 @@ author:
 date: 2020-09-19T16:51:27+11:00
 cover: /img/essays/heidegger-theyself/cover.jpg
 coverAlt: "they-self"
-draft: false
+draft: true
 toc: false
 type:
   - essays
