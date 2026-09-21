@@ -7,15 +7,15 @@
 	:root {
 		color-scheme: light dark;
 
-		--color-bg: light-dark(#e2e2e2, #121212);
-		--color-surface: light-dark(#f1f1f1, #1c1c1c);
+		--color-bg: light-dark(#f5f5f5, #121212);
+		--color-surface: light-dark(#ffffff, #1c1c1c);
 		--color-text: light-dark(#161616, #ececec);
-		--color-muted: light-dark(#555555, #a3a3a3);
-		--color-border: light-dark(#c9c9c9, #2e2e2e);
-		--color-accent: light-dark(#33594e, #93b8a9);
-		--color-wash-1: light-dark(#d9ded3, #2a332c);
-		--color-wash-2: light-dark(#dedede, #2e2e2e);
-		--color-wash-3: light-dark(#cdd5da, #22303a);
+		--color-muted: light-dark(#4d4d4d, #a8a8a8);
+		--color-border: light-dark(#cfcfcf, #2e2e2e);
+		--color-accent: light-dark(#2b4d43, #93b8a9);
+		--color-wash-1: light-dark(#ecf1e6, #2a332c);
+		--color-wash-2: light-dark(#f1f1f1, #2e2e2e);
+		--color-wash-3: light-dark(#e0e8ed, #22303a);
 
 		--content-width: 68rem;
 		--prose-width: 65ch;
