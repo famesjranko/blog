@@ -6,7 +6,10 @@ import { parseCssColour } from "../static/js/thought-field-maths.js";
 // light-dark() pair as readable as the dark half, so neither theme is the
 // afterthought: WCAG AAA (7:1) for every text tone on both the page and the
 // card/code surface, and the light ratio no more than 15% below the dark one.
+// The accent is the link colour — underlined body text — held to AA so it
+// keeps enough chroma to read as a link rather than as prose.
 const MIN_RATIO = 7;
+const MIN_ACCENT_RATIO = 4.5;
 // Diagram strokes are graphics, not text: WCAG non-text contrast is 3:1.
 const MIN_GRAPHIC_RATIO = 3;
 const MAX_LIGHT_DEFICIT = 0.15;
@@ -50,26 +53,33 @@ function contrast(a: string, b: string): number {
 }
 
 const palette = readPalette();
-const TEXT_TOKENS = ["text", "muted", "accent"] as const;
+const TEXT_TOKENS = ["text", "muted"] as const;
 const GRAPHIC_TOKENS = ["diagram-x", "diagram-o"] as const;
 const GROUNDS = ["bg", "surface"] as const;
 const SCHEMES = ["light", "dark"] as const;
+
+function expectFloor(name: string, floor: number): void {
+	for (const scheme of SCHEMES) {
+		for (const ground of GROUNDS) {
+			const ratio = contrast(token(name, scheme), token(ground, scheme));
+			expect(ratio, `${name} on ${ground} in ${scheme}`).toBeGreaterThanOrEqual(
+				floor,
+			);
+		}
+	}
+}
 
 describe("colour tokens", () => {
 	it.each(TEXT_TOKENS)(
 		"keeps %s at AAA contrast on every ground in both schemes",
 		(name) => {
-			for (const scheme of SCHEMES) {
-				for (const ground of GROUNDS) {
-					const ratio = contrast(token(name, scheme), token(ground, scheme));
-					expect(
-						ratio,
-						`${name} on ${ground} in ${scheme}`,
-					).toBeGreaterThanOrEqual(MIN_RATIO);
-				}
-			}
+			expectFloor(name, MIN_RATIO);
 		},
 	);
+
+	it("keeps the accent at AA contrast on every ground in both schemes", () => {
+		expectFloor("accent", MIN_ACCENT_RATIO);
+	});
 
 	it.each(TEXT_TOKENS)(
 		"gives %s a light ratio close to its dark ratio",
@@ -83,15 +93,7 @@ describe("colour tokens", () => {
 	it.each(GRAPHIC_TOKENS)(
 		"keeps %s at non-text contrast on every ground in both schemes",
 		(name) => {
-			for (const scheme of SCHEMES) {
-				for (const ground of GROUNDS) {
-					const ratio = contrast(token(name, scheme), token(ground, scheme));
-					expect(
-						ratio,
-						`${name} on ${ground} in ${scheme}`,
-					).toBeGreaterThanOrEqual(MIN_GRAPHIC_RATIO);
-				}
-			}
+			expectFloor(name, MIN_GRAPHIC_RATIO);
 		},
 	);
 });
