@@ -124,6 +124,12 @@ describe("projectEntry meta structure", () => {
 });
 
 describe("projectIndexPage", () => {
+	it("emits a meta description for search snippets", () => {
+		expect(projectIndexPage([sampleProject()])).toMatch(
+			/<meta name="description" content="[^"]+">/,
+		);
+	});
+
 	it("renders a card grid with a project count", () => {
 		const html = projectIndexPage([
 			sampleProject(),

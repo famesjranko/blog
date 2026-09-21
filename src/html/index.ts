@@ -41,6 +41,7 @@ export function essayIndexPage(essays: Essay[]): string {
 	const count = essays.length === 1 ? "1 essay" : `${essays.length} essays`;
 	return page({
 		title: "Essays",
+		description: "Essays on philosophy, knowledge, ethics, and technology.",
 		content: `<div class="wrap index-page"><h1>Essays</h1><p class="index-count">${count}</p><ol class="card-grid">${entries}</ol></div>`,
 	});
 }
@@ -49,6 +50,7 @@ export function essayIndexPage(essays: Essay[]): string {
 export function notFoundPage(): string {
 	return page({
 		title: "Page not found",
+		description: "There is nothing at this address.",
 		content: `<div class="wrap index-page"><h1>Page not found</h1><p class="index-count">There is nothing at this address.</p><p><a href="${siteUrl("/")}">Home</a> · <a href="${siteUrl("/essays/")}">Essays</a> · <a href="${siteUrl("/projects/")}">Projects</a></p></div>`,
 	});
 }

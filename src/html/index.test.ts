@@ -211,6 +211,12 @@ describe("essayEntry content", () => {
 });
 
 describe("essayIndexPage", () => {
+	it("emits a meta description for search snippets", () => {
+		expect(essayIndexPage([sampleEssay()])).toMatch(
+			/<meta name="description" content="[^"]+">/,
+		);
+	});
+
 	it("renders a two-column card grid with an essay count", () => {
 		const html = essayIndexPage([
 			sampleEssay(),

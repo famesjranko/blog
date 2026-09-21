@@ -53,6 +53,8 @@ export function projectIndexPage(projects: Project[]): string {
 		projects.length === 1 ? "1 project" : `${projects.length} projects`;
 	return page({
 		title: "Projects",
+		description:
+			"Software projects, from university coursework to personal builds.",
 		content: `<div class="wrap index-page"><h1>Projects</h1><p class="index-count">${count}</p><ol class="card-grid">${entries}</ol></div>`,
 	});
 }

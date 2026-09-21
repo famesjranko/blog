@@ -66,12 +66,28 @@ describe("allTopics", () => {
 	});
 });
 
-describe("topicPage", () => {
+describe("topicPage shell", () => {
+	it("emits a meta description naming the topic", () => {
+		const html = topicPage({ name: "Time & Space", slug: "time-space" }, []);
+		expect(html).toContain(
+			'<meta name="description" content="Essays on Time &amp; Space.">',
+		);
+	});
+
 	it("uses the shared content column like other index pages", () => {
 		const html = topicPage(ethics, [sampleEssay()]);
 		expect(html).toContain('<div class="wrap topic-page">');
 	});
 
+	it("escapes the topic heading", () => {
+		const entry = { name: "<ethics>", slug: topicSlug("<ethics>") };
+		const html = topicPage(entry, [sampleEssay({ topics: ["<ethics>"] })]);
+		expect(html).toContain("<h1>&lt;ethics&gt;</h1>");
+		expect(html).not.toContain("<h1><ethics></h1>");
+	});
+});
+
+describe("topicPage entries", () => {
 	it("lists only essays tagged with the topic", () => {
 		const tagged = sampleEssay();
 		const untagged = sampleEssay({
@@ -107,12 +123,5 @@ describe("topicPage", () => {
 		const html = topicPage(ethics, [sampleEssay()]);
 		expect(html).toContain('<h2 class="card-title">');
 		expect(html).not.toContain("<h3");
-	});
-
-	it("escapes the topic heading", () => {
-		const entry = { name: "<ethics>", slug: topicSlug("<ethics>") };
-		const html = topicPage(entry, [sampleEssay({ topics: ["<ethics>"] })]);
-		expect(html).toContain("<h1>&lt;ethics&gt;</h1>");
-		expect(html).not.toContain("<h1><ethics></h1>");
 	});
 });
