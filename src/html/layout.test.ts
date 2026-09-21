@@ -1,5 +1,21 @@
 import { describe, expect, it, vi } from "vitest";
-import { cardCover, footer, header, page } from "./layout.js";
+import {
+	type CoverPiece,
+	cardClass,
+	cardCover,
+	footer,
+	header,
+	page,
+} from "./layout.js";
+
+function piece(
+	cover: string | undefined,
+	coverAlt: string | undefined,
+	slug: string,
+	draft = false,
+): CoverPiece {
+	return { cover, coverAlt, slug, draft };
+}
 
 describe("footer", () => {
 	it("links to the GitHub profile in a new tab", () => {
@@ -75,15 +91,13 @@ describe("feed discovery", () => {
 describe("cardCover dimensions", () => {
 	it("sizes a shipped cover image", () => {
 		const html = cardCover(
-			"/img/projects/connect4-lisp-web/cover.jpg",
-			"c",
-			"c",
+			piece("/img/projects/connect4-lisp-web/cover.jpg", "c", "c"),
 		);
 		expect(html).toContain('width="1536" height="1024"');
 	});
 
 	it("leaves an unknown cover unsized", () => {
-		const html = cardCover("/img/essays/x/cover.jpg", "x", "x");
+		const html = cardCover(piece("/img/essays/x/cover.jpg", "x", "x"));
 		expect(html).not.toContain("width=");
 	});
 });
@@ -91,9 +105,7 @@ describe("cardCover dimensions", () => {
 describe("cardCover webp sidecars", () => {
 	it("wraps jpeg covers in a picture element with a webp source", () => {
 		const html = cardCover(
-			"/img/essays/jtb-knowledge/cover.jpg",
-			"jtb",
-			"jtb-knowledge",
+			piece("/img/essays/jtb-knowledge/cover.jpg", "jtb", "jtb-knowledge"),
 		);
 		expect(html).toContain("<picture>");
 		expect(html).toContain(
@@ -106,7 +118,7 @@ describe("cardCover webp sidecars", () => {
 	it("prefixes both the webp source and the fallback with the base path", () => {
 		vi.stubEnv("BASE_PATH", "/blog");
 		try {
-			const html = cardCover("/img/essays/x/cover.jpg", "x", "x");
+			const html = cardCover(piece("/img/essays/x/cover.jpg", "x", "x"));
 			expect(html).toContain('srcset="/blog/img/essays/x/cover.webp"');
 			expect(html).toContain('src="/blog/img/essays/x/cover.jpg"');
 		} finally {
@@ -115,13 +127,13 @@ describe("cardCover webp sidecars", () => {
 	});
 
 	it("leaves png covers as plain img elements", () => {
-		const html = cardCover("/img/essays/x/table1.png", "t", "x");
+		const html = cardCover(piece("/img/essays/x/table1.png", "t", "x"));
 		expect(html).not.toContain("<picture>");
 		expect(html).toContain('src="/img/essays/x/table1.png"');
 	});
 
 	it("leaves svg covers as plain img elements", () => {
-		const html = cardCover("/img/projects/c/diagram.svg", "d", "c");
+		const html = cardCover(piece("/img/projects/c/diagram.svg", "d", "c"));
 		expect(html).not.toContain("<picture>");
 		expect(html).toContain('src="/img/projects/c/diagram.svg"');
 	});
@@ -153,9 +165,7 @@ describe("page scripts", () => {
 describe("cardCover", () => {
 	it("renders the explicit cover image with lazy loading", () => {
 		const html = cardCover(
-			"/img/essays/jtb-knowledge/cover.jpg",
-			"jtb",
-			"jtb-knowledge",
+			piece("/img/essays/jtb-knowledge/cover.jpg", "jtb", "jtb-knowledge"),
 		);
 		expect(html).toContain('class="card-media"');
 		expect(html).toContain('src="/img/essays/jtb-knowledge/cover.jpg"');
@@ -164,7 +174,7 @@ describe("cardCover", () => {
 	});
 
 	it("falls back to the slug's rendered placeholder with an empty alt", () => {
-		const html = cardCover(undefined, undefined, "other");
+		const html = cardCover(piece(undefined, undefined, "other"));
 		expect(html).toContain(
 			'<source type="image/webp" srcset="/img/placeholders/other.webp">',
 		);
@@ -173,21 +183,21 @@ describe("cardCover", () => {
 	});
 
 	it("ignores coverAlt when the cover itself is absent", () => {
-		const html = cardCover(undefined, "described", "other");
+		const html = cardCover(piece(undefined, "described", "other"));
 		expect(html).toContain('alt=""');
 		expect(html).not.toContain("described");
 	});
 
 	it("emits the placeholder's size once it is in the table", () => {
 		// tablescan ships a rendered placeholder, so its size is known.
-		const html = cardCover(undefined, undefined, "tablescan");
+		const html = cardCover(piece(undefined, undefined, "tablescan"));
 		expect(html).toContain('width="640" height="360"');
 	});
 
 	it("prefixes the placeholder path under BASE_PATH", () => {
 		vi.stubEnv("BASE_PATH", "/blog");
 		try {
-			const html = cardCover(undefined, undefined, "other");
+			const html = cardCover(piece(undefined, undefined, "other"));
 			expect(html).toContain('src="/blog/img/placeholders/other.jpg"');
 			expect(html).toContain('srcset="/blog/img/placeholders/other.webp"');
 		} finally {
@@ -196,8 +206,35 @@ describe("cardCover", () => {
 	});
 
 	it("escapes cover alt text", () => {
-		const html = cardCover("/img/x.jpg", "<evil>", "x");
+		const html = cardCover(piece("/img/x.jpg", "<evil>", "x"));
 		expect(html).toContain('alt="&lt;evil&gt;"');
 		expect(html).not.toContain('alt="<evil>"');
+	});
+});
+
+describe("draft marking", () => {
+	it("overlays a draft badge on the art of a draft", () => {
+		const html = cardCover(piece(undefined, undefined, "other", true));
+		expect(html).toContain('<span class="draft-badge">Draft</span></div>');
+		expect(html.indexOf("</picture>")).toBeLessThan(
+			html.indexOf("draft-badge"),
+		);
+	});
+
+	it("badges a draft with an explicit cover too", () => {
+		const html = cardCover(piece("/img/x.png", "x", "x", true));
+		expect(html).toContain('<img src="/img/x.png"');
+		expect(html).toContain("draft-badge");
+	});
+
+	it("leaves published art unbadged", () => {
+		expect(cardCover(piece(undefined, undefined, "other"))).not.toContain(
+			"draft",
+		);
+	});
+
+	it("adds the card modifier only for drafts", () => {
+		expect(cardClass({ draft: true })).toBe("card card-draft");
+		expect(cardClass({ draft: false })).toBe("card");
 	});
 });

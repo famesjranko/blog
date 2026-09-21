@@ -85,6 +85,14 @@ describe("projectEntry card", () => {
 	});
 });
 
+describe("projectEntry draft", () => {
+	it("marks a draft card with a modifier class and a badge", () => {
+		const html = projectEntry(sampleProject({ draft: true }));
+		expect(html).toContain('<article class="card card-draft">');
+		expect(html).toContain('<span class="draft-badge">Draft</span>');
+	});
+});
+
 describe("projectEntry content", () => {
 	it("omits the description when absent", () => {
 		const html = projectEntry(sampleProject({ description: undefined }));
@@ -148,6 +156,14 @@ describe("projectPage header", () => {
 		expect(html).toContain('class="project-eyebrow"');
 		expect(html).toContain("Personal project");
 		expect(html).not.toContain("<time");
+	});
+
+	it("prefixes the eyebrow with a draft label for drafts only", () => {
+		const draft = projectPage(sampleProject({ draft: true }));
+		expect(draft).toContain(
+			'<p class="project-eyebrow"><span class="draft-eyebrow">Draft</span>Personal project</p>',
+		);
+		expect(projectPage(sampleProject())).not.toContain("draft-eyebrow");
 	});
 
 	it("uses the description as the lede and meta description", () => {

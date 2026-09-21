@@ -7,6 +7,7 @@ export function essayPage(essay: Essay): string {
 		essay.description !== undefined
 			? `<p>${escapeHtml(essay.description)}</p>`
 			: "";
+	const draft = essay.draft ? `<p class="draft-eyebrow">Draft</p>\n` : "";
 	return page({
 		title: essay.title,
 		...(essay.description === undefined
@@ -19,7 +20,7 @@ export function essayPage(essay: Essay): string {
 		],
 		content: `<div class="wrap"><article class="prose">
 <header>
-<h1>${escapeHtml(essay.title)}</h1>
+${draft}<h1>${escapeHtml(essay.title)}</h1>
 ${subtitle}
 </header>
 ${essay.html}

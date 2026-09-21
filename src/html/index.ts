@@ -5,7 +5,7 @@ import {
 	topicSlug,
 } from "../content.js";
 import { siteUrl } from "../site.js";
-import { cardCover, escapeHtml, page } from "./layout.js";
+import { cardClass, cardCover, escapeHtml, page } from "./layout.js";
 import { projectEntry } from "./project.js";
 
 // Homepage hero copy. Edit freely; no logic depends on it.
@@ -22,13 +22,13 @@ export type CardHeading = 2 | 3;
 
 export function essayEntry(essay: Essay, heading: CardHeading = 2): string {
 	const url = siteUrl(`/essays/${essay.slug}/`);
-	const cover = cardCover(essay.cover, essay.coverAlt, essay.slug);
+	const cover = cardCover(essay);
 	const description =
 		essay.description !== undefined
 			? `<p class="entry-desc">${escapeHtml(essay.description)}</p>`
 			: "";
 	const topics = `<span class="entry-topics">${essay.topics.map((topic) => topicLink(topic)).join("")}</span>`;
-	return `<li><article class="card">
+	return `<li><article class="${cardClass(essay)}">
 ${cover}<div class="card-body">
 <h${heading} class="card-title"><a href="${url}">${escapeHtml(essay.title)}</a></h${heading}>
 ${description}

@@ -100,7 +100,8 @@ function rssItem(essay: Essay): string {
  * The newest essay dates the build. Using content rather than the clock
  * keeps the feed byte-identical across rebuilds of unchanged content.
  */
-function rss(essays: Essay[]): string {
+function rss(allEssays: Essay[]): string {
+	const essays = allEssays.filter((e) => !e.draft);
 	const items = essays.map(rssItem).join("\n");
 	const newest = essays.reduce<Date | undefined>(
 		(latest, e) => (latest === undefined || e.date > latest ? e.date : latest),
@@ -122,7 +123,10 @@ function rss(essays: Essay[]): string {
 	);
 }
 
-function sitemap(essays: Essay[], projects: Project[]): string {
+/** Drafts (only present under SHOW_DRAFTS) stay out of crawler surfaces. */
+function sitemap(allEssays: Essay[], allProjects: Project[]): string {
+	const essays = allEssays.filter((e) => !e.draft);
+	const projects = allProjects.filter((p) => !p.draft);
 	const urls = [
 		"",
 		"essays/",

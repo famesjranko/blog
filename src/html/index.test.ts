@@ -163,6 +163,12 @@ describe("essayEntry cover", () => {
 		expect(html).toContain("On Privacy");
 	});
 
+	it("marks a draft card with a modifier class and a badge", () => {
+		const html = essayEntry(sampleEssay({ draft: true }));
+		expect(html).toContain('<article class="card card-draft">');
+		expect(html).toContain('<span class="draft-badge">Draft</span>');
+	});
+
 	it("derives the essay placeholder from the slug", () => {
 		const html = essayEntry(sampleEssay({ slug: "other" }));
 		expect(html).toContain("/img/placeholders/other.jpg");

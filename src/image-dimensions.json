@@ -107,11 +107,43 @@
 		"width": 1280,
 		"height": 540
 	},
+	"/img/placeholders/esp32-s3-internet-monitor.jpg": {
+		"width": 640,
+		"height": 360
+	},
+	"/img/placeholders/esp32-s3-internet-monitor.webp": {
+		"width": 640,
+		"height": 360
+	},
+	"/img/placeholders/mediastack.jpg": {
+		"width": 640,
+		"height": 360
+	},
+	"/img/placeholders/mediastack.webp": {
+		"width": 640,
+		"height": 360
+	},
+	"/img/placeholders/minesweeper-flags.jpg": {
+		"width": 640,
+		"height": 360
+	},
+	"/img/placeholders/minesweeper-flags.webp": {
+		"width": 640,
+		"height": 360
+	},
 	"/img/placeholders/musicmeta.jpg": {
 		"width": 640,
 		"height": 360
 	},
 	"/img/placeholders/musicmeta.webp": {
+		"width": 640,
+		"height": 360
+	},
+	"/img/placeholders/object-tracking-demo.jpg": {
+		"width": 640,
+		"height": 360
+	},
+	"/img/placeholders/object-tracking-demo.webp": {
 		"width": 640,
 		"height": 360
 	},

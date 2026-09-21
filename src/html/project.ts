@@ -1,7 +1,7 @@
 import type { Project } from "../content.js";
 import { siteUrl } from "../site.js";
 import type { CardHeading } from "./index.js";
-import { cardCover, escapeHtml, page } from "./layout.js";
+import { cardClass, cardCover, escapeHtml, page } from "./layout.js";
 
 export function originLabel(origin: Project["origin"]): string {
 	return origin === "university" ? "University project" : "Personal project";
@@ -35,12 +35,12 @@ export function projectEntry(
 	heading: CardHeading = 2,
 ): string {
 	const url = siteUrl(`/projects/${project.slug}/`);
-	const cover = cardCover(project.cover, project.coverAlt, project.slug);
+	const cover = cardCover(project);
 	const description =
 		project.description !== undefined
 			? `<p class="entry-desc">${escapeHtml(project.description)}</p>`
 			: "";
-	return `<li><article class="card">${cover}<div class="card-body">
+	return `<li><article class="${cardClass(project)}">${cover}<div class="card-body">
 <h${heading} class="card-title"><a href="${url}">${escapeHtml(project.title)}</a></h${heading}>
 ${description}
 <p class="entry-meta">${facetList(project)}</p>
@@ -81,6 +81,15 @@ function projectFacts(project: Project): string {
 	}
 	return `<dl class="project-facts">${rows.join("")}</dl>`;
 }
+
+function eyebrow(project: Project): string {
+	const origin = escapeHtml(originLabel(project.origin));
+	const label = project.draft
+		? `<span class="draft-eyebrow">Draft</span>${origin}`
+		: origin;
+	return `<p class="project-eyebrow">${label}</p>`;
+}
+
 export function projectPage(project: Project): string {
 	const lede =
 		project.description !== undefined
@@ -103,7 +112,7 @@ export function projectPage(project: Project): string {
 		],
 		content: `<div class="wrap"><article class="prose project">
 <header class="project-header">
-<p class="project-eyebrow">${originLabel(project.origin)}</p>
+${eyebrow(project)}
 <h1>${escapeHtml(project.title)}</h1>
 ${lede}
 </header>
