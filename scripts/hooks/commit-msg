@@ -1,0 +1,9 @@
+#!/bin/sh
+# Reject commit messages that credit an AI assistant. Nothing leaving this
+# repository mentions Claude or Anthropic, trailers included. Wired up by
+# `make install` via core.hooksPath.
+if grep -Eiq 'claude|anthropic' "$1"; then
+	echo "commit-msg: message mentions Claude/Anthropic; remove it (see CLAUDE.md rule)" >&2
+	grep -Ein 'claude|anthropic' "$1" >&2
+	exit 1
+fi

@@ -7,8 +7,9 @@ DRAFTS ?= true
 help: ## Show targets
 	@grep -E '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | sed 's/: [^#]*## /: ## /' | sort | awk 'BEGIN {FS=": ## "} {printf "%-12s %s\n", $$1, $$2}'
 
-install: ## Install dependencies
+install: ## Install dependencies and the repo git hooks
 	npm ci
+	git config core.hooksPath scripts/hooks
 
 check: ## Canonical gate (same as CI): format-check + lint + guard + typecheck + test + images-check + build
 	$(MAKE) --no-print-directory format-check
