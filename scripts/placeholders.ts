@@ -17,11 +17,12 @@ import { accents, kmeans, pixelsOf } from "../src/placeholder/palette.js";
 /**
  * Generated cover art for pieces that ship without a cover image.
  *
- * Every published essay or project whose frontmatter has no `cover`
- * gets `static/img/placeholders/<slug>.jpg`, a fluid-ink render seeded
- * by the slug and coloured from the real covers. The file is only
- * rendered when missing, so re-runs never rewrite bytes; delete the
- * file to re-render it. `images:check` fails when one is missing or
+ * Every essay or project, draft or published, whose frontmatter has no
+ * `cover` gets `static/img/placeholders/<slug>.jpg`, a fluid-ink render
+ * seeded by the slug and coloured from the real covers. Drafts are
+ * included so preview builds (SHOW_DRAFTS) have card art too. The file
+ * is only rendered when missing, so re-runs never rewrite bytes; delete
+ * the file to re-render it. `images:check` fails when one is missing or
  * when a stale one lingers after a piece gained a cover.
  */
 const THUMB_WIDTH = 64;
@@ -29,8 +30,11 @@ const THUMB_HEIGHT = 36;
 const CLUSTERS = 6;
 const JPEG_QUALITY = 86;
 
-async function publishedPieces(): Promise<Piece[]> {
-	const [essays, projects] = await Promise.all([loadEssays(), loadProjects()]);
+async function allPieces(): Promise<Piece[]> {
+	const [essays, projects] = await Promise.all([
+		loadEssays(undefined, true),
+		loadProjects(undefined, true),
+	]);
 	return [...essays, ...projects];
 }
 
@@ -80,7 +84,7 @@ async function renderOne(slug: string, pool: string[]): Promise<void> {
 
 /** Render missing placeholders and remove stale ones. */
 export async function generatePlaceholders(): Promise<void> {
-	const pieces = await publishedPieces();
+	const pieces = await allPieces();
 	const needed = coverlessSlugs(pieces);
 	const missing = needed.filter((slug) => !existsSync(placeholderFile(slug)));
 	if (missing.length > 0) {
@@ -102,7 +106,7 @@ export async function generatePlaceholders(): Promise<void> {
 
 /** Problems with the placeholder set, one line each; empty when fine. */
 export async function checkPlaceholders(): Promise<string[]> {
-	const needed = coverlessSlugs(await publishedPieces());
+	const needed = coverlessSlugs(await allPieces());
 	const problems = needed
 		.filter((slug) => !existsSync(placeholderFile(slug)))
 		.map((slug) => `missing placeholder: ${placeholderFile(slug)} (${slug})`);

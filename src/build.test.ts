@@ -7,7 +7,9 @@ import { describe, expect, it } from "vitest";
 async function buildToTemp(): Promise<string> {
 	const root = await mkdtemp(path.join(tmpdir(), "blog-dist-"));
 	const outDir = path.join(root, "dist");
-	execFileSync("npx", ["tsx", "src/build.ts", outDir], { stdio: "pipe" });
+	// Always the production shape, whatever the developer's shell exports.
+	const { SHOW_DRAFTS: _, ...env } = process.env;
+	execFileSync("npx", ["tsx", "src/build.ts", outDir], { stdio: "pipe", env });
 	return outDir;
 }
 

@@ -142,6 +142,37 @@ describe("generateSite rss", () => {
 	});
 });
 
+describe("generateSite drafts", () => {
+	it("keeps drafts out of the feed and sitemap while still writing their pages", async () => {
+		const dir = await generate(
+			[
+				sampleEssay(),
+				sampleEssay({
+					slug: "wip",
+					title: "WIP",
+					draft: true,
+					topics: ["Only Draft"],
+				}),
+			],
+			[sampleProject({ draft: true })],
+		);
+		const rss = await readFile(path.join(dir, "rss.xml"), "utf8");
+		const sitemap = await readFile(path.join(dir, "sitemap.xml"), "utf8");
+		expect(rss).toContain("essays/on-mind/");
+		expect(rss).not.toContain("essays/wip/");
+		expect(sitemap).toContain("essays/on-mind/");
+		expect(sitemap).not.toContain("essays/wip/");
+		expect(sitemap).not.toContain("projects/connect4-lisp-web/");
+		expect(sitemap).not.toContain("topics/only-draft/");
+		await expect(
+			stat(path.join(dir, "essays/wip/index.html")),
+		).resolves.toBeTruthy();
+		await expect(
+			stat(path.join(dir, "topics/only-draft/index.html")),
+		).resolves.toBeTruthy();
+	});
+});
+
 describe("generateSite not-found page", () => {
 	it("writes a styled 404 page at the site root", async () => {
 		vi.stubEnv("BASE_PATH", "/blog");

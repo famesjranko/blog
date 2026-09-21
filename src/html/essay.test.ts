@@ -35,6 +35,17 @@ describe("essayPage", () => {
 		expect(html).not.toContain('<meta name="description"');
 	});
 
+	it("labels a draft in the header before the title", () => {
+		const html = essayPage({ ...sampleEssay(), draft: true });
+		expect(html).toContain(
+			'<header>\n<p class="draft-eyebrow">Draft</p>\n<h1>On Privacy</h1>',
+		);
+	});
+
+	it("shows no draft label on a published essay", () => {
+		expect(essayPage(sampleEssay())).not.toContain("draft-eyebrow");
+	});
+
 	it("links the shared and prose stylesheets", () => {
 		const html = essayPage(sampleEssay());
 		expect(html).toContain('<link rel="stylesheet" href="/css/main.css">');

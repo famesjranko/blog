@@ -1,5 +1,22 @@
+import { mkdtemp, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { pickFeatured } from "./content.js";
+import { loadEssays, loadProjects, pickFeatured } from "./content.js";
+
+async function writeEssayFixture(dir: string, name: string, draft: boolean) {
+	await writeFile(
+		path.join(dir, name),
+		`---\ntitle: "${name}"\ndate: 2024-01-01\ndraft: ${draft}\n---\n\nBody.\n`,
+	);
+}
+
+async function writeProjectFixture(dir: string, name: string, draft: boolean) {
+	await writeFile(
+		path.join(dir, name),
+		`---\ntitle: "${name}"\ndate: 2024-01-01\ndraft: ${draft}\norigin: personal\n---\n\nBody.\n`,
+	);
+}
 
 function item(slug: string, date: string, featured: boolean) {
 	return { slug, date: new Date(date), featured };
@@ -68,5 +85,47 @@ describe("pickFeatured fallback", () => {
 			item("middle", "2020-01-01", false),
 		];
 		expect(slugs(items)).toEqual(["newest", "middle"]);
+	});
+});
+
+describe("loadEssays draft filtering", () => {
+	it("excludes drafts by default", async () => {
+		const dir = await mkdtemp(path.join(tmpdir(), "essays-"));
+		await writeEssayFixture(dir, "published.md", false);
+		await writeEssayFixture(dir, "in-progress.md", true);
+		const essays = await loadEssays(`${dir}/*.md`);
+		expect(essays.map((e) => e.slug)).toEqual(["published"]);
+	});
+
+	it("includes drafts when includeDrafts is true", async () => {
+		const dir = await mkdtemp(path.join(tmpdir(), "essays-"));
+		await writeEssayFixture(dir, "published.md", false);
+		await writeEssayFixture(dir, "in-progress.md", true);
+		const essays = await loadEssays(`${dir}/*.md`, true);
+		expect(essays.map((e) => e.slug).sort()).toEqual([
+			"in-progress",
+			"published",
+		]);
+	});
+});
+
+describe("loadProjects draft filtering", () => {
+	it("excludes drafts by default", async () => {
+		const dir = await mkdtemp(path.join(tmpdir(), "projects-"));
+		await writeProjectFixture(dir, "published.md", false);
+		await writeProjectFixture(dir, "in-progress.md", true);
+		const projects = await loadProjects(`${dir}/*.md`);
+		expect(projects.map((p) => p.slug)).toEqual(["published"]);
+	});
+
+	it("includes drafts when includeDrafts is true", async () => {
+		const dir = await mkdtemp(path.join(tmpdir(), "projects-"));
+		await writeProjectFixture(dir, "published.md", false);
+		await writeProjectFixture(dir, "in-progress.md", true);
+		const projects = await loadProjects(`${dir}/*.md`, true);
+		expect(projects.map((p) => p.slug).sort()).toEqual([
+			"in-progress",
+			"published",
+		]);
 	});
 });

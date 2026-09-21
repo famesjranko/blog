@@ -1,3 +1,4 @@
+import type { Essay, Project } from "../content.js";
 import { imageSize, placeholderSrc, webpSrc } from "../images.js";
 import { siteUrl } from "../site.js";
 
@@ -19,13 +20,23 @@ export function escapeHtml(value: string): string {
  * path, mirroring the markdown image rule, so covers keep working
  * under BASE_PATH. Internal JPEG covers render as `<picture>` with a
  * WebP source; the original file remains the fallback `<img>`. All
- * other sources keep the plain `<img>` rendering.
+ * other sources keep the plain `<img>` rendering. A draft (only ever
+ * built under SHOW_DRAFTS) gets a badge overlaid on the art.
  */
-export function cardCover(
-	cover: string | undefined,
-	coverAlt: string | undefined,
-	slug: string,
-): string {
+export type CoverPiece = Pick<
+	Essay | Project,
+	"cover" | "coverAlt" | "slug" | "draft"
+>;
+
+export const DRAFT_BADGE = `<span class="draft-badge">Draft</span>`;
+
+/** Card class list; drafts get a modifier so the whole card reads as one. */
+export function cardClass(piece: Pick<CoverPiece, "draft">): string {
+	return piece.draft ? "card card-draft" : "card";
+}
+
+export function cardCover(piece: CoverPiece): string {
+	const { cover, coverAlt, slug } = piece;
 	const src = cover ?? placeholderSrc(slug);
 	const alt = cover === undefined ? "" : (coverAlt ?? "");
 	const url = src.startsWith("/") && !src.startsWith("//") ? siteUrl(src) : src;
@@ -34,11 +45,12 @@ export function cardCover(
 		size === undefined ? "" : ` width="${size.width}" height="${size.height}"`;
 	const img = `<img src="${escapeHtml(url)}" alt="${escapeHtml(alt)}"${dimensions} loading="lazy" decoding="async">`;
 	const webp = webpSrc(src);
-	if (webp === undefined) {
-		return `<div class="card-media">${img}</div>`;
-	}
-	const webpUrl = siteUrl(webp);
-	return `<div class="card-media"><picture><source type="image/webp" srcset="${escapeHtml(webpUrl)}">${img}</picture></div>`;
+	const art =
+		webp === undefined
+			? img
+			: `<picture><source type="image/webp" srcset="${escapeHtml(siteUrl(webp))}">${img}</picture>`;
+	const badge = piece.draft ? DRAFT_BADGE : "";
+	return `<div class="card-media">${art}${badge}</div>`;
 }
 
 export function header(): string {
