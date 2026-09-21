@@ -1,6 +1,9 @@
 """Serve dist/ the way GitHub Pages does: unknown paths get 404.html with a 404 status.
 
 Usage: python3 scripts/preview-server.py PORT [BIND]
+
+BIND defaults to every interface, as `python3 -m http.server` did, so LAN preview
+works; pass 127.0.0.1 to keep the server local.
 """
 
 import sys
@@ -27,7 +30,7 @@ class PagesHandler(SimpleHTTPRequestHandler):
 
 def main() -> None:
     port = int(sys.argv[1])
-    bind = sys.argv[2] if len(sys.argv) > 2 else "127.0.0.1"
+    bind = sys.argv[2] if len(sys.argv) > 2 else "0.0.0.0"
     handler = partial(PagesHandler, directory=str(DIST))
     ThreadingHTTPServer((bind, port), handler).serve_forever()
 

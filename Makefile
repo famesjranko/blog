@@ -57,7 +57,7 @@ preview-wsl: ## Build and serve dist/ on all WSL interfaces for LAN access (PORT
 	SHOW_DRAFTS=$(DRAFTS) npm run build
 	@powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$$(wslpath -w scripts/preview-wsl.ps1)" -Port $(PORT)
 	@echo "Preview at http://localhost:$(PORT)/ and on the LAN (DRAFTS=$(DRAFTS))"
-	python3 scripts/preview-server.py $(PORT) 0.0.0.0
+	python3 scripts/preview-server.py $(PORT)
 
 clean: ## Remove build output
 	rm -rf dist
