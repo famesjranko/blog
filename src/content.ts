@@ -62,11 +62,12 @@ export async function loadEssay(filePath: string): Promise<Essay> {
 
 export async function loadEssays(
 	pattern = "content/essays/**/*.md",
+	includeDrafts = false,
 ): Promise<Essay[]> {
 	const files = await glob(pattern);
 	const essays = await Promise.all(files.map((f) => loadEssay(f)));
 	return essays
-		.filter((e) => !e.draft)
+		.filter((e) => includeDrafts || !e.draft)
 		.sort((a, b) => b.date.getTime() - a.date.getTime());
 }
 
@@ -85,11 +86,12 @@ export async function loadProject(filePath: string): Promise<Project> {
 
 export async function loadProjects(
 	pattern = "content/projects/**/*.md",
+	includeDrafts = false,
 ): Promise<Project[]> {
 	const files = await glob(pattern);
 	const projects = await Promise.all(files.map((f) => loadProject(f)));
 	return projects
-		.filter((p) => !p.draft)
+		.filter((p) => includeDrafts || !p.draft)
 		.sort((a, b) => b.date.getTime() - a.date.getTime());
 }
 

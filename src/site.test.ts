@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { absoluteSiteUrl, basePath, siteUrl } from "./site.js";
+import { absoluteSiteUrl, basePath, showDrafts, siteUrl } from "./site.js";
 
 afterEach(() => {
 	vi.unstubAllEnvs();
@@ -25,6 +25,21 @@ describe("siteUrl", () => {
 		vi.stubEnv("BASE_PATH", "/personal_blog");
 		expect(siteUrl("/essays/")).toBe("/personal_blog/essays/");
 		expect(siteUrl("/styles.css")).toBe("/personal_blog/styles.css");
+	});
+});
+
+describe("showDrafts", () => {
+	it("is false by default (CI build)", () => {
+		expect(showDrafts()).toBe(false);
+	});
+
+	it("is true only when SHOW_DRAFTS is exactly 'true', case-insensitively", () => {
+		vi.stubEnv("SHOW_DRAFTS", "true");
+		expect(showDrafts()).toBe(true);
+		vi.stubEnv("SHOW_DRAFTS", "TRUE");
+		expect(showDrafts()).toBe(true);
+		vi.stubEnv("SHOW_DRAFTS", "1");
+		expect(showDrafts()).toBe(false);
 	});
 });
 

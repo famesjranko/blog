@@ -17,6 +17,16 @@ export function basePath(): string {
 	return raw.startsWith("/") ? raw : `/${raw}`;
 }
 
+/**
+ * Whether draft essays and projects should be included in the build.
+ * Set via the `SHOW_DRAFTS` environment variable; used by `make preview`
+ * and `make preview-wsl` so drafts are visible locally but never in the
+ * CI build that ships to GitHub Pages.
+ */
+export function showDrafts(): boolean {
+	return (readEnv("SHOW_DRAFTS") ?? "").trim().toLowerCase() === "true";
+}
+
 /** Prefix an absolute site path with the base path. */
 export function siteUrl(path: string): string {
 	const p = path.startsWith("/") ? path : `/${path}`;

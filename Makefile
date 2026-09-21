@@ -1,6 +1,8 @@
 .PHONY: install check typecheck lint guard format format-check test build images images-check preview preview-wsl clean help
 
 PORT ?= 8000
+# Preview builds include draft pieces; DRAFTS=false previews the published shape.
+DRAFTS ?= true
 
 help: ## Show targets
 	@grep -E '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | sed 's/: [^#]*## /: ## /' | sort | awk 'BEGIN {FS=": ## "} {printf "%-12s %s\n", $$1, $$2}'
@@ -45,13 +47,15 @@ images: ## Regenerate WebP sidecars for JPEGs under static/img
 images-check: ## Fail when a JPEG lacks its required WebP sidecar (no conversion)
 	npm run images:check
 
-preview: build ## Serve dist/ locally at http://localhost:8000 (PORT=8001 to override)
-	@echo "Preview at http://localhost:$(PORT)/"
+preview: ## Build and serve dist/ locally at http://localhost:8000 (PORT=8001, DRAFTS=false to override)
+	SHOW_DRAFTS=$(DRAFTS) npm run build
+	@echo "Preview at http://localhost:$(PORT)/ (DRAFTS=$(DRAFTS))"
 	python3 -m http.server $(PORT) -d dist
 
-preview-wsl: build ## Serve dist/ on all WSL interfaces for LAN access (PORT=8001 to override)
+preview-wsl: ## Build and serve dist/ on all WSL interfaces for LAN access (PORT=8001, DRAFTS=false to override)
+	SHOW_DRAFTS=$(DRAFTS) npm run build
 	@powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$$(wslpath -w scripts/preview-wsl.ps1)" -Port $(PORT)
-	@echo "Preview on all interfaces at port $(PORT)"
+	@echo "Preview on all interfaces at port $(PORT) (DRAFTS=$(DRAFTS))"
 	python3 -m http.server $(PORT) --bind 0.0.0.0 -d dist
 
 clean: ## Remove build output
