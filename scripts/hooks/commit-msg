@@ -1,9 +1,19 @@
 #!/bin/sh
 # Reject commit messages that credit an AI assistant. Nothing leaving this
-# repository mentions Claude or Anthropic, trailers included. Wired up by
-# `make install` via core.hooksPath.
-if grep -Eiq 'claude|anthropic' "$1"; then
-	echo "commit-msg: message mentions Claude/Anthropic; remove it (see CLAUDE.md rule)" >&2
-	grep -Ein 'claude|anthropic' "$1" >&2
+# repository names the assistant or its vendor, trailers included. Wired
+# up by `make install` via core.hooksPath.
+#
+# The patterns are the actual tells plus the bare words. A genuine
+# non-assistant reference (Claude Shannon, the anthropic principle) is
+# rare; for one, commit with --no-verify deliberately.
+#
+# Keep in sync with ~/.claude/hooks/publish-guard.sh, which applies the
+# same check to gh pr/issue bodies that git never sees.
+PATTERN='co-authored-by:.*(claude|anthropic)|noreply@anthropic\.com|anthropic\.com|claude\.(ai|com)|claude[ -]?(code|opus|sonnet|haiku|fable)|generated with.*claude|\bclaude\b|\banthropic\b'
+
+# Ignore the commented-out template lines git appends below the message.
+if sed '/^#/d' "$1" | grep -Eiq "$PATTERN"; then
+	echo "commit-msg: message names the assistant or its vendor; remove it (CLAUDE.md rule)" >&2
+	sed '/^#/d' "$1" | grep -Ein "$PATTERN" >&2
 	exit 1
 fi
