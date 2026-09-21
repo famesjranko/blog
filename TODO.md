@@ -2,10 +2,10 @@
 
 ## Projects to add
 
-- [ ] MediaStack — https://github.com/famesjranko/MediaStack
-- [ ] esp32-s3-internet-monitor — https://github.com/famesjranko/esp32-s3-internet-monitor
-- [ ] minesweeper-flags — https://github.com/famesjranko/minesweeper-flags
-- [ ] object-tracking-demo — https://github.com/famesjranko/object-tracking-demo
+- [x] MediaStack — https://github.com/famesjranko/MediaStack (draft at `content/projects/mediastack.md`, needs review + cover art before publishing)
+- [x] esp32-s3-internet-monitor — https://github.com/famesjranko/esp32-s3-internet-monitor (draft at `content/projects/esp32-s3-internet-monitor.md`, needs review + cover art before publishing)
+- [x] minesweeper-flags — https://github.com/famesjranko/minesweeper-flags (draft at `content/projects/minesweeper-flags.md`, needs review + cover art before publishing)
+- [x] object-tracking-demo — https://github.com/famesjranko/object-tracking-demo (draft at `content/projects/object-tracking-demo.md`, needs review + cover art before publishing)
 
 ## New categories
 
@@ -13,6 +13,7 @@
   - New top-level category + page (own content dir, e.g. `content/<name>/`), like `essays`/`projects`.
   - A meta/status tag (e.g. `status: active`) usable on any article in any category, with a generated listing page (e.g. "Active" page) that pulls tagged articles regardless of category. Cleaner — doesn't force duplicate content dirs, works across essays/projects/future categories.
   - Need a name either way — candidates: "in-progress", "underway", "wip", "in-flight", "ongoing", "active", "current", "now", "building", "in-the-works".
+- [ ] Add 'About' page for a biography
 
 ## Light-mode SVG contrast
 
