@@ -76,8 +76,10 @@
 		text-underline-offset: 0.15em;
 	}
 
-	a:hover {
-		text-decoration-thickness: 2px;
+	@media (hover: hover) {
+		a:hover {
+			text-decoration-thickness: 2px;
+		}
 	}
 
 	:focus-visible {
@@ -167,10 +169,12 @@
 			box-shadow 160ms ease;
 	}
 
-	.card:hover {
-		transform: translateY(-2px);
-		border-color: var(--color-muted);
-		box-shadow: 0 12px 32px rgb(0 0 0 / 0.08);
+	@media (hover: hover) {
+		.card:hover {
+			transform: translateY(-2px);
+			border-color: var(--color-muted);
+			box-shadow: 0 12px 32px rgb(0 0 0 / 0.08);
+		}
 	}
 
 	.card:has(.card-title a:focus-visible) {
@@ -240,9 +244,11 @@
 		text-decoration: none;
 	}
 
-	.card-title a:hover {
-		text-decoration: underline;
-		text-underline-offset: 0.2em;
+	@media (hover: hover) {
+		.card-title a:hover {
+			text-decoration: underline;
+			text-underline-offset: 0.2em;
+		}
 	}
 
 	.card-title a::after {
@@ -290,9 +296,11 @@
 		font-size: 0.75rem;
 	}
 
-	.entry-topics a:hover {
-		color: var(--color-text);
-		border-color: var(--color-muted);
+	@media (hover: hover) {
+		.entry-topics a:hover {
+			color: var(--color-text);
+			border-color: var(--color-muted);
+		}
 	}
 }
 
@@ -328,9 +336,11 @@
 		height: 1.1rem;
 	}
 
-	.footer-link:hover {
-		color: var(--color-text);
-		text-decoration: underline;
+	@media (hover: hover) {
+		.footer-link:hover {
+			color: var(--color-text);
+			text-decoration: underline;
+		}
 	}
 }
 
@@ -346,9 +356,11 @@
 			transition: none;
 		}
 
-		.card:hover {
-			transform: none;
-			box-shadow: none;
+		@media (hover: hover) {
+			.card:hover {
+				transform: none;
+				box-shadow: none;
+			}
 		}
 	}
 }

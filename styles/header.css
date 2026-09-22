@@ -28,9 +28,11 @@
 		text-decoration: none;
 	}
 
-	.desktop-nav a:hover {
-		color: var(--color-text);
-		text-decoration: underline;
+	@media (hover: hover) {
+		.desktop-nav a:hover {
+			color: var(--color-text);
+			text-decoration: underline;
+		}
 	}
 
 	.header-actions {
@@ -58,13 +60,19 @@
 			transform 160ms ease;
 	}
 
-	.theme-toggle:hover,
 	.theme-toggle:focus-visible,
-	.menu-toggle:hover,
 	.menu-toggle:focus-visible,
 	.menu-toggle:has(+ #mobile-nav:popover-open) {
 		border-color: var(--color-muted);
 		background: var(--color-wash-1);
+	}
+
+	@media (hover: hover) {
+		.theme-toggle:hover,
+		.menu-toggle:hover {
+			border-color: var(--color-muted);
+			background: var(--color-wash-1);
+		}
 	}
 
 	.theme-toggle:active,
@@ -142,16 +150,26 @@
 		transition: transform 160ms ease;
 	}
 
-	#mobile-nav a:hover,
 	#mobile-nav a:focus-visible {
 		background: var(--color-wash-1);
 		color: var(--color-accent);
 		text-decoration: none;
 	}
 
-	#mobile-nav a:hover::after,
 	#mobile-nav a:focus-visible::after {
 		transform: translateX(0.2rem);
+	}
+
+	@media (hover: hover) {
+		#mobile-nav a:hover {
+			background: var(--color-wash-1);
+			color: var(--color-accent);
+			text-decoration: none;
+		}
+
+		#mobile-nav a:hover::after {
+			transform: translateX(0.2rem);
+		}
 	}
 
 	#mobile-nav::backdrop {
