@@ -14,6 +14,15 @@ async function buildToTemp(): Promise<string> {
 }
 
 describe("build output", () => {
+	it("emits site-wide Cloudflare security headers", async () => {
+		const outDir = await buildToTemp();
+		const headers = await readFile(path.join(outDir, "_headers"), "utf8");
+
+		expect(headers).toBe(
+			"/*\n  X-Frame-Options: DENY\n  Permissions-Policy: camera=(), microphone=(), geolocation=()\n",
+		);
+	}, 30000);
+
 	it("ships no three.js bundle and no module that imports one", async () => {
 		const outDir = await buildToTemp();
 		const files = await readdir(path.join(outDir, "js"));
