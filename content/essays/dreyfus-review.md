@@ -4,7 +4,7 @@ description: "Dreyfus on skill, mastery, and world transformation, and where his
 date: 2020-10-10T17:39:34+11:00
 cover: /img/essays/dreyfus-review/cover.jpg
 coverAlt: "transformations"
-draft: true
+draft: false
 featured: true
 toc: false
 type:
@@ -58,6 +58,8 @@ In sum, Dreyfus' take on Heidegger is interesting: on one level he is very consi
 
 ## References
 
+<div class="references">
+
 Dreyfus, H 2004, ‘What Could Be More Intelligible Than Everyday Intelligibility? Reinterpreting Division I of Being and Time in the Light of Division II’, _Bulletin of Science, Technology & Society_, vol. 24, no. 3, pp. 265-274
 
 Dreyfus, H 2005, ‘What Could Be More Intelligible Than Everyday Intelligibility? Reinterpreting Division I of Being and Time in the Light of Division II’, in Polt, R (ed.), _Heidegger's Being and Time: Critical Essays_, Rowman & Littlefield Publishers, Blue Ridge Summit, pp. 134-146
@@ -66,4 +68,6 @@ Heidegger, M 1962, _Being and time_, trans. Macquarrie, J, & Robinson, E, Malden
 
 Keller, P 1999, _Husserl and Heidegger on Human Experience_, Cambridge UP, Cambridge.
 
-Korab-Karpowicz, W. J 2020, 'Martin Heidegger', _The Internet Encyclopedia of Philosophy_, viewed 15 September 2020, <https://iep.utm.edu/heidegge/>.
+Korab-Karpowicz, W. J 2020, '[Martin Heidegger](https://iep.utm.edu/heidegge/)', _The Internet Encyclopedia of Philosophy_, viewed 15 September 2020.
+
+</div>
