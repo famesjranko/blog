@@ -75,10 +75,12 @@
 		text-decoration: none;
 	}
 
-	.hero-cta a:hover {
-		background: var(--color-text);
-		color: var(--color-bg);
-		text-decoration: none;
+	@media (hover: hover) {
+		.hero-cta a:hover {
+			background: var(--color-text);
+			color: var(--color-bg);
+			text-decoration: none;
+		}
 	}
 
 	/* Abstract atmospheric field. Static gradients alone must look
