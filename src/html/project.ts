@@ -27,7 +27,7 @@ function repoLink(repo: string | undefined): string {
 	if (repo === undefined) {
 		return "";
 	}
-	return `<a href="${escapeHtml(repo)}">Repository</a>`;
+	return `<a href="${escapeHtml(repo)}" target="_blank" rel="noopener noreferrer">Repository</a>`;
 }
 
 export function projectEntry(

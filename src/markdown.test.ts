@@ -140,6 +140,24 @@ describe("external links", () => {
 		);
 	});
 
+	it("opens external raw HTML links in a new tab safely", () => {
+		const html = renderMarkdown(
+			'<a class="citation" href="https://example.com">Example</a>',
+		);
+		expect(html).toContain(
+			'<a class="citation" href="https://example.com" target="_blank" rel="noopener noreferrer">Example</a>',
+		);
+	});
+
+	it("keeps existing raw HTML rel values while adding link protections", () => {
+		const html = renderMarkdown(
+			'<a href="https://example.com" rel="nofollow">Example</a>',
+		);
+		expect(html).toContain(
+			'<a href="https://example.com" rel="nofollow noopener noreferrer" target="_blank">Example</a>',
+		);
+	});
+
 	it("keeps internal links in the current tab", () => {
 		const html = renderMarkdown("[essay](/essays/something/)");
 		expect(html).toContain('<a href="/essays/something/">');

@@ -1,6 +1,7 @@
 import MarkdownIt from "markdown-it";
 import { imageSize, webpSrc } from "./images.js";
 import { markFigureParagraphs } from "./markdownFigures.js";
+import { isExternalLink, openExternalHtmlLinks } from "./markdownLinks.js";
 import { siteUrl } from "./site.js";
 import { inlineSvg } from "./svgInline.js";
 
@@ -16,14 +17,6 @@ function internalUrl(path: string): string {
 		return siteUrl(path);
 	}
 	return path;
-}
-
-function isExternalLink(href: string): boolean {
-	return (
-		href.startsWith("http://") ||
-		href.startsWith("https://") ||
-		href.startsWith("//")
-	);
 }
 
 const ATTRIBUTION_PATTERN = /^\([^()]*\)\.?$/;
@@ -134,6 +127,9 @@ function asFigure(
 
 type ImageRenderRule = NonNullable<MarkdownIt["renderer"]["rules"]["image"]>;
 type LinkRenderRule = NonNullable<MarkdownIt["renderer"]["rules"]["link_open"]>;
+type HtmlRenderRule = NonNullable<
+	MarkdownIt["renderer"]["rules"]["html_block"]
+>;
 type ParagraphRenderRule = NonNullable<
 	MarkdownIt["renderer"]["rules"]["paragraph_open"]
 >;
@@ -196,6 +192,10 @@ function renderLink(md: MarkdownIt): LinkRenderRule {
 	};
 }
 
+function renderHtml(): HtmlRenderRule {
+	return (tokens, idx) => openExternalHtmlLinks(tokens[idx]?.content ?? "");
+}
+
 function buildRenderer(): MarkdownIt {
 	const md = new MarkdownIt({
 		html: true,
@@ -229,7 +229,11 @@ function buildRenderer(): MarkdownIt {
 			return `<figure>${body}<figcaption>${caption}</figcaption></figure>`;
 		};
 	}
-	Object.assign(md.renderer.rules, { link_open: renderLink(md) });
+	Object.assign(md.renderer.rules, {
+		link_open: renderLink(md),
+		html_block: renderHtml(),
+		html_inline: renderHtml(),
+	});
 	return md;
 }
 

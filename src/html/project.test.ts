@@ -210,7 +210,9 @@ describe("projectPage sidebar", () => {
 
 	it("links the repository when present", () => {
 		const html = projectPage(sampleProject());
-		expect(html).toContain("https://github.com/famesjranko/Connect4-Lisp-Web");
+		expect(html).toContain(
+			'<a href="https://github.com/famesjranko/Connect4-Lisp-Web" target="_blank" rel="noopener noreferrer">Repository</a>',
+		);
 	});
 
 	it("omits the repository link when absent", () => {
