@@ -90,4 +90,9 @@ The site is intended for:
 https://famesjranko.github.io/blog/
 ```
 
-Deployment is currently manual.
+Deployment is manual. Run the **Deploy blog to shared GitHub Pages** workflow
+and type `deploy` to confirm it. The workflow builds the site with
+`BASE_PATH=/blog`, then synchronizes only the generated files to `blog/` in
+the public `famesjranko.github.io` repository. It requires a repository
+deploy key stored as the `PAGES_DEPLOY_KEY` Actions secret; the root site and
+`ipcamera/` are left untouched.
