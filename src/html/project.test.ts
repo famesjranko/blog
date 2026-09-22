@@ -179,12 +179,15 @@ describe("projectPage header", () => {
 		expect(html).toContain('<meta name="description"');
 	});
 
-	it("links the shared and prose stylesheets", () => {
+	it("links shared, figure, project, and diagram styles", () => {
 		const html = projectPage(sampleProject());
 		expect(html).toContain('<link rel="stylesheet" href="/css/main.css">');
 		expect(html).toContain('<link rel="stylesheet" href="/css/header.css">');
 		expect(html).toContain('<link rel="stylesheet" href="/css/prose.css">');
+		expect(html).toContain('<link rel="stylesheet" href="/css/figures.css">');
+		expect(html).toContain('<link rel="stylesheet" href="/css/project.css">');
 		expect(html).toContain('<link rel="stylesheet" href="/css/diagrams.css">');
+		expect(html).not.toContain("/css/essay.css");
 	});
 });
 

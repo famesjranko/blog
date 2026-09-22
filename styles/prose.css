@@ -19,6 +19,7 @@
 	}
 
 	.prose p {
+		margin-block: 1.15em;
 		line-height: 1.78;
 	}
 
@@ -58,6 +59,10 @@
 	.prose li {
 		margin-block: 0.4em;
 		line-height: 1.78;
+	}
+
+	.prose li > p {
+		margin-block: 0.4rem;
 	}
 
 	.prose li::marker {
@@ -126,75 +131,11 @@
 		text-align: right;
 	}
 
-	.prose img {
-		max-width: 100%;
-		height: auto;
-	}
-
 	.prose pre {
 		overflow-x: auto;
 		padding: 1rem 1.25rem;
 		border: 1px solid var(--color-border);
 		font-size: 0.85rem;
-	}
-
-	.prose figure {
-		margin-block: 2rem;
-		text-align: center;
-	}
-
-	.prose figure picture,
-	.prose figure img,
-	.prose figure svg {
-		display: block;
-		max-width: 100%;
-		height: auto;
-		margin-inline: auto;
-	}
-
-	.prose figure figcaption {
-		margin-top: 0.75rem;
-		color: var(--color-muted);
-		text-align: left;
-	}
-
-	.prose .diagram-pair {
-		display: grid;
-		grid-template-columns: repeat(2, minmax(0, 1fr));
-		gap: 1.5rem;
-		margin-block: 1.5em;
-	}
-
-	/* Drop the UA's 40px inline figure margin too, or each board loses
-	80px of its column. */
-	.prose .diagram-pair figure {
-		min-width: 0;
-		margin: 0;
-	}
-
-	.prose .diagram-pair figcaption {
-		font-size: 0.8rem;
-	}
-
-	.prose.project {
-		max-width: none;
-	}
-
-	.project-header {
-		max-width: var(--prose-width);
-	}
-
-	.project-eyebrow {
-		margin: 0 0 0.9rem;
-		color: var(--color-muted);
-		font-family: var(--font-ui);
-		font-size: 0.82rem;
-		letter-spacing: 0.06em;
-		text-transform: uppercase;
-	}
-
-	.project-lede {
-		font-size: 1.05rem;
 	}
 
 	/* Preview-only: drafts are never built for the published site. */
@@ -209,192 +150,5 @@
 		font-size: 0.72rem;
 		letter-spacing: 0.08em;
 		text-transform: uppercase;
-	}
-
-	.project-eyebrow .draft-eyebrow {
-		margin: 0 0.5rem 0 0;
-	}
-
-	.project-grid {
-		display: grid;
-		gap: 2rem;
-	}
-
-	.project-side {
-		display: grid;
-		gap: 0.7rem;
-		align-content: start;
-		border-top: 1px solid var(--color-border);
-		padding-top: 1rem;
-		font-family: var(--font-ui);
-		font-size: 0.88rem;
-	}
-
-	.project-facts {
-		margin: 0;
-		display: grid;
-		gap: 0.7rem;
-	}
-
-	.project-fact {
-		display: grid;
-		gap: 0.3rem;
-	}
-
-	.project-fact dt {
-		color: var(--color-muted);
-		font-size: 0.76rem;
-		letter-spacing: 0.05em;
-		text-transform: uppercase;
-	}
-
-	.project-fact dd {
-		margin: 0;
-		min-width: 0;
-	}
-
-	.project-main {
-		max-width: var(--prose-width);
-		min-width: 0;
-	}
-
-	.prose.essay > h2 {
-		margin: 4rem 0 1.25rem;
-		padding-top: 1.25rem;
-		border-top: 1px solid var(--color-border);
-		font-size: 1.65rem;
-		font-weight: 650;
-	}
-
-	.prose.essay > h3 {
-		margin-block: 3rem 1rem;
-		color: var(--color-text);
-		font-size: 1.3rem;
-		font-weight: 700;
-	}
-	.prose.essay p {
-		margin-block: 1.15em;
-	}
-
-	.prose.essay li + li {
-		margin-top: 0.4rem;
-	}
-
-	.prose.essay li > p {
-		margin-block: 0.4rem;
-	}
-
-	.prose.essay ol ol {
-		list-style-type: lower-alpha;
-	}
-
-	.prose.essay ol ol ol {
-		list-style-type: lower-roman;
-	}
-
-	.prose.essay .editorial-note {
-		margin-block: 2rem;
-		padding: 1rem 1.25rem;
-		border-left: 2px solid var(--color-border);
-		background: color-mix(in srgb, var(--color-text) 4%, transparent);
-	}
-
-	.prose.essay .editorial-note {
-		border-color: var(--color-accent);
-	}
-
-	.prose.essay .editorial-note p,
-	.prose.essay .method p {
-		margin-block: 0.5rem;
-	}
-
-	.prose.essay .method {
-		margin-block: 1.75rem;
-		padding: 0.25rem 0 0.25rem 1.25rem;
-		border-left: 2px solid
-			color-mix(in srgb, var(--color-accent) 45%, transparent);
-	}
-
-	.prose.essay .method ol {
-		margin-block: 0.75rem;
-	}
-
-	.prose.essay .substitutions {
-		color: var(--color-muted);
-		font-family: var(--font-ui);
-		font-size: 0.9em;
-	}
-
-	.prose.essay .maxims {
-		display: grid;
-		gap: 0.75rem;
-		margin: 1.5rem 0 2rem;
-	}
-
-	.prose.essay .maxims > div {
-		display: grid;
-		grid-template-columns: 2.5rem minmax(0, 1fr);
-		gap: 0.5rem;
-		align-items: baseline;
-	}
-
-	.prose.essay .maxims dt {
-		color: var(--color-muted);
-		font-family: var(--font-ui);
-		font-weight: 600;
-	}
-
-	.prose.essay .maxims dd {
-		margin: 0;
-	}
-
-	.prose.essay .table-scroll {
-		overflow-x: auto;
-		margin-block: 1.5em;
-	}
-
-	.prose.essay .table-scroll table {
-		min-width: 34rem;
-		margin: 0;
-	}
-
-	.prose.essay .references {
-		font-family: var(--font-ui);
-		font-size: 0.9em;
-	}
-
-	.prose.essay .references p {
-		margin-block: 0.8rem;
-		padding-left: 1.5rem;
-		text-indent: -1.5rem;
-		overflow-wrap: anywhere;
-	}
-
-	@media (min-width: 52rem) {
-		.project-grid {
-			grid-template-columns: minmax(0, 1fr) 15rem;
-		}
-
-		.project-main {
-			grid-column: 1;
-			grid-row: 1;
-		}
-
-		.project-side {
-			grid-column: 2;
-			position: sticky;
-			top: 1.5rem;
-			align-self: start;
-			border-top: 0;
-			border-left: 1px solid var(--color-border);
-			padding-top: 0;
-			padding-left: 1.4rem;
-		}
-	}
-
-	@media (max-width: 40rem) {
-		.prose .diagram-pair {
-			grid-template-columns: 1fr;
-		}
 	}
 }

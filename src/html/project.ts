@@ -111,6 +111,8 @@ export function projectPage(project: Project): string {
 			siteUrl("/css/main.css"),
 			siteUrl("/css/header.css"),
 			siteUrl("/css/prose.css"),
+			siteUrl("/css/figures.css"),
+			siteUrl("/css/project.css"),
 			siteUrl("/css/diagrams.css"),
 		],
 		content: `<div class="wrap"><article class="prose project">

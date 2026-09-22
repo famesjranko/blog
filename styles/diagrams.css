@@ -1,7 +1,7 @@
 /* Diagrams: inline SVGs tagged class="diagram" carry geometry and
 semantic classes only; every colour is a site token, so they follow the
-theme toggle. Generic roles first, then per-drawing semantics. The layer
-sits beside prose so figure sizing in prose.css still applies. */
+theme toggle. Generic roles first, then per-drawing semantics. Figure sizing
+is supplied separately by figures.css. */
 @layer prose {
 	.prose .diagram .heading,
 	.prose .diagram .label,

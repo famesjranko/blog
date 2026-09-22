@@ -17,6 +17,8 @@ export function essayPage(essay: Essay): string {
 			siteUrl("/css/main.css"),
 			siteUrl("/css/header.css"),
 			siteUrl("/css/prose.css"),
+			siteUrl("/css/figures.css"),
+			siteUrl("/css/essay.css"),
 			siteUrl("/css/diagrams.css"),
 		],
 		content: `<div class="wrap"><article class="prose essay">

@@ -5,6 +5,9 @@ import path from "node:path";
 const STYLES = [
 	"main.css",
 	"prose.css",
+	"figures.css",
+	"essay.css",
+	"project.css",
 	"diagrams.css",
 	"hero.css",
 	"header.css",

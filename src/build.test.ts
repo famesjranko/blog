@@ -37,6 +37,10 @@ describe("build output", () => {
 				"main.css",
 				"header.css",
 				"prose.css",
+				"figures.css",
+				"essay.css",
+				"project.css",
+				"diagrams.css",
 				"hero.css",
 			]),
 		);

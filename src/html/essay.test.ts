@@ -46,11 +46,14 @@ describe("essayPage", () => {
 		expect(essayPage(sampleEssay())).not.toContain("draft-eyebrow");
 	});
 
-	it("links the shared and prose stylesheets", () => {
+	it("links shared, figure, essay, and diagram styles", () => {
 		const html = essayPage(sampleEssay());
 		expect(html).toContain('<link rel="stylesheet" href="/css/main.css">');
 		expect(html).toContain('<link rel="stylesheet" href="/css/header.css">');
 		expect(html).toContain('<link rel="stylesheet" href="/css/prose.css">');
+		expect(html).toContain('<link rel="stylesheet" href="/css/figures.css">');
+		expect(html).toContain('<link rel="stylesheet" href="/css/essay.css">');
 		expect(html).toContain('<link rel="stylesheet" href="/css/diagrams.css">');
+		expect(html).not.toContain("/css/project.css");
 	});
 });

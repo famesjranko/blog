@@ -4,7 +4,8 @@ import { describe, expect, it } from "vitest";
 
 // The diagram contract: an SVG opting in with class="diagram" is inlined
 // at build time and takes every colour from the site palette via
-// styles/prose.css, so it must carry no presentation of its own, and it
+// styles/diagrams.css, while its surrounding layout comes from figures.css.
+// It must carry no presentation of its own, and it
 // owns its accessible name because the markdown alt is dropped.
 const CONTENT_DIAGRAMS = [
 	"static/img/essays/dretske-closure/euler-diagram.svg",
