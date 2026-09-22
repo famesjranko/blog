@@ -88,6 +88,45 @@ describe("feed discovery", () => {
 	});
 });
 
+describe("social metadata", () => {
+	it("uses the public domain and a large image card for an article", () => {
+		const html = page({
+			title: "On Mind",
+			content: "",
+			description: "A short description.",
+			canonicalPath: "/essays/on-mind/",
+			socialImage: "/img/essays/on-mind/cover.jpg",
+			socialImageAlt: "A cover image.",
+			socialType: "article",
+		});
+		expect(html).toContain(
+			'<link rel="canonical" href="https://andrewjmcdonald.com/essays/on-mind/">',
+		);
+		expect(html).toContain(
+			'<meta property="og:image" content="https://andrewjmcdonald.com/img/essays/on-mind/cover.jpg">',
+		);
+		expect(html).toContain('<meta property="og:type" content="article">');
+		expect(html).toContain(
+			'<meta name="twitter:card" content="summary_large_image">',
+		);
+	});
+
+	it("does not derive canonical URLs from a fallback base path", () => {
+		vi.stubEnv("BASE_PATH", "/blog");
+		try {
+			const html = page({
+				title: "Essays",
+				content: "",
+				canonicalPath: "/essays/",
+			});
+			expect(html).toContain("https://andrewjmcdonald.com/essays/");
+			expect(html).not.toContain("andrewjmcdonald.com/blog/");
+		} finally {
+			vi.unstubAllEnvs();
+		}
+	});
+});
+
 describe("cardCover dimensions", () => {
 	it("sizes a shipped cover image", () => {
 		const html = cardCover(

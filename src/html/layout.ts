@@ -1,6 +1,6 @@
 import type { Essay, Project } from "../content.js";
 import { imageSize, placeholderSrc, webpSrc } from "../images.js";
-import { siteUrl } from "../site.js";
+import { canonicalSiteUrl, siteUrl } from "../site.js";
 
 export const SITE_NAME = "Andrew J. McDonald";
 
@@ -36,8 +36,8 @@ export function cardClass(piece: Pick<CoverPiece, "draft">): string {
 }
 
 export function cardCover(piece: CoverPiece): string {
-	const { cover, coverAlt, slug } = piece;
-	const src = cover ?? placeholderSrc(slug);
+	const { cover, coverAlt } = piece;
+	const src = coverSrc(piece);
 	const alt = cover === undefined ? "" : (coverAlt ?? "");
 	const url = src.startsWith("/") && !src.startsWith("//") ? siteUrl(src) : src;
 	const size = imageSize(src);
@@ -51,6 +51,11 @@ export function cardCover(piece: CoverPiece): string {
 			: `<picture><source type="image/webp" srcset="${escapeHtml(siteUrl(webp))}">${img}</picture>`;
 	const badge = piece.draft ? DRAFT_BADGE : "";
 	return `<div class="card-media">${art}${badge}</div>`;
+}
+
+/** The image source used by cards and social previews for a piece. */
+export function coverSrc(piece: Pick<CoverPiece, "cover" | "slug">): string {
+	return piece.cover ?? placeholderSrc(piece.slug);
 }
 
 export function header(): string {
@@ -90,6 +95,28 @@ export interface PageScript {
 	type: "classic" | "module";
 }
 
+interface PageOptions {
+	title: string;
+	content: string;
+	description?: string;
+	canonicalPath?: string;
+	socialImage?: string;
+	socialImageAlt?: string;
+	socialType?: "article" | "website";
+	scripts?: Array<string | PageScript>;
+	styles?: string[];
+	skipTo?: string;
+}
+
+interface SocialMetadataOptions {
+	title: string;
+	description: string | undefined;
+	canonicalPath: string | undefined;
+	socialImage: string | undefined;
+	socialImageAlt: string | undefined;
+	socialType: "article" | "website" | undefined;
+}
+
 function renderScript(script: string | PageScript): string {
 	const src = typeof script === "string" ? script : script.src;
 	const moduleScript = typeof script !== "string" && script.type === "module";
@@ -106,6 +133,35 @@ function renderScript(script: string | PageScript): string {
 const THEME_BOOT_SCRIPT =
 	'<script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark"){document.documentElement.dataset.theme=t}}catch(e){}</script>';
 
+function socialImageUrl(src: string): string {
+	return src.startsWith("/") ? canonicalSiteUrl(src) : src;
+}
+
+function socialMetadata(options: SocialMetadataOptions): string {
+	if (options.canonicalPath === undefined) {
+		return "";
+	}
+	const url = canonicalSiteUrl(options.canonicalPath);
+	const description =
+		options.description === undefined
+			? ""
+			: `<meta property="og:description" content="${escapeHtml(options.description)}">\n<meta name="twitter:description" content="${escapeHtml(options.description)}">\n`;
+	const image =
+		options.socialImage === undefined
+			? ""
+			: `<meta property="og:image" content="${escapeHtml(socialImageUrl(options.socialImage))}">\n<meta name="twitter:image" content="${escapeHtml(socialImageUrl(options.socialImage))}">\n${options.socialImageAlt === undefined ? "" : `<meta property="og:image:alt" content="${escapeHtml(options.socialImageAlt)}">\n`}`;
+	const card =
+		options.socialImage === undefined ? "summary" : "summary_large_image";
+	return `<link rel="canonical" href="${escapeHtml(url)}">
+<meta property="og:type" content="${options.socialType ?? "website"}">
+<meta property="og:site_name" content="${SITE_NAME}">
+<meta property="og:url" content="${escapeHtml(url)}">
+<meta property="og:title" content="${escapeHtml(options.title)}">
+<meta name="twitter:card" content="${card}">
+<meta name="twitter:title" content="${escapeHtml(options.title)}">
+${description}${image}`;
+}
+
 /**
  * `skipTo` is the id the skip link jumps to. It defaults to main, and
  * a page whose main opens with decoration (the homepage hero) passes
@@ -115,17 +171,14 @@ export function page({
 	title,
 	content,
 	description,
+	canonicalPath,
+	socialImage,
+	socialImageAlt,
+	socialType,
 	scripts = [],
 	styles = [siteUrl("/css/main.css"), siteUrl("/css/header.css")],
 	skipTo = "main",
-}: {
-	title: string;
-	content: string;
-	description?: string;
-	scripts?: Array<string | PageScript>;
-	styles?: string[];
-	skipTo?: string;
-}): string {
+}: PageOptions): string {
 	return `<!doctype html>
 <html lang="en">
 <head>
@@ -139,7 +192,7 @@ ${
 		? `<meta name="description" content="${escapeHtml(description)}">
 `
 		: ""
-}${THEME_BOOT_SCRIPT}
+}${socialMetadata({ title, description, canonicalPath, socialImage, socialImageAlt, socialType })}${THEME_BOOT_SCRIPT}
 ${styles.map((href) => `<link rel="stylesheet" href="${escapeHtml(href)}">\n`).join("")}${renderScript(siteUrl("/js/theme.js"))}${scripts.map(renderScript).join("")}</head>
 <body>
 <a class="skip-link" href="#${escapeHtml(skipTo)}">Skip to content</a>

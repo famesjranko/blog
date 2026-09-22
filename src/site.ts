@@ -33,6 +33,12 @@ export function siteUrl(path: string): string {
 	return `${basePath()}${p}`;
 }
 
+/** The public URL to advertise, regardless of the active deployment target. */
+export function canonicalSiteUrl(path: string): string {
+	const p = path.startsWith("/") ? path : `/${path}`;
+	return `${DEFAULT_SITE_ORIGIN}${p}`;
+}
+
 /** Produce a canonical URL for feeds and other machine-readable output. */
 export function absoluteSiteUrl(path: string): string {
 	const raw = (readEnv("SITE_ORIGIN") ?? DEFAULT_SITE_ORIGIN)

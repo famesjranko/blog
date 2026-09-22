@@ -1,6 +1,6 @@
 import type { Essay } from "../content.js";
 import { siteUrl } from "../site.js";
-import { escapeHtml, page } from "./layout.js";
+import { coverSrc, escapeHtml, page } from "./layout.js";
 
 export function essayPage(essay: Essay): string {
 	const subtitle =
@@ -10,6 +10,12 @@ export function essayPage(essay: Essay): string {
 	const draft = essay.draft ? `<p class="draft-eyebrow">Draft</p>\n` : "";
 	return page({
 		title: essay.title,
+		canonicalPath: `/essays/${essay.slug}/`,
+		socialImage: coverSrc(essay),
+		...(essay.cover === undefined || essay.coverAlt === undefined
+			? {}
+			: { socialImageAlt: essay.coverAlt }),
+		socialType: "article",
 		...(essay.description === undefined
 			? {}
 			: { description: essay.description }),
