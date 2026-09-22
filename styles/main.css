@@ -182,6 +182,10 @@
 		outline-offset: 3px;
 	}
 
+	.card:has(.card-title a:active) {
+		border-color: var(--color-muted);
+	}
+
 	.card-media {
 		position: relative;
 		aspect-ratio: 16 / 9;

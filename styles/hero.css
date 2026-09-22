@@ -75,6 +75,11 @@
 		text-decoration: none;
 	}
 
+	.hero-cta a:active {
+		background: var(--color-text);
+		color: var(--color-bg);
+	}
+
 	@media (hover: hover) {
 		.hero-cta a:hover {
 			background: var(--color-text);

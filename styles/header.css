@@ -77,6 +77,8 @@
 
 	.theme-toggle:active,
 	.menu-toggle:active {
+		border-color: var(--color-muted);
+		background: var(--color-wash-1);
 		transform: scale(0.96);
 	}
 
