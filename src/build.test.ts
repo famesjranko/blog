@@ -40,6 +40,7 @@ describe("build output", () => {
 		const scripts = await readdir(path.join(outDir, "js"));
 		expect(scripts).toContain("hero.js");
 		expect(scripts).toContain("theme.js");
+		expect(scripts).toContain("mobile-nav.js");
 		const styles = await readdir(path.join(outDir, "css"));
 		expect(styles).toEqual(
 			expect.arrayContaining([
