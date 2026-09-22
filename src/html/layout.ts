@@ -193,7 +193,7 @@ ${
 `
 		: ""
 }${socialMetadata({ title, description, canonicalPath, socialImage, socialImageAlt, socialType })}${THEME_BOOT_SCRIPT}
-${styles.map((href) => `<link rel="stylesheet" href="${escapeHtml(href)}">\n`).join("")}${renderScript(siteUrl("/js/theme.js"))}${scripts.map(renderScript).join("")}</head>
+${styles.map((href) => `<link rel="stylesheet" href="${escapeHtml(href)}">\n`).join("")}${renderScript(siteUrl("/js/theme.js"))}${renderScript(siteUrl("/js/mobile-nav.js"))}${scripts.map(renderScript).join("")}</head>
 <body>
 <a class="skip-link" href="#${escapeHtml(skipTo)}">Skip to content</a>
 ${header()}

@@ -52,6 +52,17 @@ describe("theme toggle", () => {
 		const html = page({ title: "t", content: "" });
 		expect(html).toContain('<script src="/js/theme.js" defer></script>');
 	});
+
+	it("loads the mobile navigation handler using the site base path", () => {
+		vi.stubEnv("BASE_PATH", "/blog");
+		try {
+			expect(page({ title: "t", content: "" })).toContain(
+				'<script src="/blog/js/mobile-nav.js" defer></script>',
+			);
+		} finally {
+			vi.unstubAllEnvs();
+		}
+	});
 });
 
 describe("skip link", () => {
