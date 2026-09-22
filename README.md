@@ -10,6 +10,7 @@ Personal website for essays and projects.
 [![Vitest](https://img.shields.io/badge/Vitest-3.x-6E9F18?style=flat-square&logo=vitest&logoColor=white)](https://vitest.dev)
 [![Biome](https://img.shields.io/badge/Biome-2.x-60A5FA?style=flat-square&logo=biome&logoColor=white)](https://biomejs.dev)
 [![CI](https://img.shields.io/github/actions/workflow/status/famesjranko/blog/ci.yml?style=flat-square&label=CI)](https://github.com/famesjranko/blog/actions/workflows/ci.yml)
+[![Cloudflare Pages](https://img.shields.io/github/check-runs/famesjranko/blog/main?nameFilter=Cloudflare%20Pages&style=flat-square&label=Cloudflare%20Pages&logo=cloudflare&logoColor=white)](https://github.com/famesjranko/blog/commits/main)
 [![GitHub Pages](https://img.shields.io/badge/GitHub_Pages-manual-222?style=flat-square&logo=github&logoColor=white)](https://github.com/famesjranko/blog/actions/workflows/pages.yml)
 
 </div>
@@ -94,6 +95,8 @@ https://andrewjmcdonald.com/
 
 Cloudflare Pages builds `main` from this repository with `npm run build` and
 publishes `dist/`; non-`main` branches receive noindex preview deployments.
+For applicable `main` commits, its native GitHub integration reports the
+`Cloudflare Pages` check shown in the badge above.
 GitHub CI and pull-request checks are the quality gate before merging to
 `main`.
 
