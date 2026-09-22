@@ -5,7 +5,6 @@ date: 2020-08-12T14:18:23+11:00
 cover: /img/essays/ethics-google/cover.jpg
 coverAlt: "google"
 draft: false
-featured: true
 toc: false
 type:
   - essays
@@ -20,10 +19,12 @@ tags:
 
 ![Google Maps on a phone](/img/essays/ethics-google/cover.jpg)
 
-<aside class="editorial-note">
-  <p><strong>Editorial note</strong></p>
-  <p>Written in 2020 for a La Trobe University ethics unit. The report discussed is Google's COVID-19 Community Mobility Report for Australia (29 March 2020). The assignment brief also raised Taiwan's COVID-19 "electronic fence" as an example drawn "from the same data source," and the essay's ethical dilemma was developed from that comparison. Subsequent verification indicates that Taiwan's electronic-fence system relied on telecommunications-network location data rather than Google's anonymised Community Mobility Report data. Accordingly, references in the original essay to Taiwan identifying individuals using Google's dataset, or to Google acting jointly with Taiwan, should be understood as reflecting the premise presented in the assignment material rather than an established factual connection.</p>
-</aside>
+<details class="editorial-note discussion-archive">
+  <summary>Editorial note — source correction</summary>
+  <p class="discussion-intro">
+    Written in 2020 for a La Trobe University ethics unit. The report discussed is Google's COVID-19 Community Mobility Report for Australia (29 March 2020). The assignment brief also raised Taiwan's COVID-19 "electronic fence" as an example drawn "from the same data source," and the essay's ethical dilemma was developed from that comparison. Subsequent verification indicates that Taiwan's electronic-fence system relied on telecommunications-network location data rather than Google's anonymised Community Mobility Report data. Accordingly, references in the original essay to Taiwan identifying individuals using Google's dataset, or to Google acting jointly with Taiwan, should be understood as reflecting the premise presented in the assignment material rather than an established factual connection.
+  </p>
+</details>
 
 ## Overview of the Google Article
 
@@ -33,21 +34,21 @@ The report outlines that the datasets used for the report were obtained by the s
 
 Key facts outlined in the report on data collection methods:
 
-1. Data is only used where a statistical significance is met.
-2. Data is aggregated and anonymised as per Google Maps guidelines/methods (Google, 2020b).
-   1. Data is harvested from users, only where privacy settings allow for data collection – opt-in, off by default.
-   2. User data is only used where the privacy threshold is met – must be enough users at a location to ensure anonymity.
-   3. Use of differential privacy, which adds artificial noise to data to further prevent identification of any individual person.
+- Data is only used where a statistical significance is met.
+- Data is aggregated and anonymised as per Google Maps guidelines/methods (Google, 2020b).
+- Data is harvested from users, only where privacy settings allow for data collection – opt-in, off by default.
+- User data is only used where the privacy threshold is met – must be enough users at a location to ensure anonymity.
+- Differential privacy is used to add artificial noise to data, further preventing identification of any individual person.
 
 Furthermore, there does not appear to be a secondary medical, nor personal use ethical dilemma present either as the report clearly states the expected limitations of use for the data provided.
 
 The report states:
 
-“This report shouldn’t be used for medical diagnostics, prognostics, or treatment purpose” and “isn’t intended to be used for guidance on personal travel plans” (Google, 2020a).
+> “This report shouldn’t be used for medical diagnostics, prognostics, or treatment purpose” and “isn’t intended to be used for guidance on personal travel plans” (Google, 2020a).
 
 Therefore, any such use goes against the explicit recommendation of the report and outside of the stated use boundary.
 
-However, an issue does appear to arise when considering the alleged claim that Taiwan is using the same dataset source to create “electronic fences” around quarantined citizens to monitor their movements (as raised in the assignment brief, citing The Verge, 2020). This appears to go against Google’s recommendations to not use the data for medical prognostics. In this case, the data is being used to monitor and mitigate the pandemic spread of a viral contagion. Moreover, it also appears to contradict Google’s own statement that users cannot be identified individually from within the dataset, as outlined in fact 2 and sub-facts 2a, 2b, and 2c. If Taiwan’s alleged use of Google’s user data is true, it raises further questions against Google and the Google report; specifically, the opt-in nature of the data collection.
+However, an issue does appear to arise when considering the alleged claim that Taiwan is using the same dataset source to create “electronic fences” around quarantined citizens to monitor their movements (as raised in the assignment brief, citing The Verge, 2020). This appears to go against Google’s recommendations to not use the data for medical prognostics. In this case, the data is being used to monitor and mitigate the pandemic spread of a viral contagion. Moreover, it also appears to contradict Google’s own statement that users cannot be identified individually from within the dataset, as outlined in the data-collection facts above. If Taiwan’s alleged use of Google’s user data is true, it raises further questions against Google and the Google report; specifically, the opt-in nature of the data collection.
 
 Under normal circumstances, the above privacy concerns alone would be enough for further ethical and legal investigation. However, we are not currently operating under normal circumstances, but are actively experiencing a world-wide viral epidemic. Understandably, with this will come some latitude to how we approach individual privacy and autonomy in relation to the greater public health. There should always be a concern and a sense of reticence when considering giving up any freedoms, privacy, or rights; as once the cat is out of the bag, it is very hard to put it back in. There is always a risk of bad faith actors taking advantage of compromised people and circumstances to further their own wealth, power, and interests, whether that be individuals, private industry, or government.
 
@@ -65,74 +66,106 @@ According to Rachels & Rachels (1986), Kant’s ethics are built from the idea t
 
 Central to Kant’s ethics is The Categorical Imperative, which he describes in three distinct formulations (Kant, 2008, p. 34):
 
-1. “Act as though the maxim of your action were to become, through your will, a universal law of nature.”
-2. “Act in such a way as to treat humanity, whether in your own person or in that of anyone else, always as an end and never merely as a means.”
-3. “Act only so that your will could regard itself as giving universal law through its maxim.”
+<ol class="formulations">
+  <li>“Act as though the maxim of your action were to become, through your will, a universal law of nature.”</li>
+  <li>“Act in such a way as to treat humanity, whether in your own person or in that of anyone else, always as an end and never merely as a means.”</li>
+  <li>“Act only so that your will could regard itself as giving universal law through its maxim.”</li>
+</ol>
 
 Exploring Kant’s ethics in completeness is far beyond the scope of this assignment; for conciseness, I am going to limit this analysis to Kant’s first formulation of his Categorical Imperative, also known as “The Formula of Universal Law” (California State University, 2020).
 
 <div class="method">
   <p>There are four basic steps required for such a Kantian analysis (Forster, 1989):</p>
-  <ol>
-    <li>Construct the hypothetical imperative into the form of a maxim:
-      <ol>
-        <li>In circumstances x, I am to y, in order to z.</li>
-      </ol>
-    </li>
-    <li>Generalise the maxim into the form:
-      <ol>
-        <li>In circumstances x, everyone is to y, in order to z.</li>
-      </ol>
-    </li>
-    <li>Generalise the precept at 2a into the form of a law of nature:
-      <ol>
-        <li>In circumstances x, everyone always is to y, in order to z.</li>
-      </ol>
-    </li>
-    <li>Apply the law of nature at 3a to the actual world state and figure out the implications to the world if this law of nature were universal and allowed to reach equilibrium.
-      <p>Additionally, there are two tests that aid us at step 4:</p>
-      <ol>
-        <li>“The Contradiction in Conception Test” (California State University, 2020)
-          <ol>
-            <li>tests if the universalised maxim is still a viable means to the end.</li>
-          </ol>
-        </li>
-        <li>“The Contradiction in the Will Test” (California State University, 2020)
-          <ol>
-            <li>tests if the will of a person conflicts with the maxim’s implications.</li>
-          </ol>
-        </li>
-      </ol>
-    </li>
-  </ol>
+
+  <div class="method-step">
+    <span class="method-number">1</span>
+    <div>
+      <strong>Construct the maxim</strong>
+      <p>Put the hypothetical imperative into the form:</p>
+      <p><em>In circumstances <strong>x</strong>, I am to <strong>y</strong>, in order to <strong>z</strong>.</em></p>
+    </div>
+  </div>
+
+  <div class="method-step">
+    <span class="method-number">2</span>
+    <div>
+      <strong>Universalise the maxim</strong>
+      <p>Generalise the maxim into the form:</p>
+      <p><em>In circumstances <strong>x</strong>, everyone is to <strong>y</strong>, in order to <strong>z</strong>.</em></p>
+    </div>
+  </div>
+
+  <div class="method-step">
+    <span class="method-number">3</span>
+    <div>
+      <strong>Make it a law of nature</strong>
+      <p>Generalise the maxim further into the form:</p>
+      <p><em>In circumstances <strong>x</strong>, everyone always is to <strong>y</strong>, in order to <strong>z</strong>.</em></p>
+    </div>
+  </div>
+
+  <div class="method-step">
+    <span class="method-number">4</span>
+    <div>
+      <strong>Test the resulting world</strong>
+      <p>Apply the law of nature to the actual world and consider the implications if it were universal and allowed to reach equilibrium.</p>
+      <p>Two tests aid us at this final step (California State University, 2020):</p>
+      <dl class="method-tests">
+        <div>
+          <dt>Contradiction in Conception Test</dt>
+          <dd>Tests if the universalised maxim is still a viable means to the end.</dd>
+        </div>
+        <div>
+          <dt>Contradiction in the Will Test</dt>
+          <dd>Tests if the will of a person conflicts with the maxim’s implications.</dd>
+        </div>
+      </dl>
+    </div>
+  </div>
 </div>
 
-Following these steps and applying the substitutions:
+<div class="worked-formulation">
+  <p>Following these steps and applying the substitutions:</p>
+  <p class="formulation-section">Substitutions</p>
+  <dl class="substitution-key">
+    <div>
+      <dt>x</dt>
+      <dd>public health crisis</dd>
+    </div>
+    <div>
+      <dt>y</dt>
+      <dd>sacrifice my privacy</dd>
+    </div>
+    <div>
+      <dt>z</dt>
+      <dd>save the lives of others</dd>
+    </div>
+  </dl>
+  <hr class="formulation-divider">
+  <p class="formulation-section">Derived maxims</p>
+  <dl class="maxims">
+    <div>
+      <dt>1</dt>
+      <dd><em>In circumstances of public health crisis, I am to sacrifice my privacy, in order to save the lives of others.</em></dd>
+    </div>
+    <div>
+      <dt>2</dt>
+      <dd><em>In circumstances of public health crisis, everyone is to sacrifice their privacy, in order to save the lives of others.</em></dd>
+    </div>
+    <div>
+      <dt>3</dt>
+      <dd><em>In circumstances of public health crisis, everyone always is to sacrifice their privacy, in order to save the lives of others.</em></dd>
+    </div>
+  </dl>
+</div>
 
-<p class="substitutions">x = public health crisis; y = sacrifice my privacy; z = save the lives of others.</p>
+Applying the contradiction in conception test to the third maxim, we must ask ourselves: If in every public health crisis, every person always sacrifices their privacy in order to save the lives of other, would this always lead to the saving of people’s lives?
 
-<dl class="maxims">
-  <div>
-    <dt>1a</dt>
-    <dd><em>In circumstances of public health crisis, I am to sacrifice my privacy, in order to save the lives of others.</em></dd>
-  </div>
-  <div>
-    <dt>2a</dt>
-    <dd><em>In circumstances of public health crisis, everyone is to sacrifice their privacy, in order to save the lives of others.</em></dd>
-  </div>
-  <div>
-    <dt>3a</dt>
-    <dd><em>In circumstances of public health crisis, everyone always is to sacrifice their privacy, in order to save the lives of others.</em></dd>
-  </div>
-</dl>
+Unfortunately, this is a difficult question to answers as it relies on many factors that are hard, even impossible to know in detail or in advance of the question. However, we can assume, based on the Google report, that in this case private data is relevant and is at least suspect of being beneficial to public health. So, for the sake of this analysis, we will assume that it does indeed always lead to saving of people’s lives and thus passes the contradiction in conception test.
 
-Applying 4a, the contradiction in conception test, to 3a, we must ask ourselves: If in every public health crisis, every person always sacrifices their privacy in order to save the lives of other, would this always lead to the saving of people’s lives?
+Applying the contradiction in the will test, we must ask ourselves: If in every public health crisis, every person always sacrifices their privacy in order to save the lives of other, would this conflict with a person’s individual will?
 
-Unfortunately, this is a difficult question to answers as it relies on many factors that are hard, even impossible to know in detail or in advance of the question. However, we can assume, based on the Google report, that in this case private data is relevant and is at least suspect of being beneficial to public health. So, for the sake of this analysis, we will assume that it does indeed always lead to saving of people’s lives and thus passes test 4a.
-
-Applying 4b, the contradiction in the will test, we must ask ourselves: If in every public health crisis, every person always sacrifices their privacy in order to save the lives of other, would this conflict with a person’s individual will?
-
-Thankfully, this is a much easier question to answers. If 3a were a natural law, it would most definitely conflict with a person’s individual will as a right to privacy as prescribed in the Universal Declaration of Human Rights; where it states: “No one shall be subjected to arbitrary interference with his privacy, family, home or correspondence, nor to attacks upon his honour and reputation. Everyone has the right to the protection of the law against such interference or attacks.” (United Nations, 2020, article 12). In a world where it was not a choice to refuse such privacy intrusions, such a right would be nullified, and thus fails the contradiction in the will test.
+Thankfully, this is a much easier question to answers. If the third maxim were a natural law, it would most definitely conflict with a person’s individual will as a right to privacy as prescribed in the Universal Declaration of Human Rights; where it states: “No one shall be subjected to arbitrary interference with his privacy, family, home or correspondence, nor to attacks upon his honour and reputation. Everyone has the right to the protection of the law against such interference or attacks.” (United Nations, 2020, article 12). In a world where it was not a choice to refuse such privacy intrusions, such a right would be nullified, and thus fails the contradiction in the will test.
 
 In following Kant’s Formula, that we should act only on that maxim through which you can at the same time will that it should become a universal law, in regards to the current ethical dilemma, we would then have the imperative to not act in accordance.
 
@@ -144,35 +177,74 @@ To fully grasp the implications borne out from the simple outline of utilitarian
 
 The Utilitarian qualifiers (Hospers, 1972, pp. 4-8):
 
-1. An act must be voluntary, in so much as there must be a choice to act otherwise.
-2. Time has no value on betterment – it does not matter if the effect is now or later.
-3. Betterment is not to be considered alone; must also consider harm.
-4. Just because an act produces greater betterment than harm, does not itself make the choice right; there must be no other choice that could have been made that would lead to greater betterment and/or less harm.
-5. Cannot assume a simple calculus will always be between betterment and harm; it is just as likely to be a choice between two choices of relative harm.
-6. The Utilitarian calculus must be made impartially – all actors, including oneself, are weighted equally.
-7. To the utilitarian, no law, in and of itself, is sacrosanct – the utilitarian follows their calculus wholeheartedly and without weight towards existing laws or commonly held beliefs.
+<ol class="principles">
+  <li>An act must be voluntary, in so much as there must be a choice to act otherwise.</li>
+  <li>Time has no value on betterment – it does not matter if the effect is now or later.</li>
+  <li>Betterment is not to be considered alone; must also consider harm.</li>
+  <li>Just because an act produces greater betterment than harm, does not itself make the choice right; there must be no other choice that could have been made that would lead to greater betterment and/or less harm.</li>
+  <li>Cannot assume a simple calculus will always be between betterment and harm; it is just as likely to be a choice between two choices of relative harm.</li>
+  <li>The Utilitarian calculus must be made impartially – all actors, including oneself, are weighted equally.</li>
+  <li>To the utilitarian, no law, in and of itself, is sacrosanct – the utilitarian follows their calculus wholeheartedly and without weight towards existing laws or commonly held beliefs.</li>
+</ol>
 
 With these guiding principles, the utilitarian is both motivated and able to evaluate ethical and moral choices in terms of betterment vs harm, for the many vs the individual, reasonably and impartially.
 
-To this end there are generally five basic steps necessary for a utilitarian ethical analysis (California State University, 2020):
+<div class="method utilitarian-method">
+  <p>To this end there are generally five basic steps necessary for a utilitarian ethical analysis (California State University, 2020):</p>
 
-1. Specify the options
-2. Specify possible consequences for each option
-3. For each option, estimate the probability of each of its consequences
-4. For each option, estimate the “utility” of each of its consequences
-5. Identify the best prospect
+  <div class="method-step">
+    <span class="method-number">1</span>
+    <div><strong>Specify the options</strong></div>
+  </div>
 
-Applying these steps to the question: Does the current pandemic situation allow for such ethical slipperiness in relation to the use of non-anonymised user data for the greater good?
+  <div class="method-step">
+    <span class="method-number">2</span>
+    <div><strong>Specify possible consequences for each option</strong></div>
+  </div>
 
-1. Options
-   1. Allow users’ data to be used by governing bodies
-   2. Do not allow users’ data to be used by governing bodies
-2. Consequences
-   1. User data is used against the pandemic and it helps; user data is used to control/monitor citizens
-   2. User data is not used against the pandemic, pandemic continues longer than needed; user data is not used to control/monitor citizens
-3. Probability and utility (steps 3 & 4)
-   1. Probability: Very High; Utility: Very High. Probability: High; Utility: Very Low
-   2. Probability: Medium; Utility: Low. Probability: Low; Utility: Very High
+  <div class="method-step">
+    <span class="method-number">3</span>
+    <div><strong>Estimate the probability of each consequence</strong></div>
+  </div>
+
+  <div class="method-step">
+    <span class="method-number">4</span>
+    <div><strong>Estimate the utility of each consequence</strong></div>
+  </div>
+
+  <div class="method-step">
+    <span class="method-number">5</span>
+    <div><strong>Identify the best prospect</strong></div>
+  </div>
+</div>
+
+<div class="worked-analysis">
+  <p>Applying these steps to the question: Does the current pandemic situation allow for such ethical slipperiness in relation to the use of non-anonymised user data for the greater good?</p>
+
+  <p class="formulation-section">Options</p>
+  <dl class="analysis-rows">
+    <div>
+      <dt>A</dt>
+      <dd>Allow users’ data to be used by governing bodies</dd>
+    </div>
+    <div>
+      <dt>B</dt>
+      <dd>Do not allow users’ data to be used by governing bodies</dd>
+    </div>
+  </dl>
+
+  <p class="formulation-section analysis-section">Consequences</p>
+  <dl class="analysis-rows">
+    <div>
+      <dt>A</dt>
+      <dd>User data is used against the pandemic and it helps; user data is used to control/monitor citizens</dd>
+    </div>
+    <div>
+      <dt>B</dt>
+      <dd>User data is not used against the pandemic, pandemic continues longer than needed; user data is not used to control/monitor citizens</dd>
+    </div>
+  </dl>
+</div>
 
 Regarding steps 3 and 4: Evaluating a given consequences respective probability and utility to within any degree of accuracy is difficult. And while there may be relevant statistical and utility projection methodologies that are beneficial to this end, they are beyond the scope of this discussion. Thus, for this analysis I will simply apply an estimated general best-fit value for each respective option, such that:
 
@@ -180,7 +252,7 @@ Regarding steps 3 and 4: Evaluating a given consequences respective probability 
 - Preventing the use of personal user data hurts many in few cases and benefits individuals in most cases.
 
 <div class="table-scroll" role="region" aria-label="Utilitarian decision table" tabindex="0">
-<table>
+<table class="utilitarian-table">
   <thead>
     <tr>
       <th>Option</th>
@@ -191,7 +263,7 @@ Regarding steps 3 and 4: Evaluating a given consequences respective probability 
   </thead>
   <tbody>
     <tr>
-      <td rowspan="2">1a</td>
+      <td rowspan="2">A</td>
       <td>User data is used against the pandemic and it helps</td>
       <td>Very High</td>
       <td>Very High</td>
@@ -202,7 +274,7 @@ Regarding steps 3 and 4: Evaluating a given consequences respective probability 
       <td>Very Low</td>
     </tr>
     <tr>
-      <td rowspan="2">1b</td>
+      <td rowspan="2">B</td>
       <td>User data is not used against the pandemic, pandemic continues longer than needed</td>
       <td>Medium</td>
       <td>Low</td>
@@ -220,9 +292,18 @@ Using the table above, we can identify the best utilitarian prospect by applying
 
 Using this metric gives us:
 
-<p>1a = (5 + 5) + (4 + 1) = 15<br>1b = (3 + 2) + (2 + 5) = 12</p>
+<dl class="calculation">
+  <div>
+    <dt>A</dt>
+    <dd>(5 + 5) + (4 + 1) = 15</dd>
+  </div>
+  <div>
+    <dt>B</dt>
+    <dd>(3 + 2) + (2 + 5) = 12</dd>
+  </div>
+</dl>
 
-While it is relatively close between the two options, there is a slightly better outcome for overall betterment for 1a over 1b. This is mostly due to both the benefits and high probability for all to benefit from using user data to slow the spread of contagion during a viral pandemic. Thus, consequently, the actions of 1a is the utilitarian’s recommended choice.
+While it is relatively close between the two options, there is a slightly better outcome for overall betterment for A over B. This is mostly due to both the benefits and high probability for all to benefit from using user data to slow the spread of contagion during a viral pandemic. Thus, consequently, the actions of A is the utilitarian’s recommended choice.
 
 However, there is a caveat: one of the main problems for any utilitarian calculation, and one that is apparent here, is the difficulty to ascribe probability and utility values for a given act. Hence why this cannot be considered necessarily the morally right choice; given more information and a better metric, a different and possibly better outcome is very likely.
 
@@ -242,15 +323,26 @@ Lastly, on self-reflection, if I were to apply my own ethical intuition to the c
 
 <div class="references">
   <p>Brink, David. (2018). <a href="https://plato.stanford.edu/archives/win2018/entries/mill-moral-political">Mill’s Moral and Political Philosophy</a>.</p>
+
   <p>California State University. (2020). <a href="https://www.csus.edu/indiv/g/gaskilld/ethics/kantian%20ethics.htm">Kantian Ethics</a>.</p>
+
   <p>Driver, Julia. (2014). <a href="https://plato.stanford.edu/archives/win2014/entries/utilitarianism-history/">The History of Utilitarianism</a>.</p>
+
   <p>Forster, E. (1989). <em>Kant's transcendental deductions - The Three Critiques and the Opus postumum</em> (pp. 82-90). Stanford: Stanford University.</p>
+
   <p>Google. (2020a). <a href="https://www.google.com/covid19/mobility/">COVID-19 Community Mobility Report: Australia, March 29, 2020</a>.</p>
+
   <p>Google. (2020b). <a href="https://policies.google.com/technologies/anonymization?hl=en">Privacy &amp; Terms</a>.</p>
+
   <p>Hospers, J. (1972). <em>Human Conduct: Problems of Ethics</em>. New York: Harcourt Brace Jovanovich.</p>
+
   <p>Johnson, Robert &amp; Cureton, Adam. (2019). <a href="https://plato.stanford.edu/archives/spr2019/entries/kant-moral/">Kant’s Moral Philosophy</a>.</p>
+
   <p>Kant, I. (2008). <a href="https://www.earlymoderntexts.com/assets/pdfs/kant1785.pdf">Groundwork for the Metaphysic of Morals</a>.</p>
+
   <p>Rachels, J., Rachel, T. (1986). <em>The Elements of Moral Philosophy</em>. NY: McGraw Hill.</p>
+
   <p>The Verge. (2020, April 3). <a href="https://www.theverge.com/2020/4/3/21206318/google-location-data-mobility-reports-covid-19-privacy">Google uses location data to show which places are complying with stay-at-home orders — and which aren’t</a>.</p>
+
   <p>United Nations. (2020). <a href="https://archives.un.org/sites/archives.un.org/files/UDHR/udhr.pdf">Universal Declaration of Human Rights</a>.</p>
 </div>

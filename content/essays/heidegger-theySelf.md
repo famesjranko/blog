@@ -2,11 +2,11 @@
 title: "On Heidegger’s They-Self"
 description: "Heidegger on the they-self, idle talk, and what owning oneself would take."
 author:
-  name = "Andrew McDonald"
+  name: "Andrew McDonald"
 date: 2020-09-19T16:51:27+11:00
 cover: /img/essays/heidegger-theyself/cover.jpg
 coverAlt: "they-self"
-draft: true
+draft: false
 toc: false
 type:
   - essays
@@ -19,6 +19,12 @@ tags:
 ---
 
 ![they-self](/img/essays/heidegger-theyself/cover.jpg)
+
+<blockquote class="epigraph">
+  <p><strong><em>‘The Self of everyday Dasein is the they-self, which we distinguish from the authentic Self …’</em></strong></p>
+  <p class="attribution">(Heidegger 1962, p. 167).</p>
+</blockquote>
+
 
 The above quotation is from Martin Heidegger’s magnum opus, _Being and Time_.  Wherein he sets himself the task of answering the question of The Meaning of Being.  My aim for this discussion is to explain what Heidegger means by the 
 titular quotation; to do so as simply as possible and avoid the barrier imposed by his complex prose and unique terminology as used throughout Being and Time.  Having said that, a detailed account of Heidegger’s unique verbiage must be 
@@ -68,11 +74,15 @@ future closed off by the horizon of death.  Moreover, this horizon is “non-rel
 foreign.  Essentially, existential anxiety signifies our first experience of freedom from the objectification of the world as *thing*.  However, this freedom also reveals to us the consequential truth of our finitude, the cost of choice
 (Heidegger 1962, p. 313).
 
+<div class="analogy-passage">
+
 It is often stated that truth is both a good and desired thing, exemplified by the phrase “the truth will set you free.”  However, less noted is the cost that comes with truth: truth implies facticity, which implies concreteness, which 
 implies that which does not change.  It is in this unchanging, fixed nature that the cost of truth is disclosed.  By uncovering a truth of the world, we tie the world and ourselves concretely to it, along with its implications.  If we 
 think of the domain of possibilities as a tent and each point of truth as a peg, we can think of each disclosed truth as pinning the domain of possibilities to a specific and factual subset of possibilities.  With each truth disclosed, 
 the more grounded and concrete the world becomes.  Thus, an ever-smaller subset of all possibilities appears open to us.  When unpegged, the tent's domain of possibilities is the super-set of all its possibilities.  It is only once 
 pegged to the ground does it become concretised in a moment of actuality; it is by pegging the tent to one possibility that we close off many others.  This is the cost of truth.
+
+</div>
 
 For Heidegger, the ultimate truth that pegs us to the ontological grounding of our existence is the omnipresent possibility of death (Heidegger 1962, p. 438).  It is in understanding our lives as toward death that the consequence of 
 choice is revealed: That in choosing to be something, we also choose to not be something else.  In this sense, we are fated in our choices toward definitive possibilities (Heidegger 1962, p. 436).  This fate existentially defines us to 
@@ -81,7 +91,7 @@ ourselves as Beings-in-the-world as our choices concretises us factually.  It is
 
 > _“When Dasein thus brings itself back from the ‘they’, the they‑[S]elf is modified in an existentiell manner so that it becomes authentic Being‑one’s‑Self [Self-they].  This must be accomplished by making up for not choosing.  But ‘making up’ for not choosing signifies choosing to make this choice – deciding for a potentiality‑for‑Being, and making this decision from one’s own Self.  In choosing to make this choice, Dasein makes possible, first and foremost, its authentic potentiality-for-Being."_
 >
-> (Heidegger 1962, p. 313).
+> <p class="attribution">(Heidegger 1962, p. 313).</p>
 
 In sum, we have defined Dasein as the being which is the unification of Subject and Object: a being not only in the world, but inseparable from it; a being that cares for its own existence; Dasein as Being-in-the-world.  Additionally, 
 that we as beings that care for own existence are ourselves Dasein.  Moreover, that in asking who we are as Dasein, we answer as the subjective I of ourselves as Self.  That we see this I as separate to the world through distortion of 
@@ -101,16 +111,20 @@ for oneself.  For my part, within the scope of this discussion, my intention was
 
 ## References
 
-Daves, S 2013, 'On the Permanence of Heideggerian Authenticity ', in _Theses and Dissertations_, University of Arkansas, < http://scholarworks.uark.edu/etd/842>.
+<div class="references">
 
-Dooley, M, & Kearney, R 2001, ‘Hermeneutics, including Critical Theory’, _International Encyclopedia of the Social & Behavioral Sciences_, pp. 6665–6672
+  <p>Daves, S 2013, <a href="http://scholarworks.uark.edu/etd/842" target="_blank" rel="noopener noreferrer">'On the Permanence of Heideggerian Authenticity'</a>, in <em>Theses and Dissertations</em>, University of Arkansas.</p>
 
-Egan, D 2012, ‘Das Man and Distantiality in Being and Time.’ _Inquiry: An interdisciplinary Journal in Philosophy_, vol. 55, no 3, pp. 289-306.
+  <p>Dooley, M, &amp; Kearney, R 2001, ‘Hermeneutics, including Critical Theory’, <em>International Encyclopedia of the Social &amp; Behavioral Sciences</em>, pp. 6665–6672</p>
 
-Guignon, C (ed.) 1993 _The Cambridge Companion to Heidegger_, Cambridge University Press, Cambridge
+  <p>Egan, D 2012, ‘Das Man and Distantiality in Being and Time.’ <em>Inquiry: An interdisciplinary Journal in Philosophy</em>, vol. 55, no 3, pp. 289-306.</p>
 
-Heidegger, M 1962, _Being and time_, trans. Macquarrie, J, & Robinson, E, Malden, MA: Blackwell.
+  <p>Guignon, C (ed.) 1993 <em>The Cambridge Companion to Heidegger</em>, Cambridge University Press, Cambridge</p>
 
-Newman, L 2019, “‘Descartes’ Epistemology", in _The Stanford Encyclopedia of Philosophy_, Zalta, E. N (ed.), Spring 2019 Edition, Stanford University, <https://plato.stanford.edu/archives/spr2019/entries/descartes-epistemology/>.
+  <p>Heidegger, M 1962, <em>Being and time</em>, trans. Macquarrie, J, &amp; Robinson, E, Malden, MA: Blackwell.</p>
 
-Wheeler, M 2020, ‘Martin Heidegger’, in _The Stanford Encyclopedia of Philosophy_, Zalta, E. N (ed.), Fall 2020 Edition, Stanford University, <https://plato.stanford.edu/archives/fall2020/entries/heidegger/>.
+  <p>Newman, L 2019, <a href="https://plato.stanford.edu/archives/spr2019/entries/descartes-epistemology/" target="_blank" rel="noopener noreferrer">“‘Descartes’ Epistemology"</a>, in <em>The Stanford Encyclopedia of Philosophy</em>, Zalta, E. N (ed.), Spring 2019 Edition, Stanford University.</p>
+
+  <p>Wheeler, M 2020, <a href="https://plato.stanford.edu/archives/fall2020/entries/heidegger/" target="_blank" rel="noopener noreferrer">‘Martin Heidegger’</a>, in <em>The Stanford Encyclopedia of Philosophy</em>, Zalta, E. N (ed.), Fall 2020 Edition, Stanford University.</p>
+
+</div>

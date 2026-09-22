@@ -1,12 +1,12 @@
 ---
-title: "On Knowing Oneself and Caring for Oneself"
-description: "Why 'know thyself' fails as a definition but works as advice on who should philosophise."
+title: "Can ‘Know Thyself’ Define Philosophy?"
+description: "Why ‘know thyself’ and ‘care for oneself’ are weak definitions of philosophy, but useful descriptions of philosophical motivation."
 author:
-  name = "Andrew McDonald"
+  name: "Andrew McDonald"
 date: 2016-07-22
 cover: /img/essays/descript-philosophy/cover.jpg
 coverAlt: "rocks"
-draft: true
+draft: false
 images:
 type:
   - essays
@@ -26,7 +26,9 @@ If we define something as (A), anything that conforms to (A) therefore must be (
 
 Continuing, the term caring is further problematic, implying a personal degree of investment and the potential for a preferred outcome.  For example, if I care about a friend’s health issues, I am invested towards an outcome where they are healthy.  This invested interest and its aim toward a specific outcome is inherently unphilosophical.  Knowledge can be dangerous; nature is indifferent to your personal plans and interests.  It is this nature of knowledge which philosophy aims toward, not at a specific outcome, but asking of it what it is.  The act of philosophy is first concerned with problems generally and then specificity follows, not the other way around.
 
-This isn’t to say that the personal has no place within philosophy.  I tend to agree with the well known populariser of philosophy, Brian Magee, and his thoughts regarding who should do philosophy.  In his autobiography, Confessions of a Philosopher, Magee argues that it those who have experienced philosophical problems which that are the most suitable for philosophical studies. (1997, p. 43)  His thoughts are in reaction to two things: first, his time spent studying at post war Oxford where philosophy was dominated by ordinary-language analysis – ordinary-language analysis aimed to dissolve philosophical problems by showing them to be misunderstandings of everyday language, which Magee argues led to a never ending examination of general language statements without solution.  And, second, by his experience of being troubled as a young boy by problems regarding time, infinities, limits of knowledge and perception, and of first causes.
+The form that knowledge will take is itself another question; if we assume the answer and look for that assumed answer specifically, we open our pursuit to potential bias.  Philosophy does, of course, have an aim, but this is general; if it becomes too specific, it risks becoming dogmatic and teleological.  A better way to think about it is that it is we who encompass telos rather than the knowledge which we pursue.  It is we who have a purpose, an aim, not knowledge, or philosophy.  We should search out wisdom, whatever that is, fearlessly, selflessly, and without prejudice.
+
+This isn’t to say that the personal has no place within philosophy.  I tend to agree with the well known populariser of philosophy, Brian Magee, and his thoughts regarding who should do philosophy.  In his autobiography, Confessions of a Philosopher, Magee argues that it is those who have experienced philosophical problems that are the most suitable for philosophical studies. (1997, p. 43)  His thoughts are in reaction to two things: first, his time spent studying at post war Oxford where philosophy was dominated by ordinary-language analysis – ordinary-language analysis which aimed to dissolve philosophical problems by showing them to be misunderstandings of everyday language, which Magee argues led to a never ending examination of general language statements without solution.  And, second, by his experience of being troubled as a young boy by problems regarding time, infinities, limits of knowledge and perception, and of first causes.
 
 > “For a period of two or three years between the ages of about nine and twelve I was in thrall to puzzlement about time.  I would lie awake in bed at night the dark thinking something along the following lines.  I know there was a day before yesterday, and a day before that, and a day before that, and so on, as far back as I can remember.  But there must also have been a day before the first day I can remember.  I know I was born on 12 April 1930, and there must have been a day before that.  And a day before that.  And so on–and so on–and so on.  Before every day there must have been a day before.  So it must be possible to go back like that for ever and ever and ever. . . Yet is it?  The idea of going back for ever and ever was something I could not get a hold of it: it seemed impossible.  So perhaps, after all, there must have been a beginning somewhere.  But if there was a beginning, what had been going on before that?  Well, obviously, nothing–nothing at all–otherwise it could not be the beginning.
 >
@@ -36,10 +38,157 @@ This isn’t to say that the personal has no place within philosophy.  I tend to
 
 According to Magee, it was the lack of this personal type of philosophical quandary that led philosophers of the post war period at Oxford astray, ultimately leaving academic philosophy weaker for it.  Along with the rise of intellectualism within the field which had a knock on effect to the kinds of problems that academic philosophy was interested in.  The assumption was that we had a reliable method in analytical linguistics, where by reducing all philosophical problems to problems of language, all the problems of philosophy would be solved in due course.  For Magee, the pain and puzzlement connected to one’s experience of philosophical problems and the passionate interest that can follow, which he considers vital to the study of philosophy, was lost within this academic environment.
 
-Like Magee, I too think that personal problems of a philosophical nature are of necessity to the study of philosophy.  In this sense, ‘caring for oneself’ can be thought of as the exploring of one’s own philosophical problems.  Though I would add that its final form be a self-less one, not motivated by personal fulfillment, or specific aims – a dispassionate approach over an impassioned one is preferred, the latter being susceptible to errors of thought.  When speaking of dispassion it’s easy to confuse it with coldness or apathy, but this is far from the case.  Just as the sciences can be weakened by personal bias, so too can philosophical inquiry.  And it is with a degree of dispassion that allows us to interpret data and consider arguments irrespective of our own wishes and expectations.  After all thinking – specifically clear and critical thinking – is the primary mode of philosophy and to weaken that would undermine its foundations, leaving it intellectually bankrupt.
+Like Magee, I too think that personal problems of a philosophical nature are of necessity to the study of philosophy.  In this sense, ‘caring for oneself’ can be thought of as the exploring of one’s own philosophical problems.  Though I would add that its final form be a self-less one, not motivated by personal fulfillment, or specific aims – a dispassionate approach over an impassioned one is preferred, the latter being susceptible to errors of thought.  This is not to say that philosophy should be absolutely without passion.  Passion in any intellectual pursuit is a primary motivator and essential; it should instead be moderated, to a greater or lesser degree, to prevent errors of judgement.  When speaking of dispassion it’s easy to confuse it with coldness or apathy, but this is far from the case.  Just as the sciences can be weakened by personal bias, so too can philosophical inquiry.  And it is with a degree of dispassion that allows us to interpret data and consider arguments irrespective of our own wishes and expectations.  After all thinking – specifically clear and critical thinking – is the primary mode of philosophy and to weaken that would undermine its foundations, leaving it intellectually bankrupt.
 
-In this last descriptive sense, we can unpack the two terms ‘caring for oneself’ and ‘know oneself’ further, respectively as: the personal exploration of one’s philosophical problems in a self-less manner and without proprietary.
+In this last descriptive sense, we can unpack the two terms ‘caring for oneself’ and ‘know oneself’ further, respectively as: the personal exploration of one’s philosophical problems in a self-less manner.
 
 ## References
 
-Magee, B 1997, Confessions of a philosopher, Random House, NY
+<div class="references">
+  <p>Magee, B 1997, <em>Confessions of a philosopher</em>, Random House, NY</p>
+</div>
+
+<details class="editorial-note discussion-archive">
+  <summary>Objections and Replies</summary>
+
+  <p class="discussion-intro">
+  This essay was originally posted to a university class forum to encourage students to engage with one another’s arguments. What follows is an exchange with another student, organised here as objections and replies.
+  </p>
+
+  <div class="discussion-archive__content">
+
+<details class="discussion-objection">
+  <summary>Objection 1: On defining philosophy</summary>
+
+> I would disagree. Philosophy may be one of many ways of caring for oneself—it is only a subset. There may be other, non-philosophical ways, of caring.
+
+<p class="discussion-response-label">My response</p>
+
+<p>This is specifically the problem with defining philosophy in this way; it is too broad a statement a statement leading to ambiguity. Even you appear to be acknowledging this by arguing that it could be defined as philosophy if only we add further distinctions to it.</p>
+</details>
+
+<details class="discussion-objection">
+  <summary>Objection 2: On self-recognition</summary>
+
+> It might be, if your aim is to contemplate the implications of this state of affairs. You might, for instance, identify with the face you see— thinking, this body is what I am. Or you might contemplate something like, this hair is not mine because I can shave it off, and yet I am not shaved off with it. Now this is philosophy, surely. But certainly, philosophy must question what we are aware of; it is not simply being aware in a non-reflexive way.
+
+<p class="discussion-response-label">My response</p>
+
+Again, I do agree with your position that it could be deemed a form of philosophical knowledge, but that this is only the case when further defining, further classifying the type of knowledge we are aiming for/acquiring, or the method by which it is pursued. My aim was to merely show a problem of definition rather than building an explicit argument detailing either what knowledge is, in this case specifically philosophical knowledge, nor what philosophy actually is. A much more detailed account of my position regarding the definition of philosophy can be found here: [What Is Philosophy?](/essays/whatis-philosophy/)
+</details>
+
+<details class="discussion-objection">
+  <summary>Objection 3: On philosophical aims</summary>
+
+> Is knowledge a Newtonian apple? Shall we sit and wait for it to plant itself upon our head? I would rather think that knowledge is sought. There must be an aim, surely. I agree that this aim must make concessions in the face of evidence; but without an aim, there can be no philosophy. Even in science, each experiment is an attempt to find something. We might decide that we ought to search for something different, but ultimately there is always a search—maybe something like a unifying theory. Without an aim, there is no direction, no purpose. We are then nothing more than passive sponges. But I doubt that even this is possible. The mind is, I think, fundamentally an intentional structure.
+
+<p class="discussion-response-label">My response</p>
+
+<p>Yes, I agree, but I’m specifically against a teleological position regarding the acquisition of knowledge. I.e. that knowledge or truth will be of a certain form - aiming to prove an a priori belief, a belief in God for instance. If truth is the aim of philosophy, it’s inherently dangerous to our pre-existing cognitive beliefs and to a greater degree our own sense of identity. We can see this point illustrated by Descartes methodological doubt.</p>
+</details>
+
+<details class="discussion-objection">
+  <summary>Objection 4: On truth and value</summary>
+
+> It seems that you are regarding philosophy as an attempt to secure the truth ‘out there’. But then, what is the value of truth? I do not think it should be taken for granted.
+>
+> What is the measure of truth? A subjective sense, surely. A powerful feeling that something ‘makes sense’. We are the measure of truth; truth is not the measure of us. And so if facts fail to make me happy, should I not just throw them away. Moreover, if philosophy can involve the questioning of truth’s value, how can it be defined by it? A mighty paradox this is!
+
+<p class="discussion-response-label">My response</p>
+
+<p>This is specifically my point, though I disagree with your measure of testing our success in this pursuit. The fact is we don’t know, I don’t know, what truth will look like or if it’s meaningful to even refer to at all. As to measuring facts with happiness, I’m really not sure how to respond to that as I don’t see the relevance of feelings to facts, especially as a measurement of their value. Lastly, your ‘paradox’ of truth and philosophy, this is specifically what makes defining philosophy so difficult. Unlike other academic fields, it is absolutely consistent to question its own principles, questioning the very nature and foundations from which it is built. Technically, philosophy could render itself irrelevant and still be philosophical in doing so; talk about troubling. But is this nature that attracts me to the field; nothing is above criticism nor examination.</p>
+</details>
+
+<details class="discussion-objection">
+  <summary>Objection 5: On dispassion</summary>
+
+> A dispassionate approach sounds like an approach that does not concern me. Without passion, without the drive to untangle the tangle of existence, what is philosophy but a practice in logic and rhetoric? It is the scientific drive for objectivity and indifference that has lead the logical positivists to entirely omit themselves from philosophy, as if they were not the ones doing the philosophy. To me, this seem absurd. Scientific knowledge does nothing to solve the issues of existence. The concept of an expanding universe, or the complexity of sub-atomic particles, changes the way in which I view the world, but is neither meaningful nor tells me what I should do—it is totally irrelevant to me. Only good philosophy makes it relevant.
+>
+> There is no reason to know oneself unless it is a means by which we can achieve a measure of happiness and peace. Otherwise, for what purpose do we practice philosophy? For whom do we practice if not for ourselves? And further, if it is for me that I practice philosophy, why would I then try to remove myself from the equation? Doing so would make it utterly incapable of helping me.
+
+<p class="discussion-response-label">My response</p>
+
+<p>Firstly, I didn’t say that philosophy should be ‘absolutely’ without passion... As I stated, passion in any intellectual pursuit is a primary motivator and essential. What I did say is that this passion must be moderated, to a greater or lesser degree, to prevent errors of judgement.</p>
+<p>You may argue that happiness and peace is what motivates one to know oneself, I don’t have any issue with that, but I disagree that this is philosophy, nor necessarily why we do philosophy. In my case, I’m not interested in philosophy to make myself happy, nor to find peace or create it in any sense. I do philosophy because I want to understand, and I have no expectations as to what that will look like, nor if it is even possible. The problem with defining philosophical pursuit as requiring happiness and peace as a measure is that you’ve implanted a desired outcome to a method. What happens if you don’t find happiness? What if philosophy leads you to unfavourable conclusions? What if peace and happiness are illusory?</p>
+<p>Anyone can define their own personal philosophy however they like; there is no contradiction in that. On the other hand, academic philosophy cannot and it is this type of philosophy that interests me.</p>
+</details>
+
+<details class="discussion-objection">
+  <summary>Objection 6: On ‘know oneself’ as a definition</summary>
+
+> Describing philosophy as an attempt to ‘know oneself’ may be understood as limited. But I also think it is true, if only we expand on what it means to ‘know oneself’—or at least attempt to do so.
+>
+> We might further define ‘knowing’ as having the goal of understanding according to some notion of reality or true perspective. This is achieved, in a fundamental way, by reflection and analysis. We might also further define ‘oneself’ to be everything. For I am defined by my being-in-the-world, and by what I am not, so that to understand myself is to understand everything. So this phrase, ‘knowing oneself’, if we just expand on it a little, captures well philosophy: the task of coming to true knowledge of oneself and the world by reflection and analysis. And this applies to both academic and casual philosophy.
+>
+> As for ‘caring for oneself’, this is the purpose of philosophy. Otherwise, I don’t see any reason to practise philosophy.
+
+<p class="discussion-response-label">My response</p>
+
+<p>This is fine if it’s your position, but as it relates to mine – that as a definition it is ambiguous and open to interpretation and therefore weak – I fail to see anything that I can add at this point.</p>
+</details>
+
+<details class="discussion-objection">
+  <summary>Objection 7: On teleology</summary>
+
+> I think that we must assume the form of knowledge if we are going to obtain it. We do this by posing questions. Each question we pose presupposes the form of the answer in some way. I agree that we might want to avoid wasting our time trying to prove something only because we really want to have it be true. But to think that we can attempt to acquire knowledge without having any teleological structures is wishful thinking.
+
+<p class="discussion-response-label">My response</p>
+
+<p>The form that knowledge will take is itself another question; again, if we assume the answer and look for that assumed answer specifically, we open our pursuit to potential bias. I don’t assume the form knowledge will take, nor what it will ultimately be, if anything... And, yes of course philosophy has an aim, but this is general, for if it were too specific, it risks becoming dogmatic and teleological. Obviously this is in degree, but for the sake of this dialogue I don’t see the necessity to nitpick too far on this detail.</p>
+<p>I think a better way to think about it is that it is we who encompass telos rather than the knowledge which we pursue. It is we who have a purpose, an aim (and I think this is ultimately what you are referring to, but feel free to correct me) not knowledge, or philosophy. My point is that we as philosophers should search out wisdom (whatever that is) fearlessly, selflessly, and without prejudice. That is all.</p>
+</details>
+
+<details class="discussion-objection">
+  <summary>Objection 8: On facts and understanding</summary>
+
+> I am really not capable of expanding the point on feelings and their relationship with understanding. I will just make two provocative statements for contemplation. That facts don’t exist without humans. And that understanding can be reduced to an irresistible feeling of satisfaction.
+
+<p class="discussion-response-label">My response</p>
+
+<p>Two things here trouble me: First, “that facts don’t exist without humans” is a big claim and one that I feel warrants reflection and further examination. This claim is highly debatable and sadly, for me, far beyond my reach in regards to this exchange.</p>
+<p>Second, “that understanding can be reduced to an irresistible feeling of satisfaction.” This last statement is very problematic. If understanding can be reduced to a feeling of satisfaction, at what point is the intellect involved? Is understanding literally just a feeling?</p>
+</details>
+
+<details class="discussion-objection">
+  <summary>Objection 9: On the degree of passion</summary>
+
+> What degree of passion should we have? Is there any way to discover the right amount? Why is a little passion permissible, but not a lot?
+
+<p class="discussion-response-label">My response</p>
+
+<p>I never argued that a “little passion permissible,” I merely stated that passion should be managed to prevent errors of thought due to emotional or personal prejudices of thought.</p>
+</details>
+
+<details class="discussion-objection">
+  <summary>Objection 10: On happiness and philosophical purpose</summary>
+
+> Why do you want to understand? What point is there in mere understanding? Do you really have no expectations?
+>
+> It is not that happiness and peace is the aim of philosophy. Rather, suffering and distress is the very reason we enter into philosophy. And I think that we reach the end of philosophy when we no longer experience suffering.
+>
+> If I don’t find happiness? Then I continue philosophy. What if it leads to unfavourable conclusions? Then I continue philosophy. What if peace and happiness are illusory? Well, I certainly can’t choose to act for the sake of suffering.
+
+<p class="discussion-response-label">My response</p>
+
+<p>I think, and correct if I’m wrong, that you’re more specifically referring to moral philosophy in this sense? I myself am not that interested in moral philosophy, but more so in epistemology and the philosophy of systems of thought, science, etc. In this regard, reaching the end of suffering would not be a suffice measure for the end of my personal intellectual and philosophical pursuits. So, further, this is not why I entered philosophy, but that does not make it a rule, merely my own inclinations and history.</p>
+<p>You state: “If I don’t find happiness? Then I continue philosophy. What if it leads to unfavourable conclusions? Then I continue philosophy.” This process could go on ad infinitum and if so would render philosophy ultimately meaningless. Which it might be, I don’t know... But either way, I too would probably follow your footsteps in this regard. No different to reading in general; if somehow language was proven beyond question, beyond doubt, immutably, that it inherently lacks all meaning, I could and would still value reading for the simple fact that get enjoyment from reading. I would be satisfied in reading just for readings sake.</p>
+<p>Though it should be made clear that this satisfaction would not equate to understanding. While I could understand my motivations to continue reading, that understanding and the satisfaction I feel while reading are two very distinct and separate things. For instance, I could be satisfied with reading, without any understanding of why I’m reading or any understanding at all if I merely enjoyed the act of reading words off a page.</p>
+<p>As for the choice to “act for the sake of suffering,” I’m not sure how happiness being illusory would get you to this point, nor necessarily what you mean by it? Are you saying that if happiness was illusory that your motivating principle to do philosophy would disappear? If this is the case it seems quite a fragile position to be in.</p>
+</details>
+
+<details class="discussion-objection">
+  <summary>Objection 11: On philosophy general and philosophy proper</summary>
+
+> I disagree that people can define philosophy however they like. If this were so, it would become meaningless.
+
+<p class="discussion-response-label">My response</p>
+
+<p>Firstly, we must be careful to specify exactly what we are talking about when referring to philosophy. The word ‘philosophy’ is used in two ways and it is the other everyday common-sense meaning which opens itself to this extended definition. First we have philosophy general, which can include ‘personal philosophies, fitness philosophies, business philosophies, etc; it is the way people describe their own thoughts and ideas. And secondly there is philosophy proper which is the more nuanced, academic type - It is this latter philosophy that I tried to define in that other post I linked to.</p>
+<p>Finally, in the line you quoted, specifically, I make a distinction between two types of philosophy which can be defined; further stating that one can be defined however one wishes, while the other cannot. You are absolutely right that philosophy proper would become meaningless if anyone could define it as they wished. But, philosophy general already suffers from this weakened definitive property. Hence why I personally have no interest in it; it’s rendered meaningless by definition.</p>
+<p>Ultimately, what makes a good definition is not what it allows, but what it doesn’t.</p>
+</details>
+
+  </div>
+</details>
+
+Related: [What Is Philosophy?](/essays/whatis-philosophy/) — my broader account of philosophy proper.

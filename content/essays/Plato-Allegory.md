@@ -2,11 +2,11 @@
 title: "On Plato’s Allegory of the Cave"
 description: "The Divided Line, the Forms, and philosophical education through the Cave."
 author:
-  name = "Andrew McDonald"
+  name: "Andrew McDonald"
 date: 2016-07-22
 cover: /img/essays/plato-allegory/cover.jpg
 coverAlt: "cave"
-draft: true
+draft: false
 toc: false
 images:
 type:
@@ -20,11 +20,45 @@ tags:
 
 ![cave](/img/essays/plato-allegory/cover.jpg)
 
-Drawing on guidance from Heidegger and Kenny, and a direct reading of Plato’s Allegory of the Cave, this essay contends that the Allegory has had such an enduring and influential effect on philosophy, history, and western culture at large, due to its successful synthesis of so many of his ideas into a single narrative.  In support of this contention, three parallels will be explored: the Divided Line; the Forms; and the importance of philosophical education.
+Drawing on guidance from Heidegger and Kenny, and a direct reading of Plato’s Allegory of the Cave, this essay contends that the Allegory has had such an enduring and influential effect on philosophy, history, and western culture at large, due to its successful synthesis of so many of his ideas into a single narrative.  In support of this contention, three parallels will be explored:
+
+<ol class="principles">
+  <li>the Divided Line</li>
+  <li>the Forms</li>
+  <li>the importance of philosophical education</li>
+</ol>
 
 A complete and comprehensive evaluation of Plato’s cosmology is far beyond the scope of this essay; therefore I will limit the focus to Plato’s theory of knowledge and how it connects to the Allegory of the Cave.  This will be done in two ways: first, by describing Plato’s other well known epistemological model, The Divided Line, and using it as a guiding principle for this discussion; and second, by connecting sections of the Divided Line to key features within the Allegory of the Cave.
 
-The key to understanding Plato’s views on all subjects resides within his metaphysical outlook, which he outlines in the Divided Line (fig 1), his grand theory of knowledge which is split into four distinct and unequal parts.  It is first divided into two sections, opinion (doxa) and knowledge (episteme,) each containing two sub-parts.  Opinion consists of imagination (a), whose objects are ‘shadows and reflections;’ and belief (b), whose objects are ‘the living creatures about us and the works of nature or of human hands.’  Whilst knowledge, consisting of mathematical investigation (c), whose objects are abstract items like numbers and geometric figures, and philosophical understanding (d), whose method is dialectic and whose objects is the realm of Ideas (The Forms). (Kenny, 2006, p. 49)  In short, the divided line illustrates degrees of knowing, from the lowest opaque knowledge (imagination) to the clearest and highest ideal knowledge (understanding of the Forms, Ideas themselves) which Plato illustrates in the Allegory of the Cave, where categories of the divided line correspond to specific features within the narrative.
+The key to understanding Plato’s views on all subjects resides within his metaphysical outlook, which he outlines in the Divided Line (fig 1), his grand theory of knowledge which is split into four distinct and unequal parts.  It is first divided into two sections, opinion (doxa) and knowledge (episteme,) each containing two sub-parts.
+
+<div class="concept-sequence">
+  <p class="formulation-section">Opinion (doxa)</p>
+  <dl class="sequence-list">
+    <div>
+      <dt>a</dt>
+      <dd>imagination, whose objects are ‘shadows and reflections;’</dd>
+    </div>
+    <div>
+      <dt>b</dt>
+      <dd>belief, whose objects are ‘the living creatures about us and the works of nature or of human hands.’</dd>
+    </div>
+  </dl>
+
+  <p class="formulation-section">Knowledge (episteme)</p>
+  <dl class="sequence-list">
+    <div>
+      <dt>c</dt>
+      <dd>mathematical investigation, whose objects are abstract items like numbers and geometric figures</dd>
+    </div>
+    <div>
+      <dt>d</dt>
+      <dd>philosophical understanding, whose method is dialectic and whose objects is the realm of Ideas (The Forms). (Kenny, 2006, p. 49)</dd>
+    </div>
+  </dl>
+</div>
+
+In short, the divided line illustrates degrees of knowing, from the lowest opaque knowledge (imagination) to the clearest and highest ideal knowledge (understanding of the Forms, Ideas themselves) which Plato illustrates in the Allegory of the Cave, where categories of the divided line correspond to specific features within the narrative.
 
 In the Allegory of the Cave, Plato describes a cave where three prisoners have been shackled since birth, with their backs to the entrance, unable to move and forced to stare at a single spot on the wall.  Behind them is a walkway where objects can be paraded and behind that a fire, which casts shadows of the objects on to the wall in front of the prisoners.  Every waking hour the prisoners watch the shadows flicker across the wall.  Knowing only the world of these shadows, they play games, competing with each other to see who best knows the shadows.
 
@@ -38,7 +72,28 @@ At the beginning of the story, the prisoners can only see reflections and shadow
 
 Next the prisoner is unshackled and turned around.  He is now able to see the fire as the source of light, which he has only ever seen reflected off the cave wall; the walkway that lies between the fire and the prisoners; and the objects whence the shadows come.  He is now able to see the elements that make up the empirical world.  The objects and the fire represent the underlying principles of the empirical.  And while the prisoner can now see an “unhidden” (Heidegger, 1962, pp. 257-258) principle to what he previously thought was true knowledge (the shadows), for Plato, this is too is merely just a shadow of a deeper reality.  In short, they are “images” of the Forms. (Plato n.d., p. 194)
 
-In the Republic, Plato uses mathematical education as a means to explain these levels of knowledge further.  Firstly, when someone reads a story about a mathematician, this is an exercise of the imagination.   Secondly, when someone counts objects, such as people or chariots, or any other physical object, this will be an exercise in mathematical belief.  Thirdly, higher examination of arithmetic will lead the student from the world of becoming (opinion) all together, and teach him the study of abstract numbers, which can be multiplied but cannot change.  And lastly, by using dialectic and questioning the foundations of mathematics it will give him a true understanding of the number. (Kenny, 2006, p. 50)  Within the Allegory, these last two educational levels correspond to the world beyond the cave.
+In the Republic, Plato uses mathematical education as a means to explain these levels of knowledge further.
+
+<dl class="argument-outline">
+  <div>
+    <dt>1</dt>
+    <dd>Firstly, when someone reads a story about a mathematician, this is an exercise of the imagination.</dd>
+  </div>
+  <div>
+    <dt>2</dt>
+    <dd>Secondly, when someone counts objects, such as people or chariots, or any other physical object, this will be an exercise in mathematical belief.</dd>
+  </div>
+  <div>
+    <dt>3</dt>
+    <dd>Thirdly, higher examination of arithmetic will lead the student from the world of becoming (opinion) all together, and teach him the study of abstract numbers, which can be multiplied but cannot change.</dd>
+  </div>
+  <div>
+    <dt>4</dt>
+    <dd>And lastly, by using dialectic and questioning the foundations of mathematics it will give him a true understanding of the number. (Kenny, 2006, p. 50)</dd>
+  </div>
+</dl>
+
+Within the Allegory, these last two educational levels correspond to the world beyond the cave.
 
 Once outside the cave, the prisoner is exposed to the world beyond the sensible, the intelligible world.  This further turning, from the sensible to the intelligible reveals deeper underlying principles that were hidden from him whilst only relying on his senses to know the world.  He can now grasp the interconnecting principles that give rise to the everyday empirical world.  In this sense, the outside world that is seen to him in the Suns light is the world of abstract numbers.  Where arithmetic is riddled with multiples, such as adding two to two creates four, the world of abstract numbers is concerned with the Idea of Two.  This Idea is singular and possesses internal unchangability, and like all objects of knowledge (the divided line) belongs to the world of being (knowledge), not of becoming (opinion). (Kenny, 2006, p. 49)  For Plato, though, to truly understand the world there is still further to go.
 
@@ -50,10 +105,14 @@ In sum, the strength of Plato’s Allegory is its ability to touch on so many di
 
 ## References
 
-Groarke, L 2016,  Aristotle: Logic, Internet Encyclopedia of Philosophy, viewed 22 April 2016, [link](http://www.iep.utm.edu/aris-log/).
+<div class="references">
 
-Heidegger, M 1962, Plato’s Doctrine of Truth, Barrett, W & Aiken, H (eds), Philosophy in the twentieth century: an anthology, Random House, New York, pp. 251-270.
+  <p>Groarke, L 2016, <a href="http://www.iep.utm.edu/aris-log/" target="_blank" rel="noopener noreferrer">Aristotle: Logic</a>, <em>Internet Encyclopedia of Philosophy</em>, viewed 22 April 2016.</p>
 
-Kenny, A 2006, An illustrated brief history of western philosophy, Malden, Blackwell Pub, MA.
+  <p>Heidegger, M 1962, <em>Plato’s Doctrine of Truth</em>, Barrett, W &amp; Aiken, H (eds), <em>Philosophy in the twentieth century: an anthology</em>, Random House, New York, pp. 251-270.</p>
 
-Plato n.d., ‘The Republic’, trans. B Jowett 1941, Modern Library, New York.
+  <p>Kenny, A 2006, <em>An illustrated brief history of western philosophy</em>, Malden, Blackwell Pub, MA.</p>
+
+  <p>Plato n.d., ‘The Republic’, trans. B Jowett 1941, Modern Library, New York.</p>
+
+</div>

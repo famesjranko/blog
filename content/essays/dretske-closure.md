@@ -6,7 +6,7 @@ author:
 date: 2020-03-09T03:54:16+11:00
 cover: /img/essays/dretske-closure/cover.jpg
 coverAlt: "rope"
-draft: true
+draft: false
 toc: false
 type:
   - essays
@@ -19,13 +19,18 @@ tags:
 
 ![rope](/img/essays/dretske-closure/cover.jpg)
 
-Fred Dretske (2005) rejects the claim that closure holds over known entailment. Dretske argues that propositions, P, have heavyweight implications, Q, which cannot be known by the same reasons that P is known by; and that if closure holds this leads to scepticism. However, Dretske argues that we can rule out closure by acknowledging that relevant alternatives for P are distinct and separate from those for Q. Thus closure fails and scepticism is avoided. Intuitively I find myself agreeing with Dretske, but think that this intuition itself is part of the larger problem within epistemology. Using ideas from Nagel et al, I contend that the analytic approach to the problems of closure and knowledge itself is potentially limited; that gaps between thought modes can explain cases of apparent loss of knowledge as exposed by Dretske. Moreover, that if we want to further success regarding problems within epistemology a new approach may be needed. I suggest we look toward the rational sciences, and towards a form of experimental epistemology.
+Fred Dretske (2005) rejects the claim that knowledge is closed under known entailment. This is a counterintuitive position. If we know that *P* is true, and know that *P* entails *Q*, it seems reasonable to expect that we should thereby know *Q*. Yet Dretske argues that there are some implications of what we know which cannot be known by the same reasons that the original proposition is known. If closure holds across these implications, the result threatens to lead us towards scepticism.
+
+Intuitively, I find myself agreeing with Dretske. But I think that this intuition is itself part of the larger problem within epistemology. Drawing on Jennifer Nagel’s account of intuitive and reflective thought, I suggest that some apparent losses of knowledge exposed by the closure problem may instead arise from gaps between different modes of thinking. More broadly, I question whether the analytic approach to problems of knowledge is itself becoming limiting. If we want to make further progress on these problems, a different approach may be needed—one that looks toward the rational sciences and, ultimately, toward a form of experimental epistemology.
+
 
 It’s commonly thought and reasonable to expect that if we know that a given proposition is true, that we can thereby deduce and know what is subsequent to it, its implications, are true also. If this is the case, knowledge would appear to be closed under known entailment, otherwise known as the closure principle.
 
-> **Closure Principle**: if, while knowing P, S believes Q because S knows that P entails Q, then S knows Q
->
-> (Luper 2016).
+<div class="principle-statement">
+  <p class="formulation-section">Closure principle</p>
+  <p>If, while knowing <em>P</em>, S believes <em>Q</em> because S knows that <em>P</em> entails <em>Q</em>, then S knows <em>Q</em>.</p>
+  <p class="attribution">(Luper 2016).</p>
+</div>
 
 However, according to Dretske, knowledge is not closed under known entailment. He argues there are things implied by what we know, that not only do we not know, we can’t know, even if we know they have to be true. This counterintuitive proposal is one that many struggle to accept. He refers to these unknowable implications as heavyweight (hw). Distinguishing them from knowable implications, which are lightweight (lw).  The key difference between heavyweight and lightweight implications is that lightweights can be known by the same reasons that P is known; whereas heavyweights cannot. For Dretske, heavyweight implications are pervasive and irreversibly deleterious to closure, and are what lead to closure failure.
 
@@ -33,8 +38,23 @@ For example, when we see a jar with cookies in it, we come to know P – that th
 
 For instance, imagine you are at an ordinary zoo and you are standing in front of a pen with a sign that reads ‘zebra.’ In this pen there is a zebra, and you believe that in the pen the animal is a zebra. Suddenly you realise that your belief that there is a zebra in the pen implies that it isn’t a cleverly disguised mule. According to Dretske, though you can deduce *not-mule* from your knowledge that there is a zebra in the pen, you can’t know not-mule as you have no method for detecting when it is false. However, if this is the case, then closure across simplification and equivalence fail also. This is because if P entails Q, then P is equivalent to the conjunction of P & Q.
 
-![Euler diagram with P=PQ contained inside Q](/img/essays/dretske-closure/euler-diagram.svg "**The equivalence principle**: P entails Q; therefore P is equal to the conjunction of P&Q.\
-**The simplification principle**: if I know P, I can deduce Q from P, as P is equal to P&Q.")
+<div class="principle-pair">
+  <div>
+    <p class="formulation-section">Equivalence principle</p>
+    <p><em>P</em> entails <em>Q</em>; therefore <em>P</em> is equal to the conjunction of <em>P</em> &amp; <em>Q</em>.</p>
+  </div>
+
+  <div>
+    <p class="formulation-section">Simplification principle</p>
+    <p>If I know <em>P</em>, I can deduce <em>Q</em> from <em>P</em>, as <em>P</em> is equal to <em>P</em> &amp; <em>Q</em>.</p>
+  </div>
+</div>
+
+<div class="principle-diagram">
+
+![Euler diagram with P=PQ contained inside Q](/img/essays/dretske-closure/euler-diagram.svg "P entails Q under conjunction.")
+
+</div>
 
 Assuming that closure holds across equivalence, if we know zebra we also know the conjunction zebra and not-mule. Moreover, if we accept that closure holds across simplification, then we will be able to know not-mule from the conjunction of zebra and not-mule. If Dretske is right and we don’t know not-mule from zebra, then we also have to accept that closure fails for equivalence and simplification. For some this cost is too high; contra, Dretske thinks the cost is too high not to as the alternative may be rampant scepticism (2005 p.31).
 
@@ -54,14 +74,18 @@ In sum, Dretske has shown that there are serious problems with closure that need
 
 ## References
 
-Armstrong, D 1999, ‘Naturalist Program: Epistemology and Ontology’, Proceedings and Addresses of the American Philosophical Association, vol. 73, no. 2, pp. 77-89.
+<div class="references">
 
-Luper, S 2016, Epistemic Closure, The Stanford Encyclopedia of Philosophy (Spring 2016 Edition), Edward N. Zalta (ed.), viewed 15 October 2016, [link](http://plato.stanford.edu/archives/spr2016/entries/closure-epistemic/).
+  <p>Armstrong, D 1999, ‘Naturalist Program: Epistemology and Ontology’, <em>Proceedings and Addresses of the American Philosophical Association</em>, vol. 73, no. 2, pp. 77-89.</p>
 
-Nagel, J 2016, Jennifer Nagel: Closure and Defeat, online video, 2 June, Philosophy at the University of Edinburgh. Viewed 14 October 2016, [link](https://www.youtube.com/watch?v=gyySntqfAik).
+  <p>Luper, S 2016, <a href="http://plato.stanford.edu/archives/spr2016/entries/closure-epistemic/" target="_blank" rel="noopener noreferrer">Epistemic Closure</a>, <em>The Stanford Encyclopedia of Philosophy</em> (Spring 2016 Edition), Edward N. Zalta (ed.), viewed 15 October 2016.</p>
 
-Nagel, J 2011, ‘The psychological basis of the Harman‐Vogel paradox’, Philosophers' Imprint, vol. 11, no. 5, pp. 1‐28.
+  <p>Nagel, J 2016, <a href="https://www.youtube.com/watch?v=gyySntqfAik" target="_blank" rel="noopener noreferrer">Jennifer Nagel: Closure and Defeat</a>, online video, 2 June, Philosophy at the University of Edinburgh. Viewed 14 October 2016.</p>
 
-Steup, M, & Sosa, E 2005, Contemporary debates in epistemology, 2nd ed. MA: Blackwell Pub.
+  <p>Nagel, J 2011, ‘The psychological basis of the Harman‐Vogel paradox’, <em>Philosophers' Imprint</em>, vol. 11, no. 5, pp. 1‐28.</p>
 
-Williamson, T 2000, Knowledge and its limits, Oxford, Oxford University Press.
+  <p>Steup, M, &amp; Sosa, E 2005, <em>Contemporary debates in epistemology</em>, 2nd ed. MA: Blackwell Pub.</p>
+
+  <p>Williamson, T 2000, <em>Knowledge and its limits</em>, Oxford, Oxford University Press.</p>
+
+</div>

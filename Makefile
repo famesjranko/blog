@@ -39,7 +39,7 @@ format-check: ## Fail on unformatted files (CI)
 test: ## vitest run
 	npm run test
 
-build: ## Build dist/ (BASE_PATH=/repo for project-site URLs, empty locally)
+build: ## Generate card placeholders and build dist/ (BASE_PATH=/repo for project-site URLs, empty locally)
 	npm run build
 
 images: ## Regenerate WebP sidecars for JPEGs under static/img

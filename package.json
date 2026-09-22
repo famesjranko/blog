@@ -8,6 +8,7 @@
 		"node": ">=20"
 	},
 	"scripts": {
+		"prebuild": "npm run images",
 		"build": "tsx src/build.ts",
 		"typecheck": "tsc --noEmit && tsc -p tsconfig.static.json",
 		"lint": "biome lint --error-on-warnings .",

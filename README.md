@@ -72,12 +72,13 @@ from the repository owner.
 <br>
 
 An essay or project names its card image with `cover` in frontmatter.
-One without a cover gets generated art instead: `npm run images`
-renders `static/img/placeholders/<slug>.jpg`, a fluid-ink image seeded
-by the slug and coloured from the real covers, and `make check` fails
-until it exists. The file is checked in and only rendered when
-missing, so delete it to re-render. It is removed again once the piece
-gains a cover.
+One without a cover gets generated art instead. Every `npm run build`
+(including `make preview` and the deployment build) first runs
+`npm run images`, which renders `static/img/placeholders/<slug>.jpg`.
+The fluid-ink image is seeded by the slug and coloured from the real
+covers. `make check` also fails until the generated image is present.
+The file is checked in and only rendered when missing, so delete it to
+re-render. It is removed again once the piece gains a cover.
 
 </details>
 

@@ -2,11 +2,11 @@
 title: "Is Justified True Belief Knowledge?"
 description: "Gettier cases and a fourth clause: knowledge as belief tested against the world."
 author:
-  name = "Andrew McDonald"
+  name: "Andrew McDonald"
 date: 2016-08-03
 cover: /img/essays/jtb-knowledge/cover.jpg
 coverAlt: "jtb"
-draft: true
+draft: false
 toc: false
 type:
   - essays
@@ -19,55 +19,95 @@ tags:
 
 ![jtb](/img/essays/jtb-knowledge/cover.jpg)
 
-What do we mean when we say we know something?  The long held thought in philosophy was that for a belief to be considered knowledge it had to have three characteristics.  First that it was true in accordance with a fact of the world. Second, that the holder of the belief holds it with conviction. And lastly, that the believer has justification for holding the belief. This proposal for analysis of knowledge is commonly referred to as Justified True Belief (JTB).
+What do we mean when we say we know something?  The long held thought in philosophy was that for a belief to be considered knowledge it had to have three characteristics.
+
+<ol class="principles">
+  <li>First that it was true in accordance with a fact of the world.</li>
+  <li>Second, that the holder of the belief holds it with conviction.</li>
+  <li>And lastly, that the believer has justification for holding the belief.</li>
+</ol>
+
+This proposal for analysis of knowledge is commonly referred to as Justified True Belief (JTB).
 
 Edmund Gettier (1963), in his seminal paper, *Is Justified True Belief Knowledge?*, outlines three logical examples of JTB:
 
->(a) **S** knows that **P** IFF:
->1. **P** is true
->2. **S** believes that **P**, and
->3. **S** is justified in believing that **P**.
->
->(b) **S** knows that **P** IFF:
->1. **S** accepts **P**
->2. **S** has adequate evidence for **P**, and
->3. **P** is true.
->
->(c) **S** knows that **P** IFF:
->1. **P** is true
->2. **S** is sure that **P** is true, and
->3. **S** has the right to be sure that **P** is true.
+<blockquote class="logical-formulations">
+  <div class="logical-formulation">
+    <p class="logical-title"><span class="logical-label">A</span><strong>S knows that P IFF:</strong></p>
+    <ol>
+      <li><strong>P</strong> is true</li>
+      <li><strong>S</strong> believes that <strong>P</strong>, and</li>
+      <li><strong>S</strong> is justified in believing that <strong>P</strong>.</li>
+    </ol>
+  </div>
+
+  <div class="logical-formulation">
+    <p class="logical-title"><span class="logical-label">B</span><strong>S knows that P IFF:</strong></p>
+    <ol>
+      <li><strong>S</strong> accepts <strong>P</strong></li>
+      <li><strong>S</strong> has adequate evidence for <strong>P</strong>, and</li>
+      <li><strong>P</strong> is true.</li>
+    </ol>
+  </div>
+
+  <div class="logical-formulation">
+    <p class="logical-title"><span class="logical-label">C</span><strong>S knows that P IFF:</strong></p>
+    <ol>
+      <li><strong>P</strong> is true</li>
+      <li><strong>S</strong> is sure that <strong>P</strong> is true, and</li>
+      <li><strong>S</strong> has the right to be sure that <strong>P</strong> is true.</li>
+    </ol>
+  </div>
+</blockquote>
 
 Gettier in applying these versions of JTB, found that the conditions stated in these logical outlines “do not constitute a sufficient condition for the truth of the proposition that **S** knows that **P**.” (1963 p. 121) Gettier points out that in each of the examples of JTB, it is possible for someone to hold a justified true belief that is false. He illustrates this fact in his example of Smith and Jones:
 
 >Suppose that Smith and Jones have applied for a certain job. And suppose that Smith has strong evidence for the following conjunctive proposition:
 >
->(**d**) Jones is the man who will get the job, and Jones has ten coins in his pocket.
+>**D** Jones is the man who will get the job, and Jones has ten coins in his pocket.
 >
->Smith’s evidence for (**d**) might be that the president of the company assured him that Jones would in the end be selected, and that he, Smith, had counted the coins in Jones’s pocket ten minutes ago.
+>Smith’s evidence for **D** might be that the president of the company assured him that Jones would in the end be selected, and that he, Smith, had counted the coins in Jones’s pocket ten minutes ago.
 >
->Proposition (**d**) entails: (**e**) The man who will get the job has ten coins in his pocket.
+>Proposition **D** entails: **E** The man who will get the job has ten coins in his pocket.
 >
->Let us suppose that Smith sees the entailment from (**d**) to (**e**), and accepts (**e**) on the grounds of (**d**), for which he has strong evidence.
+>Let us suppose that Smith sees the entailment from **D** to **E**, and accepts **E** on the grounds of **D**, for which he has strong evidence.
 >
->In this case, Smith is clearly justified in believing that (**e**) is true. But imagine, further, that unknown to Smith, he himself, not Jones, will get the job. And, also, unknown to Smith, he himself has ten coins in his pocket.
+>In this case, Smith is clearly justified in believing that **E** is true. But imagine, further, that unknown to Smith, he himself, not Jones, will get the job. And, also, unknown to Smith, he himself has ten coins in his pocket.
 >
->Proposition (**e**) is then true, though proposition (**d**), from which Smith inferred (**e**), is false.
+>Proposition **E** is then true, though proposition **D**, from which Smith inferred **E**, is false.
 >
 >In our example, then, all of the following are true:
->1. (**e**) is true
->2. Smith believes that (**e**) is true, and
->3. Smith is justified in believing that (**e**) is true.
+>1. **E** is true
+>2. Smith believes that **E** is true, and
+>3. Smith is justified in believing that **E** is true.
 >
->But it is equally clear that Smith does not know that (**e**) is true; for (**e**) is true in virtue of the number of coins in Smith’s pocket, while Smith does not know how many coins are in Smith’s pocket, and bases his belief in (**e**) on a count of the coins in Jones’s pocket, whom he falsely believes to be the man who will get the job.
+>But it is equally clear that Smith does not know that **E** is true; for **E** is true in virtue of the number of coins in Smith’s pocket, while Smith does not know how many coins are in Smith’s pocket, and bases his belief in **E** on a count of the coins in Jones’s pocket, whom he falsely believes to be the man who will get the job.
 >
 >(1963 p. 122)
 
 I contend that Gettier was right to question this understanding of knowledge and expose it as lacking; but that a further provisional form of knowledge can be saved from this analysis by the addition of a fourth clause, consisting of an appropriate external test. Moreover, that by reversing the analytical approach and instead of trying to solve for what knowledge is, a better method may be to distinguish what knowledge can’t be; thereby defining where the theoretical limit of knowledge is and exposing the demarcation point between knowing and not knowing.
 
-Once we have an argument for knowledge we have two basic approaches by which we can justify that argument. First, an inward internalist approach. Where justification is built up from clauses, presuppositions, and other arguments which further deductions can be drawn. Or second, an outward externalist approach, which relies on measurement, on a qualifying test against which the truth claim would fail if it were false. If we are to accept the pure internalist view, then we must accept that knowledge by this means is limited. If we are to accept a purely outward externalist view, we are the forced to deny that knowledge exists at all within our minds. If on the other hand we take both an internalist and externalist view, blending the justificational framework across both domains, that of the inner mental and the outer worldly, we can mitigate some of these apparent imposed limits on our knowledge.
+Once we have an argument for knowledge we have two basic approaches by which we can justify that argument.
 
-It is only when an internal belief is tested and doesn’t fail can we say we hold some form of actual knowledge. Internalistically, our beliefs rely on frameworks for justification, built up on prior arguments, deductions, experience, intuitions and the appearance of internal consistency. But this alone is not enough to fully satisfy the truth conditions necessary for knowledge; we need a further external justification for this; before this crucial step the best we can claim to hold is possible knowledge. In essence, there is a demarcation that separates possible knowledge from actual knowledge, and this demarcation correlates with the boundary that exists between our internal frameworks and the external measure of the outside world. The problem we face then is how do we cross this demarcation? What would be a satisfactory test for actual knowledge?
+<div class="approach-list">
+  <div>
+    <span>1</span>
+    <p><strong>First, an inward internalist approach.</strong> Where justification is built up from clauses, presuppositions, and other arguments which further deductions can be drawn.</p>
+  </div>
+
+  <div>
+    <span>2</span>
+    <p><strong>Or second, an outward externalist approach,</strong> which relies on measurement, on a qualifying test against which the truth claim would fail if it were false.</p>
+  </div>
+</div>
+
+If we are to accept the pure internalist view, then we must accept that knowledge by this means is limited. If we are to accept a purely outward externalist view, we are the forced to deny that knowledge exists at all within our minds. If on the other hand we take both an internalist and externalist view, blending the justificational framework across both domains, that of the inner mental and the outer worldly, we can mitigate some of these apparent imposed limits on our knowledge.
+
+It is only when an internal belief is tested and doesn’t fail can we say we hold some form of actual knowledge. Internalistically, our beliefs rely on frameworks for justification, built up on prior arguments, deductions, experience, intuitions and the appearance of internal consistency. But this alone is not enough to fully satisfy the truth conditions necessary for knowledge; we need a further external justification for this; before this crucial step the best we can claim to hold is possible knowledge.
+
+<p class="demarcation-line">In essence, there is a demarcation that separates possible knowledge from actual knowledge, and this demarcation correlates with the boundary that exists between our internal frameworks and the external measure of the outside world.</p>
+
+The problem we face then is how do we cross this demarcation? What would be a satisfactory test for actual knowledge?
 
 Let’s look at a specific example from Stanley and Williamson’s article, Knowing How. 
 
@@ -83,7 +123,7 @@ For instance, let’s look at Bertrand Russell’s well known example of the sto
 
 >Alice sees a clock that reads two o’clock, and believes that the time is two o’clock. It is in fact two o’clock. There’s a problem, however: unknown to Alice, the clock she’s looking at stopped twelve hours ago. Alice thus has an accidentally true, justified belief.
 >
-> (Wikipedia)
+> <p class="attribution">(Wikipedia)</p>
 
 Alice clearly does not hold what we would classify as a genuine case of knowledge in this scenario, as it is by sheer luck that the broken clock’s hands happen to correlate with the actual time that it happens to be when Alice makers her observation. This particular case also aids to highlight just how often these scenarios can arise, as the broken clock will always be exactly correct at two separate times of every day. But what if Alice, instead of ending her inquiry at the initial observation, had taken the time to inspect the clock to test its working state? If we add the clause that the clock must be tested at the time of the first observation for working order, we can provisionally test its truthfulness and therefore also its knowledge claim.
 
@@ -115,10 +155,14 @@ If you made it this far and are interested in a broader overview of knowledge, t
 
 ## References
 
-Gettier, E 1963, Is Justified True Belief Knowledge?, Analysis, 23:6, pp.121-123.
+<div class="references">
 
-Hume, D & Millican, P 2007, An enquiry concerning human understanding, Oxford University Press, Oxford.
+  <p>Gettier, E 1963, <em>Is Justified True Belief Knowledge?</em>, <em>Analysis</em>, 23:6, pp.121-123.</p>
 
-Stanley, J & Williamson, T 2001, Knowing How, Journal of Philosophy, 98.8, pp.411-44.
+  <p>Hume, D &amp; Millican, P 2007, <em>An enquiry concerning human understanding</em>, Oxford University Press, Oxford.</p>
 
-Wikipedia 2016, Gettier Problem, [link](https://en.wikipedia.org/wiki/Gettier_problem) [Accessed 3 Aug. 2016].
+  <p>Stanley, J &amp; Williamson, T 2001, <em>Knowing How</em>, <em>Journal of Philosophy</em>, 98.8, pp.411-44.</p>
+
+  <p>Wikipedia 2016, <a href="https://en.wikipedia.org/wiki/Gettier_problem" target="_blank" rel="noopener noreferrer">Gettier Problem</a> [Accessed 3 Aug. 2016].</p>
+
+</div>
