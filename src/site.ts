@@ -7,7 +7,7 @@ function readEnv(name: string): string | undefined {
 	return process.env[name];
 }
 
-const DEFAULT_SITE_ORIGIN = "https://famesjranko.github.io";
+const DEFAULT_SITE_ORIGIN = "https://andrewjmcdonald.com";
 
 export function basePath(): string {
 	const raw = (readEnv("BASE_PATH") ?? "").trim().replace(/\/+$/, "");

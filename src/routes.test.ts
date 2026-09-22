@@ -105,7 +105,7 @@ describe("generateSite rss", () => {
 		expect(rss).toContain("<title>Andrew J. McDonald</title>");
 		expect(rss).toContain("<description>A short description.</description>");
 		expect(rss).toContain(
-			'<guid isPermaLink="true">https://famesjranko.github.io/essays/on-mind/</guid>',
+			'<guid isPermaLink="true">https://andrewjmcdonald.com/essays/on-mind/</guid>',
 		);
 	});
 

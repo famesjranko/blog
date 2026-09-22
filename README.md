@@ -41,6 +41,7 @@ Custom static site built with TypeScript and Markdown.
 * Biome
 * Vitest
 * GitHub Actions
+* Cloudflare Pages
 * GitHub Pages
 
 ## Structure
@@ -55,14 +56,15 @@ dist/       Generated site output
 ```
 
 <details>
-<summary><strong>Project-site URLs</strong></summary>
+<summary><strong>Deployment URLs</strong></summary>
 
 <br>
 
-GitHub Pages serves this repository under `/blog/`. Internal URLs use
-`BASE_PATH`, which is empty locally and `/blog` in the Pages build.
-RSS and sitemap URLs use `SITE_ORIGIN`, which the Pages workflow derives
-from the repository owner.
+The production site is served from `https://andrewjmcdonald.com/` with an
+empty `BASE_PATH`. Internal URLs use `BASE_PATH`, so the manual GitHub Pages
+fallback can still build under `/blog/`. RSS and sitemap URLs use
+`SITE_ORIGIN`; it defaults to the production domain and the fallback workflow
+sets its GitHub Pages origin explicitly.
 
 </details>
 
@@ -84,15 +86,20 @@ re-render. It is removed again once the piece gains a cover.
 
 ## Deployment
 
-The site is intended for:
+The production site is:
 
 ```text
-https://famesjranko.github.io/blog/
+https://andrewjmcdonald.com/
 ```
 
-Deployment is manual. Run the **Deploy blog to shared GitHub Pages** workflow
-and type `deploy` to confirm it. The workflow builds the site with
-`BASE_PATH=/blog`, then synchronizes only the generated files to `blog/` in
-the public `famesjranko.github.io` repository. It requires a repository
-deploy key stored as the `PAGES_DEPLOY_KEY` Actions secret; the root site and
-`ipcamera/` are left untouched.
+Cloudflare Pages builds `main` from this repository with `npm run build` and
+publishes `dist/`; non-`main` branches receive noindex preview deployments.
+GitHub CI and pull-request checks are the quality gate before merging to
+`main`.
+
+The GitHub Pages copy at `https://famesjranko.github.io/blog/` remains a
+manual fallback. Run the **Deploy blog to shared GitHub Pages** workflow and
+type `deploy` to refresh it. That workflow builds with `BASE_PATH=/blog`, then
+synchronizes only generated files to `blog/` in the public
+`famesjranko.github.io` repository. It requires the `PAGES_DEPLOY_KEY` secret;
+the root site and `ipcamera/` are left untouched.
