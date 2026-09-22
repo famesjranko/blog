@@ -44,6 +44,12 @@ describe("showDrafts", () => {
 });
 
 describe("absoluteSiteUrl", () => {
+	it("uses the production domain by default", () => {
+		expect(absoluteSiteUrl("/essays/on-mind/")).toBe(
+			"https://andrewjmcdonald.com/essays/on-mind/",
+		);
+	});
+
 	it("combines the configured origin, base path, and site path", () => {
 		vi.stubEnv("SITE_ORIGIN", "https://example.com/");
 		vi.stubEnv("BASE_PATH", "/blog");
