@@ -42,6 +42,7 @@ export function essayIndexPage(essays: Essay[]): string {
 	const count = essays.length === 1 ? "1 essay" : `${essays.length} essays`;
 	return page({
 		title: "Essays",
+		canonicalPath: "/essays/",
 		description: "Essays on philosophy, knowledge, ethics, and technology.",
 		content: `<div class="wrap index-page"><h1>Essays</h1><p class="index-count">${count}</p><ol class="card-grid">${entries}</ol></div>`,
 	});
@@ -95,6 +96,7 @@ export function homePage(essays: Essay[], projects: Project[] = []): string {
 				});
 	return page({
 		title: "Andrew J. McDonald",
+		canonicalPath: "/",
 		description: HERO_STANDFIRST,
 		skipTo: skipTarget(featuredEssays.length, featuredProjects.length),
 		...heroAssets(),

@@ -22,6 +22,7 @@ describe("essayPage", registerEssayTests);
 function registerEssayTests(): void {
 	registerContentColumnTest();
 	registerDescriptionTest();
+	registerSocialImageTest();
 	registerMissingDescriptionTest();
 	registerDraftLabelTest();
 	registerPublishedLabelTest();
@@ -41,6 +42,16 @@ function registerDescriptionTest(): void {
 		expect(html).toContain(
 			'<meta name="description" content="A short description.">',
 		);
+	});
+}
+
+function registerSocialImageTest(): void {
+	it("uses the essay image for social sharing", () => {
+		const html = essayPage(sampleEssay());
+		expect(html).toContain(
+			"https://andrewjmcdonald.com/img/placeholders/on-privacy.jpg",
+		);
+		expect(html).toContain('<meta property="og:type" content="article">');
 	});
 }
 

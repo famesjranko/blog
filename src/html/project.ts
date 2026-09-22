@@ -1,7 +1,7 @@
 import type { Project } from "../content.js";
 import { siteUrl } from "../site.js";
 import type { CardHeading } from "./index.js";
-import { cardClass, cardCover, escapeHtml, page } from "./layout.js";
+import { cardClass, cardCover, coverSrc, escapeHtml, page } from "./layout.js";
 
 export function originLabel(origin: Project["origin"]): string {
 	return origin === "university" ? "University project" : "Personal project";
@@ -53,6 +53,7 @@ export function projectIndexPage(projects: Project[]): string {
 		projects.length === 1 ? "1 project" : `${projects.length} projects`;
 	return page({
 		title: "Projects",
+		canonicalPath: "/projects/",
 		description:
 			"Software projects, from university coursework to personal builds.",
 		content: `<div class="wrap index-page"><h1>Projects</h1><p class="index-count">${count}</p><ol class="card-grid">${entries}</ol></div>`,
@@ -104,6 +105,11 @@ export function projectPage(project: Project): string {
 			: `<aside class="project-side" aria-label="Project facts">${facts}</aside>`;
 	return page({
 		title: project.title,
+		canonicalPath: `/projects/${project.slug}/`,
+		socialImage: coverSrc(project),
+		...(project.cover === undefined || project.coverAlt === undefined
+			? {}
+			: { socialImageAlt: project.coverAlt }),
 		...(project.description === undefined
 			? {}
 			: { description: project.description }),

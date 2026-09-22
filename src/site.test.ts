@@ -1,5 +1,11 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { absoluteSiteUrl, basePath, showDrafts, siteUrl } from "./site.js";
+import {
+	absoluteSiteUrl,
+	basePath,
+	canonicalSiteUrl,
+	showDrafts,
+	siteUrl,
+} from "./site.js";
 
 afterEach(() => {
 	vi.unstubAllEnvs();
@@ -61,5 +67,15 @@ describe("absoluteSiteUrl", () => {
 	it("rejects an origin containing a path", () => {
 		vi.stubEnv("SITE_ORIGIN", "https://example.com/blog");
 		expect(() => absoluteSiteUrl("/")).toThrow(/SITE_ORIGIN/);
+	});
+});
+
+describe("canonicalSiteUrl", () => {
+	it("always uses the public root domain", () => {
+		vi.stubEnv("SITE_ORIGIN", "https://famesjranko.github.io");
+		vi.stubEnv("BASE_PATH", "/blog");
+		expect(canonicalSiteUrl("/essays/on-mind/")).toBe(
+			"https://andrewjmcdonald.com/essays/on-mind/",
+		);
 	});
 });

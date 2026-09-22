@@ -14,6 +14,7 @@ export function topicPage(topic: TopicEntry, essays: Essay[]): string {
 		.join("\n");
 	return page({
 		title: `Topic: ${topic.name}`,
+		canonicalPath: `/topics/${topic.slug}/`,
 		description: `Essays on ${topic.name}.`,
 		content: `<div class="wrap topic-page"><h1>${escapeHtml(topic.name)}</h1><ol class="card-grid">${items}</ol></div>`,
 	});
