@@ -152,28 +152,57 @@ describe("cardCover dimensions", () => {
 	});
 });
 
-describe("cardCover webp sidecars", () => {
-	it("wraps jpeg covers in a picture element with a webp source", () => {
+describe("cardCover responsive sources", () => {
+	it("puts AVIF before WebP with matching candidates and sizes", () => {
 		const html = cardCover(
-			piece("/img/essays/jtb-knowledge/cover.jpg", "jtb", "jtb-knowledge"),
+			piece(
+				"/img/essays/dreyfus-review/cover.jpg",
+				"transformations",
+				"dreyfus-review",
+			),
 		);
 		expect(html).toContain("<picture>");
-		expect(html).toContain(
-			'<source type="image/webp" srcset="/img/essays/jtb-knowledge/cover.webp">',
-		);
-		expect(html).toContain('src="/img/essays/jtb-knowledge/cover.jpg"');
+		const sizes =
+			"(min-width: 73rem) 33.25rem, (min-width: 62.5rem) calc(50vw - 3.25rem), (min-width: 42rem) calc(46vw - 0.75rem), (min-width: 25rem) 92vw, calc(100vw - 2rem)";
+		const avif =
+			'<source type="image/avif" srcset="/img/essays/dreyfus-review/cover.card-480w.avif 480w, /img/essays/dreyfus-review/cover.card-720w.avif 720w, /img/essays/dreyfus-review/cover.card-944w.avif 944w"';
+		const webp =
+			'<source type="image/webp" srcset="/img/essays/dreyfus-review/cover.card-480w.webp 480w, /img/essays/dreyfus-review/cover.card-720w.webp 720w, /img/essays/dreyfus-review/cover.card-944w.webp 944w"';
+		expect(html).toContain(`${avif} sizes="${sizes}">`);
+		expect(html).toContain(`${webp} sizes="${sizes}">`);
+		expect(html.indexOf(avif)).toBeLessThan(html.indexOf(webp));
+		expect(html).toContain('src="/img/essays/dreyfus-review/cover.jpg"');
+		expect(html).toContain('width="1313" height="533"');
+		expect(html).toContain('loading="lazy"');
 		expect(html).toContain('decoding="async"');
 	});
 
-	it("prefixes both the webp source and the fallback with the base path", () => {
+	it("prefixes every candidate and the fallback with the base path", () => {
 		vi.stubEnv("BASE_PATH", "/blog");
 		try {
-			const html = cardCover(piece("/img/essays/x/cover.jpg", "x", "x"));
-			expect(html).toContain('srcset="/blog/img/essays/x/cover.webp"');
-			expect(html).toContain('src="/blog/img/essays/x/cover.jpg"');
+			const html = cardCover(
+				piece("/img/essays/dreyfus-review/cover.jpg", "x", "x"),
+			);
+			expect(html).toContain(
+				'srcset="/blog/img/essays/dreyfus-review/cover.card-480w.avif 480w',
+			);
+			expect(html).toContain(
+				", /blog/img/essays/dreyfus-review/cover.card-944w.webp 944w",
+			);
+			expect(html).toContain('src="/blog/img/essays/dreyfus-review/cover.jpg"');
 		} finally {
 			vi.unstubAllEnvs();
 		}
+	});
+});
+
+describe("cardCover compatibility", () => {
+	it("keeps the full-size WebP path for an unknown JPEG", () => {
+		const html = cardCover(piece("/img/essays/x/cover.jpg", "x", "x"));
+		expect(html).toContain(
+			'<source type="image/webp" srcset="/img/essays/x/cover.webp">',
+		);
+		expect(html).not.toContain('type="image/avif"');
 	});
 
 	it("leaves png covers as plain img elements", () => {

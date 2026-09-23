@@ -53,7 +53,9 @@ describe("projectEntry card", () => {
 	it("renders the slug's placeholder art when no cover is set", () => {
 		const html = projectEntry(sampleProject({ slug: "musicmeta" }));
 		expect(html).toContain('src="/img/placeholders/musicmeta.jpg"');
-		expect(html).toContain('srcset="/img/placeholders/musicmeta.webp"');
+		expect(html).toContain(
+			'srcset="/img/placeholders/musicmeta.card-480w.webp 480w, /img/placeholders/musicmeta.card-640w.webp 640w"',
+		);
 		expect(html).toContain('alt=""');
 	});
 

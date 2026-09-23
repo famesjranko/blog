@@ -1,5 +1,11 @@
 import type { Essay, Project } from "../content.js";
-import { imageSize, placeholderSrc, webpSrc } from "../images.js";
+import {
+	CARD_IMAGE_SIZES,
+	type CardImageCandidate,
+	cardImagePlan,
+	cardImageSource,
+} from "../cardImages.js";
+import { imageSize, webpSrc } from "../images.js";
 import { canonicalSiteUrl, siteUrl } from "../site.js";
 
 export const SITE_NAME = "Andrew J. McDonald";
@@ -19,9 +25,9 @@ export function escapeHtml(value: string): string {
  * empty alt. Root-relative sources are prefixed with the site base
  * path, mirroring the markdown image rule, so covers keep working
  * under BASE_PATH. Internal JPEG covers render as `<picture>` with a
- * WebP source; the original file remains the fallback `<img>`. All
- * other sources keep the plain `<img>` rendering. A draft (only ever
- * built under SHOW_DRAFTS) gets a badge overlaid on the art.
+ * responsive AVIF and WebP sources; the original file remains the
+ * fallback `<img>`. All other sources keep their previous rendering.
+ * A draft (only ever built under SHOW_DRAFTS) gets a badge over the art.
  */
 export type CoverPiece = Pick<
 	Essay | Project,
@@ -44,18 +50,40 @@ export function cardCover(piece: CoverPiece): string {
 	const dimensions =
 		size === undefined ? "" : ` width="${size.width}" height="${size.height}"`;
 	const img = `<img src="${escapeHtml(url)}" alt="${escapeHtml(alt)}"${dimensions} loading="lazy" decoding="async">`;
-	const webp = webpSrc(src);
-	const art =
-		webp === undefined
-			? img
-			: `<picture><source type="image/webp" srcset="${escapeHtml(siteUrl(webp))}">${img}</picture>`;
+	const art = picture(src, img);
 	const badge = piece.draft ? DRAFT_BADGE : "";
 	return `<div class="card-media">${art}${badge}</div>`;
 }
 
+function candidateSet(
+	candidates: CardImageCandidate[],
+	format: "avif" | "webp",
+): string {
+	return candidates
+		.map((candidate) => {
+			const src = format === "avif" ? candidate.avifSrc : candidate.webpSrc;
+			return `${siteUrl(src)} ${candidate.width}w`;
+		})
+		.join(", ");
+}
+
+function picture(src: string, img: string): string {
+	const plan = cardImagePlan(src);
+	if (plan !== undefined) {
+		const avif = escapeHtml(candidateSet(plan.candidates, "avif"));
+		const webp = escapeHtml(candidateSet(plan.candidates, "webp"));
+		const sizes = escapeHtml(CARD_IMAGE_SIZES);
+		return `<picture><source type="image/avif" srcset="${avif}" sizes="${sizes}"><source type="image/webp" srcset="${webp}" sizes="${sizes}">${img}</picture>`;
+	}
+	const webp = webpSrc(src);
+	return webp === undefined
+		? img
+		: `<picture><source type="image/webp" srcset="${escapeHtml(siteUrl(webp))}">${img}</picture>`;
+}
+
 /** The image source used by cards and social previews for a piece. */
 export function coverSrc(piece: Pick<CoverPiece, "cover" | "slug">): string {
-	return piece.cover ?? placeholderSrc(piece.slug);
+	return cardImageSource(piece);
 }
 
 export function header(): string {
