@@ -96,7 +96,7 @@ describe("build output", () => {
 		const headers = await readFile(path.join(outDir, "_headers"), "utf8");
 
 		expect(headers).toBe(
-			"/*\n  X-Frame-Options: DENY\n  Permissions-Policy: camera=(), microphone=(), geolocation=()\n",
+			"/*\n  X-Frame-Options: DENY\n  Permissions-Policy: camera=(), microphone=(), geolocation=()\n\n/img/*.avif\n  Cache-Control: public, max-age=86400\n\n/img/*.webp\n  Cache-Control: public, max-age=86400\n",
 		);
 	}, 30000);
 

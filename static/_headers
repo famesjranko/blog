@@ -1,3 +1,9 @@
 /*
   X-Frame-Options: DENY
   Permissions-Policy: camera=(), microphone=(), geolocation=()
+
+/img/*.avif
+  Cache-Control: public, max-age=86400
+
+/img/*.webp
+  Cache-Control: public, max-age=86400
