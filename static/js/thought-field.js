@@ -16,15 +16,16 @@ import { perfMeter } from "./thought-field-perf.js";
  * @typedef {import("./thought-field-particles.js").Pointer} Pointer
  * @typedef {import("./thought-field-engine.js").Settings} Settings
  * @typedef {import("./thought-field-lab-panel.js").LabPanel} LabPanel
+ * @typedef {import("./thought-field-lab-panel.js").LabOptions} LabOptions
  */
 
 /**
  * The physics settings: the defaults, or with ?tune the lab panel's once
  * it has loaded. Only ?tune imports the lab, so no other page fetches it.
- * @param {boolean} motion
+ * @param {LabOptions} options handed to the lab panel
  * @returns {{ settings: () => Settings, destroy: () => void }}
  */
-function settingsSource(motion) {
+function settingsSource(options) {
 	/** @type {LabPanel | null} */
 	let lab = null;
 	let closed = false;
@@ -32,7 +33,7 @@ function settingsSource(motion) {
 		const url = new URL("./thought-field-lab-panel.js", import.meta.url);
 		/** @type {typeof import("./thought-field-lab-panel.js")} */
 		const panel = await import(url.href);
-		lab = closed ? null : panel.openLabPanel({ motion });
+		lab = closed ? null : panel.openLabPanel(options);
 	};
 	if (new URLSearchParams(location.search).has("tune")) {
 		void open();
@@ -127,7 +128,7 @@ export function initThoughtField(canvas, tier) {
 	const resize = resizeState({ hero, renderer, tier });
 	const motion = motionInput();
 	const perf = perfMeter({ particles: field.count, motion: motion !== null });
-	const source = settingsSource(motion !== null);
+	const source = settingsSource({ motion, hero });
 	const loop = createLoop({
 		renderer,
 		field,

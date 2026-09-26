@@ -22,7 +22,7 @@
  * @returns {boolean}
  */
 export function motionSupported(env) {
-	// Listening never prompts (only requestPermission() does, and we never call it); unpermitted browsers send no or all-null events.
+	// Listening never prompts (only requestPermission() does, and only the ?tune lab calls it); unpermitted browsers send no or all-null events.
 	return (
 		env.matchMedia("(pointer: coarse)").matches && "DeviceMotionEvent" in env
 	);

@@ -3,6 +3,7 @@
 // store, so the hero stays in view above it.
 
 import { KNOBS, TOGGLES } from "./thought-field-lab-knobs.js";
+import { mountPermissionLab } from "./thought-field-lab-permission-ui.js";
 import { createLabStore } from "./thought-field-lab-store.js";
 import {
 	DEFAULT_LAB,
@@ -31,6 +32,10 @@ import {
  * @typedef {import("./thought-field-lab-knobs.js").ToggleName} ToggleName
  * @typedef {import("./thought-field-engine.js").Settings} Settings
  * @typedef {{ settings: () => Settings, destroy: () => void }} LabPanel
+ * @typedef {{
+ *   motion: import("./thought-field-motion.js").MotionInput | null,
+ *   hero: Element | null,
+ * }} LabOptions
  * @typedef {{ store: LabStore, render: () => void }} Ctx
  */
 
@@ -190,11 +195,13 @@ function browserStorage() {
 /**
  * Mounts the Tune button and its sheet; the returned settings follow
  * every change from the next frame on.
- * @param {{ motion: boolean }} options
+ * @param {LabOptions} options
  * @returns {LabPanel}
  */
-export function openLabPanel({ motion }) {
+export function openLabPanel(options) {
+	const { motion } = options;
 	const store = createLabStore(browserStorage());
+	const permission = mountPermissionLab(options);
 	const tune = el("button", TUNE_STYLE, "Tune");
 	const sheet = el("div", `${SHEET_STYLE}; display: none`);
 	/** @param {boolean} open */
@@ -208,9 +215,9 @@ export function openLabPanel({ motion }) {
 		const close = button("Close", () => setOpen(false), "float: right");
 		const title = el("div", "font-weight: 600; line-height: 44px", "Hero lab");
 		const off = "motion off: tune on a phone";
-		const note = motion ? [] : [el("div", "color: #ffb070", off)];
+		const note = motion !== null ? [] : [el("div", "color: #ffb070", off)];
 		const ctx = { store, render };
-		const body = [...controls(ctx), actions(ctx)];
+		const body = [permission.section, ...controls(ctx), actions(ctx)];
 		sheet.replaceChildren(close, title, ...note, ...body);
 	};
 	render();
@@ -218,6 +225,7 @@ export function openLabPanel({ motion }) {
 	return {
 		settings: store.settings,
 		destroy: () => {
+			permission.destroy();
 			tune.remove();
 			sheet.remove();
 		},
