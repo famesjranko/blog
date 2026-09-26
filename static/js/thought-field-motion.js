@@ -47,8 +47,7 @@ export function toScreenAxes(sample, angle) {
 
 /**
  * Converts one devicemotion event's fields into a screen-axes reading,
- * or null without an acceleration. The twist is derived downstream from
- * gravity, not rotationRate: browsers disagree on which axis alpha is.
+ * or null without an acceleration.
  * @param {AccelerationReading | null} accel
  * @param {number} angle
  * @returns {MotionReading | null}

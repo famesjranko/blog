@@ -133,25 +133,49 @@ export function sample(channel, gx, gy) {
 }
 
 /**
- * Adds AMOUNT to the channel's force with the weights sample reads.
+ * The lower-left face that sample reads at (gx, gy) and the point's
+ * offsets from it.
+ * @param {Channel} channel
+ * @param {number} gx
+ * @param {number} gy
+ * @returns {{ k: number, tx: number, ty: number }}
+ */
+function corner(channel, gx, gy) {
+	const { sx, sy, cols, rows, stride } = channel;
+	const fi = clamp(gx + sx, sx, cols + sx);
+	const fj = clamp(gy + sy, sy, rows + sy);
+	const i = Math.floor(fi);
+	const j = Math.floor(fj);
+	return { k: j * stride + i, tx: fi - i, ty: fj - j };
+}
+
+/**
+ * Adds AMOUNT to the channel's velocity with the weights sample reads.
  * @param {Channel} channel
  * @param {number} gx
  * @param {number} gy
  * @param {number} amount
  */
 export function splat(channel, gx, gy, amount) {
-	const { sx, sy, cols, rows, stride, force } = channel;
-	const fi = clamp(gx + sx, sx, cols + sx);
-	const fj = clamp(gy + sy, sy, rows + sy);
-	const i = Math.floor(fi);
-	const j = Math.floor(fj);
-	const tx = fi - i;
-	const ty = fj - j;
-	const k = j * stride + i;
-	force[k] += (1 - tx) * (1 - ty) * amount;
-	force[k + 1] += tx * (1 - ty) * amount;
-	force[k + stride] += (1 - tx) * ty * amount;
-	force[k + stride + 1] += tx * ty * amount;
+	const { stride, data } = channel;
+	const { k, tx, ty } = corner(channel, gx, gy);
+	data[k] += (1 - tx) * (1 - ty) * amount;
+	data[k + 1] += tx * (1 - ty) * amount;
+	data[k + stride] += (1 - tx) * ty * amount;
+	data[k + stride + 1] += tx * ty * amount;
+}
+
+/**
+ * The sum of the squared weights at (gx, gy): how much of a splat there
+ * the sample at the same point reads back.
+ * @param {Channel} channel
+ * @param {number} gx
+ * @param {number} gy
+ * @returns {number}
+ */
+export function splatWeight(channel, gx, gy) {
+	const { tx, ty } = corner(channel, gx, gy);
+	return ((1 - tx) ** 2 + tx ** 2) * ((1 - ty) ** 2 + ty ** 2);
 }
 
 /**

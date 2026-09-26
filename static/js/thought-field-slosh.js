@@ -33,11 +33,10 @@ import { add, scaled, sub, vec } from "./thought-field-vec.js";
 /** @typedef {{ state: SloshState, sample: Vec2 | null, dt: number, tuning: SloshTuning }} SloshStepOptions */
 
 /**
- * `shake`, `lean` and `spin` are this step's filter outputs: the
- * deadzoned high-pass of the reading (m/s², screen axes), the tilt lean
- * (field units) the spring pulls toward, and the in-plane twist rate
- * (rad/s, positive counter-clockwise looking at the screen).
- * @typedef {{ state: SloshState, shift: Vec2, delta: Vec2, shake: Vec2, lean: Vec2, spin: number }} SloshStep
+ * `shake` and `lean` are this step's filter outputs: the deadzoned
+ * high-pass of the reading (m/s², screen axes) and the tilt lean (field
+ * units) the spring pulls toward.
+ * @typedef {{ state: SloshState, shift: Vec2, delta: Vec2, shake: Vec2, lean: Vec2 }} SloshStep
  */
 
 /** @typedef {{ offset: Vec2, velocity: Vec2 }} Motion */
@@ -47,14 +46,12 @@ import { add, scaled, sub, vec } from "./thought-field-vec.js";
 /** @type {Readonly<SloshTuning>} */
 export const SLOSH_TUNING = Object.freeze({
 	shakeGain: 2.5, // field units/s² of kick per m/s² of shake
-	deadzone: 3, // m/s² of shake ignored: tilting and handling read 3–5 m/s²; a deliberate shake 20+
+	deadzone: 5, // m/s² of shake ignored: tilts read 2.4–5.3 m/s² on a phone; deliberate shakes 20–68
 	frequency: 1.2, // Hz; how fast the field swings back and forth
 	damping: 0.35, // below 1 swings past centre and back; 1 or more settles
 	tiltLean: 0.25, // field units of lean per 1 g of tilt from neutral
 	tiltRecenter: 4, // s for a held tilt to become the new neutral
 	gravitySmoothing: 0.15, // s; longer keeps shake out of the lean but lags tilt
-	twistFloor: 3, // m/s² of in-plane gravity below which a near-flat phone gives no twist
-	twistFull: 6, // m/s² of in-plane gravity from which the twist counts in full
 	maxOffset: 0.3, // field units; soft ceiling on the displayed shift
 	spread: 0.6, // 0 moves the field as one block; higher moves big particles more
 });
@@ -144,7 +141,7 @@ export function stepSlosh({ state, sample, dt, tuning }) {
 	if (!(dt > 0)) {
 		const shift = { ...state.shown };
 		const [delta, shake, lean] = [vec(0, 0), vec(0, 0), vec(0, 0)];
-		return { state, shift, delta, shake, lean, spin: 0 };
+		return { state, shift, delta, shake, lean };
 	}
 	const filtered = filterReading({ state, sample, dt, tuning });
 	const drive = {
@@ -170,7 +167,6 @@ export function stepSlosh({ state, sample, dt, tuning }) {
 		delta: sub(shown, state.shown),
 		shake: filtered.shake,
 		lean: filtered.lean,
-		spin: filtered.spin,
 	};
 }
 

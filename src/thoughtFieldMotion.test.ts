@@ -71,7 +71,7 @@ describe("toScreenAxes", () => {
 describe("readingFrom", () => {
 	const UPRIGHT = { x: 0, y: 9.81 };
 
-	it("reads the acceleration alone, with no gyroscope twist", () => {
+	it("reads the acceleration alone", () => {
 		expect(readingFrom(UPRIGHT, 0)).toStrictEqual(UPRIGHT);
 	});
 

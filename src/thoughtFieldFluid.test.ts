@@ -1,7 +1,13 @@
 import { describe, expect, it } from "vitest";
 import { project } from "../static/js/thought-field-fluid.js";
 import type { Channel, Fluid } from "../static/js/thought-field-grid.js";
-import { makeFluid, sample, splat } from "../static/js/thought-field-grid.js";
+import {
+	makeFluid,
+	sample,
+	sampleBuffer,
+	splat,
+	splatWeight,
+} from "../static/js/thought-field-grid.js";
 
 const COLS = 8;
 const ROWS = 6;
@@ -125,26 +131,55 @@ describe("sample", () => {
 	});
 });
 
+// Splats AMOUNT at a random interior point of the channel and returns
+// the point and the change to every entry of its velocity.
+function splatOnce(channel: Channel, random: () => number, amount: number) {
+	const gx = 1 + random() * (COLS - 2);
+	const gy = 1 + random() * (ROWS - 2);
+	const before = channel.data.slice();
+	splat(channel, gx, gy, amount);
+	const change = channel.data.map((value, k) => value - at(before, k));
+	return { gx, gy, change };
+}
+
 describe("splat", () => {
-	it("adds exactly the amount, with the weights sample reads", () => {
+	it("adds exactly the amount to the velocity, with the weights sample reads", () => {
 		const fluid = makeFluid(COLS, ROWS);
 		const random = generator(13);
 		for (const channel of [fluid.u, fluid.v]) {
 			fill(channel, () => random() * 2 - 1);
+			// An independent probe field in src shows which weights were used.
+			channel.src.forEach((_, k) => {
+				channel.src[k] = random() * 2 - 1;
+			});
 			for (let n = 0; n < 20; n += 1) {
-				channel.force.fill(0);
-				const gx = 1 + random() * (COLS - 2);
-				const gy = 1 + random() * (ROWS - 2);
 				const amount = random() * 4 - 2;
-				splat(channel, gx, gy, amount);
+				const { gx, gy, change } = splatOnce(channel, random, amount);
 				let total = 0;
 				let weighted = 0;
-				for (let k = 0; k < channel.force.length; k += 1) {
-					total += at(channel.force, k);
-					weighted += at(channel.force, k) * at(channel.data, k);
-				}
+				change.forEach((delta, k) => {
+					total += delta;
+					weighted += delta * at(channel.src, k);
+				});
+				const probe = sampleBuffer(channel, channel.src, gx, gy);
 				expect(total).toBeCloseTo(amount, 12);
-				expect(weighted).toBeCloseTo(amount * sample(channel, gx, gy), 12);
+				expect(weighted).toBeCloseTo(amount * probe, 12);
+			}
+		}
+	});
+
+	it("splatWeight is the share of a splat the sample there reads back", () => {
+		const fluid = makeFluid(COLS, ROWS);
+		const random = generator(17);
+		for (const channel of [fluid.u, fluid.v]) {
+			for (let n = 0; n < 20; n += 1) {
+				const amount = 1 + random();
+				const { gx, gy, change } = splatOnce(channel, random, amount);
+				let squares = 0;
+				for (const delta of change) {
+					squares += (delta / amount) ** 2;
+				}
+				expect(splatWeight(channel, gx, gy)).toBeCloseTo(squares, 12);
 			}
 		}
 	});

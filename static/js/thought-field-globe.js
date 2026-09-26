@@ -2,6 +2,7 @@
 // fluid simulation; every flake has its own velocity, is dragged by the
 // liquid and drags it back, so a shake stirs up independent swirls.
 
+import { shakeBubble } from "./thought-field-bubble.js";
 import { moveFlakes } from "./thought-field-flakes.js";
 import { fluidSpeed, stepFluid } from "./thought-field-fluid.js";
 import { fluidCols, makeFluid } from "./thought-field-grid.js";
@@ -11,13 +12,11 @@ import {
 	restingSlosh,
 	stepSlosh,
 } from "./thought-field-slosh.js";
-import { shakeFluid, twistFluid } from "./thought-field-stir.js";
-import { dot, scaled, sub } from "./thought-field-vec.js";
+import { scaled } from "./thought-field-vec.js";
 
 /**
  * @typedef {import("./thought-field-flakes.js").Flakes} Flakes
  * @typedef {import("./thought-field-grid.js").Fluid} Fluid
- * @typedef {import("./thought-field-vec.js").Vec2} Vec2
  * @typedef {import("./thought-field-slosh.js").SloshStep} SloshStep
  * @typedef {import("./thought-field-motion.js").MotionReading} MotionReading
  * @typedef {import("./thought-field-particles.js").Field} Field
@@ -32,34 +31,12 @@ import { dot, scaled, sub } from "./thought-field-vec.js";
  *   coupling: number,
  *   viscosity: number,
  *   glassDrag: number,
- *   twistGain: number,
- *   spinDeadzone: number,
- *   twistHold: number,
  *   bubble: number,
  *   free: number,
  * }} GlobeTuning
  */
 
-/**
- * The twist fed to the liquid (rad/s), whether it came from a reading,
- * and the seconds since the last shake.
- * @typedef {{ value: number, seeded: boolean, quiet: number }} Spin
- */
-
-/** @typedef {{ spin: Spin, filtered: SloshStep, live: boolean, dt: number }} SpinStep */
-
-/**
- * One step's state and inputs: `spin` (rad/s) is the phone's turning
- * rate and `spinUp` (rad/s) its change since the last step.
- * @typedef {{
- *   fluid: Fluid,
- *   flakes: Flakes,
- *   dt: number,
- *   filtered: SloshStep,
- *   spinUp: number,
- *   spin: number,
- * }} World
- */
+/** @typedef {{ fluid: Fluid, flakes: Flakes, dt: number, filtered: SloshStep }} World */
 
 /**
  * `step` advances the liquid and flakes and returns the calm: the share
@@ -70,60 +47,15 @@ import { dot, scaled, sub } from "./thought-field-vec.js";
 /** @type {Readonly<GlobeTuning>} */
 export const GLOBE_TUNING = Object.freeze({
 	shakeGain: 2.6, // field units/s² a mid-weight flake is jolted per m/s² of shake
-	tiltGain: 4, // 1/s²; settling acceleration per field unit of lean
+	tiltGain: 2, // 1/s²; settling acceleration per field unit of lean
 	drag: 0.3, // s; how quickly a mid-weight flake catches up with the liquid
 	spread: 0.4, // flakes weigh 1 ± spread by size: heavier lags, sinks, slips more
-	coupling: 3, // total flake mass over liquid mass: how hard flakes stir it
-	viscosity: 0.02, // field units²/s; higher calms small swirls sooner
-	glassDrag: 0.7, // s for the front and back glass to stop the liquid
-	twistGain: 0.7, // 1 = the liquid lags a twist fully; less = walls drag it along
-	spinDeadzone: 0.8, // rad/s of twist ignored: walking sways gravity by up to ~0.7
-	twistHold: 0.3, // s after a shake before a twist counts in full again
-	bubble: 0.3, // share of a shake the top of the liquid takes; 0 = brim-full
+	coupling: 6, // total flake mass over liquid mass: how hard flakes stir it
+	viscosity: 0.01, // field units²/s; higher calms small swirls sooner
+	glassDrag: 0.1, // s for the glass to stop bare liquid; the flakes' momentum makes a stir last ~(1 + coupling) times longer
+	bubble: 1, // share of a shake the top of the liquid takes; 0 = brim-full
 	free: 3, // s per field unit: how far motion loosens the pull to the layout
 });
-
-const ONE_G = 9.81; // m/s²
-
-/** @type {(value: number, deadzone: number) => number} */
-const softDeadzone = (value, deadzone) =>
-	Math.sign(value) * Math.max(0, Math.abs(value) - deadzone);
-
-/**
- * The part-full globe's push: the shake across UP, the in-plane way
- * away from gravity, weaker as the phone lies flatter. Null when flat.
- * @param {Vec2} shake m/s²
- * @param {Vec2} gravity the settled reading, m/s², pointing up
- * @param {Readonly<GlobeTuning>} tuning
- * @returns {{ push: Vec2, up: Vec2 } | null}
- */
-function bubblePush(shake, gravity, tuning) {
-	const g = Math.hypot(gravity.x, gravity.y);
-	if (g < 0.01 || tuning.bubble === 0) {
-		return null;
-	}
-	const up = scaled(gravity, 1 / g);
-	const across = sub(shake, scaled(up, dot(shake, up)));
-	const k = -tuning.shakeGain * tuning.bubble * Math.min(1, g / ONE_G);
-	return { push: scaled(across, k), up };
-}
-
-/**
- * The twist the liquid feels (rad/s): the filter's spin past the
- * deadzone. A sideways shake turns the filtered gravity just as a twist
- * does, so the twist is silenced while the phone shakes and fades back
- * in over twistHold seconds after; `quiet` counts those seconds.
- * @param {SpinStep} options
- * @param {Readonly<GlobeTuning>} tuning
- * @returns {Spin}
- */
-function nextSpin({ spin, filtered, live, dt }, tuning) {
-	const { shake } = filtered;
-	const quiet = shake.x !== 0 || shake.y !== 0 ? 0 : spin.quiet + dt;
-	const fade = quiet === 0 ? 0 : Math.min(1, quiet / tuning.twistHold);
-	const value = softDeadzone(filtered.spin, tuning.spinDeadzone) * fade;
-	return { value, seeded: live, quiet };
-}
 
 /**
  * One step of liquid and flakes; returns the calm.
@@ -131,29 +63,22 @@ function nextSpin({ spin, filtered, live, dt }, tuning) {
  * @param {Readonly<GlobeTuning>} tuning
  * @returns {number}
  */
-function stir(world, tuning) {
-	const { fluid, flakes, dt, filtered } = world;
-	const spinUp = world.spinUp * tuning.twistGain;
-	const spin = world.spin * tuning.twistGain;
-	twistFluid(fluid, { spinUp, spin, dt });
+function stir({ fluid, flakes, dt, filtered }, tuning) {
 	const cells = fluid.cols * fluid.rows;
 	const flakeSpeed = moveFlakes(flakes, {
 		fluid,
 		dt,
 		jolt: scaled(filtered.shake, -tuning.shakeGain),
 		sink: scaled(filtered.lean, tuning.tiltGain),
-		spinUp,
-		cos: Math.cos(2 * spin * dt),
-		sin: Math.sin(2 * spin * dt),
-		spinSq: spin * spin,
 		drag: tuning.drag,
 		spread: tuning.spread,
-		share: (tuning.coupling * cells) / (Math.max(1, flakes.count) * dt),
+		mass: (tuning.coupling * cells) / Math.max(1, flakes.count),
 	});
-	const bubble = bubblePush(filtered.shake, filtered.state.gravity, tuning);
-	if (bubble !== null) {
-		shakeFluid(fluid, bubble.push, bubble.up);
-	}
+	shakeBubble(fluid, {
+		shake: filtered.shake,
+		gravity: filtered.state.gravity,
+		gain: tuning.shakeGain * tuning.bubble,
+	});
 	const { viscosity, glassDrag } = tuning;
 	stepFluid(fluid, { dt, viscosity, glassDrag });
 	return 1 / (1 + tuning.free * (fluidSpeed(fluid) + flakeSpeed));
@@ -172,8 +97,6 @@ export function createGlobe(field, motion, tuning = GLOBE_TUNING) {
 	const flakes = { pos, scale, count, vel: new Float32Array(count * 3) };
 	let fluid = makeFluid(fluidCols(1));
 	let slosh = restingSlosh();
-	/** @type {Spin} */
-	let spin = { value: 0, seeded: false, quiet: Number.POSITIVE_INFINITY };
 	let calm = 1;
 	/** @type {(aspect: number, dt: number) => number} */
 	const step = (aspect, dt) => {
@@ -182,25 +105,18 @@ export function createGlobe(field, motion, tuning = GLOBE_TUNING) {
 		}
 		const cols = fluidCols(aspect);
 		fluid = cols === fluid.cols ? fluid : makeFluid(cols);
-		const reading = motion.reading();
 		const filtered = stepSlosh({
 			state: slosh,
-			sample: reading,
+			sample: motion.reading(),
 			dt,
 			tuning: SLOSH_TUNING,
 		});
-		const live = reading !== null;
-		const spun = nextSpin({ spin, filtered, live, dt }, tuning);
-		const spinUp = spin.seeded ? spun.value - spin.value : 0;
 		slosh = filtered.state;
-		spin = spun;
-		const world = { fluid, flakes, dt, filtered, spinUp, spin: spun.value };
-		calm = stir(world, tuning);
+		calm = stir({ fluid, flakes, dt, filtered }, tuning);
 		return calm;
 	};
 	const reseed = () => {
 		slosh = reseedSlosh(slosh);
-		spin = { ...spin, seeded: false };
 	};
 	return { step, reseed };
 }

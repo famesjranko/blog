@@ -52,4 +52,5 @@ export function splat(
 	gy: number,
 	amount: number,
 ): void;
+export function splatWeight(channel: Channel, gx: number, gy: number): number;
 export function enforceWalls(channel: Channel, slot: Slot): void;
