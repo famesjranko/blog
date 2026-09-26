@@ -1,14 +1,9 @@
+import { createGlobe } from "./thought-field-globe.js";
 import { pointerStrength, stepParticles } from "./thought-field-particles.js";
 import { stepMeteors } from "./thought-field-meteors.js";
-import {
-	SLOSH_TUNING,
-	reseedSlosh,
-	restingSlosh,
-	stepSlosh,
-} from "./thought-field-slosh.js";
 
 /**
- * @typedef {import("./thought-field-slosh.js").SloshState} SloshState
+ * @typedef {import("./thought-field-globe.js").Globe} Globe
  * @typedef {import("./thought-field-motion.js").MotionInput} MotionInput
  * @typedef {import("./thought-field-perf.js").PerfMeter} PerfMeter
  */
@@ -27,44 +22,38 @@ import {
  */
 
 /**
- * Advances every per-frame simulation by DT and returns the new slosh
- * state. Everything in here is timed as the frame's physics cost.
+ * Advances every per-frame simulation by DT. Everything in here is
+ * timed as the frame's physics cost.
  * @param {LoopOptions} options
+ * @param {Globe | null} globe
  * @param {number} now
  * @param {number} dt
- * @param {SloshState} state
- * @returns {SloshState}
  */
-function stepPhysics(options, now, dt, state) {
-	const { field, pointer, meteors, dims, motion } = options;
+function stepPhysics(options, globe, now, dt) {
+	const { field, pointer, meteors, dims } = options;
 	const aspect = dims.aspect;
 	const time = now / 1000;
-	const sample = motion?.reading() ?? null;
-	const step = stepSlosh({ state, sample, dt, tuning: SLOSH_TUNING });
-	const { shift, delta } = step;
-	const slosh = { shift, delta, spread: SLOSH_TUNING.spread };
 	pointer.strength = pointerStrength(pointer.lastMove, now);
 	stepMeteors(meteors, aspect, time, dt);
-	stepParticles({ field, aspect, time, dt, pointer, meteors, slosh });
-	return step.state;
+	// Without motion no globe exists, so the drift runs exactly as it always has.
+	const calm = globe === null ? 1 : globe.step(aspect, dt);
+	stepParticles({ field, aspect, time, dt, pointer, meteors, calm });
 }
 
 /**
- * Steps the physics, draws one frame and returns the new slosh state.
+ * Steps the physics and draws one frame.
  * @param {LoopOptions} options
+ * @param {Globe | null} globe
  * @param {number} now
  * @param {number} dt
- * @param {SloshState} state
- * @returns {SloshState}
  */
-function renderFrame(options, now, dt, state) {
+function renderFrame(options, globe, now, dt) {
 	const { renderer, perf } = options;
 	perf?.frame(now);
 	perf?.begin();
-	const next = stepPhysics(options, now, dt, state);
+	stepPhysics(options, globe, now, dt);
 	perf?.end();
 	renderer.render();
-	return next;
 }
 
 /**
@@ -75,7 +64,8 @@ export function createLoop(options) {
 	let frame = 0;
 	let running = false;
 	let last = performance.now();
-	let slosh = restingSlosh();
+	const { motion } = options;
+	const globe = motion === null ? null : createGlobe(options.field, motion);
 	/** @param {number} now */
 	const tick = (now) => {
 		frame = 0;
@@ -84,7 +74,7 @@ export function createLoop(options) {
 		}
 		const dt = Math.min((now - last) / 1000, 0.05);
 		last = now;
-		slosh = renderFrame(options, now, dt, slosh);
+		renderFrame(options, globe, now, dt);
 		frame = window.requestAnimationFrame(tick);
 	};
 	const visible = () => !document.hidden && heroVisible(options.hero);
@@ -94,7 +84,7 @@ export function createLoop(options) {
 		}
 		running = true;
 		last = performance.now();
-		slosh = reseedSlosh(slosh);
+		globe?.reseed();
 		options.motion?.resume();
 		frame = window.requestAnimationFrame(tick);
 	};
