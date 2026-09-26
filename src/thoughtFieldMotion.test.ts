@@ -71,19 +71,8 @@ describe("toScreenAxes", () => {
 describe("readingFrom", () => {
 	const UPRIGHT = { x: 0, y: 9.81 };
 
-	it("converts the twist rate from deg/s to rad/s", () => {
-		const reading = readingFrom(UPRIGHT, { alpha: 90 }, 0);
-		expect(reading?.spin).toBeCloseTo(Math.PI / 2, 12);
-	});
-
-	it.each([
-		{ case: "no rotationRate", rotationRate: null },
-		{ case: "a null alpha", rotationRate: { alpha: null } },
-	])("reads zero spin from $case", ({ rotationRate }) => {
-		expect(readingFrom(UPRIGHT, rotationRate, 0)).toEqual({
-			...UPRIGHT,
-			spin: 0,
-		});
+	it("reads the acceleration alone, with no gyroscope twist", () => {
+		expect(readingFrom(UPRIGHT, 0)).toStrictEqual(UPRIGHT);
 	});
 
 	it.each([
@@ -91,14 +80,13 @@ describe("readingFrom", () => {
 		{ case: "a null x", accel: { x: null, y: 9.81 } },
 		{ case: "a null y", accel: { x: 0, y: null } },
 	])("gives no reading for $case", ({ accel }) => {
-		expect(readingFrom(accel, { alpha: 90 }, 0)).toBeNull();
+		expect(readingFrom(accel, 0)).toBeNull();
 	});
 
-	it("rotates x and y into screen axes but leaves the spin alone", () => {
+	it("rotates x and y into screen axes", () => {
 		// Top turned to the left: device +x points up the screen.
-		const reading = readingFrom({ x: 1, y: 0 }, { alpha: 90 }, 90);
+		const reading = readingFrom({ x: 1, y: 0 }, 90);
 		expect(reading?.x).toBeCloseTo(0, 12);
 		expect(reading?.y).toBeCloseTo(1, 12);
-		expect(reading?.spin).toBeCloseTo(Math.PI / 2, 12);
 	});
 });

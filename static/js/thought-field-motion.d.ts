@@ -5,22 +5,14 @@
 // motionSupported env and the readingFrom inputs are typed as the
 // structural shapes they read, so the Node suite needs no DOM types.
 
-import type { Vec2 } from "./thought-field-slosh.js";
+import type { Vec2 } from "./thought-field-vec.js";
 
-// Screen axes in m/s²; spin in rad/s, positive counter-clockwise looking at the screen.
-export interface MotionReading {
-	x: number;
-	y: number;
-	spin: number;
-}
+// accelerationIncludingGravity in screen axes, m/s².
+export type MotionReading = Vec2;
 
 export interface AccelerationReading {
 	x: number | null;
 	y: number | null;
-}
-
-export interface RotationReading {
-	alpha: number | null;
 }
 
 export interface MotionInput {
@@ -39,7 +31,6 @@ export function motionSupported(env: MotionEnv): boolean;
 export function toScreenAxes(sample: Vec2, angle: number): Vec2;
 export function readingFrom(
 	accel: AccelerationReading | null,
-	rotationRate: RotationReading | null,
 	angle: number,
 ): MotionReading | null;
 export function motionInput(): MotionInput | null;

@@ -1,32 +1,29 @@
 // Phone-motion slosh for the hero field: shaking the phone sloshes the
-// particles like liquid in a bottle and tilting leans them gently. Pure
-// maths, no DOM or sensor APIs, so Node can test it directly.
+// particles like liquid in a bottle and tilting leans them gently. The
+// filter stage lives in thought-field-motion-filter.js; this module is
+// the spring it drives. Pure maths, no DOM or sensor APIs, so Node can
+// test it directly.
 
-/** @typedef {{ x: number, y: number }} Vec2 */
+import { filterReading } from "./thought-field-motion-filter.js";
+import { add, scaled, sub, vec } from "./thought-field-vec.js";
+
+/** @typedef {import("./thought-field-vec.js").Vec2} Vec2 */
 
 /**
- * @typedef {{
+ * @typedef {import("./thought-field-motion-filter.js").FilterTuning & {
  *   shakeGain: number,
- *   deadzone: number,
  *   frequency: number,
  *   damping: number,
- *   tiltLean: number,
- *   tiltRecenter: number,
- *   gravitySmoothing: number,
  *   maxOffset: number,
  *   spread: number,
  * }} SloshTuning
  */
 
 /**
- * `gravity` is a fast low-pass of the reading (m/s², screen axes),
- * `neutral` a slow baseline of gravity (how the phone is normally held),
- * `offset` the unclamped spring displacement in field units and `shown`
- * the soft-limited displacement output on the previous step.
- * @typedef {{
- *   seeded: boolean,
- *   gravity: Vec2,
- *   neutral: Vec2,
+ * The filter state plus the spring: `offset` the unclamped displacement
+ * in field units and `shown` the soft-limited displacement output on the
+ * previous step.
+ * @typedef {import("./thought-field-motion-filter.js").FilterState & {
  *   offset: Vec2,
  *   velocity: Vec2,
  *   shown: Vec2,
@@ -36,70 +33,37 @@
 /** @typedef {{ state: SloshState, sample: Vec2 | null, dt: number, tuning: SloshTuning }} SloshStepOptions */
 
 /**
- * `shake` is this step's deadzoned high-pass of the reading (m/s², screen
- * axes) and `lean` the tilt lean (field units) the spring pulls toward.
- * @typedef {{ state: SloshState, shift: Vec2, delta: Vec2, shake: Vec2, lean: Vec2 }} SloshStep
+ * `shake`, `lean` and `spin` are this step's filter outputs: the
+ * deadzoned high-pass of the reading (m/s², screen axes), the tilt lean
+ * (field units) the spring pulls toward, and the in-plane twist rate
+ * (rad/s, positive counter-clockwise looking at the screen).
+ * @typedef {{ state: SloshState, shift: Vec2, delta: Vec2, shake: Vec2, lean: Vec2, spin: number }} SloshStep
  */
 
 /** @typedef {{ offset: Vec2, velocity: Vec2 }} Motion */
 
 /** @typedef {{ lean: Vec2, push: Vec2, omega: number, zeta: number }} Drive */
 
-/** @typedef {{ gravity: Vec2, neutral: Vec2, shake: Vec2, lean: Vec2 }} Filtered */
-
 /** @type {Readonly<SloshTuning>} */
 export const SLOSH_TUNING = Object.freeze({
 	shakeGain: 2.5, // field units/s² of kick per m/s² of shake
-	deadzone: 0.6, // m/s² of shake ignored: hand tremor, walking
+	deadzone: 3, // m/s² of shake ignored: tilting and handling read 3–5 m/s²; a deliberate shake 20+
 	frequency: 1.2, // Hz; how fast the field swings back and forth
 	damping: 0.35, // below 1 swings past centre and back; 1 or more settles
 	tiltLean: 0.25, // field units of lean per 1 g of tilt from neutral
 	tiltRecenter: 4, // s for a held tilt to become the new neutral
 	gravitySmoothing: 0.15, // s; longer keeps shake out of the lean but lags tilt
+	twistFloor: 3, // m/s² of in-plane gravity below which a near-flat phone gives no twist
+	twistFull: 6, // m/s² of in-plane gravity from which the twist counts in full
 	maxOffset: 0.3, // field units; soft ceiling on the displayed shift
 	spread: 0.6, // 0 moves the field as one block; higher moves big particles more
 });
 
-const ONE_G = 9.81; // m/s²
 const MAX_SUBSTEP = 1 / 120;
 
 // makePoints draws each particle's scale from [0.9, 1.8).
 const SCALE_MIDPOINT = 1.35;
 const SCALE_HALF_RANGE = 0.45;
-
-/** @type {(x: number, y: number) => Vec2} */
-const vec = (x, y) => ({ x, y });
-
-/** @type {(a: Vec2, b: Vec2) => Vec2} */
-const add = (a, b) => vec(a.x + b.x, a.y + b.y);
-
-/** @type {(a: Vec2, b: Vec2) => Vec2} */
-const sub = (a, b) => vec(a.x - b.x, a.y - b.y);
-
-/** @type {(v: Vec2, k: number) => Vec2} */
-const scaled = (v, k) => vec(v.x * k, v.y * k);
-
-// Fraction of the gap a first-order low-pass closes in dt.
-/** @type {(dt: number, timeConstant: number) => number} */
-const closes = (dt, timeConstant) => 1 - Math.exp(-dt / timeConstant);
-
-/** @type {(from: Vec2, to: Vec2, amount: number) => Vec2} */
-const approach = (from, to, amount) => add(from, scaled(sub(to, from), amount));
-
-/**
- * Shrinks the vector's length by DEADZONE, so the response starts from
- * zero at the threshold instead of jumping.
- * @param {Vec2} shake
- * @param {number} deadzone
- * @returns {Vec2}
- */
-function softDeadzone(shake, deadzone) {
-	const magnitude = Math.hypot(shake.x, shake.y);
-	if (magnitude <= deadzone) {
-		return vec(0, 0);
-	}
-	return scaled(shake, (magnitude - deadzone) / magnitude);
-}
 
 /**
  * Limits the vector's length to below MAX with tanh, keeping direction.
@@ -113,30 +77,6 @@ function softLimit(offset, max) {
 		return vec(0, 0);
 	}
 	return scaled(offset, (max * Math.tanh(magnitude / max)) / magnitude);
-}
-
-/**
- * Splits the reading into tilt (the filtered gravity against its
- * neutral baseline) and shake (the reading minus the gravity it had
- * settled on). An unseeded state takes the reading as both, so the
- * first reading from a tilted phone neither kicks nor leans.
- * @param {SloshStepOptions} options
- * @returns {Filtered}
- */
-function filterReading({ state, sample, dt, tuning }) {
-	if (sample === null) {
-		const { gravity, neutral } = state;
-		return { gravity, neutral, shake: vec(0, 0), lean: vec(0, 0) };
-	}
-	const prior = state.seeded ? state : { gravity: sample, neutral: sample };
-	const shake = softDeadzone(sub(sample, prior.gravity), tuning.deadzone);
-	const fast = closes(dt, tuning.gravitySmoothing);
-	const slow = closes(dt, tuning.tiltRecenter);
-	const gravity = approach(prior.gravity, sample, fast);
-	const neutral = approach(prior.neutral, gravity, slow);
-	// The liquid feels the negative of the reading: it pools on the low side.
-	const lean = scaled(sub(gravity, neutral), -tuning.tiltLean / ONE_G);
-	return { gravity, neutral, shake, lean };
 }
 
 /**
@@ -204,7 +144,7 @@ export function stepSlosh({ state, sample, dt, tuning }) {
 	if (!(dt > 0)) {
 		const shift = { ...state.shown };
 		const [delta, shake, lean] = [vec(0, 0), vec(0, 0), vec(0, 0)];
-		return { state, shift, delta, shake, lean };
+		return { state, shift, delta, shake, lean, spin: 0 };
 	}
 	const filtered = filterReading({ state, sample, dt, tuning });
 	const drive = {
@@ -230,6 +170,7 @@ export function stepSlosh({ state, sample, dt, tuning }) {
 		delta: sub(shown, state.shown),
 		shake: filtered.shake,
 		lean: filtered.lean,
+		spin: filtered.spin,
 	};
 }
 

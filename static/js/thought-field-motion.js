@@ -1,14 +1,11 @@
-/** @typedef {import("./thought-field-slosh.js").Vec2} Vec2 */
+/** @typedef {import("./thought-field-vec.js").Vec2} Vec2 */
 
 /**
- * accelerationIncludingGravity in screen axes (m/s²) and the in-plane
- * twist rate in rad/s, positive counter-clockwise looking at the screen.
- * @typedef {{ x: number, y: number, spin: number }} MotionReading
+ * accelerationIncludingGravity in screen axes (m/s²).
+ * @typedef {Vec2} MotionReading
  */
 
 /** @typedef {{ x: number | null, y: number | null }} AccelerationReading */
-
-/** @typedef {{ alpha: number | null }} RotationReading */
 
 /**
  * Latest reading, read once per frame by the loop.
@@ -50,21 +47,17 @@ export function toScreenAxes(sample, angle) {
 
 /**
  * Converts one devicemotion event's fields into a screen-axes reading,
- * or null without an acceleration. ROTATIONRATE.alpha is in deg/s about
- * the device z axis, which points out of the screen in every
- * orientation, so the twist needs no rotation.
+ * or null without an acceleration. The twist is derived downstream from
+ * gravity, not rotationRate: browsers disagree on which axis alpha is.
  * @param {AccelerationReading | null} accel
- * @param {RotationReading | null} rotationRate
  * @param {number} angle
  * @returns {MotionReading | null}
  */
-export function readingFrom(accel, rotationRate, angle) {
+export function readingFrom(accel, angle) {
 	if (accel === null || accel.x === null || accel.y === null) {
 		return null;
 	}
-	const { x, y } = toScreenAxes({ x: accel.x, y: accel.y }, angle);
-	const alpha = rotationRate?.alpha ?? 0;
-	return { x, y, spin: (alpha * Math.PI) / 180 };
+	return toScreenAxes({ x: accel.x, y: accel.y }, angle);
 }
 
 /**
@@ -82,7 +75,6 @@ export function motionInput() {
 	const onMotion = (event) => {
 		const next = readingFrom(
 			event.accelerationIncludingGravity,
-			event.rotationRate,
 			screen.orientation.angle,
 		);
 		if (next !== null) {

@@ -2,27 +2,23 @@
 // can import the browser module without switching the compiler to
 // check JavaScript. Keep in step with the JSDoc in the .js file.
 
-export interface Vec2 {
-	x: number;
-	y: number;
-}
+import type {
+	FilterState,
+	FilterTuning,
+} from "./thought-field-motion-filter.js";
+import type { Vec2 } from "./thought-field-vec.js";
 
-export interface SloshTuning {
+export type { Vec2 };
+
+export interface SloshTuning extends FilterTuning {
 	shakeGain: number;
-	deadzone: number;
 	frequency: number;
 	damping: number;
-	tiltLean: number;
-	tiltRecenter: number;
-	gravitySmoothing: number;
 	maxOffset: number;
 	spread: number;
 }
 
-export interface SloshState {
-	seeded: boolean;
-	gravity: Vec2;
-	neutral: Vec2;
+export interface SloshState extends FilterState {
 	offset: Vec2;
 	velocity: Vec2;
 	shown: Vec2;
@@ -43,6 +39,8 @@ export interface SloshStep {
 	shake: Vec2;
 	// Tilt lean in field units.
 	lean: Vec2;
+	// In-plane twist in rad/s, positive counter-clockwise looking at the screen.
+	spin: number;
 }
 
 export const SLOSH_TUNING: Readonly<SloshTuning>;
