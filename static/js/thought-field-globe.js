@@ -28,7 +28,7 @@
 
 /** @type {Readonly<GlobeTuning>} */
 export const GLOBE_TUNING = Object.freeze({
-	shakeStir: 0.2, // agitation per m/s of shake (m/s² summed over seconds)
+	shakeStir: 0.28, // agitation per m/s of shake (m/s² summed over seconds)
 	twistStir: 0.4, // agitation per radian the liquid lags a twist
 	twistDeadzone: 0.2, // rad/s of liquid-vs-phone spin ignored: hand wobble
 	viscosity: 0.6, // s; time constant for the swirling to die away
@@ -36,7 +36,7 @@ export const GLOBE_TUNING = Object.freeze({
 	eddySize: 0.6, // field units; rough diameter of one swirl
 	eddyDrift: 0.4, // rad/s; how fast the swirl pattern wanders
 	fluidLag: 0.4, // s; how long the liquid takes to catch up with a twist
-	shakeGain: 0.5, // field units/s² of jolt per m/s² of shake, heaviest flake
+	shakeGain: 0.7, // field units/s² of jolt per m/s² of shake, heaviest flake
 	drag: 0.2, // s; how quickly the lightest flake takes up the local flow
 	heavyLag: 2, // the heaviest flake's extra drag time, in multiples of drag
 	tiltGain: 5, // field units/s² of sinking per field unit of lean, heaviest
@@ -56,8 +56,8 @@ export const GLOBE_TUNING = Object.freeze({
  */
 
 /**
- * `shake` (m/s²) and `lean` (field units) as stepSlosh reports them;
- * `spin` the phone's twist rate (rad/s, counter-clockwise positive).
+ * `shake` (m/s²), `lean` (field units) and `spin` (the phone's twist
+ * rate, rad/s, counter-clockwise positive) as stepSlosh reports them.
  * @typedef {{ shake: Vec2, lean: Vec2, spin: number }} GlobeInput
  */
 

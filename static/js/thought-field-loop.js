@@ -54,7 +54,7 @@ function stepPhysics(options, now, dt, state) {
 	const step = stepSlosh({ state: state.slosh, sample, dt, tuning });
 	pointer.strength = pointerStrength(pointer.lastMove, now);
 	stepMeteors(meteors, aspect, time, dt);
-	const input = { shake: step.shake, lean: step.lean, spin: sample?.spin ?? 0 };
+	const input = { shake: step.shake, lean: step.lean, spin: step.spin };
 	const { globe } = state;
 	// The only motion branch: without a globe, positions are the plain drift.
 	const moved =
