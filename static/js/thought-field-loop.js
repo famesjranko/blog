@@ -1,3 +1,4 @@
+import { GLOBE_TUNING, makeGlobe, stepGlobe } from "./thought-field-globe.js";
 import { pointerStrength, stepParticles } from "./thought-field-particles.js";
 import { stepMeteors } from "./thought-field-meteors.js";
 import {
@@ -9,9 +10,18 @@ import {
 
 /**
  * @typedef {import("./thought-field-slosh.js").SloshState} SloshState
+ * @typedef {import("./thought-field-globe.js").Globe} Globe
  * @typedef {import("./thought-field-motion.js").MotionInput} MotionInput
  * @typedef {import("./thought-field-perf.js").PerfMeter} PerfMeter
  */
+
+/**
+ * The motion filters and, only where there is phone motion, the globe.
+ * @typedef {{ slosh: SloshState, globe: Globe | null }} PhysicsState
+ */
+
+/** @type {{ globe: null, hold: number }} */
+const NO_GLOBE = Object.freeze({ globe: null, hold: 1 });
 
 /**
  * @typedef {{
@@ -27,35 +37,42 @@ import {
  */
 
 /**
- * Advances every per-frame simulation by DT and returns the new slosh
+ * Advances every per-frame simulation by DT and returns the new physics
  * state. Everything in here is timed as the frame's physics cost.
  * @param {LoopOptions} options
  * @param {number} now
  * @param {number} dt
- * @param {SloshState} state
- * @returns {SloshState}
+ * @param {PhysicsState} state
+ * @returns {PhysicsState}
  */
 function stepPhysics(options, now, dt, state) {
 	const { field, pointer, meteors, dims, motion } = options;
 	const aspect = dims.aspect;
 	const time = now / 1000;
 	const sample = motion?.reading() ?? null;
-	const step = stepSlosh({ state, sample, dt, tuning: SLOSH_TUNING });
-	const { shift, delta } = step;
-	const slosh = { shift, delta, spread: SLOSH_TUNING.spread };
+	const tuning = SLOSH_TUNING;
+	const step = stepSlosh({ state: state.slosh, sample, dt, tuning });
 	pointer.strength = pointerStrength(pointer.lastMove, now);
 	stepMeteors(meteors, aspect, time, dt);
-	stepParticles({ field, aspect, time, dt, pointer, meteors, slosh });
-	return step.state;
+	const input = { shake: step.shake, lean: step.lean, spin: sample?.spin ?? 0 };
+	const { globe } = state;
+	// The only motion branch: without a globe, positions are the plain drift.
+	const moved =
+		globe === null
+			? NO_GLOBE
+			: stepGlobe({ globe, field, input, dt, time, tuning: GLOBE_TUNING });
+	const hold = moved.hold;
+	stepParticles({ field, aspect, time, dt, pointer, meteors, hold });
+	return { slosh: step.state, globe: moved.globe };
 }
 
 /**
- * Steps the physics, draws one frame and returns the new slosh state.
+ * Steps the physics, draws one frame and returns the new physics state.
  * @param {LoopOptions} options
  * @param {number} now
  * @param {number} dt
- * @param {SloshState} state
- * @returns {SloshState}
+ * @param {PhysicsState} state
+ * @returns {PhysicsState}
  */
 function renderFrame(options, now, dt, state) {
 	const { renderer, perf } = options;
@@ -68,6 +85,19 @@ function renderFrame(options, now, dt, state) {
 }
 
 /**
+ * The globe exists only with phone motion, so without it none of its
+ * physics runs. A pause keeps its velocities and agitation; dt is
+ * capped, so resuming never jumps.
+ * @param {LoopOptions} options
+ * @returns {PhysicsState}
+ */
+function restingPhysics(options) {
+	const { motion, field } = options;
+	const globe = motion === null ? null : makeGlobe(field.count);
+	return { slosh: restingSlosh(), globe };
+}
+
+/**
  * @param {LoopOptions} options
  * @returns {{ start: () => void, stop: () => void, destroy: () => void }}
  */
@@ -75,7 +105,7 @@ export function createLoop(options) {
 	let frame = 0;
 	let running = false;
 	let last = performance.now();
-	let slosh = restingSlosh();
+	let physics = restingPhysics(options);
 	/** @param {number} now */
 	const tick = (now) => {
 		frame = 0;
@@ -84,7 +114,7 @@ export function createLoop(options) {
 		}
 		const dt = Math.min((now - last) / 1000, 0.05);
 		last = now;
-		slosh = renderFrame(options, now, dt, slosh);
+		physics = renderFrame(options, now, dt, physics);
 		frame = window.requestAnimationFrame(tick);
 	};
 	const visible = () => !document.hidden && heroVisible(options.hero);
@@ -94,7 +124,7 @@ export function createLoop(options) {
 		}
 		running = true;
 		last = performance.now();
-		slosh = reseedSlosh(slosh);
+		physics = { ...physics, slosh: reseedSlosh(physics.slosh) };
 		options.motion?.resume();
 		frame = window.requestAnimationFrame(tick);
 	};

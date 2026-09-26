@@ -7,7 +7,6 @@
 // suite needs no DOM or meteor types.
 
 import type { LinearColour } from "./thought-field-maths.js";
-import type { Vec2 } from "./thought-field-slosh.js";
 
 export interface Pointer {
 	x: number;
@@ -26,12 +25,6 @@ export interface Field {
 	scale: Float32Array;
 }
 
-export interface SloshFrame {
-	shift: Vec2;
-	delta: Vec2;
-	spread: number;
-}
-
 export interface StepParticlesOptions {
 	field: Field;
 	aspect: number;
@@ -41,7 +34,8 @@ export interface StepParticlesOptions {
 	meteors: {
 		slots: ReadonlyArray<{ active: boolean; x: number; y: number }>;
 	};
-	slosh: SloshFrame;
+	// Pull toward each drift target: 1 is the plain drift.
+	hold: number;
 }
 
 export function buildPalette(element?: {

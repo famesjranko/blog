@@ -1,15 +1,8 @@
 import { parseCssColour } from "./thought-field-maths.js";
-import { sloshWeight } from "./thought-field-slosh.js";
 
 /**
  * @typedef {import("./thought-field-maths.js").LinearColour} LinearColour
  * @typedef {import("./thought-field-meteors.js").Meteors} Meteors
- * @typedef {import("./thought-field-slosh.js").Vec2} Vec2
- */
-
-/**
- * The field's slosh displacement and its change since the last frame.
- * @typedef {{ shift: Vec2, delta: Vec2, spread: number }} SloshFrame
  */
 
 /**
@@ -172,6 +165,8 @@ function repel(options) {
 }
 
 /**
+ * HOLD scales the pull toward each drift target: 1 is the plain drift,
+ * lower lets phone motion carry particles away from their layout.
  * @param {{
  *   field: Field,
  *   aspect: number,
@@ -179,32 +174,25 @@ function repel(options) {
  *   dt: number,
  *   pointer: Pointer,
  *   meteors: Meteors,
- *   slosh: SloshFrame,
+ *   hold: number,
  * }} options
  */
 export function stepParticles(options) {
-	const { field, aspect, time, dt, pointer, meteors, slosh } = options;
-	const ease = 1 - Math.exp(-dt * 1.1);
+	const { field, aspect, time, dt, pointer, meteors, hold } = options;
+	const ease = 1 - Math.exp(-dt * 1.1 * hold);
 	const rate = Math.min(dt * 60, 3);
 	for (let i = 0; i < field.count; i += 1) {
 		const ix = i * 3;
 		const p1 = field.phase[i * 2];
 		const p2 = field.phase[i * 2 + 1];
-		const w = sloshWeight(field.scale[i], slosh.spread);
 		const tx =
 			field.base[ix] * aspect +
 			0.09 * Math.sin(0.21 * time + p1) +
-			0.05 * Math.cos(0.13 * time + 1.7 * p2) +
-			slosh.shift.x * w;
+			0.05 * Math.cos(0.13 * time + 1.7 * p2);
 		const ty =
 			field.base[ix + 1] +
 			0.09 * Math.cos(0.17 * time + 1.3 * p2) +
-			0.05 * Math.sin(0.11 * time + 0.7 * p1) +
-			slosh.shift.y * w;
-		// The ~0.9 s ease would blur the slosh, so pos takes the delta directly;
-		// the target carries the shift so the ease can't pull a held tilt out.
-		field.pos[ix] += slosh.delta.x * w;
-		field.pos[ix + 1] += slosh.delta.y * w;
+			0.05 * Math.sin(0.11 * time + 0.7 * p1);
 		field.pos[ix] += (tx - field.pos[ix]) * ease;
 		field.pos[ix + 1] += (ty - field.pos[ix + 1]) * ease;
 		applyRepulsion({ field, ix, pointer, meteors, rate });
