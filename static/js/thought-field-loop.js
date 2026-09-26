@@ -1,5 +1,16 @@
 import { pointerStrength, stepParticles } from "./thought-field-particles.js";
 import { stepMeteors } from "./thought-field-meteors.js";
+import {
+	SLOSH_TUNING,
+	reseedSlosh,
+	restingSlosh,
+	stepSlosh,
+} from "./thought-field-slosh.js";
+
+/**
+ * @typedef {import("./thought-field-slosh.js").SloshState} SloshState
+ * @typedef {import("./thought-field-motion.js").MotionInput} MotionInput
+ */
 
 /**
  * @typedef {{
@@ -9,22 +20,31 @@ import { stepMeteors } from "./thought-field-meteors.js";
  *   hero: Element | null,
  *   meteors: import("./thought-field-meteors.js").Meteors,
  *   dims: { aspect: number },
+ *   motion: MotionInput | null,
  * }} LoopOptions
  */
 
 /**
+ * Draws one frame and returns the slosh state advanced by DT.
  * @param {LoopOptions} options
  * @param {number} now
  * @param {number} dt
+ * @param {SloshState} state
+ * @returns {SloshState}
  */
-function renderFrame(options, now, dt) {
-	const { renderer, field, pointer, meteors, dims } = options;
+function renderFrame(options, now, dt, state) {
+	const { renderer, field, pointer, meteors, dims, motion } = options;
 	const aspect = dims.aspect;
 	const time = now / 1000;
+	const sample = motion?.reading() ?? null;
+	const step = stepSlosh({ state, sample, dt, tuning: SLOSH_TUNING });
+	const { shift, delta } = step;
+	const slosh = { shift, delta, spread: SLOSH_TUNING.spread };
 	pointer.strength = pointerStrength(pointer.lastMove, now);
 	stepMeteors(meteors, aspect, time, dt);
-	stepParticles({ field, aspect, time, dt, pointer, meteors });
+	stepParticles({ field, aspect, time, dt, pointer, meteors, slosh });
 	renderer.render();
+	return step.state;
 }
 
 /**
@@ -35,6 +55,7 @@ export function createLoop(options) {
 	let frame = 0;
 	let running = false;
 	let last = performance.now();
+	let slosh = restingSlosh();
 	/** @param {number} now */
 	const tick = (now) => {
 		frame = 0;
@@ -43,7 +64,7 @@ export function createLoop(options) {
 		}
 		const dt = Math.min((now - last) / 1000, 0.05);
 		last = now;
-		renderFrame(options, now, dt);
+		slosh = renderFrame(options, now, dt, slosh);
 		frame = window.requestAnimationFrame(tick);
 	};
 	const visible = () => !document.hidden && heroVisible(options.hero);
@@ -53,10 +74,13 @@ export function createLoop(options) {
 		}
 		running = true;
 		last = performance.now();
+		slosh = reseedSlosh(slosh);
+		options.motion?.resume();
 		frame = window.requestAnimationFrame(tick);
 	};
 	const stop = () => {
 		running = false;
+		options.motion?.pause();
 		if (frame !== 0) {
 			window.cancelAnimationFrame(frame);
 			frame = 0;
