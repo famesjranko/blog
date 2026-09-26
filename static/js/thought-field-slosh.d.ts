@@ -39,8 +39,6 @@ export interface SloshStep {
 	shake: Vec2;
 	// Tilt lean in field units.
 	lean: Vec2;
-	// In-plane twist in rad/s, positive counter-clockwise looking at the screen.
-	spin: number;
 }
 
 export const SLOSH_TUNING: Readonly<SloshTuning>;

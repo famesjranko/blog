@@ -39,12 +39,22 @@ function at(values: Float32Array, index: number): number {
 	return values[index] ?? Number.NaN;
 }
 
+function scatteredField(count: number) {
+	return {
+		count,
+		pos: Float32Array.from({ length: count * 3 }, (_, i) =>
+			i % 3 === 2 ? 0 : ((i * 0.37) % 2) - 1,
+		),
+		scale: Float32Array.from({ length: count }, (_, i) => 0.9 + (i % 10) / 11),
+	};
+}
+
 describe("sampleFlow", () => {
 	it("is divergence-free while it swirls", () => {
 		const points = centres();
 		const field = stencilField(points);
 		const globe = makeGlobe(field.count);
-		const flow = { energy: 1, time: 2.3, twist: 0.7 };
+		const flow = { energy: 1, time: 2.3 };
 		sampleFlow({ globe, field, flow, tuning: GLOBE_TUNING });
 		const u = (point: number, side: number, axis: number) =>
 			at(globe.flow, (point * 4 + side) * 2 + axis);
@@ -61,19 +71,9 @@ describe("sampleFlow", () => {
 
 describe("stepGlobe", () => {
 	it("scatters on a firm shake, then settles once it stops", () => {
-		const count = 40;
-		const field = {
-			count,
-			pos: Float32Array.from({ length: count * 3 }, (_, i) =>
-				i % 3 === 2 ? 0 : ((i * 0.37) % 2) - 1,
-			),
-			scale: Float32Array.from(
-				{ length: count },
-				(_, i) => 0.9 + (i % 10) / 11,
-			),
-		};
+		const field = scatteredField(40);
 		const start = Float32Array.from(field.pos);
-		let globe = makeGlobe(count);
+		let globe = makeGlobe(field.count);
 		for (let frame = 0; frame < 60 * 7; frame += 1) {
 			const t = frame * FRAME;
 			// 12 m/s² at 3 Hz for half a second, then still.
@@ -81,7 +81,6 @@ describe("stepGlobe", () => {
 			const input: GlobeInput = {
 				shake: { x: shake, y: 0 },
 				lean: { x: 0, y: 0 },
-				spin: 0,
 			};
 			const tuning = GLOBE_TUNING;
 			globe = stepGlobe({
@@ -98,5 +97,25 @@ describe("stepGlobe", () => {
 		expect(Math.max(...moved)).toBeLessThan(1.5);
 		expect(globe.energy).toBeLessThan(0.01);
 		expect(Math.max(...Array.from(globe.vel, Math.abs))).toBeLessThan(0.01);
+	});
+
+	it("leans without stirring when the phone only tilts", () => {
+		const field = scatteredField(40);
+		const start = Float32Array.from(field.pos);
+		let step = { globe: makeGlobe(field.count), hold: 1 };
+		const input: GlobeInput = {
+			shake: { x: 0, y: 0 },
+			lean: { x: 0.05, y: 0 },
+		};
+		for (let frame = 0; frame < 60 * 2; frame += 1) {
+			const t = frame * FRAME;
+			const { globe } = step;
+			const tuning = GLOBE_TUNING;
+			step = stepGlobe({ globe, field, input, dt: FRAME, time: t, tuning });
+		}
+		const drift = Array.from(field.pos, (v, i) => v - at(start, i));
+		expect(Math.min(...drift.filter((_, i) => i % 3 === 0))).toBeGreaterThan(0);
+		expect(step.globe.energy).toBe(0);
+		expect(step.hold).toBe(1);
 	});
 });

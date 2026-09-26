@@ -7,13 +7,10 @@ import type { Vec2 } from "./thought-field-slosh.js";
 
 export interface GlobeTuning {
 	shakeStir: number;
-	twistStir: number;
-	twistDeadzone: number;
 	viscosity: number;
 	swirlSpeed: number;
 	eddySize: number;
 	eddyDrift: number;
-	fluidLag: number;
 	shakeGain: number;
 	drag: number;
 	heavyLag: number;
@@ -23,7 +20,6 @@ export interface GlobeTuning {
 
 export interface Globe {
 	energy: number;
-	spinFluid: number;
 	vel: Float32Array;
 	flow: Float32Array;
 	waves: Float32Array;
@@ -32,7 +28,6 @@ export interface Globe {
 export interface GlobeInput {
 	shake: Vec2;
 	lean: Vec2;
-	spin: number;
 }
 
 export interface GlobeStepOptions {
@@ -47,7 +42,7 @@ export interface GlobeStepOptions {
 export interface FlowOptions {
 	globe: Globe;
 	field: Pick<Field, "count" | "pos">;
-	flow: { energy: number; time: number; twist: number };
+	flow: { energy: number; time: number };
 	tuning: GlobeTuning;
 }
 

@@ -1,6 +1,6 @@
-// Snow-globe response to phone motion for the hero field. A shake or a
-// twist stirs the liquid into drifting eddies; each particle is dragged
-// by its local flow and jolted and sunk by its own weight. Pure maths,
+// Snow-globe response to phone motion for the hero field. A shake stirs
+// the liquid into drifting eddies; each particle is dragged by its local
+// flow and jolted and sunk by its own weight. Pure maths,
 // no DOM or sensor APIs, so Node can test it directly.
 
 /**
@@ -11,13 +11,10 @@
 /**
  * @typedef {{
  *   shakeStir: number,
- *   twistStir: number,
- *   twistDeadzone: number,
  *   viscosity: number,
  *   swirlSpeed: number,
  *   eddySize: number,
  *   eddyDrift: number,
- *   fluidLag: number,
  *   shakeGain: number,
  *   drag: number,
  *   heavyLag: number,
@@ -28,27 +25,23 @@
 
 /** @type {Readonly<GlobeTuning>} */
 export const GLOBE_TUNING = Object.freeze({
-	shakeStir: 0.28, // agitation per m/s of shake (m/s² summed over seconds)
-	twistStir: 0.4, // agitation per radian the liquid lags a twist
-	twistDeadzone: 0.2, // rad/s of liquid-vs-phone spin ignored: hand wobble
+	shakeStir: 0.5, // agitation per m/s of deadzoned shake; a firm 15 m/s², 0.7 s shake fills it
 	viscosity: 0.6, // s; time constant for the swirling to die away
 	swirlSpeed: 0.7, // field units/s; RMS flow speed at full agitation
 	eddySize: 0.6, // field units; rough diameter of one swirl
 	eddyDrift: 0.4, // rad/s; how fast the swirl pattern wanders
-	fluidLag: 0.4, // s; how long the liquid takes to catch up with a twist
-	shakeGain: 0.7, // field units/s² of jolt per m/s² of shake, heaviest flake
+	shakeGain: 1, // field units/s² of jolt per m/s² of deadzoned shake, heaviest flake
 	drag: 0.2, // s; how quickly the lightest flake takes up the local flow
 	heavyLag: 2, // the heaviest flake's extra drag time, in multiples of drag
-	tiltGain: 5, // field units/s² of sinking per field unit of lean, heaviest
+	tiltGain: 3, // field units/s² of sinking per field unit of lean, heaviest; low, as long drift can nauseate
 	free: 2.5, // how far agitation loosens the pull home; 0 never loosens it
 });
 
 /**
  * Per-particle velocity and local flow as x, y pairs; the agitation
- * (0..1); the liquid's lagged spin (rad/s); and this frame's wave table.
+ * (0..1); and this frame's wave table.
  * @typedef {{
  *   energy: number,
- *   spinFluid: number,
  *   vel: Float32Array,
  *   flow: Float32Array,
  *   waves: Float32Array,
@@ -56,9 +49,8 @@ export const GLOBE_TUNING = Object.freeze({
  */
 
 /**
- * `shake` (m/s²), `lean` (field units) and `spin` (the phone's twist
- * rate, rad/s, counter-clockwise positive) as stepSlosh reports them.
- * @typedef {{ shake: Vec2, lean: Vec2, spin: number }} GlobeInput
+ * `shake` (m/s²) and `lean` (field units) as stepSlosh reports them.
+ * @typedef {{ shake: Vec2, lean: Vec2 }} GlobeInput
  */
 
 /**
@@ -73,11 +65,10 @@ export const GLOBE_TUNING = Object.freeze({
  */
 
 /**
- * `twist` is the liquid's spin relative to the phone (rad/s).
  * @typedef {{
  *   globe: Globe,
  *   field: Field,
- *   flow: { energy: number, time: number, twist: number },
+ *   flow: { energy: number, time: number },
  *   tuning: GlobeTuning,
  * }} FlowOptions
  */
@@ -109,7 +100,6 @@ const LIGHTEST_SHARE = 0.3;
 export function makeGlobe(count) {
 	return {
 		energy: 0,
-		spinFluid: 0,
 		vel: new Float32Array(count * 2),
 		flow: new Float32Array(count * 2),
 		waves: new Float32Array(WAVES.length * WAVE_STRIDE),
@@ -128,23 +118,17 @@ export function homeHold(energy, tuning) {
 }
 
 /**
- * Pumps the agitation from shake and twist and lets viscosity drain it;
- * the liquid's spin follows the phone's with a first-order lag.
- * @param {Globe} globe
+ * Pumps the agitation from shake and lets viscosity drain it.
+ * @param {number} energy
  * @param {GlobeInput} input
  * @param {number} dt
  * @param {GlobeTuning} tuning
- * @returns {{ energy: number, spinFluid: number }}
+ * @returns {number}
  */
-function stir(globe, input, dt, tuning) {
-	const follow = 1 - Math.exp(-dt / tuning.fluidLag);
-	const spinFluid = globe.spinFluid + (input.spin - globe.spinFluid) * follow;
-	const twist = Math.abs(spinFluid - input.spin) - tuning.twistDeadzone;
-	const pump =
-		tuning.shakeStir * Math.hypot(input.shake.x, input.shake.y) +
-		tuning.twistStir * Math.max(0, twist);
-	const drained = globe.energy * Math.exp(-dt / tuning.viscosity);
-	return { energy: Math.min(1, drained + pump * dt), spinFluid };
+function stir(energy, input, dt, tuning) {
+	const pump = tuning.shakeStir * Math.hypot(input.shake.x, input.shake.y);
+	const drained = energy * Math.exp(-dt / tuning.viscosity);
+	return Math.min(1, drained + pump * dt);
 }
 
 /**
@@ -170,22 +154,20 @@ function fillWaves(options) {
 }
 
 /**
- * Samples the liquid's velocity at every particle into `globe.flow`: the
- * stirred eddies plus the rigid rotation of a liquid lagging a twist.
- * Both are curls of a stream function, so the flow is divergence-free.
+ * Samples the stirred eddies' velocity at every particle into
+ * `globe.flow`. It is the curl of a stream function, so divergence-free.
  * @param {FlowOptions} options
  */
 export function sampleFlow(options) {
 	fillWaves(options);
 	const { globe, field } = options;
-	const { twist } = options.flow;
 	const { waves, flow } = globe;
 	const { pos, count } = field;
 	for (let i = 0; i < count; i += 1) {
 		const x = pos[i * 3];
 		const y = pos[i * 3 + 1];
-		let ux = -twist * y;
-		let uy = twist * x;
+		let ux = 0;
+		let uy = 0;
 		for (let o = 0; o < waves.length; o += WAVE_STRIDE) {
 			const c = Math.cos(waves[o] * x + waves[o + 1] * y + waves[o + 2]);
 			ux += waves[o + 3] * c;
@@ -237,11 +219,9 @@ export function stepGlobe(options) {
 	if (!(dt > 0)) {
 		return { globe, hold: homeHold(globe.energy, tuning) };
 	}
-	const stirred = stir(globe, input, dt, tuning);
-	const twist = stirred.spinFluid - input.spin;
-	const flow = { energy: stirred.energy, time, twist };
-	sampleFlow({ globe, field, flow, tuning });
+	const energy = stir(globe.energy, input, dt, tuning);
+	sampleFlow({ globe, field, flow: { energy, time }, tuning });
 	pushParticles(options);
-	const next = { ...globe, ...stirred };
+	const next = { ...globe, energy };
 	return { globe: next, hold: homeHold(next.energy, tuning) };
 }
