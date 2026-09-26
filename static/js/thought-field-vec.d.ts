@@ -11,5 +11,3 @@ export function vec(x: number, y: number): Vec2;
 export function add(a: Vec2, b: Vec2): Vec2;
 export function sub(a: Vec2, b: Vec2): Vec2;
 export function scaled(v: Vec2, k: number): Vec2;
-export function dot(a: Vec2, b: Vec2): number;
-export function cross(a: Vec2, b: Vec2): number;

@@ -10,8 +10,6 @@ export interface FilterTuning {
 	tiltLean: number;
 	tiltRecenter: number;
 	gravitySmoothing: number;
-	twistFloor: number;
-	twistFull: number;
 }
 
 export interface FilterState {
@@ -34,8 +32,6 @@ export interface Filtered {
 	shake: Vec2;
 	// Tilt lean in field units.
 	lean: Vec2;
-	// In-plane twist in rad/s, positive counter-clockwise looking at the screen.
-	spin: number;
 }
 
 export function filterReading(options: FilterOptions): Filtered;

@@ -346,34 +346,31 @@ describe("reseedSlosh", () => {
 });
 
 describe("stepSlosh filtered inputs", () => {
-	it("reports the filter's shake, lean and spin for the step", () => {
+	it("reports the filter's shake and lean for the step", () => {
 		const tuning = tuned();
 		const state = seededUpright(tuning);
-		// Jolted, tilted and turned at once, so every output is non-zero.
+		// Jolted and tilted at once, so both outputs are non-zero.
 		const sample = { x: 4, y: G - 2 };
 		const step = stepSlosh({ state, sample, dt: FRAME, tuning });
 		const filtered = filterReading({ state, sample, dt: FRAME, tuning });
 		expect(magnitude(filtered.shake)).toBeGreaterThan(0);
 		expect(magnitude(filtered.lean)).toBeGreaterThan(0);
-		expect(filtered.spin).not.toBe(0);
-		const { shake, lean, spin } = step;
-		expect({ shake, lean, spin }).toEqual({
+		const { shake, lean } = step;
+		expect({ shake, lean }).toEqual({
 			shake: filtered.shake,
 			lean: filtered.lean,
-			spin: filtered.spin,
 		});
 	});
 
 	it.each([
 		{ case: "without a reading", sample: null, dt: FRAME },
 		{ case: "when no time has passed", sample: JOLT_RIGHT, dt: 0 },
-	])("reports no shake, lean or spin $case", ({ sample, dt }) => {
+	])("reports no shake or lean $case", ({ sample, dt }) => {
 		const tuning = tuned();
 		const { state } = joltedRight(tuning);
 		const step = stepSlosh({ state, sample, dt, tuning });
 		expect(magnitude(step.shake)).toBe(0);
 		expect(magnitude(step.lean)).toBe(0);
-		expect(step.spin).toBe(0);
 	});
 });
 
