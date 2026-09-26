@@ -3,6 +3,7 @@ import { createLoop } from "./thought-field-loop.js";
 import { makeMeteors } from "./thought-field-meteors.js";
 import { motionInput } from "./thought-field-motion.js";
 import { buildPalette, makePoints } from "./thought-field-particles.js";
+import { perfMeter } from "./thought-field-perf.js";
 
 /**
  * Particle budget and device-pixel cap chosen by the host page before
@@ -92,6 +93,7 @@ export function initThoughtField(canvas, tier) {
 	const pointer = pointerState(hero);
 	const resize = resizeState({ hero, renderer, tier });
 	const motion = motionInput();
+	const perf = perfMeter({ particles: field.count, motion: motion !== null });
 	const loop = createLoop({
 		renderer,
 		field,
@@ -100,6 +102,7 @@ export function initThoughtField(canvas, tier) {
 		meteors,
 		dims: resize.dims,
 		motion,
+		perf,
 	});
 	loop.start();
 	return {
@@ -108,6 +111,7 @@ export function initThoughtField(canvas, tier) {
 			resize.destroy();
 			pointer.destroy();
 			motion?.destroy();
+			perf?.destroy();
 			renderer.destroy();
 		},
 	};

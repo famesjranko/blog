@@ -10,6 +10,7 @@ import {
 /**
  * @typedef {import("./thought-field-slosh.js").SloshState} SloshState
  * @typedef {import("./thought-field-motion.js").MotionInput} MotionInput
+ * @typedef {import("./thought-field-perf.js").PerfMeter} PerfMeter
  */
 
 /**
@@ -21,19 +22,21 @@ import {
  *   meteors: import("./thought-field-meteors.js").Meteors,
  *   dims: { aspect: number },
  *   motion: MotionInput | null,
+ *   perf: PerfMeter | null,
  * }} LoopOptions
  */
 
 /**
- * Draws one frame and returns the slosh state advanced by DT.
+ * Advances every per-frame simulation by DT and returns the new slosh
+ * state. Everything in here is timed as the frame's physics cost.
  * @param {LoopOptions} options
  * @param {number} now
  * @param {number} dt
  * @param {SloshState} state
  * @returns {SloshState}
  */
-function renderFrame(options, now, dt, state) {
-	const { renderer, field, pointer, meteors, dims, motion } = options;
+function stepPhysics(options, now, dt, state) {
+	const { field, pointer, meteors, dims, motion } = options;
 	const aspect = dims.aspect;
 	const time = now / 1000;
 	const sample = motion?.reading() ?? null;
@@ -43,8 +46,25 @@ function renderFrame(options, now, dt, state) {
 	pointer.strength = pointerStrength(pointer.lastMove, now);
 	stepMeteors(meteors, aspect, time, dt);
 	stepParticles({ field, aspect, time, dt, pointer, meteors, slosh });
-	renderer.render();
 	return step.state;
+}
+
+/**
+ * Steps the physics, draws one frame and returns the new slosh state.
+ * @param {LoopOptions} options
+ * @param {number} now
+ * @param {number} dt
+ * @param {SloshState} state
+ * @returns {SloshState}
+ */
+function renderFrame(options, now, dt, state) {
+	const { renderer, perf } = options;
+	perf?.frame(now);
+	perf?.begin();
+	const next = stepPhysics(options, now, dt, state);
+	perf?.end();
+	renderer.render();
+	return next;
 }
 
 /**

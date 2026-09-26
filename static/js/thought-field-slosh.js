@@ -35,7 +35,11 @@
 
 /** @typedef {{ state: SloshState, sample: Vec2 | null, dt: number, tuning: SloshTuning }} SloshStepOptions */
 
-/** @typedef {{ state: SloshState, shift: Vec2, delta: Vec2 }} SloshStep */
+/**
+ * `shake` is this step's deadzoned high-pass of the reading (m/s², screen
+ * axes) and `lean` the tilt lean (field units) the spring pulls toward.
+ * @typedef {{ state: SloshState, shift: Vec2, delta: Vec2, shake: Vec2, lean: Vec2 }} SloshStep
+ */
 
 /** @typedef {{ offset: Vec2, velocity: Vec2 }} Motion */
 
@@ -198,7 +202,9 @@ export function reseedSlosh(state) {
  */
 export function stepSlosh({ state, sample, dt, tuning }) {
 	if (!(dt > 0)) {
-		return { state, shift: { ...state.shown }, delta: vec(0, 0) };
+		const shift = { ...state.shown };
+		const [delta, shake, lean] = [vec(0, 0), vec(0, 0), vec(0, 0)];
+		return { state, shift, delta, shake, lean };
 	}
 	const filtered = filterReading({ state, sample, dt, tuning });
 	const drive = {
@@ -218,21 +224,13 @@ export function stepSlosh({ state, sample, dt, tuning }) {
 		velocity: motion.velocity,
 		shown,
 	};
-	return { state: next, shift: { ...shown }, delta: sub(shown, state.shown) };
-}
-
-/**
- * Rotates a device-axes reading into screen axes. ANGLE is
- * screen.orientation.angle in degrees.
- * @param {Vec2} sample
- * @param {number} angle
- * @returns {Vec2}
- */
-export function toScreenAxes(sample, angle) {
-	const radians = (angle * Math.PI) / 180;
-	const cos = Math.cos(radians);
-	const sin = Math.sin(radians);
-	return vec(sample.x * cos - sample.y * sin, sample.x * sin + sample.y * cos);
+	return {
+		state: next,
+		shift: { ...shown },
+		delta: sub(shown, state.shown),
+		shake: filtered.shake,
+		lean: filtered.lean,
+	};
 }
 
 /**

@@ -10,7 +10,6 @@ import {
 	restingSlosh,
 	sloshWeight,
 	stepSlosh,
-	toScreenAxes,
 } from "../static/js/thought-field-slosh.js";
 
 const G = 9.81;
@@ -341,21 +340,46 @@ describe("reseedSlosh", () => {
 	});
 });
 
-describe("toScreenAxes", () => {
-	// Device +x and +y unit readings, and where each points on screen.
+describe("stepSlosh filtered inputs", () => {
+	it("reports the shake as the deadzoned reading minus the settled gravity", () => {
+		const tuning = tuned();
+		// A (3, 4) jolt over upright is 5 m/s²; the 0.6 deadzone leaves 4.4.
+		const step = stepSlosh({
+			state: seededUpright(tuning),
+			sample: { x: 3, y: G + 4 },
+			dt: FRAME,
+			tuning,
+		});
+		expect(step.shake.x).toBeCloseTo(3 * (4.4 / 5), 12);
+		expect(step.shake.y).toBeCloseTo(4 * (4.4 / 5), 12);
+	});
+
 	it.each([
-		{ angle: 0, x: { x: 1, y: 0 }, y: { x: 0, y: 1 } },
-		// Top turned to the left: device +x points up, device +y points left.
-		{ angle: 90, x: { x: 0, y: 1 }, y: { x: -1, y: 0 } },
-		{ angle: 180, x: { x: -1, y: 0 }, y: { x: 0, y: -1 } },
-		{ angle: 270, x: { x: 0, y: -1 }, y: { x: 1, y: 0 } },
-	])("rotates device axes into screen axes at $angle°", ({ angle, x, y }) => {
-		const fromX = toScreenAxes({ x: 1, y: 0 }, angle);
-		const fromY = toScreenAxes({ x: 0, y: 1 }, angle);
-		expect(fromX.x).toBeCloseTo(x.x, 12);
-		expect(fromX.y).toBeCloseTo(x.y, 12);
-		expect(fromY.x).toBeCloseTo(y.x, 12);
-		expect(fromY.y).toBeCloseTo(y.y, 12);
+		{ edge: "right", sign: 1 },
+		{ edge: "left", sign: -1 },
+	])("reports a lean toward the lowered $edge edge", ({ sign }) => {
+		const tuning = tuned();
+		// That edge lowered 30°: the reading's x is ∓g sin 30°.
+		const lowered = { x: -sign * G * 0.5, y: G * Math.cos(Math.PI / 6) };
+		const step = stepSlosh({
+			state: seededUpright(tuning),
+			sample: lowered,
+			dt: FRAME,
+			tuning,
+		});
+		expect(Math.sign(step.lean.x)).toBe(sign);
+		expect(Math.abs(step.lean.x)).toBeGreaterThan(Math.abs(step.lean.y));
+	});
+
+	it.each([
+		{ case: "without a reading", sample: null, dt: FRAME },
+		{ case: "when no time has passed", sample: JOLT_RIGHT, dt: 0 },
+	])("reports no shake or lean $case", ({ sample, dt }) => {
+		const tuning = tuned();
+		const { state } = joltedRight(tuning);
+		const step = stepSlosh({ state, sample, dt, tuning });
+		expect(magnitude(step.shake)).toBe(0);
+		expect(magnitude(step.lean)).toBe(0);
 	});
 });
 

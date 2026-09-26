@@ -39,11 +39,14 @@ export interface SloshStep {
 	state: SloshState;
 	shift: Vec2;
 	delta: Vec2;
+	// Deadzoned high-pass of the reading, m/s² in screen axes.
+	shake: Vec2;
+	// Tilt lean in field units.
+	lean: Vec2;
 }
 
 export const SLOSH_TUNING: Readonly<SloshTuning>;
 export function restingSlosh(): SloshState;
 export function reseedSlosh(state: SloshState): SloshState;
 export function stepSlosh(options: SloshStepOptions): SloshStep;
-export function toScreenAxes(sample: Vec2, angle: number): Vec2;
 export function sloshWeight(scale: number, spread: number): number;

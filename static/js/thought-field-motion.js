@@ -1,12 +1,19 @@
-import { toScreenAxes } from "./thought-field-slosh.js";
-
 /** @typedef {import("./thought-field-slosh.js").Vec2} Vec2 */
 
 /**
- * Latest accelerationIncludingGravity in screen axes (m/s²), read once
- * per frame by the loop.
+ * accelerationIncludingGravity in screen axes (m/s²) and the in-plane
+ * twist rate in rad/s, positive counter-clockwise looking at the screen.
+ * @typedef {{ x: number, y: number, spin: number }} MotionReading
+ */
+
+/** @typedef {{ x: number | null, y: number | null }} AccelerationReading */
+
+/** @typedef {{ alpha: number | null }} RotationReading */
+
+/**
+ * Latest reading, read once per frame by the loop.
  * @typedef {{
- *   reading: () => Vec2 | null,
+ *   reading: () => MotionReading | null,
  *   pause: () => void,
  *   resume: () => void,
  *   destroy: () => void,
@@ -25,6 +32,42 @@ export function motionSupported(env) {
 }
 
 /**
+ * Rotates a device-axes reading into screen axes. ANGLE is
+ * screen.orientation.angle in degrees.
+ * @param {Vec2} sample
+ * @param {number} angle
+ * @returns {Vec2}
+ */
+export function toScreenAxes(sample, angle) {
+	const radians = (angle * Math.PI) / 180;
+	const cos = Math.cos(radians);
+	const sin = Math.sin(radians);
+	return {
+		x: sample.x * cos - sample.y * sin,
+		y: sample.x * sin + sample.y * cos,
+	};
+}
+
+/**
+ * Converts one devicemotion event's fields into a screen-axes reading,
+ * or null without an acceleration. ROTATIONRATE.alpha is in deg/s about
+ * the device z axis, which points out of the screen in every
+ * orientation, so the twist needs no rotation.
+ * @param {AccelerationReading | null} accel
+ * @param {RotationReading | null} rotationRate
+ * @param {number} angle
+ * @returns {MotionReading | null}
+ */
+export function readingFrom(accel, rotationRate, angle) {
+	if (accel === null || accel.x === null || accel.y === null) {
+		return null;
+	}
+	const { x, y } = toScreenAxes({ x: accel.x, y: accel.y }, angle);
+	const alpha = rotationRate?.alpha ?? 0;
+	return { x, y, spin: (alpha * Math.PI) / 180 };
+}
+
+/**
  * Phone motion for the hero field, or null where it is not offered.
  * Starts paused.
  * @returns {MotionInput | null}
@@ -33,18 +76,18 @@ export function motionInput() {
 	if (!motionSupported(window)) {
 		return null;
 	}
-	/** @type {Vec2 | null} */
+	/** @type {MotionReading | null} */
 	let latest = null;
 	/** @param {DeviceMotionEvent} event */
 	const onMotion = (event) => {
-		const sample = event.accelerationIncludingGravity;
-		if (sample === null || sample.x === null || sample.y === null) {
-			return;
-		}
-		latest = toScreenAxes(
-			{ x: sample.x, y: sample.y },
+		const next = readingFrom(
+			event.accelerationIncludingGravity,
+			event.rotationRate,
 			screen.orientation.angle,
 		);
+		if (next !== null) {
+			latest = next;
+		}
 	};
 	// addEventListener ignores a repeat of the same listener, so resume is idempotent.
 	const resume = () =>
