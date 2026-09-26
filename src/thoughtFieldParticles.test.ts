@@ -39,18 +39,26 @@ function step(field: Field, hold: number): void {
 	});
 }
 
+// At time 0 with zero phases the drift target is
+// (base.x * aspect + 0.05 cos 0, base.y + 0.09 cos 0).
+const TARGET_X = BASE_X * ASPECT + 0.05;
+const TARGET_Y = BASE_Y + 0.09;
+const EASE = 1 - Math.exp(-FRAME * 1.1);
+
 describe("stepParticles hold", () => {
-	it("leaves the drift untouched at full hold", () => {
+	it("eases toward the drift target exactly as before at full hold", () => {
 		const field = makeField();
 		step(field, 1);
-		// At time 0 with zero phases the drift target is
-		// (base.x * aspect + 0.05 cos 0, base.y + 0.09 cos 0).
-		const ease = 1 - Math.exp(-FRAME * 1.1);
-		const targetX = BASE_X * ASPECT + 0.05;
-		const targetY = BASE_Y + 0.09;
-		const x = Math.fround(BASE_X + (targetX - BASE_X) * ease);
-		const y = Math.fround(BASE_Y + (targetY - BASE_Y) * ease);
+		const x = Math.fround(BASE_X + (TARGET_X - BASE_X) * EASE);
+		const y = Math.fround(BASE_Y + (TARGET_Y - BASE_Y) * EASE);
 		expect(Array.from(field.pos)).toEqual([x, y, 0, x, y, 0]);
+	});
+
+	it("scales the pull toward the drift target by the hold", () => {
+		const field = makeField();
+		step(field, 0.25);
+		const x = Math.fround(BASE_X + (TARGET_X - BASE_X) * EASE * 0.25);
+		expect(field.pos[0]).toBeCloseTo(x, 7);
 	});
 
 	it("stops pulling particles home at zero hold", () => {

@@ -1,3 +1,4 @@
+import { DEFAULT_SETTINGS } from "./thought-field-engine.js";
 import { createRenderer } from "./thought-field-gl.js";
 import { createLoop } from "./thought-field-loop.js";
 import { makeMeteors } from "./thought-field-meteors.js";
@@ -11,7 +12,39 @@ import { perfMeter } from "./thought-field-perf.js";
  * @typedef {{ count: number, pixelRatio: number }} Tier
  */
 
-/** @typedef {import("./thought-field-particles.js").Pointer} Pointer */
+/**
+ * @typedef {import("./thought-field-particles.js").Pointer} Pointer
+ * @typedef {import("./thought-field-engine.js").Settings} Settings
+ * @typedef {import("./thought-field-lab-panel.js").LabPanel} LabPanel
+ */
+
+/**
+ * The physics settings: the defaults, or with ?tune the lab panel's once
+ * it has loaded. Only ?tune imports the lab, so no other page fetches it.
+ * @param {boolean} motion
+ * @returns {{ settings: () => Settings, destroy: () => void }}
+ */
+function settingsSource(motion) {
+	/** @type {LabPanel | null} */
+	let lab = null;
+	let closed = false;
+	const open = async () => {
+		const url = new URL("./thought-field-lab-panel.js", import.meta.url);
+		/** @type {typeof import("./thought-field-lab-panel.js")} */
+		const panel = await import(url.href);
+		lab = closed ? null : panel.openLabPanel({ motion });
+	};
+	if (new URLSearchParams(location.search).has("tune")) {
+		void open();
+	}
+	return {
+		settings: () => lab?.settings() ?? DEFAULT_SETTINGS,
+		destroy: () => {
+			closed = true;
+			lab?.destroy();
+		},
+	};
+}
 
 /**
  * @param {Element | null} hero
@@ -94,6 +127,7 @@ export function initThoughtField(canvas, tier) {
 	const resize = resizeState({ hero, renderer, tier });
 	const motion = motionInput();
 	const perf = perfMeter({ particles: field.count, motion: motion !== null });
+	const source = settingsSource(motion !== null);
 	const loop = createLoop({
 		renderer,
 		field,
@@ -103,6 +137,7 @@ export function initThoughtField(canvas, tier) {
 		dims: resize.dims,
 		motion,
 		perf,
+		settings: source.settings,
 	});
 	loop.start();
 	return {
@@ -112,6 +147,7 @@ export function initThoughtField(canvas, tier) {
 			pointer.destroy();
 			motion?.destroy();
 			perf?.destroy();
+			source.destroy();
 			renderer.destroy();
 		},
 	};

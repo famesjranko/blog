@@ -1,29 +1,26 @@
-import { GLOBE_TUNING, makeGlobe, stepGlobe } from "./thought-field-globe.js";
+import { makeEngine, stepEngine } from "./thought-field-engine.js";
 import { pointerStrength, stepParticles } from "./thought-field-particles.js";
 import { stepMeteors } from "./thought-field-meteors.js";
-import {
-	SLOSH_TUNING,
-	reseedSlosh,
-	restingSlosh,
-	stepSlosh,
-} from "./thought-field-slosh.js";
+import { reseedSlosh, restingSlosh, stepSlosh } from "./thought-field-slosh.js";
 
 /**
  * @typedef {import("./thought-field-slosh.js").SloshState} SloshState
- * @typedef {import("./thought-field-globe.js").Globe} Globe
+ * @typedef {import("./thought-field-engine.js").Engine} Engine
+ * @typedef {import("./thought-field-engine.js").Settings} Settings
  * @typedef {import("./thought-field-motion.js").MotionInput} MotionInput
  * @typedef {import("./thought-field-perf.js").PerfMeter} PerfMeter
  */
 
 /**
- * The motion filters and, only where there is phone motion, the globe.
- * @typedef {{ slosh: SloshState, globe: Globe | null }} PhysicsState
+ * The motion filters and, only where there is phone motion, the engine.
+ * @typedef {{ slosh: SloshState, engine: Engine | null }} PhysicsState
  */
 
-/** @type {{ globe: null, hold: number }} */
-const NO_GLOBE = Object.freeze({ globe: null, hold: 1 });
+/** @type {{ engine: null, hold: number }} */
+const NO_ENGINE = Object.freeze({ engine: null, hold: 1 });
 
 /**
+ * `settings` is read every frame, so a change takes effect on the next.
  * @typedef {{
  *   renderer: { render: () => void },
  *   field: import("./thought-field-particles.js").Field,
@@ -33,6 +30,7 @@ const NO_GLOBE = Object.freeze({ globe: null, hold: 1 });
  *   dims: { aspect: number },
  *   motion: MotionInput | null,
  *   perf: PerfMeter | null,
+ *   settings: () => Settings,
  * }} LoopOptions
  */
 
@@ -47,31 +45,23 @@ const NO_GLOBE = Object.freeze({ globe: null, hold: 1 });
  */
 function stepPhysics(options, now, dt, state) {
 	const { field, pointer, meteors, dims, motion } = options;
+	const settings = options.settings();
 	const aspect = dims.aspect;
 	const time = now / 1000;
 	const sample = motion?.reading() ?? null;
-	const tuning = SLOSH_TUNING;
-	const step = stepSlosh({ state: state.slosh, sample, dt, tuning });
+	const tuning = settings.slosh;
+	const filtered = stepSlosh({ state: state.slosh, sample, dt, tuning });
 	pointer.strength = pointerStrength(pointer.lastMove, now);
 	stepMeteors(meteors, aspect, time, dt);
-	const input = { shake: step.shake, lean: step.lean };
-	const { globe } = state;
-	// The only motion branch: without a globe, positions are the plain drift.
+	const { engine } = state;
+	// The only motion branch: without an engine, positions are the plain drift.
 	const moved =
-		globe === null
-			? NO_GLOBE
-			: stepGlobe({
-					globe,
-					field,
-					input,
-					dt,
-					time,
-					aspect,
-					tuning: GLOBE_TUNING,
-				});
+		engine === null
+			? NO_ENGINE
+			: stepEngine({ engine, settings, field, filtered, dt, time, aspect });
 	const hold = moved.hold;
 	stepParticles({ field, aspect, time, dt, pointer, meteors, hold });
-	return { slosh: step.state, globe: moved.globe };
+	return { slosh: filtered.state, engine: moved.engine };
 }
 
 /**
@@ -93,7 +83,7 @@ function renderFrame(options, now, dt, state) {
 }
 
 /**
- * The globe exists only with phone motion, so without it none of its
+ * The engine exists only with phone motion, so without it none of its
  * physics runs. A pause keeps its velocities and agitation; dt is
  * capped, so resuming never jumps.
  * @param {LoopOptions} options
@@ -101,8 +91,9 @@ function renderFrame(options, now, dt, state) {
  */
 function restingPhysics(options) {
 	const { motion, field } = options;
-	const globe = motion === null ? null : makeGlobe(field.count);
-	return { slosh: restingSlosh(), globe };
+	const kind = options.settings().engine;
+	const engine = motion === null ? null : makeEngine(kind, field.count);
+	return { slosh: restingSlosh(), engine };
 }
 
 /**

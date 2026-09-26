@@ -34,7 +34,7 @@ export interface StepParticlesOptions {
 	meteors: {
 		slots: ReadonlyArray<{ active: boolean; x: number; y: number }>;
 	};
-	// Pull toward each drift target: 1 is the plain drift.
+	// Share (0..1] of the drift's pull back to the layout; 1 without motion.
 	hold: number;
 }
 
