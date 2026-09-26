@@ -18,6 +18,7 @@ export interface LabStore {
 }
 
 export const LAB_KEY: string;
+export function labFromSaved(saved: unknown): LabState | null;
 export function parseLab(text: string | null): LabState;
 export function serializeLab(state: LabState): string;
 export function createLabStore(storage: LabStorage | null): LabStore;

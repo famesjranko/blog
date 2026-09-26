@@ -9,17 +9,21 @@ import type { KnobGroup, ToggleName } from "./thought-field-lab-knobs.js";
 
 export type KnobValues = Readonly<Record<string, number>>;
 
+export type PresetMark = { name: string; modified: boolean } | null;
+
 export interface LabState {
 	engine: EngineKind;
 	style: SwirlStyle;
 	toggles: Readonly<Record<ToggleName, boolean>>;
 	knobs: Readonly<Record<KnobGroup, KnobValues>>;
+	preset: PresetMark;
 }
 
 export const TOGGLE_NAMES: ToggleName[];
 export const DEFAULT_LAB: Readonly<LabState>;
 export function resolvedKnobs(state: LabState, group: KnobGroup): KnobValues;
 export function resolveSettings(state: LabState): Settings;
+export function markLoaded(source: LabState, name: string): LabState;
 export function setKnob(
 	state: LabState,
 	group: KnobGroup,
@@ -31,5 +35,7 @@ export function setToggle(
 	name: ToggleName,
 	on: boolean,
 ): LabState;
+export function setEngine(state: LabState, engine: EngineKind): LabState;
+export function setStyle(state: LabState, style: SwirlStyle): LabState;
 export function resetEngine(state: LabState): LabState;
 export function exportLab(state: LabState): string;

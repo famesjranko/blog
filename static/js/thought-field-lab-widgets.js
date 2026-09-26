@@ -17,6 +17,9 @@ const CHOICE =
 const TICK = "width: 22px; height: 22px; margin: 0; accent-color: #5fb8ff";
 const RANGE =
 	"display: block; width: 100%; height: 32px; margin: 0; accent-color: #5fb8ff";
+const CHIP = `${BUTTON}; flex: none; padding: 0 14px; border-radius: 22px; white-space: nowrap`;
+export const CHIP_ROW =
+	"display: flex; gap: 8px; overflow-x: auto; overscroll-behavior-x: contain; padding: 4px 0";
 const JSON_BOX = `display: block; box-sizing: border-box; width: 100%; height: 40vh; font: 12px/1.3 monospace; ${INK}; background: #0a0d12`;
 
 /**
@@ -52,6 +55,17 @@ export function button(text, onClick, style = "") {
 	node.type = "button";
 	node.addEventListener("click", onClick);
 	return node;
+}
+
+/**
+ * A rounded chip's style: highlighted while ACTIVE, faded while EMPTY.
+ * @param {boolean} active
+ * @param {boolean} empty
+ * @returns {string}
+ */
+export function chipStyle(active, empty) {
+	const fill = active ? "background: #1f6f5c; border-color: #5fb8ff" : "";
+	return `${CHIP}; ${fill}; opacity: ${empty ? 0.55 : 1}`;
 }
 
 /**

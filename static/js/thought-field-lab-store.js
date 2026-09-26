@@ -94,29 +94,50 @@ function savedToggles(value) {
 }
 
 /**
+ * @param {unknown} value
+ * @returns {LabState["preset"]}
+ */
+function savedPreset(value) {
+	const { name, modified } = record(value);
+	if (typeof name !== "string" || typeof modified !== "boolean") {
+		return null;
+	}
+	return { name, modified };
+}
+
+/**
+ * The lab state in SAVED, a parsed save; null for another version, and
+ * per field the default for any value that is out of shape. Saves from
+ * before presets have no mark and load unmarked.
+ * @param {unknown} saved
+ * @returns {LabState | null}
+ */
+export function labFromSaved(saved) {
+	const fields = record(saved);
+	if (fields.version !== VERSION) {
+		return null;
+	}
+	return {
+		engine: oneOf(fields.engine, ENGINES, DEFAULT_LAB.engine),
+		style: oneOf(fields.style, STYLES, DEFAULT_LAB.style),
+		toggles: savedToggles(fields.toggles),
+		knobs: savedKnobs(fields.knobs),
+		preset: savedPreset(fields.preset),
+	};
+}
+
+/**
  * The lab state saved as TEXT; defaults for missing, corrupt or older
- * saves, and per field for any value that is out of shape.
+ * saves.
  * @param {string | null} text
  * @returns {LabState}
  */
 export function parseLab(text) {
-	/** @type {unknown} */
-	let parsed = null;
 	try {
-		parsed = JSON.parse(text ?? "null");
+		return labFromSaved(JSON.parse(text ?? "null")) ?? DEFAULT_LAB;
 	} catch {
 		return DEFAULT_LAB;
 	}
-	const saved = record(parsed);
-	if (saved.version !== VERSION) {
-		return DEFAULT_LAB;
-	}
-	return {
-		engine: oneOf(saved.engine, ENGINES, DEFAULT_LAB.engine),
-		style: oneOf(saved.style, STYLES, DEFAULT_LAB.style),
-		toggles: savedToggles(saved.toggles),
-		knobs: savedKnobs(saved.knobs),
-	};
 }
 
 /**

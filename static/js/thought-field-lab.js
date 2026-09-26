@@ -16,6 +16,12 @@ import { KNOBS, TOGGLES } from "./thought-field-lab-knobs.js";
  */
 
 /**
+ * The preset or saved slot the state was loaded from, and whether any
+ * control has changed since; null until one is loaded.
+ * @typedef {{ name: string, modified: boolean } | null} PresetMark
+ */
+
+/**
  * Knob values are kept while a toggle is off; only the resolved
  * settings see the override.
  * @typedef {{
@@ -23,6 +29,7 @@ import { KNOBS, TOGGLES } from "./thought-field-lab-knobs.js";
  *   style: SwirlStyle,
  *   toggles: Readonly<Record<ToggleName, boolean>>,
  *   knobs: Readonly<Record<KnobGroup, KnobValues>>,
+ *   preset: PresetMark,
  * }} LabState
  */
 
@@ -54,6 +61,7 @@ export const DEFAULT_LAB = Object.freeze({
 		galaxy: pickKnobs("galaxy", DEFAULT_SETTINGS.swirl.galaxy),
 		liquid: pickKnobs("liquid", DEFAULT_SETTINGS.liquid),
 	}),
+	preset: null,
 });
 
 /**
@@ -94,6 +102,28 @@ export function resolveSettings(state) {
 }
 
 /**
+ * SOURCE as just loaded from the preset or slot NAME.
+ * @param {LabState} source
+ * @param {string} name
+ * @returns {LabState}
+ */
+export function markLoaded(source, name) {
+	return { ...source, preset: { name, modified: false } };
+}
+
+/**
+ * STATE after a control changed: its preset, if any, is now modified.
+ * @param {LabState} state
+ * @returns {LabState}
+ */
+function edited(state) {
+	const { preset } = state;
+	return preset === null
+		? state
+		: { ...state, preset: { ...preset, modified: true } };
+}
+
+/**
  * @param {LabState} state
  * @param {KnobGroup} group
  * @param {string} key
@@ -102,7 +132,7 @@ export function resolveSettings(state) {
  */
 export function setKnob(state, group, key, value) {
 	const values = { ...state.knobs[group], [key]: value };
-	return { ...state, knobs: { ...state.knobs, [group]: values } };
+	return edited({ ...state, knobs: { ...state.knobs, [group]: values } });
 }
 
 /**
@@ -112,7 +142,25 @@ export function setKnob(state, group, key, value) {
  * @returns {LabState}
  */
 export function setToggle(state, name, on) {
-	return { ...state, toggles: { ...state.toggles, [name]: on } };
+	return edited({ ...state, toggles: { ...state.toggles, [name]: on } });
+}
+
+/**
+ * @param {LabState} state
+ * @param {EngineKind} engine
+ * @returns {LabState}
+ */
+export function setEngine(state, engine) {
+	return edited({ ...state, engine });
+}
+
+/**
+ * @param {LabState} state
+ * @param {SwirlStyle} style
+ * @returns {LabState}
+ */
+export function setStyle(state, style) {
+	return edited({ ...state, style });
 }
 
 /**
@@ -130,21 +178,23 @@ export function resetEngine(state) {
 	);
 	const knobs = groups.map((group) => [group, DEFAULT_LAB.knobs[group]]);
 	const toggles = own.map((name) => [name, DEFAULT_LAB.toggles[name]]);
-	return {
+	return edited({
 		...state,
 		style: liquid ? state.style : DEFAULT_LAB.style,
 		knobs: { ...state.knobs, ...Object.fromEntries(knobs) },
 		toggles: { ...state.toggles, ...Object.fromEntries(toggles) },
-	};
+	});
 }
 
 /**
- * JSON to send back: the choices and the fully resolved tunings.
+ * JSON to send back: the preset or slot it started from, the choices
+ * and the fully resolved tunings.
  * @param {LabState} state
  * @returns {string}
  */
 export function exportLab(state) {
-	const { engine, style, toggles } = state;
+	const { preset, engine, style, toggles } = state;
 	const settings = resolveSettings(state);
-	return JSON.stringify({ engine, style, toggles, settings }, null, 2);
+	const json = { preset, engine, style, toggles, settings };
+	return JSON.stringify(json, null, 2);
 }
