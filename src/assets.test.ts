@@ -9,6 +9,7 @@ describe("copySiteAssets", registerAssetTests);
 function registerAssetTests(): void {
 	registerMissingStylesheetTest();
 	registerEssayStylesheetTest();
+	registerDeclarationExclusionTest();
 }
 
 function registerMissingStylesheetTest(): void {
@@ -66,5 +67,38 @@ function registerEssayStylesheetTest(): void {
 				"essay-discussion.css",
 			]),
 		);
+	});
+}
+
+function registerDeclarationExclusionTest(): void {
+	it("copies static files except TypeScript declarations", async () => {
+		const root = await mkdtemp(path.join(tmpdir(), "blog-assets-"));
+		const outDir = path.join(root, "dist");
+		await mkdir(path.join(root, "static/js"), { recursive: true });
+		await mkdir(path.join(root, "styles"));
+		for (const style of [
+			"main.css",
+			"prose.css",
+			"figures.css",
+			"essay.css",
+			"essay-patterns.css",
+			"essay-discussion.css",
+			"project.css",
+			"diagrams.css",
+			"hero.css",
+			"header.css",
+		]) {
+			await writeFile(path.join(root, "styles", style), "body {}\n");
+		}
+		await writeFile(path.join(root, "static/js/app.js"), "export {};\n");
+		await writeFile(path.join(root, "static/js/app.d.ts"), "export {};\n");
+		await writeFile(path.join(root, "static/js/notes.ts"), "export {};\n");
+
+		await copySiteAssets(root, outDir);
+
+		expect((await readdir(path.join(outDir, "js"))).sort()).toEqual([
+			"app.js",
+			"notes.ts",
+		]);
 	});
 }
