@@ -6,7 +6,7 @@ import { sloshWeight } from "./thought-field-slosh.js";
 
 /**
  * @typedef {import("./thought-field-grid.js").Fluid} Fluid
- * @typedef {import("./thought-field-slosh.js").Vec2} Vec2
+ * @typedef {import("./thought-field-vec.js").Vec2} Vec2
  */
 
 /**

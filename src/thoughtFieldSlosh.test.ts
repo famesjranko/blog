@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { filterReading } from "../static/js/thought-field-motion-filter.js";
 import type {
 	SloshState,
 	SloshTuning,
@@ -27,8 +28,12 @@ const PURE_SPRING: Partial<SloshTuning> = {
 	tiltRecenter: Number.POSITIVE_INFINITY,
 };
 
+// The jolts and hand arithmetic below were sized for this deadzone, so
+// the suite pins it rather than follow the shipped tuning.
+const DEADZONE = 0.6;
+
 function tuned(overrides: Partial<SloshTuning> = {}): SloshTuning {
-	return { ...SLOSH_TUNING, ...overrides };
+	return { ...SLOSH_TUNING, deadzone: DEADZONE, ...overrides };
 }
 
 function magnitude(v: Vec2): number {
@@ -341,45 +346,34 @@ describe("reseedSlosh", () => {
 });
 
 describe("stepSlosh filtered inputs", () => {
-	it("reports the shake as the deadzoned reading minus the settled gravity", () => {
+	it("reports the filter's shake, lean and spin for the step", () => {
 		const tuning = tuned();
-		// A (3, 4) jolt over upright is 5 m/s²; the 0.6 deadzone leaves 4.4.
-		const step = stepSlosh({
-			state: seededUpright(tuning),
-			sample: { x: 3, y: G + 4 },
-			dt: FRAME,
-			tuning,
+		const state = seededUpright(tuning);
+		// Jolted, tilted and turned at once, so every output is non-zero.
+		const sample = { x: 4, y: G - 2 };
+		const step = stepSlosh({ state, sample, dt: FRAME, tuning });
+		const filtered = filterReading({ state, sample, dt: FRAME, tuning });
+		expect(magnitude(filtered.shake)).toBeGreaterThan(0);
+		expect(magnitude(filtered.lean)).toBeGreaterThan(0);
+		expect(filtered.spin).not.toBe(0);
+		const { shake, lean, spin } = step;
+		expect({ shake, lean, spin }).toEqual({
+			shake: filtered.shake,
+			lean: filtered.lean,
+			spin: filtered.spin,
 		});
-		expect(step.shake.x).toBeCloseTo(3 * (4.4 / 5), 12);
-		expect(step.shake.y).toBeCloseTo(4 * (4.4 / 5), 12);
-	});
-
-	it.each([
-		{ edge: "right", sign: 1 },
-		{ edge: "left", sign: -1 },
-	])("reports a lean toward the lowered $edge edge", ({ sign }) => {
-		const tuning = tuned();
-		// That edge lowered 30°: the reading's x is ∓g sin 30°.
-		const lowered = { x: -sign * G * 0.5, y: G * Math.cos(Math.PI / 6) };
-		const step = stepSlosh({
-			state: seededUpright(tuning),
-			sample: lowered,
-			dt: FRAME,
-			tuning,
-		});
-		expect(Math.sign(step.lean.x)).toBe(sign);
-		expect(Math.abs(step.lean.x)).toBeGreaterThan(Math.abs(step.lean.y));
 	});
 
 	it.each([
 		{ case: "without a reading", sample: null, dt: FRAME },
 		{ case: "when no time has passed", sample: JOLT_RIGHT, dt: 0 },
-	])("reports no shake or lean $case", ({ sample, dt }) => {
+	])("reports no shake, lean or spin $case", ({ sample, dt }) => {
 		const tuning = tuned();
 		const { state } = joltedRight(tuning);
 		const step = stepSlosh({ state, sample, dt, tuning });
 		expect(magnitude(step.shake)).toBe(0);
 		expect(magnitude(step.lean)).toBe(0);
+		expect(step.spin).toBe(0);
 	});
 });
 

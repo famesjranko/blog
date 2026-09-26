@@ -7,7 +7,7 @@ import { enforceWalls, sample } from "./thought-field-grid.js";
 /**
  * @typedef {import("./thought-field-grid.js").Channel} Channel
  * @typedef {import("./thought-field-grid.js").Fluid} Fluid
- * @typedef {import("./thought-field-slosh.js").Vec2} Vec2
+ * @typedef {import("./thought-field-vec.js").Vec2} Vec2
  */
 
 /**
