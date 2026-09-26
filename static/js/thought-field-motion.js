@@ -13,13 +13,14 @@ import { toScreenAxes } from "./thought-field-slosh.js";
  * }} MotionInput
  */
 
-/** @returns {boolean} */
-function motionSupported() {
-	// Only iOS Safari has requestPermission; a prompt isn't worth it for decoration.
+/**
+ * @param {{ matchMedia: (query: string) => { matches: boolean }, DeviceMotionEvent?: unknown }} env
+ * @returns {boolean}
+ */
+export function motionSupported(env) {
+	// Listening never prompts (only requestPermission() does, and we never call it); unpermitted browsers send no or all-null events.
 	return (
-		window.matchMedia("(pointer: coarse)").matches &&
-		"DeviceMotionEvent" in window &&
-		!("requestPermission" in DeviceMotionEvent)
+		env.matchMedia("(pointer: coarse)").matches && "DeviceMotionEvent" in env
 	);
 }
 
@@ -29,7 +30,7 @@ function motionSupported() {
  * @returns {MotionInput | null}
  */
 export function motionInput() {
-	if (!motionSupported()) {
+	if (!motionSupported(window)) {
 		return null;
 	}
 	/** @type {Vec2 | null} */
