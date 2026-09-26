@@ -60,7 +60,15 @@ function stepPhysics(options, now, dt, state) {
 	const moved =
 		globe === null
 			? NO_GLOBE
-			: stepGlobe({ globe, field, input, dt, time, tuning: GLOBE_TUNING });
+			: stepGlobe({
+					globe,
+					field,
+					input,
+					dt,
+					time,
+					aspect,
+					tuning: GLOBE_TUNING,
+				});
 	const hold = moved.hold;
 	stepParticles({ field, aspect, time, dt, pointer, meteors, hold });
 	return { slosh: step.state, globe: moved.globe };

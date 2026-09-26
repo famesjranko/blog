@@ -1,47 +1,68 @@
 // Snow-globe response to phone motion for the hero field. A shake stirs
-// the liquid into drifting eddies; each particle is dragged by its local
-// flow and jolted and sunk by its own weight. Pure maths,
-// no DOM or sensor APIs, so Node can test it directly.
+// the liquid into swirls; each particle is dragged by its local flow and
+// jolted and sunk by its own weight. The swirl style picks the flow: the
+// procedural eddies of thought-field-pattern.js, the shake-born vortices
+// of thought-field-galaxy.js, or none. Pure maths, no DOM or sensor
+// APIs, so Node can test it directly.
+
+import {
+	GALAXY_TUNING,
+	addGalaxyFlow,
+	galaxyAgitation,
+	makeGalaxy,
+	stepGalaxy,
+} from "./thought-field-galaxy.js";
+import {
+	PATTERN_TUNING,
+	makeWaves,
+	sampleFlow,
+} from "./thought-field-pattern.js";
 
 /**
  * @typedef {import("./thought-field-slosh.js").Vec2} Vec2
  * @typedef {import("./thought-field-particles.js").Field} Field
+ * @typedef {import("./thought-field-pattern.js").PatternTuning} PatternTuning
+ * @typedef {import("./thought-field-galaxy.js").GalaxyState} GalaxyState
+ * @typedef {import("./thought-field-galaxy.js").GalaxyTuning} GalaxyTuning
  */
+
+/** @typedef {"pattern" | "galaxy" | "off"} SwirlStyle */
 
 /**
  * @typedef {{
+ *   swirl: SwirlStyle,
  *   shakeStir: number,
  *   viscosity: number,
- *   swirlSpeed: number,
- *   eddySize: number,
- *   eddyDrift: number,
  *   shakeGain: number,
  *   drag: number,
  *   heavyLag: number,
  *   tiltGain: number,
  *   free: number,
+ *   pattern: PatternTuning,
+ *   galaxy: GalaxyTuning,
  * }} GlobeTuning
  */
 
 /** @type {Readonly<GlobeTuning>} */
 export const GLOBE_TUNING = Object.freeze({
-	shakeStir: 0.5, // agitation per m/s of deadzoned shake; a firm 15 m/s², 0.7 s shake fills it
-	viscosity: 0.6, // s; time constant for the swirling to die away
-	swirlSpeed: 0.7, // field units/s; RMS flow speed at full agitation
-	eddySize: 0.6, // field units; rough diameter of one swirl
-	eddyDrift: 0.4, // rad/s; how fast the swirl pattern wanders
+	swirl: "galaxy", // "pattern": fixed eddies; "galaxy": shake-born vortices; "off": no flow
+	shakeStir: 0.5, // pattern agitation per m/s of deadzoned shake; a firm 15 m/s², 0.7 s shake fills it
+	viscosity: 0.6, // s; time constant for the pattern's swirling to die away
 	shakeGain: 1, // field units/s² of jolt per m/s² of deadzoned shake, heaviest flake
 	drag: 0.2, // s; how quickly the lightest flake takes up the local flow
 	heavyLag: 2, // the heaviest flake's extra drag time, in multiples of drag
 	tiltGain: 3, // field units/s² of sinking per field unit of lean, heaviest; low, as long drift can nauseate
 	free: 2.5, // how far agitation loosens the pull home; 0 never loosens it
+	pattern: PATTERN_TUNING,
+	galaxy: GALAXY_TUNING,
 });
 
 /**
- * Per-particle velocity and local flow as x, y pairs; the agitation
- * (0..1); and this frame's wave table.
+ * Per-particle velocity and local flow as x, y pairs; the pattern's
+ * agitation (0..1) and wave table; and the galaxy's vortices.
  * @typedef {{
  *   energy: number,
+ *   galaxy: GalaxyState,
  *   vel: Float32Array,
  *   flow: Float32Array,
  *   waves: Float32Array,
@@ -54,38 +75,17 @@ export const GLOBE_TUNING = Object.freeze({
  */
 
 /**
+ * `aspect` is the hero's half-width in field units, its half-height 1.
  * @typedef {{
  *   globe: Globe,
  *   field: Field,
  *   input: GlobeInput,
  *   dt: number,
  *   time: number,
+ *   aspect: number,
  *   tuning: GlobeTuning,
  * }} GlobeStepOptions
  */
-
-/**
- * @typedef {{
- *   globe: Globe,
- *   field: Field,
- *   flow: { energy: number, time: number },
- *   tuning: GlobeTuning,
- * }} FlowOptions
- */
-
-// Three wave vectors 60° apart cross into a lattice of counter-rotating
-// eddies; the finer fourth wave breaks up its regularity. SIZE scales
-// eddySize; DRIFT scales eddyDrift.
-const WAVES = Object.freeze([
-	{ angle: 0.3, size: 1, amp: 1, drift: 1, phase: 0 },
-	{ angle: 1.35, size: 0.9, amp: 1, drift: -0.8, phase: 2.1 },
-	{ angle: 2.4, size: 1.15, amp: 1, drift: 0.6, phase: 4.2 },
-	{ angle: 0.85, size: 0.6, amp: 0.5, drift: -1.3, phase: 1.3 },
-]);
-const WAVE_STRIDE = 5;
-// Normalises the summed waves to unit RMS speed (each cosine has mean square 1/2).
-const RMS_NORM =
-	1 / Math.sqrt(WAVES.reduce((sum, wave) => sum + wave.amp * wave.amp, 0) / 2);
 
 // makePoints draws each particle's scale from [0.9, 1.8).
 const SCALE_MIN = 0.9;
@@ -100,9 +100,10 @@ const LIGHTEST_SHARE = 0.3;
 export function makeGlobe(count) {
 	return {
 		energy: 0,
+		galaxy: makeGalaxy(),
 		vel: new Float32Array(count * 2),
 		flow: new Float32Array(count * 2),
-		waves: new Float32Array(WAVES.length * WAVE_STRIDE),
+		waves: makeWaves(),
 	};
 }
 
@@ -118,7 +119,23 @@ export function homeHold(energy, tuning) {
 }
 
 /**
- * Pumps the agitation from shake and lets viscosity drain it.
+ * The active swirl style's agitation, 0 calm to 1; "off" has none.
+ * @param {Globe} globe
+ * @param {GlobeTuning} tuning
+ * @returns {number}
+ */
+export function globeAgitation(globe, tuning) {
+	if (tuning.swirl === "pattern") {
+		return globe.energy;
+	}
+	if (tuning.swirl === "galaxy") {
+		return galaxyAgitation(globe.galaxy, tuning.galaxy);
+	}
+	return 0;
+}
+
+/**
+ * Pumps the pattern's agitation from shake and lets viscosity drain it.
  * @param {number} energy
  * @param {GlobeInput} input
  * @param {number} dt
@@ -132,50 +149,35 @@ function stir(energy, input, dt, tuning) {
 }
 
 /**
- * Writes this frame's wave table: per wave, the wave vector (kx, ky),
- * the phase and the velocity it adds per unit cosine (ax, ay).
- * @param {FlowOptions} options
+ * Steps the active swirl style and writes its velocity at every particle
+ * into `globe.flow`, returning the globe with that style's new state.
+ * Only the active style advances; the others keep their state.
+ * @param {GlobeStepOptions} options
+ * @returns {Globe}
  */
-function fillWaves(options) {
-	const { globe, flow, tuning } = options;
-	const { waves } = globe;
-	const speed = flow.energy * tuning.swirlSpeed * RMS_NORM;
-	for (let k = 0; k < WAVES.length; k += 1) {
-		const { angle, size, amp, drift, phase } = WAVES[k];
-		const wavenumber = Math.PI / (tuning.eddySize * size);
-		const o = k * WAVE_STRIDE;
-		waves[o] = wavenumber * Math.cos(angle);
-		waves[o + 1] = wavenumber * Math.sin(angle);
-		waves[o + 2] = phase + drift * tuning.eddyDrift * flow.time;
-		// u = curl of psi = (dpsi/dy, -dpsi/dx) for psi = (A / k) sin(k.x + phase).
-		waves[o + 3] = speed * amp * Math.sin(angle);
-		waves[o + 4] = -speed * amp * Math.cos(angle);
-	}
-}
-
-/**
- * Samples the stirred eddies' velocity at every particle into
- * `globe.flow`. It is the curl of a stream function, so divergence-free.
- * @param {FlowOptions} options
- */
-export function sampleFlow(options) {
-	fillWaves(options);
-	const { globe, field } = options;
-	const { waves, flow } = globe;
+function swirl(options) {
+	const { globe, field, input, dt, time, aspect, tuning } = options;
+	const { flow, waves } = globe;
 	const { pos, count } = field;
-	for (let i = 0; i < count; i += 1) {
-		const x = pos[i * 3];
-		const y = pos[i * 3 + 1];
-		let ux = 0;
-		let uy = 0;
-		for (let o = 0; o < waves.length; o += WAVE_STRIDE) {
-			const c = Math.cos(waves[o] * x + waves[o + 1] * y + waves[o + 2]);
-			ux += waves[o + 3] * c;
-			uy += waves[o + 4] * c;
-		}
-		flow[i * 2] = ux;
-		flow[i * 2 + 1] = uy;
+	if (tuning.swirl === "pattern") {
+		const energy = stir(globe.energy, input, dt, tuning);
+		const sweep = { energy, time };
+		sampleFlow({ waves, pos, flow, count, sweep, tuning: tuning.pattern });
+		return { ...globe, energy };
 	}
+	flow.fill(0);
+	if (tuning.swirl !== "galaxy") {
+		return globe;
+	}
+	const galaxy = stepGalaxy({
+		state: globe.galaxy,
+		shake: input.shake,
+		dt,
+		tuning: tuning.galaxy,
+		aspect,
+	});
+	addGalaxyFlow({ state: galaxy, pos, flow, count, tuning: tuning.galaxy });
+	return { ...globe, galaxy };
 }
 
 /**
@@ -215,13 +217,11 @@ function pushParticles(options) {
  * @returns {{ globe: Globe, hold: number }}
  */
 export function stepGlobe(options) {
-	const { globe, field, input, dt, time, tuning } = options;
+	const { globe, dt, tuning } = options;
 	if (!(dt > 0)) {
-		return { globe, hold: homeHold(globe.energy, tuning) };
+		return { globe, hold: homeHold(globeAgitation(globe, tuning), tuning) };
 	}
-	const energy = stir(globe.energy, input, dt, tuning);
-	sampleFlow({ globe, field, flow: { energy, time }, tuning });
-	pushParticles(options);
-	const next = { ...globe, energy };
-	return { globe: next, hold: homeHold(next.energy, tuning) };
+	const next = swirl(options);
+	pushParticles({ ...options, globe: next });
+	return { globe: next, hold: homeHold(globeAgitation(next, tuning), tuning) };
 }

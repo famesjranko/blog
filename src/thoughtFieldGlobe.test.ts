@@ -1,39 +1,18 @@
 import { describe, expect, it } from "vitest";
-import type { GlobeInput } from "../static/js/thought-field-globe.js";
+import type {
+	GlobeInput,
+	GlobeTuning,
+	SwirlStyle,
+} from "../static/js/thought-field-globe.js";
 import {
 	GLOBE_TUNING,
 	makeGlobe,
-	sampleFlow,
 	stepGlobe,
 } from "../static/js/thought-field-globe.js";
 
 const FRAME = 1 / 60;
-// A power of two, so x ± H is exact in the Float32 position buffer.
-const H = 1 / 1024;
-// Around each centre: +x, -x, +y, -y.
-const NEIGHBOURS = [
-	[H, 0],
-	[-H, 0],
-	[0, H],
-	[0, -H],
-] as const;
-
-function centres(): Array<[number, number]> {
-	const out: Array<[number, number]> = [];
-	for (let i = 0; i < 7; i += 1) {
-		for (let j = 0; j < 5; j += 1) {
-			out.push([-1.5 + i * 0.5, -1 + j * 0.5]);
-		}
-	}
-	return out;
-}
-
-function stencilField(points: Array<[number, number]>) {
-	const coords = points.flatMap(([x, y]) =>
-		NEIGHBOURS.flatMap(([dx, dy]) => [x + dx, y + dy, 0]),
-	);
-	return { count: coords.length / 3, pos: Float32Array.from(coords) };
-}
+const ASPECT = 0.65;
+const STYLES: SwirlStyle[] = ["pattern", "galaxy", "off"];
 
 function at(values: Float32Array, index: number): number {
 	return values[index] ?? Number.NaN;
@@ -49,73 +28,106 @@ function scatteredField(count: number) {
 	};
 }
 
-describe("sampleFlow", () => {
-	it("is divergence-free while it swirls", () => {
-		const points = centres();
-		const field = stencilField(points);
-		const globe = makeGlobe(field.count);
-		const flow = { energy: 1, time: 2.3 };
-		sampleFlow({ globe, field, flow, tuning: GLOBE_TUNING });
-		const u = (point: number, side: number, axis: number) =>
-			at(globe.flow, (point * 4 + side) * 2 + axis);
-		const divergence = points.map(
-			(_, p) => (u(p, 0, 0) - u(p, 1, 0) + u(p, 2, 1) - u(p, 3, 1)) / (2 * H),
-		);
-		const vorticity = points.map(
-			(_, p) => (u(p, 0, 1) - u(p, 1, 1) - u(p, 2, 0) + u(p, 3, 0)) / (2 * H),
-		);
-		expect(Math.max(...divergence.map(Math.abs))).toBeLessThan(0.02);
-		expect(Math.max(...vorticity.map(Math.abs))).toBeGreaterThan(2);
-	});
-});
+// No birth jitter, so the galaxy runs are repeatable.
+function styled(swirl: SwirlStyle): GlobeTuning {
+	return {
+		...GLOBE_TUNING,
+		swirl,
+		galaxy: { ...GLOBE_TUNING.galaxy, jitter: 0 },
+	};
+}
+
+// 12 m/s² sideways at 3 Hz for half a second, then still.
+function firmShake(t: number): GlobeInput {
+	const shake = t < 0.5 ? 12 * Math.sin(2 * Math.PI * 3 * t) : 0;
+	return { shake: { x: shake, y: 0 }, lean: { x: 0, y: 0 } };
+}
 
 describe("stepGlobe", () => {
-	it("scatters on a firm shake, then settles once it stops", () => {
+	it("defaults to the galaxy swirl", () => {
+		expect(GLOBE_TUNING.swirl).toBe("galaxy");
+	});
+
+	it.each(STYLES)("%s: scatters on a firm shake, then settles", (style) => {
 		const field = scatteredField(40);
 		const start = Float32Array.from(field.pos);
-		let globe = makeGlobe(field.count);
+		const tuning = styled(style);
+		let step = { globe: makeGlobe(field.count), hold: 1 };
 		for (let frame = 0; frame < 60 * 7; frame += 1) {
-			const t = frame * FRAME;
-			// 12 m/s² at 3 Hz for half a second, then still.
-			const shake = t < 0.5 ? 12 * Math.sin(2 * Math.PI * 3 * t) : 0;
-			const input: GlobeInput = {
-				shake: { x: shake, y: 0 },
-				lean: { x: 0, y: 0 },
-			};
-			const tuning = GLOBE_TUNING;
-			globe = stepGlobe({
-				globe,
-				field,
-				input,
-				dt: FRAME,
-				time: t,
-				tuning,
-			}).globe;
+			const time = frame * FRAME;
+			const { globe } = step;
+			const input = firmShake(time);
+			const dt = FRAME;
+			const aspect = ASPECT;
+			step = stepGlobe({ globe, field, input, dt, time, aspect, tuning });
 		}
 		const moved = Array.from(field.pos, (v, i) => Math.abs(v - at(start, i)));
 		expect(Math.max(...moved)).toBeGreaterThan(0.1);
 		expect(Math.max(...moved)).toBeLessThan(1.5);
-		expect(globe.energy).toBeLessThan(0.01);
-		expect(Math.max(...Array.from(globe.vel, Math.abs))).toBeLessThan(0.01);
+		expect(step.hold).toBeGreaterThan(0.99);
+		const speeds = Array.from(step.globe.vel, Math.abs);
+		expect(Math.max(...speeds)).toBeLessThan(0.01);
 	});
 
-	it("leans without stirring when the phone only tilts", () => {
+	it.each(STYLES)("%s: leans without stirring on a tilt", (style) => {
 		const field = scatteredField(40);
 		const start = Float32Array.from(field.pos);
+		const tuning = styled(style);
 		let step = { globe: makeGlobe(field.count), hold: 1 };
 		const input: GlobeInput = {
 			shake: { x: 0, y: 0 },
 			lean: { x: 0.05, y: 0 },
 		};
 		for (let frame = 0; frame < 60 * 2; frame += 1) {
-			const t = frame * FRAME;
+			const time = frame * FRAME;
 			const { globe } = step;
-			const tuning = GLOBE_TUNING;
-			step = stepGlobe({ globe, field, input, dt: FRAME, time: t, tuning });
+			const dt = FRAME;
+			const aspect = ASPECT;
+			step = stepGlobe({ globe, field, input, dt, time, aspect, tuning });
 		}
 		const drift = Array.from(field.pos, (v, i) => v - at(start, i));
 		expect(Math.min(...drift.filter((_, i) => i % 3 === 0))).toBeGreaterThan(0);
 		expect(step.globe.energy).toBe(0);
+		expect(step.globe.galaxy.wells).toHaveLength(0);
+		expect(step.hold).toBe(1);
+	});
+});
+
+describe("stepGlobe swirl styles", () => {
+	it("galaxy: loosens the hold while its vortices swirl", () => {
+		const field = scatteredField(40);
+		const tuning = styled("galaxy");
+		let step = { globe: makeGlobe(field.count), hold: 1 };
+		let loosest = 1;
+		for (let frame = 0; frame < 60; frame += 1) {
+			const time = frame * FRAME;
+			const { globe } = step;
+			const input = firmShake(time);
+			const dt = FRAME;
+			const aspect = ASPECT;
+			step = stepGlobe({ globe, field, input, dt, time, aspect, tuning });
+			loosest = Math.min(loosest, step.hold);
+		}
+		expect(step.globe.galaxy.wells.length).toBeGreaterThan(0);
+		expect(loosest).toBeLessThan(0.6);
+	});
+
+	it("off: the shake still jolts the particles, but there is no flow", () => {
+		const field = scatteredField(40);
+		const start = Float32Array.from(field.pos);
+		const tuning = styled("off");
+		let step = { globe: makeGlobe(field.count), hold: 1 };
+		for (let frame = 0; frame < 30; frame += 1) {
+			const time = frame * FRAME;
+			const { globe } = step;
+			const input = firmShake(time);
+			const dt = FRAME;
+			const aspect = ASPECT;
+			step = stepGlobe({ globe, field, input, dt, time, aspect, tuning });
+		}
+		const moved = Array.from(field.pos, (v, i) => Math.abs(v - at(start, i)));
+		expect(Math.max(...moved)).toBeGreaterThan(0.01);
+		expect(Array.from(step.globe.flow).every((v) => v === 0)).toBe(true);
 		expect(step.hold).toBe(1);
 	});
 });
