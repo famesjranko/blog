@@ -147,6 +147,14 @@
 		"width": 640,
 		"height": 360
 	},
+	"/img/placeholders/pdf-table-extraction-capstone.jpg": {
+		"width": 640,
+		"height": 360
+	},
+	"/img/placeholders/pdf-table-extraction-capstone.webp": {
+		"width": 640,
+		"height": 360
+	},
 	"/img/placeholders/tablescan.jpg": {
 		"width": 640,
 		"height": 360
@@ -202,5 +210,9 @@
 	"/img/projects/connect4-lisp-web/cover.webp": {
 		"width": 1536,
 		"height": 1024
+	},
+	"/img/projects/tablescan/book-viewer.png": {
+		"width": 1920,
+		"height": 1516
 	}
 }
