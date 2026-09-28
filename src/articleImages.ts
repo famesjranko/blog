@@ -6,12 +6,16 @@ const ARTICLE_WIDTHS = [480, 720, 960, 1280];
 /**
  * Rendered width of a body image: the `.wrap` column
  * (`100% - 2 * clamp(1rem, 4vw, 2.5rem)`) until `--prose-width` caps it.
- * The cap is 38rem in both places on purpose. A `ch` measure would vary
- * with the reading font, which differs per platform, and `ch` in `sizes`
- * resolves against the initial font anyway.
+ * That cap is `65ch` of the reading font, and the font is whatever serif
+ * the client has: Georgia gives about 603px, Noto Serif about 674px,
+ * DejaVu Serif about 767px. `sizes` cannot follow the font (`ch` here
+ * resolves against the initial font), so the cap is an upper bound with
+ * margin, 50rem. Overestimating picks a rendition one rung larger on
+ * high-density screens, a few kilobytes. Underestimating would serve a
+ * blurry image, so the bound must stay above the widest serif.
  */
 export const ARTICLE_IMAGE_SIZES =
-	"(min-width: 40rem) 38rem, (min-width: 25rem) 92vw, calc(100vw - 2rem)";
+	"(min-width: 40rem) 50rem, (min-width: 25rem) 92vw, calc(100vw - 2rem)";
 
 /**
  * Widths a source can provide without upscaling: the ladder widths

@@ -24,11 +24,7 @@
 		--color-diagram-o: light-dark(#b85a08, #ffad66);
 
 		--content-width: 68rem;
-		/* A rem measure, not ch: the reading font differs per platform
-		(Georgia on desktop, Noto Serif on Android), and the image `sizes`
-		value in src/articleImages.ts must match this width exactly. 38rem
-		is 65ch of Georgia at the largest prose size. */
-		--prose-width: 38rem;
+		--prose-width: 65ch;
 
 		--font-ui:
 			-apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto,

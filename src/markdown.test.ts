@@ -300,7 +300,7 @@ describe("responsive article images", () => {
 	it("offers sized AVIF before WebP with the prose sizes and a JPEG fallback", () => {
 		const html = renderMarkdown(`![city](${cover})`);
 		const sizes =
-			"(min-width: 40rem) 38rem, (min-width: 25rem) 92vw, calc(100vw - 2rem)";
+			"(min-width: 40rem) 50rem, (min-width: 25rem) 92vw, calc(100vw - 2rem)";
 		expect(html).toContain(
 			`<picture><source type="image/avif" srcset="${srcset("", "avif")}" sizes="${sizes}"><source type="image/webp" srcset="${srcset("", "webp")}" sizes="${sizes}"><img src="${cover}" alt="city" width="1280" height="540"></picture>`,
 		);
