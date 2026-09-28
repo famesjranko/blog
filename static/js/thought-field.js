@@ -1,6 +1,7 @@
 import { createRenderer } from "./thought-field-gl.js";
 import { createLoop } from "./thought-field-loop.js";
 import { makeMeteors } from "./thought-field-meteors.js";
+import { motionInput } from "./thought-field-motion.js";
 import { buildPalette, makePoints } from "./thought-field-particles.js";
 
 /**
@@ -90,6 +91,7 @@ export function initThoughtField(canvas, tier) {
 	const renderer = createRenderer(canvas, field, meteors);
 	const pointer = pointerState(hero);
 	const resize = resizeState({ hero, renderer, tier });
+	const motion = motionInput();
 	const loop = createLoop({
 		renderer,
 		field,
@@ -97,6 +99,7 @@ export function initThoughtField(canvas, tier) {
 		hero,
 		meteors,
 		dims: resize.dims,
+		motion,
 	});
 	loop.start();
 	return {
@@ -104,6 +107,7 @@ export function initThoughtField(canvas, tier) {
 			loop.destroy();
 			resize.destroy();
 			pointer.destroy();
+			motion?.destroy();
 			renderer.destroy();
 		},
 	};

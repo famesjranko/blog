@@ -165,6 +165,8 @@ function repel(options) {
 }
 
 /**
+ * HOLD (0..1] scales the drift's pull back to the layout: 1 is the plain
+ * drift, lower lets phone motion carry particles away from it.
  * @param {{
  *   field: Field,
  *   aspect: number,
@@ -172,11 +174,12 @@ function repel(options) {
  *   dt: number,
  *   pointer: Pointer,
  *   meteors: Meteors,
+ *   hold: number,
  * }} options
  */
 export function stepParticles(options) {
-	const { field, aspect, time, dt, pointer, meteors } = options;
-	const ease = 1 - Math.exp(-dt * 1.1);
+	const { field, aspect, time, dt, pointer, meteors, hold } = options;
+	const ease = (1 - Math.exp(-dt * 1.1)) * hold;
 	const rate = Math.min(dt * 60, 3);
 	for (let i = 0; i < field.count; i += 1) {
 		const ix = i * 3;

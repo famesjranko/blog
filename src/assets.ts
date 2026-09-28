@@ -16,14 +16,18 @@ const STYLES = [
 ];
 
 /**
- * `static/` is copied as-is (js/, img/, favicon); stylesheets land
- * under css/ beside them.
+ * `static/` is copied as-is (js/, img/, favicon) minus `.d.ts` files;
+ * stylesheets land under css/ beside them.
  */
 export async function copySiteAssets(
 	sourceRoot: string,
 	outDir: string,
 ): Promise<void> {
-	await cp(path.join(sourceRoot, "static"), outDir, { recursive: true });
+	await cp(path.join(sourceRoot, "static"), outDir, {
+		recursive: true,
+		// .d.ts files exist only so Node tests can type the browser modules.
+		filter: (source) => !source.endsWith(".d.ts"),
+	});
 	const cssDir = path.join(outDir, "css");
 	await mkdir(cssDir, { recursive: true });
 	for (const style of STYLES) {
