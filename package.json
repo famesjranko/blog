@@ -5,7 +5,7 @@
 	"type": "module",
 	"description": "Tiny custom static-site pipeline: Markdown -> TypeScript -> HTML.",
 	"engines": {
-		"node": ">=20"
+		"node": "^22.12.0 || ^24.0.0 || >=26.0.0"
 	},
 	"scripts": {
 		"prebuild": "npm run images",
@@ -33,6 +33,6 @@
 		"sharp": "^0.35.4",
 		"tsx": "^4.19.0",
 		"typescript": "^5.9.0",
-		"vitest": "^3.2.0"
+		"vitest": "^5.0.2"
 	}
 }
