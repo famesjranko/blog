@@ -174,3 +174,39 @@ describe("stepGlobe idle", () => {
 		expect(step.hold).toBeLessThan(1);
 	});
 });
+
+describe("stepGlobe weight", () => {
+	// The lightest and the heaviest flake, side by side at the same spot.
+	function lightAndHeavy(x: number) {
+		return {
+			count: 2,
+			pos: Float32Array.of(x, 0, 0, x, 0, 0),
+			scale: Float32Array.of(0.9, 1.8),
+		};
+	}
+
+	it("jolts the heavier flake further on a shake too short to swirl", () => {
+		const field = lightAndHeavy(0);
+		const start = Float32Array.from(field.pos);
+		// One 50 ms knock sideways: below the impulse that sheds a vortex pair.
+		const knock = (t: number) =>
+			t >= 0.5 && t < 0.55 ? { x: 10, y: G } : UPRIGHT;
+		const { globe } = run({ field, reading: knock, seconds: 0.7 });
+		const [light = 0, heavy = 0] = displacements(field, start);
+		expect(globe.galaxy.wells).toHaveLength(0);
+		expect(light).toBeGreaterThan(0);
+		expect(heavy).toBeGreaterThan(light);
+	});
+
+	it("carries the heavier flake more slowly into a swirl", () => {
+		const field = lightAndHeavy(0.3);
+		const start = Float32Array.from(field.pos);
+		const resting = makeGlobe(field.count);
+		const well = { x: 0, y: 0, spin: 1, core2: 0.0144, age: 0 };
+		const globe = { ...resting, galaxy: { ...resting.galaxy, wells: [well] } };
+		run({ field, reading: () => UPRIGHT, seconds: 0.1, globe });
+		const [light = 0, heavy = 0] = displacements(field, start);
+		expect(heavy).toBeGreaterThan(0);
+		expect(light).toBeGreaterThan(heavy);
+	});
+});

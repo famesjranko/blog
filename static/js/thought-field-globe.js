@@ -48,14 +48,16 @@ export const GLOBE_TUNING = Object.freeze({
 });
 
 /**
- * The motion filter, the galaxy's vortices, and per-particle velocity
- * and local flow as x, y pairs.
- * @typedef {{
+ * The motion filter and the galaxy's vortices, replaced each step, and
+ * per-particle velocity and local flow as x, y pairs. stepGlobe writes
+ * `vel` and `flow` in place, so a stepped or reseeded globe shares them
+ * with the globe it came from: only the newest one is live.
+ * @typedef {Readonly<{
  *   filter: FilterState,
  *   galaxy: GalaxyState,
  *   vel: Float32Array,
  *   flow: Float32Array,
- * }} Globe
+ * }>} Globe
  */
 
 /**
@@ -73,10 +75,23 @@ export const GLOBE_TUNING = Object.freeze({
  */
 
 /** @typedef {{ shake: Vec2, lean: Vec2 }} GlobeInput */
+/**
+ * The part of a globe that each substep replaces rather than writes.
+ * @typedef {{ filter: FilterState, galaxy: GalaxyState }} Liquid
+ */
+/**
+ * `steps` substeps of `dt` seconds over which the flow is held.
+ * @typedef {{ dt: number, steps: number }} Stretch
+ */
 
 // Frames are split into steps no longer than this, so the filter, the
 // vortex births and the particle drag play out alike at 30 to 144 fps.
 const MAX_SUBSTEP = 1 / 240;
+// The flow at every particle costs one exp() per vortex, so it is
+// sampled once per stretch of up to this long while the drag toward it
+// is substepped: once a frame down to 25 fps, twice at the 20 fps cap.
+// Holding it a whole 50 ms frame cost 20 fps another 5% of scatter.
+const FLOW_STEP = 1 / 25;
 // makePoints draws each particle's scale from [0.9, 1.8).
 const SCALE_MIN = 0.9;
 const SCALE_RANGE = 0.9;
@@ -125,9 +140,10 @@ function homeHold(globe, tuning) {
  * flow more slowly.
  * @param {GlobeStepOptions} options
  * @param {GlobeInput} input
+ * @param {number} dt
  */
-function pushParticles(options, input) {
-	const { globe, field, dt, tuning } = options;
+function pushParticles(options, input, dt) {
+	const { globe, field, tuning } = options;
 	const { vel, flow } = globe;
 	const { pos, scale, count } = field;
 	const ax =
@@ -151,48 +167,65 @@ function pushParticles(options, input) {
 }
 
 /**
- * One substep: filters the reading, sheds and moves the vortices, then
- * pushes the particles through their flow. Returns the new globe.
+ * Samples the flow once, then runs the stretch's substeps: each filters
+ * the reading, sheds and moves the vortices, and pushes the particles.
  * @param {GlobeStepOptions} options
- * @returns {Globe}
+ * @param {Liquid} liquid
+ * @param {Stretch} stretch
+ * @returns {Liquid}
  */
-function substep(options) {
-	const { globe, field, sample, dt, aspect, tuning } = options;
-	const state = globe.filter;
-	const filtered = filterReading({ state, sample, dt, tuning });
-	const filter = {
-		seeded: state.seeded || sample !== null,
-		gravity: filtered.gravity,
-		neutral: filtered.neutral,
-	};
-	const galaxy = stepGalaxy({
-		state: globe.galaxy,
-		shake: filtered.shake,
-		dt,
-		tuning: tuning.galaxy,
-		aspect,
-	});
+function advanceStretch(options, liquid, stretch) {
+	const { globe, field, sample, aspect, tuning } = options;
 	const { pos, count } = field;
 	const { flow } = globe;
+	const { dt } = stretch;
 	flow.fill(0);
-	addGalaxyFlow({ state: galaxy, pos, flow, count, tuning: tuning.galaxy });
-	const next = { ...globe, filter, galaxy };
-	pushParticles({ ...options, globe: next }, filtered);
-	return next;
+	addGalaxyFlow({
+		state: liquid.galaxy,
+		pos,
+		flow,
+		count,
+		tuning: tuning.galaxy,
+	});
+	let { filter, galaxy } = liquid;
+	for (let i = 0; i < stretch.steps; i += 1) {
+		const filtered = filterReading({ state: filter, sample, dt, tuning });
+		filter = {
+			seeded: filter.seeded || sample !== null,
+			gravity: filtered.gravity,
+			neutral: filtered.neutral,
+		};
+		galaxy = stepGalaxy({
+			state: galaxy,
+			shake: filtered.shake,
+			dt,
+			tuning: tuning.galaxy,
+			aspect,
+		});
+		pushParticles(options, filtered, dt);
+	}
+	return { filter, galaxy };
 }
 
 /**
- * Advances the globe by dt seconds, moving `field.pos`, and returns the
- * new globe with how strongly particles are still pulled home.
+ * Advances the globe by dt seconds, moving `field.pos` and writing the
+ * globe's buffers in place, and returns the new globe with how strongly
+ * particles are still pulled home.
  * @param {GlobeStepOptions} options
  * @returns {{ globe: Globe, hold: number }}
  */
 export function stepGlobe(options) {
-	const { dt, tuning } = options;
-	const steps = dt > 0 ? Math.ceil(dt / MAX_SUBSTEP) : 0;
-	let globe = options.globe;
-	for (let i = 0; i < steps; i += 1) {
-		globe = substep({ ...options, globe, dt: dt / steps });
+	const { globe, dt, tuning } = options;
+	if (!(dt > 0)) {
+		return { globe, hold: homeHold(globe, tuning) };
 	}
-	return { globe, hold: homeHold(globe, tuning) };
+	const stretches = Math.ceil(dt / FLOW_STEP);
+	const steps = Math.ceil(dt / stretches / MAX_SUBSTEP);
+	const stretch = { dt: dt / stretches / steps, steps };
+	let liquid = { filter: globe.filter, galaxy: globe.galaxy };
+	for (let i = 0; i < stretches; i += 1) {
+		liquid = advanceStretch(options, liquid, stretch);
+	}
+	const next = { ...globe, ...liquid };
+	return { globe: next, hold: homeHold(next, tuning) };
 }

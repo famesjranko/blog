@@ -19,11 +19,13 @@ export interface GlobeTuning extends FilterTuning {
 	galaxy: GalaxyTuning;
 }
 
+// stepGlobe writes vel and flow in place, so a stepped or reseeded globe
+// shares them with the globe it came from: only the newest one is live.
 export interface Globe {
-	filter: FilterState;
-	galaxy: GalaxyState;
-	vel: Float32Array;
-	flow: Float32Array;
+	readonly filter: FilterState;
+	readonly galaxy: GalaxyState;
+	readonly vel: Float32Array;
+	readonly flow: Float32Array;
 }
 
 export interface GlobeStepOptions {
