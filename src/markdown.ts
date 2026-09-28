@@ -141,7 +141,24 @@ function buildRenderer(): MarkdownIt {
 	return md;
 }
 
-export function renderMarkdown(source: string): string {
+function markdownRenderer(): MarkdownIt {
 	renderer ??= buildRenderer();
-	return renderer.render(source);
+	return renderer;
+}
+
+export function renderMarkdown(source: string): string {
+	return markdownRenderer().render(source);
+}
+
+/**
+ * Sources of every image in a markdown body, in document order. The
+ * build generates renditions only for these, so unused images cost nothing.
+ */
+export function markdownImageSources(source: string): string[] {
+	return markdownRenderer()
+		.parse(source, {})
+		.flatMap((token) => token.children ?? [])
+		.filter((child) => child.type === "image")
+		.map((child) => child.attrGet("src"))
+		.filter((src): src is string => src !== null);
 }

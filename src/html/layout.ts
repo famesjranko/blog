@@ -1,11 +1,11 @@
 import type { Essay, Project } from "../content.js";
 import {
 	CARD_IMAGE_SIZES,
-	type CardImageCandidate,
 	cardImagePlan,
 	cardImageSource,
 } from "../cardImages.js";
 import { imageSize, webpSrc } from "../images.js";
+import { renditionSources } from "../renditions.js";
 import { canonicalSiteUrl, siteUrl } from "../site.js";
 
 export const SITE_NAME = "Andrew J. McDonald";
@@ -55,25 +55,15 @@ export function cardCover(piece: CoverPiece): string {
 	return `<div class="card-media">${art}${badge}</div>`;
 }
 
-function candidateSet(
-	candidates: CardImageCandidate[],
-	format: "avif" | "webp",
-): string {
-	return candidates
-		.map((candidate) => {
-			const src = format === "avif" ? candidate.avifSrc : candidate.webpSrc;
-			return `${siteUrl(src)} ${candidate.width}w`;
-		})
-		.join(", ");
-}
-
 function picture(src: string, img: string): string {
 	const plan = cardImagePlan(src);
 	if (plan !== undefined) {
-		const avif = escapeHtml(candidateSet(plan.candidates, "avif"));
-		const webp = escapeHtml(candidateSet(plan.candidates, "webp"));
-		const sizes = escapeHtml(CARD_IMAGE_SIZES);
-		return `<picture><source type="image/avif" srcset="${avif}" sizes="${sizes}"><source type="image/webp" srcset="${webp}" sizes="${sizes}">${img}</picture>`;
+		const sources = renditionSources(plan, {
+			sizes: CARD_IMAGE_SIZES,
+			url: siteUrl,
+			escapeHtml,
+		});
+		return `<picture>${sources}${img}</picture>`;
 	}
 	const webp = webpSrc(src);
 	return webp === undefined

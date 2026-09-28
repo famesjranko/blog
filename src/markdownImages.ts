@@ -1,5 +1,7 @@
 import type MarkdownIt from "markdown-it";
+import { ARTICLE_IMAGE_SIZES, articleImagePlan } from "./articleImages.js";
 import { imageSize, webpSrc } from "./images.js";
+import { renditionSources } from "./renditions.js";
 import { internalUrl } from "./site.js";
 import { inlineSvg } from "./svgInline.js";
 
@@ -74,7 +76,24 @@ function renderImageBody(context: ImageRenderContext): string {
 		prepareImageToken(token, src);
 	}
 	const img = fallback(source.tokens, source.index, options, env, md.renderer);
-	const webp = typeof src === "string" ? webpSrc(src) : undefined;
+	return typeof src === "string" ? picture(md, src, img) : img;
+}
+
+/**
+ * Responsive AVIF and WebP renditions when the source has a plan; the
+ * full-size WebP sidecar when only its format is known; else the bare img.
+ */
+function picture(md: MarkdownIt, src: string, img: string): string {
+	const plan = articleImagePlan(src);
+	if (plan !== undefined) {
+		const sources = renditionSources(plan, {
+			sizes: ARTICLE_IMAGE_SIZES,
+			url: internalUrl,
+			escapeHtml: md.utils.escapeHtml,
+		});
+		return `<picture>${sources}${img}</picture>`;
+	}
+	const webp = webpSrc(src);
 	if (webp === undefined) {
 		return img;
 	}

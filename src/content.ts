@@ -2,7 +2,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import matter from "gray-matter";
 import { glob } from "tinyglobby";
-import { renderMarkdown } from "./markdown.js";
+import { markdownImageSources, renderMarkdown } from "./markdown.js";
 import {
 	type EssayMeta,
 	type ProjectMeta,
@@ -15,12 +15,16 @@ import {
 export interface Essay extends EssayMeta {
 	slug: string;
 	html: string;
+	/** Image sources in the body, for the renditions the build generates. */
+	images: string[];
 	sourcePath: string;
 }
 
 export interface Project extends ProjectMeta {
 	slug: string;
 	html: string;
+	/** Image sources in the body, for the renditions the build generates. */
+	images: string[];
 	sourcePath: string;
 }
 
@@ -56,6 +60,7 @@ export async function loadEssay(filePath: string): Promise<Essay> {
 		...meta,
 		slug: makeSlug(filePath),
 		html: renderMarkdown(content),
+		images: markdownImageSources(content),
 		sourcePath: filePath,
 	};
 }
@@ -80,6 +85,7 @@ export async function loadProject(filePath: string): Promise<Project> {
 		...meta,
 		slug: makeSlug(filePath),
 		html: renderMarkdown(content),
+		images: markdownImageSources(content),
 		sourcePath: filePath,
 	};
 }

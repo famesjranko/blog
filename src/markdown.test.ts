@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { renderMarkdown } from "./markdown.js";
+import { markdownImageSources, renderMarkdown } from "./markdown.js";
 
 afterEach(() => {
 	vi.unstubAllEnvs();
@@ -281,5 +281,51 @@ describe("diagram svgs", () => {
 		const html = renderMarkdown("![x](https://example.com/foo.jpg)");
 		expect(html).not.toContain("<picture>");
 		expect(html).toContain('src="https://example.com/foo.jpg"');
+	});
+});
+
+describe("responsive article images", () => {
+	const cover = "/img/essays/whatis-philosophy/cover.jpg";
+	const widths = [480, 720, 960, 1280];
+
+	function srcset(prefix: string, extension: string): string {
+		return widths
+			.map(
+				(width) =>
+					`${prefix}/img/essays/whatis-philosophy/cover.body-${width}w.${extension} ${width}w`,
+			)
+			.join(", ");
+	}
+
+	it("offers sized AVIF before WebP with the prose sizes and a JPEG fallback", () => {
+		const html = renderMarkdown(`![city](${cover})`);
+		const sizes =
+			"(min-width: 40rem) 38rem, (min-width: 25rem) 92vw, calc(100vw - 2rem)";
+		expect(html).toContain(
+			`<picture><source type="image/avif" srcset="${srcset("", "avif")}" sizes="${sizes}"><source type="image/webp" srcset="${srcset("", "webp")}" sizes="${sizes}"><img src="${cover}" alt="city" width="1280" height="540"></picture>`,
+		);
+	});
+
+	it("prefixes every candidate with the base path", () => {
+		vi.stubEnv("BASE_PATH", "/blog");
+		const html = renderMarkdown(`![city](${cover})`);
+		expect(html).toContain(`srcset="${srcset("/blog", "avif")}"`);
+		expect(html).toContain(`srcset="${srcset("/blog", "webp")}"`);
+		expect(html).toContain(`src="/blog${cover}"`);
+	});
+
+	it("keeps the single full-size WebP source for a JPEG of unknown size", () => {
+		const html = renderMarkdown("![x](/img/essays/x/cover.jpg)");
+		expect(html).not.toContain("image/avif");
+		expect(html).not.toContain("sizes=");
+	});
+});
+
+describe("markdownImageSources", () => {
+	it("lists body image sources in document order and ignores links", () => {
+		const sources = markdownImageSources(
+			'![a](/img/a.jpg)\n\n[not an image](/img/b.jpg)\n\nText ![c](https://example.com/c.png "Caption")',
+		);
+		expect(sources).toEqual(["/img/a.jpg", "https://example.com/c.png"]);
 	});
 });

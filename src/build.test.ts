@@ -28,6 +28,9 @@ interface RenditionReference {
 	width: number;
 }
 
+const CARD_RENDITION = /\.card-\d+w\.(avif|webp)$/;
+const BODY_RENDITION = /\.body-\d+w\.(avif|webp)$/;
+
 const SOURCE_PATTERN =
 	/<source type="image\/(avif|webp)" srcset="([^"]+)" sizes="[^"]+">/g;
 
@@ -71,7 +74,28 @@ async function expectRendition(
 		reference.format === "avif" ? "heif" : "webp",
 	);
 	expect(metadata.width, reference.url).toBe(reference.width);
-	expect(metadata.height, reference.url).toBe((reference.width / 16) * 9);
+	expect(metadata.height, reference.url).toBe(
+		await expectedHeight(outDir, reference),
+	);
+}
+
+/**
+ * Cards crop to 16:9. Body renditions keep the aspect of the source JPEG,
+ * which is read from the output rather than the dimensions table.
+ */
+async function expectedHeight(
+	outDir: string,
+	reference: RenditionReference,
+): Promise<number> {
+	if (CARD_RENDITION.test(reference.url)) {
+		return (reference.width / 16) * 9;
+	}
+	const { default: sharp } = await import("sharp");
+	const source = reference.url.replace(BODY_RENDITION, ".jpg");
+	const { width, height } = await sharp(
+		path.join(outDir, source.replace(/^\/+/, "")),
+	).metadata();
+	return Math.round((reference.width * height) / width);
 }
 
 function outputUrl(outDir: string, file: string): string {
@@ -134,8 +158,8 @@ describe("build output", () => {
 	}, 30000);
 });
 
-describe("responsive card build output", () => {
-	it("emits every referenced card rendition with its declared dimensions", async () => {
+describe("responsive image build output", () => {
+	it("emits every referenced rendition with its declared codec and dimensions", async () => {
 		const files = await listFiles(outDir);
 		const htmlFiles = files.filter((file) => file.endsWith(".html"));
 		const references = await collectReferences(htmlFiles);
@@ -145,10 +169,17 @@ describe("responsive card build output", () => {
 				expectRendition(outDir, reference),
 			),
 		);
+		const renditionFiles = files
+			.map((file) => outputUrl(outDir, file))
+			.filter((url) => CARD_RENDITION.test(url) || BODY_RENDITION.test(url));
+		expect(renditionFiles.sort()).toEqual([...references.keys()].sort());
+	}, 30000);
+
+	it("crops card renditions only for card sources", async () => {
+		const files = await listFiles(outDir);
 		const cardFiles = files
-			.filter((file) => /\.card-\d+w\.(avif|webp)$/.test(file))
-			.map((file) => outputUrl(outDir, file));
-		expect(cardFiles.sort()).toEqual([...references.keys()].sort());
+			.map((file) => outputUrl(outDir, file))
+			.filter((url) => CARD_RENDITION.test(url));
 		expect(
 			cardFiles.some((file) => file.includes("connect4-debug-scores")),
 		).toBe(false);
@@ -156,5 +187,24 @@ describe("responsive card build output", () => {
 		expect(
 			cardFiles.some((file) => file.includes("as-knowledge-holders")),
 		).toBe(false);
-	}, 30000);
+	});
+
+	it("serves the article cover as sized AVIF and WebP renditions", async () => {
+		const html = await readFile(
+			path.join(outDir, "essays/whatis-philosophy/index.html"),
+			"utf8",
+		);
+		const body = html.slice(html.indexOf('<article class="prose'));
+		const sources = referencesFromHtml(body);
+		expect(sources).toContainEqual({
+			format: "avif",
+			url: "/img/essays/whatis-philosophy/cover.body-720w.avif",
+			width: 720,
+		});
+		expect(sources).toContainEqual({
+			format: "webp",
+			url: "/img/essays/whatis-philosophy/cover.body-1280w.webp",
+			width: 1280,
+		});
+	});
 });
