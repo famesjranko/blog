@@ -2,13 +2,21 @@
 // can import the browser module without switching the compiler to
 // check JavaScript. Keep in step with the JSDoc in the .js file: the
 // static typecheck resolves sibling imports to this file too. The
-// motionSupported env is typed as the structural shape it reads, so the
-// Node suite needs no DOM types.
+// motionSupported env and the readingFrom inputs are typed as the
+// structural shapes they read, so the Node suite needs no DOM types.
 
-import type { Vec2 } from "./thought-field-slosh.js";
+import type { Vec2 } from "./thought-field-vec.js";
+
+// accelerationIncludingGravity in screen axes, m/s².
+export type MotionReading = Vec2;
+
+export interface AccelerationReading {
+	x: number | null;
+	y: number | null;
+}
 
 export interface MotionInput {
-	reading: () => Vec2 | null;
+	reading: () => MotionReading | null;
 	pause: () => void;
 	resume: () => void;
 	destroy: () => void;
@@ -20,4 +28,9 @@ export interface MotionEnv {
 }
 
 export function motionSupported(env: MotionEnv): boolean;
+export function toScreenAxes(sample: Vec2, angle: number): Vec2;
+export function readingFrom(
+	accel: AccelerationReading | null,
+	angle: number,
+): MotionReading | null;
 export function motionInput(): MotionInput | null;

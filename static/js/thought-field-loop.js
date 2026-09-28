@@ -1,16 +1,19 @@
+import {
+	GLOBE_TUNING,
+	makeGlobe,
+	reseedGlobe,
+	stepGlobe,
+} from "./thought-field-globe.js";
 import { pointerStrength, stepParticles } from "./thought-field-particles.js";
 import { stepMeteors } from "./thought-field-meteors.js";
-import {
-	SLOSH_TUNING,
-	reseedSlosh,
-	restingSlosh,
-	stepSlosh,
-} from "./thought-field-slosh.js";
 
 /**
- * @typedef {import("./thought-field-slosh.js").SloshState} SloshState
+ * @typedef {import("./thought-field-globe.js").Globe} Globe
  * @typedef {import("./thought-field-motion.js").MotionInput} MotionInput
  */
+
+/** @type {{ globe: null, hold: number }} */
+const NO_GLOBE = Object.freeze({ globe: null, hold: 1 });
 
 /**
  * @typedef {{
@@ -25,29 +28,36 @@ import {
  */
 
 /**
- * Draws one frame and returns the slosh state advanced by DT.
+ * Draws one frame and returns the snow globe advanced by DT. The globe
+ * exists only with phone motion, so without it none of its physics runs.
  * @param {LoopOptions} options
  * @param {number} now
  * @param {number} dt
- * @param {SloshState} state
- * @returns {SloshState}
+ * @param {Globe | null} globe
+ * @returns {Globe | null}
  */
-function renderFrame(options, now, dt, state) {
+function renderFrame(options, now, dt, globe) {
 	const { renderer, field, pointer, meteors, dims, motion } = options;
 	const aspect = dims.aspect;
 	const time = now / 1000;
-	const sample = motion?.reading() ?? null;
-	const step = stepSlosh({ state, sample, dt, tuning: SLOSH_TUNING });
-	const { shift, delta } = step;
-	const slosh = { shift, delta, spread: SLOSH_TUNING.spread };
 	pointer.strength = pointerStrength(pointer.lastMove, now);
 	stepMeteors(meteors, aspect, time, dt);
-	stepParticles({ field, aspect, time, dt, pointer, meteors, slosh });
+	const sample = motion?.reading() ?? null;
+	const tuning = GLOBE_TUNING;
+	// The only motion branch: without a globe, positions are the plain drift.
+	const moved =
+		globe === null
+			? NO_GLOBE
+			: stepGlobe({ globe, field, sample, dt, aspect, tuning });
+	const hold = moved.hold;
+	stepParticles({ field, aspect, time, dt, pointer, meteors, hold });
 	renderer.render();
-	return step.state;
+	return moved.globe;
 }
 
 /**
+ * A pause keeps the globe's velocities and vortices; dt is capped, so
+ * resuming never jumps.
  * @param {LoopOptions} options
  * @returns {{ start: () => void, stop: () => void, destroy: () => void }}
  */
@@ -55,7 +65,7 @@ export function createLoop(options) {
 	let frame = 0;
 	let running = false;
 	let last = performance.now();
-	let slosh = restingSlosh();
+	let globe = options.motion === null ? null : makeGlobe(options.field.count);
 	/** @param {number} now */
 	const tick = (now) => {
 		frame = 0;
@@ -64,7 +74,7 @@ export function createLoop(options) {
 		}
 		const dt = Math.min((now - last) / 1000, 0.05);
 		last = now;
-		slosh = renderFrame(options, now, dt, slosh);
+		globe = renderFrame(options, now, dt, globe);
 		frame = window.requestAnimationFrame(tick);
 	};
 	const visible = () => !document.hidden && heroVisible(options.hero);
@@ -74,7 +84,7 @@ export function createLoop(options) {
 		}
 		running = true;
 		last = performance.now();
-		slosh = reseedSlosh(slosh);
+		globe = globe === null ? null : reseedGlobe(globe);
 		options.motion?.resume();
 		frame = window.requestAnimationFrame(tick);
 	};
