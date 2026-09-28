@@ -47,7 +47,7 @@ export const GALAXY_TUNING = Object.freeze({
 	spread: 0.006, // field units²/s; core diffusion ν, a² = core² + 4ν·age: the core ~doubles in 2 s
 	spiral: 0.15, // inward drift per unit swirl speed: arms pitched atan(0.15) ≈ 9°, loosely wound
 	full: 4, // field units²/s; summed |circulation| that counts as full agitation, about a firm shake's three pairs
-	maxWells: 8, // at most four pairs; each particle then costs eight exp() a frame
+	maxWells: 8, // at most four pairs; each particle then costs eight exp() each time the globe samples the flow, about once a frame
 });
 
 /**

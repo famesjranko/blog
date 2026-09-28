@@ -173,6 +173,61 @@ describe("stepGalaxy birth rate", () => {
 	);
 });
 
+describe("stepGalaxy when full", () => {
+	it("evicts the weakest wells, and keeps the strongest, when full", () => {
+		const tuning = { ...GALAXY_TUNING, maxWells: 4, decay: 1e9 };
+		const wells = [0.9, -0.2, 0.5, -0.7].map((spin, i) => ({
+			x: -0.45 + 0.3 * i,
+			y: 0.6,
+			spin,
+			core2: 0.0144,
+			age: 0,
+		}));
+		// A quantum already banked, so this frame's jolt sheds a pair.
+		const state = { ...wellsState(wells), impulse: tuning.quantum };
+		const shake = { x: 15, y: 0 };
+		const next = stepGalaxy({
+			state,
+			shake,
+			dt: FRAME,
+			tuning,
+			aspect: ASPECT,
+		});
+		const kept = next.wells
+			.filter((well) => well.age > 0)
+			.map((well) => well.spin)
+			.sort((a, b) => a - b);
+		expect(next.wells.filter((well) => well.age === 0)).toHaveLength(2);
+		expect(kept).toHaveLength(2);
+		expect(kept[0]).toBeCloseTo(-0.7, 6);
+		expect(kept[1]).toBeCloseTo(0.9, 6);
+	});
+});
+
+describe("stepGalaxy impulse", () => {
+	it("lets unspent impulse leak away between sub-quantum jolts", () => {
+		const tuning = GALAXY_TUNING;
+		// One frame of 15 m/s² is 0.25 m/s of impulse: under a quantum, two over.
+		const jolts = (frames: number[]) => (t: number) =>
+			frames.includes(Math.round(t / FRAME)) ? { x: 15, y: 0 } : STILL;
+		const state = makeGalaxy();
+		const together = run({
+			state,
+			shake: jolts([0, 1]),
+			seconds: 2 * FRAME,
+			tuning,
+		});
+		const apart = run({
+			state,
+			shake: jolts([0, 120]),
+			seconds: 121 * FRAME,
+			tuning,
+		});
+		expect(together.wells).toHaveLength(2);
+		expect(apart.wells).toHaveLength(0);
+	});
+});
+
 describe("stepGalaxy fading", () => {
 	it("fades to nothing within five decay periods of the shake stopping", () => {
 		const tuning = GALAXY_TUNING;
@@ -193,6 +248,14 @@ describe("stepGalaxy fading", () => {
 		});
 		expect(calm.wells).toHaveLength(0);
 		expect(galaxyAgitation(calm, tuning)).toBe(0);
+	});
+
+	it("spreads a well's core with age, a² = core² + 4ν·age", () => {
+		const tuning = { ...GALAXY_TUNING, core: 0.1, spread: 0.01, decay: 1e9 };
+		const state = wellsState([{ x: 0, y: 0, spin: 0.8, core2: 0.01, age: 0 }]);
+		const later = run({ state, shake: () => STILL, seconds: 2, tuning });
+		// 0.1² + 4 · 0.01 · 2
+		expect(later.wells[0]?.core2).toBeCloseTo(0.09, 9);
 	});
 });
 
