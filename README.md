@@ -29,7 +29,8 @@ Custom static site built with TypeScript and Markdown.
 | `make check`   | Run the full quality gate |
 
 > [!NOTE]
-> Requires Node 24 (see `.nvmrc`). `make preview` serves `dist/` at `http://localhost:8000` (`PORT=8001` to override).
+> Requires Node 24 (see `.nvmrc`). `package.json#allowScripts` approves only the esbuild postinstall, which installs its platform binary. The approval names an exact version, so npm 11 warns again after each esbuild bump; review the script, then run `npm install-scripts approve esbuild`.
+> `make preview` serves `dist/` at `http://localhost:8000` (`PORT=8001` to override).
 > Preview builds include `draft: true` pieces, marked with a Draft badge; `DRAFTS=false` previews exactly what deploys. `make build` and CI never include drafts.
 > Under WSL2, use `make preview-wsl`; it refreshes the Windows port forwarding and firewall rule, prompting for administrator access when needed.
 
