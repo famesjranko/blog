@@ -13,12 +13,14 @@ concurrency:
   cancel-in-progress: false
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    # Pinned so the runner OS changes only by an explicit edit, not by the
+    # ubuntu-latest migration (actions/runner-images#14748).
+    runs-on: ubuntu-24.04
     if: github.event.inputs.confirm == 'deploy'
     steps:
       - name: Checkout blog
-        uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+        uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
           cache: npm
@@ -29,7 +31,7 @@ jobs:
           BASE_PATH: /blog
           SITE_ORIGIN: https://famesjranko.github.io
       - name: Checkout shared Pages repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: famesjranko/famesjranko.github.io
           ssh-key: ${{ secrets.PAGES_DEPLOY_KEY }}
