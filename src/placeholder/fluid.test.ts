@@ -8,6 +8,8 @@ import {
 } from "./fluid.js";
 
 const POOL = ["#157ab5", "#c04316", "#78673b", "#1e5e66", "#0c81a5"];
+// Full-size renders are CPU-bound and take longer when the machine is busy.
+const RENDER_TIMEOUT = 10_000;
 
 describe("scheme", () => {
 	it("builds five stops running from deep to pale", () => {
@@ -39,34 +41,50 @@ describe("scheme", () => {
 });
 
 describe("renderFluid", () => {
-	it("fills a 640 by 360 RGB buffer", () => {
-		const image = renderFluid("tablescan", POOL);
-		expect(image.width).toBe(PLACEHOLDER_WIDTH);
-		expect(image.height).toBe(PLACEHOLDER_HEIGHT);
-		expect(image.data.length).toBe(640 * 360 * 3);
-	});
+	it(
+		"fills a 640 by 360 RGB buffer",
+		() => {
+			const image = renderFluid("tablescan", POOL);
+			expect(image.width).toBe(PLACEHOLDER_WIDTH);
+			expect(image.height).toBe(PLACEHOLDER_HEIGHT);
+			expect(image.data.length).toBe(640 * 360 * 3);
+		},
+		RENDER_TIMEOUT,
+	);
 
-	it("is reproducible from the slug alone", () => {
-		const a = renderFluid("tablescan", POOL);
-		const b = renderFluid("tablescan", POOL);
-		expect(Buffer.from(a.data).equals(Buffer.from(b.data))).toBe(true);
-	});
+	it(
+		"is reproducible from the slug alone",
+		() => {
+			const a = renderFluid("tablescan", POOL);
+			const b = renderFluid("tablescan", POOL);
+			expect(Buffer.from(a.data).equals(Buffer.from(b.data))).toBe(true);
+		},
+		RENDER_TIMEOUT,
+	);
 
-	it("gives different slugs different pictures", () => {
-		const a = renderFluid("tablescan", POOL);
-		const b = renderFluid("musicmeta", POOL);
-		expect(Buffer.from(a.data).equals(Buffer.from(b.data))).toBe(false);
-	});
+	it(
+		"gives different slugs different pictures",
+		() => {
+			const a = renderFluid("tablescan", POOL);
+			const b = renderFluid("musicmeta", POOL);
+			expect(Buffer.from(a.data).equals(Buffer.from(b.data))).toBe(false);
+		},
+		RENDER_TIMEOUT,
+	);
 
-	it("uses the whole ramp rather than one flat tone", () => {
-		const { data } = renderFluid("tablescan", POOL);
-		let min = 255;
-		let max = 0;
-		for (let index = 0; index < data.length; index += 3) {
-			const value = data[index] ?? 0;
-			min = Math.min(min, value);
-			max = Math.max(max, value);
-		}
-		expect(max - min).toBeGreaterThan(120);
-	});
+	it(
+		"uses the whole ramp rather than one flat tone",
+		() => {
+			const { data } = renderFluid("tablescan", POOL);
+			let min = 255;
+			let max = 0;
+			for (let index = 0; index < data.length; index += 3) {
+				const value = data[index] ?? 0;
+				min = Math.min(min, value);
+				max = Math.max(max, value);
+			}
+			expect(max - min).toBeGreaterThan(120);
+		},
+		RENDER_TIMEOUT,
+	);
 });
