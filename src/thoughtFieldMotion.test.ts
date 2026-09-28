@@ -79,6 +79,8 @@ describe("readingFrom", () => {
 		{ case: "no acceleration", accel: null },
 		{ case: "a null x", accel: { x: null, y: 9.81 } },
 		{ case: "a null y", accel: { x: 0, y: null } },
+		{ case: "a NaN x", accel: { x: Number.NaN, y: 9.81 } },
+		{ case: "an infinite y", accel: { x: 0, y: Number.POSITIVE_INFINITY } },
 	])("gives no reading for $case", ({ accel }) => {
 		expect(readingFrom(accel, 0)).toBeNull();
 	});

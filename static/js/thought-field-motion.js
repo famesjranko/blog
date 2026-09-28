@@ -45,15 +45,19 @@ export function toScreenAxes(sample, angle) {
 	};
 }
 
+/** @type {(value: number | null) => value is number} */
+const finite = (value) => value !== null && Number.isFinite(value);
+
 /**
  * Converts one devicemotion event's fields into a screen-axes reading,
- * or null without an acceleration.
+ * or null without a finite acceleration: one NaN would reach every
+ * particle's position and never leave.
  * @param {AccelerationReading | null} accel
  * @param {number} angle
  * @returns {MotionReading | null}
  */
 export function readingFrom(accel, angle) {
-	if (accel === null || accel.x === null || accel.y === null) {
+	if (accel === null || !finite(accel.x) || !finite(accel.y)) {
 		return null;
 	}
 	return toScreenAxes({ x: accel.x, y: accel.y }, angle);

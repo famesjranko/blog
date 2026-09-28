@@ -1,19 +1,19 @@
-import {
-	GLOBE_TUNING,
-	makeGlobe,
-	reseedGlobe,
-	stepGlobe,
-} from "./thought-field-globe.js";
 import { pointerStrength, stepParticles } from "./thought-field-particles.js";
 import { stepMeteors } from "./thought-field-meteors.js";
 
 /**
+ * @typedef {typeof import("./thought-field-globe.js")} GlobeModule
  * @typedef {import("./thought-field-globe.js").Globe} Globe
  * @typedef {import("./thought-field-motion.js").MotionInput} MotionInput
  */
 
-/** @type {{ globe: null, hold: number }} */
-const NO_GLOBE = Object.freeze({ globe: null, hold: 1 });
+/**
+ * The snow globe and the module that steps it.
+ * @typedef {{ module: GlobeModule, globe: Globe }} Physics
+ */
+
+/** @type {{ physics: null, hold: number }} */
+const NO_PHYSICS = Object.freeze({ physics: null, hold: 1 });
 
 /**
  * @typedef {{
@@ -28,31 +28,92 @@ const NO_GLOBE = Object.freeze({ globe: null, hold: 1 });
  */
 
 /**
- * Draws one frame and returns the snow globe advanced by DT. The globe
- * exists only with phone motion, so without it none of its physics runs.
+ * Draws one frame and returns the snow globe advanced by DT. Without
+ * phone motion there is no globe, so none of its physics runs.
  * @param {LoopOptions} options
  * @param {number} now
  * @param {number} dt
- * @param {Globe | null} globe
- * @returns {Globe | null}
+ * @param {Physics | null} physics
+ * @returns {Physics | null}
  */
-function renderFrame(options, now, dt, globe) {
-	const { renderer, field, pointer, meteors, dims, motion } = options;
+function renderFrame(options, now, dt, physics) {
+	const { renderer, field, pointer, meteors, dims } = options;
 	const aspect = dims.aspect;
 	const time = now / 1000;
 	pointer.strength = pointerStrength(pointer.lastMove, now);
 	stepMeteors(meteors, aspect, time, dt);
-	const sample = motion?.reading() ?? null;
-	const tuning = GLOBE_TUNING;
-	// The only motion branch: without a globe, positions are the plain drift.
 	const moved =
-		globe === null
-			? NO_GLOBE
-			: stepGlobe({ globe, field, sample, dt, aspect, tuning });
+		physics === null ? NO_PHYSICS : stepPhysics(options, dt, physics);
 	const hold = moved.hold;
 	stepParticles({ field, aspect, time, dt, pointer, meteors, hold });
 	renderer.render();
-	return moved.globe;
+	return moved.physics;
+}
+
+/**
+ * Steps the snow globe by DT with the latest phone reading.
+ * @param {LoopOptions} options
+ * @param {number} dt
+ * @param {Physics} physics
+ * @returns {{ physics: Physics, hold: number }}
+ */
+function stepPhysics(options, dt, physics) {
+	const { field, dims, motion } = options;
+	const { module } = physics;
+	const moved = module.stepGlobe({
+		globe: physics.globe,
+		field,
+		sample: motion?.reading() ?? null,
+		dt,
+		aspect: dims.aspect,
+		tuning: module.GLOBE_TUNING,
+	});
+	return { physics: { module, globe: moved.globe }, hold: moved.hold };
+}
+
+/**
+ * Keeps the globe's motion but has the next reading re-seed its filter,
+ * so resuming at a new hold angle causes no kick.
+ * @param {Physics} physics
+ * @returns {Physics}
+ */
+function reseed({ module, globe }) {
+	return { module, globe: module.reseedGlobe(globe) };
+}
+
+/**
+ * Fetches the snow globe only where there is phone motion, so no other
+ * device downloads its physics. Until it arrives, or if the fetch
+ * fails, the field keeps its plain drift: the globe is decoration.
+ * @param {number} count
+ * @param {(physics: Physics) => void} onLoad
+ */
+async function loadPhysics(count, onLoad) {
+	try {
+		const url = new URL("./thought-field-globe.js", import.meta.url);
+		/** @type {GlobeModule} */
+		const module = await import(url.href);
+		onLoad({ module, globe: module.makeGlobe(count) });
+	} catch {
+		// No globe: the drift carries on unchanged.
+	}
+}
+
+/**
+ * Holds the snow globe once it has loaded; it stays empty without phone
+ * motion.
+ * @param {LoopOptions} options
+ * @returns {{ physics: Physics | null }}
+ */
+function physicsSlot(options) {
+	/** @type {{ physics: Physics | null }} */
+	const slot = { physics: null };
+	if (options.motion !== null) {
+		void loadPhysics(options.field.count, (loaded) => {
+			slot.physics = loaded;
+		});
+	}
+	return slot;
 }
 
 /**
@@ -65,7 +126,7 @@ export function createLoop(options) {
 	let frame = 0;
 	let running = false;
 	let last = performance.now();
-	let globe = options.motion === null ? null : makeGlobe(options.field.count);
+	const slot = physicsSlot(options);
 	/** @param {number} now */
 	const tick = (now) => {
 		frame = 0;
@@ -74,7 +135,7 @@ export function createLoop(options) {
 		}
 		const dt = Math.min((now - last) / 1000, 0.05);
 		last = now;
-		globe = renderFrame(options, now, dt, globe);
+		slot.physics = renderFrame(options, now, dt, slot.physics);
 		frame = window.requestAnimationFrame(tick);
 	};
 	const visible = () => !document.hidden && heroVisible(options.hero);
@@ -84,7 +145,7 @@ export function createLoop(options) {
 		}
 		running = true;
 		last = performance.now();
-		globe = globe === null ? null : reseedGlobe(globe);
+		slot.physics = slot.physics === null ? null : reseed(slot.physics);
 		options.motion?.resume();
 		frame = window.requestAnimationFrame(tick);
 	};
