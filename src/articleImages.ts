@@ -7,7 +7,7 @@ const ARTICLE_WIDTHS = [480, 720, 960, 1280];
  * Rendered width of a body image: the `.wrap` column
  * (`100% - 2 * clamp(1rem, 4vw, 2.5rem)`) until `--prose-width` caps it.
  * That cap is `65ch` of the reading font, and the font is whatever serif
- * the client has: Georgia gives about 603px, Noto Serif about 674px,
+ * the client has: Georgia gives about 737px, Noto Serif about 674px,
  * DejaVu Serif about 767px. `sizes` cannot follow the font (`ch` here
  * resolves against the initial font), so the cap is an upper bound with
  * margin, 50rem. Overestimating picks a rendition one rung larger on
