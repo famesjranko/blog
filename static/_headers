@@ -7,3 +7,6 @@
 
 /img/*.webp
   Cache-Control: public, max-age=86400
+
+/img/*.jpg
+  Cache-Control: public, max-age=86400
