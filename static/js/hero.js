@@ -2,6 +2,10 @@ import { densityCount } from "./thought-field-maths.js";
 
 /** @typedef {import("./thought-field.js").Tier} Tier */
 
+// A navigation still pending after this long has most likely been
+// stopped. One that commits later can show the white frame again.
+const LEAVE_GRACE_MS = 5000;
+
 const hero = document.querySelector("[data-hero]");
 if (hero instanceof HTMLElement && "matchMedia" in window) {
 	const reducedMotion = window.matchMedia(
@@ -141,8 +145,39 @@ async function startField(canvas, tier) {
 		/** @type {typeof import("./thought-field.js")} */
 		const field = await import(sibling.href);
 		field.initThoughtField(canvas, tier);
+		hideFieldOnLeave(canvas);
 	} catch {
 		// The CSS wash fallback stands alone; drop the empty canvas.
 		canvas.remove();
 	}
+}
+
+/**
+ * Chromium can draw the outgoing page once more after its WebGL
+ * texture is freed, and paints the missing canvas opaque white: a
+ * one-frame white hero on refresh or navigation. Hiding the canvas
+ * when navigation starts puts a frame without it on screen first;
+ * `pagehide` fires too late for that. Firefox has no such bug but
+ * keeps pages with a `beforeunload` listener out of its back/forward
+ * cache, so only Chromium (the engine with userAgentData) listens.
+ * A page restored from that cache shows the field again.
+ *
+ * A navigation can also start and then not replace the page: the
+ * user stops it, or the response is a 204, a download, or a
+ * `mailto:`. No event reports that, so a timer shows the field again
+ * after LEAVE_GRACE_MS. A real unload discards the timer first.
+ * @param {HTMLCanvasElement} canvas
+ */
+export function hideFieldOnLeave(canvas) {
+	if (!("userAgentData" in navigator)) {
+		return;
+	}
+	const show = () => canvas.style.removeProperty("visibility");
+	let restore = 0;
+	window.addEventListener("beforeunload", () => {
+		canvas.style.setProperty("visibility", "hidden");
+		window.clearTimeout(restore);
+		restore = window.setTimeout(show, LEAVE_GRACE_MS);
+	});
+	window.addEventListener("pageshow", show);
 }
