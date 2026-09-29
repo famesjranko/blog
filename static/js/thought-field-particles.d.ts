@@ -19,6 +19,7 @@ export interface Field {
 	count: number;
 	palette: LinearColour[];
 	pos: Float32Array;
+	alpha: Float32Array;
 	col: Float32Array;
 	base: Float32Array;
 	phase: Float32Array;
@@ -46,4 +47,10 @@ export function buildPalette(element?: {
 };
 export function pointerStrength(lastMove: number, now: number): number;
 export function makePoints(count: number, palette: LinearColour[]): Field;
+export function driftTarget(
+	field: Pick<Field, "base" | "phase">,
+	i: number,
+	aspect: number,
+	time: number,
+): { x: number; y: number };
 export function stepParticles(options: StepParticlesOptions): void;
