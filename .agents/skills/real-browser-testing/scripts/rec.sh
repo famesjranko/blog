@@ -40,6 +40,8 @@ seconds=$(( runs * interval / 1000 + 3 ))
 ffmpeg -nostdin -hide_banner -loglevel error -y -f x11grab -framerate 60 -window_id "$win" -i "$DISPLAY" \
   -t "$seconds" -c:v libx264 -qp 0 -preset ultrafast "$out/rec.mkv" &
 recorder=$!
+# If a reload fails, set -e exits here; stop the recorder too, or it runs to -t.
+trap 'kill "$recorder" 2>/dev/null || true' EXIT
 sleep 1
 if [[ -n "$cold" ]]; then
   node "$here/reload.mjs" "$port" "$url" "$runs" "$interval" cold
@@ -47,6 +49,7 @@ else
   node "$here/reload.mjs" "$port" - "$runs" "$interval"
 fi
 wait "$recorder"
+trap - EXIT
 
 filter="signalstats,metadata=print:key=lavfi.signalstats.YAVG:file=$out/yavg.txt"
 [[ -n "$crop" ]] && filter="crop=$crop,$filter"

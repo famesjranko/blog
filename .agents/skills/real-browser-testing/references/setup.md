@@ -102,12 +102,12 @@ Look at each `event-N.png` (section 8). If the control shows no event of the kin
 
 ## 7. Measure the builds
 
-`ab.sh` records the builds in alternation and prints totals. A block of N loads takes about N × 3 s, plus 1 s per load in cold mode, plus 5 s. Most runs are longer than a tool call's time limit, so start the run in the background and poll the log for `DONE`:
+`ab.sh` records the builds in alternation and prints totals. A block of N loads takes about N × 3 s, plus 1 s per load in cold mode, plus 5 s. Most runs are longer than a tool call's time limit, so start the run in the background and poll the log. It ends with `DONE`, or with `FAILED` and the log of the block that failed:
 
 ```bash
 nohup "$K/ab.sh" -o "$S/ab" -p "$S/p1" -P 9333 -c W:H:X:Y -t 100 -r 6 -n 10 \
   control=http://127.0.0.1:8801/ fix=http://127.0.0.1:8802/ >"$S/ab.log" 2>&1 &
-until grep -q '^DONE' "$S/ab.log"; do sleep 20; done; cat "$S/ab.log"
+until grep -qE '^(DONE|FAILED)' "$S/ab.log"; do sleep 20; done; cat "$S/ab.log"
 ```
 
 - `-r 6 -n 10` gives 60 loads per build in 6 rounds. Short blocks interleave better. Each block also costs about 4 s to open and settle the page.

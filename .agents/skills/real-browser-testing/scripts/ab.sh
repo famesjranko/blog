@@ -8,7 +8,8 @@
 # other round (A B, B A, A B ...). -C records cold first visits instead of reloads.
 # Writes OUTDIR/NAME-ROUND/ (rec.sh output and rec.log) and OUTDIR/summary.txt.
 # A block's video is deleted when it has no events, unless -k is given.
-# The last line printed is "DONE", so a background run can be polled for it.
+# The last line printed is "DONE", or "FAILED" if a block failed, so a background run
+# can be polled for either.
 set -euo pipefail
 
 usage() { sed -n '4,5p' "$0" | sed 's/^# //' >&2; exit 2; }
@@ -24,6 +25,15 @@ shift $((OPTIND - 1))
 [[ -n "$out" && -n "$profile" && -n "$rounds" && -n "$loads" && $# -ge 1 ]] || usage
 builds=("$@")
 mkdir -p "$out"
+block_log=""
+on_exit() {
+  local status=$?
+  [[ $status -eq 0 ]] || echo "FAILED (exit $status)${block_log:+; see $block_log}"
+}
+trap on_exit EXIT
+# Totals come from this run's blocks only, so a reused OUTDIR or a build whose name
+# starts with another build's name cannot change them.
+declare -A events lengths
 
 for round in $(seq 1 "$rounds"); do
   order=("${builds[@]}")
@@ -32,9 +42,13 @@ for round in $(seq 1 "$rounds"); do
   fi
   for build in "${order[@]}"; do
     name="${build%%=*}" url="${build#*=}" dir="$out/${build%%=*}-$round"
-    "$here/rec.sh" -o "$dir" -p "$profile" "${pass[@]}" "$url" "$loads" >"$dir.log" 2>&1
+    block_log="$dir.log"
+    "$here/rec.sh" -o "$dir" -p "$profile" "${pass[@]}" "$url" "$loads" >"$block_log" 2>&1
     mv "$dir.log" "$dir/rec.log"
-    echo "round $round $name: $(wc -l <"$dir/events.txt") events"
+    count="$(wc -l <"$dir/events.txt")"
+    events[$name]=$(( ${events[$name]:-0} + count ))
+    lengths[$name]+="$(awk '{ printf "%d ", $2 - $1 + 1 }' "$dir/events.txt")"
+    echo "round $round $name: $count events"
     [[ -n "$keep" || -s "$dir/events.txt" ]] || rm -f "$dir/rec.mkv"
   done
 done
@@ -42,9 +56,8 @@ done
 {
   for build in "${builds[@]}"; do
     name="${build%%=*}"
-    lengths="$(cat "$out/$name"-*/events.txt | awk '{ printf "%d ", $2 - $1 + 1 }')"
     printf '%s: %d events in %d loads; lengths in frames: %s\n' "$name" \
-      "$(cat "$out/$name"-*/events.txt | wc -l)" "$(( rounds * loads ))" "${lengths:-none}"
+      "${events[$name]:-0}" "$(( rounds * loads ))" "${lengths[$name]:-none}"
   done
 } | tee "$out/summary.txt"
 echo DONE

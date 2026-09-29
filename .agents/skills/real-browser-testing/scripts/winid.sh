@@ -5,8 +5,9 @@
 # one is the browser window. Exits 1 if none is found.
 set -euo pipefail
 [[ $# -eq 1 ]] || { echo "usage: winid.sh PROFILE_DIR" >&2; exit 2; }
-win="$(xwininfo -root -tree | grep -F -- "$1" | while read -r line; do
-  geometry="$(grep -oE ' [0-9]+x[0-9]+[+-]' <<<"$line" | head -n 1 | tr -d ' +-')"
+# `|| true`: no match is a normal outcome here, reported below, not a pipeline failure.
+win="$(xwininfo -root -tree | { grep -F -- "$1" || true; } | while read -r line; do
+  geometry="$(grep -oE ' [0-9]+x[0-9]+[+-]' <<<"$line" | head -n 1 | tr -d ' +-' || true)"
   [[ -n "$geometry" ]] && echo "$(( ${geometry%x*} * ${geometry#*x} )) ${line%% *}"
 done | sort -n | tail -n 1 | cut -d' ' -f2)"
 [[ -n "$win" ]] || { echo "no X window found for profile $1" >&2; exit 1; }
