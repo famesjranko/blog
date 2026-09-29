@@ -95,13 +95,22 @@ function client(ws) {
 
 // Connect to the first page target. With browser: true, connect to the browser
 // target instead (needed for SystemInfo.* and Browser.*).
+async function endpoint(port, path) {
+	try {
+		return await (await fetch(`http://127.0.0.1:${port}${path}`)).json();
+	} catch {
+		throw new Error(
+			`no browser answers on CDP port ${port}; launch one with --remote-debugging-port=${port}`,
+		);
+	}
+}
+
 export async function connect(port, { browser = false } = {}) {
-	const base = `http://127.0.0.1:${port}`;
 	if (browser) {
-		const version = await (await fetch(`${base}/json/version`)).json();
+		const version = await endpoint(port, "/json/version");
 		return client(await openSocket(version.webSocketDebuggerUrl));
 	}
-	const page = (await (await fetch(`${base}/json/list`)).json()).find(
+	const page = (await endpoint(port, "/json/list")).find(
 		(t) => t.type === "page",
 	);
 	if (!page) {

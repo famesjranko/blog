@@ -22,8 +22,18 @@ while getopts "o:p:P:c:t:r:n:Ck" opt; do
   esac
 done
 shift $((OPTIND - 1))
-[[ -n "$out" && -n "$profile" && -n "$rounds" && -n "$loads" && $# -ge 1 ]] || usage
+[[ -n "$out" && -n "$profile" && $# -ge 1 ]] || usage
+# A bad count must fail here: "seq 1 x" in a for list does not trip set -e, and the run
+# would end with DONE and 0 events, which reads as a clean result.
+[[ $rounds =~ ^[1-9][0-9]*$ && $loads =~ ^[1-9][0-9]*$ ]] || { echo "-r and -n must be positive integers" >&2; exit 2; }
 builds=("$@")
+declare -A seen
+for build in "${builds[@]}"; do
+  name="${build%%=*}"
+  [[ $build == *=* && $name =~ ^[A-Za-z0-9_.-]+$ ]] || { echo "bad build \"$build\"; use NAME=URL" >&2; exit 2; }
+  [[ -z "${seen[$name]:-}" ]] || { echo "build name $name is used twice" >&2; exit 2; }
+  seen[$name]=1
+done
 mkdir -p "$out"
 block_log=""
 on_exit() {

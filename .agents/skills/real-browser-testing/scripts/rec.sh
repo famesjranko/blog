@@ -27,8 +27,14 @@ done
 shift $((OPTIND - 1))
 [[ $# -eq 2 && -n "$out" && ( -n "$profile" || -n "$win" ) ]] || usage
 url="$1" runs="$2"
+[[ $runs =~ ^[1-9][0-9]*$ ]] || { echo "RUNS must be a positive integer" >&2; exit 2; }
+for tool in ffmpeg ffprobe xwininfo node; do
+  command -v "$tool" >/dev/null || { echo "$tool is not installed" >&2; exit 1; }
+done
 : "${DISPLAY:?DISPLAY is not set; x11grab needs the X or XWayland display}"
 mkdir -p "$out"
+# Files from an earlier run in the same OUTDIR would be read as this run's events.
+rm -f "$out"/event-*.png "$out/events.txt" "$out/yavg.txt"
 
 [[ -n "$win" ]] || win="$("$here/winid.sh" "$profile")"
 echo "window $win"

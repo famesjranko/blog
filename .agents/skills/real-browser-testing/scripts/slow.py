@@ -8,6 +8,7 @@ Binds to 127.0.0.1 only. Stop it with Ctrl-C or by killing its PID.
 """
 
 import argparse
+import os
 import time
 from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
@@ -36,6 +37,8 @@ def main() -> None:
     parser.add_argument("--delay-ms", type=float, default=0.0, help="delay for each HTML response")
     parser.add_argument("--css-delay-ms", type=float, default=0.0, help="delay for each CSS response")
     args = parser.parse_args()
+    if not os.path.isdir(args.dir):
+        parser.error(f"--dir {args.dir} is not a directory")  # else every request is a 404
     server = ThreadingHTTPServer(("127.0.0.1", args.port), partial(handler(args.delay_ms / 1000, args.css_delay_ms / 1000), directory=args.dir))
     print(
         f"serving {args.dir} on http://127.0.0.1:{args.port}/ with {args.delay_ms:g} ms HTML"

@@ -16,7 +16,7 @@ if (!port || !Number.isInteger(rounds) || rounds < 1 || !urlA || !urlB) {
 // The IIFE keeps every name out of the page's global scope: a top-level const here
 // would make a page script that declares the same name fail to run.
 const OBSERVERS = `(() => {
-  window.__lcp = 0; window.__long = 0; window.__contextAt = 0;
+  window.__lcp = null; window.__long = 0; window.__contextAt = null;
   new PerformanceObserver((l) => { for (const e of l.getEntries()) window.__lcp = e.startTime; })
     .observe({ type: "largest-contentful-paint", buffered: true });
   new PerformanceObserver((l) => { window.__long += l.getEntries().length; })
@@ -48,9 +48,22 @@ const RUNTIME = `new Promise((ok) => {
   requestAnimationFrame(tick);
 })`;
 
+// Reading metrics before the load event would record 0 for a slow page, and a slower
+// build would then report a lower median. Wait for it, and fail if it never comes.
+async function waitForLoad(cdp, url) {
+	for (let waited = 0; waited < 60000; waited += 250) {
+		if ((await cdp.evaluate("document.readyState")) === "complete") {
+			return;
+		}
+		await sleep(250);
+	}
+	throw new Error(`${url} did not finish loading within 60 s`);
+}
+
 async function measure(cdp, url) {
 	await cdp.navigate(url);
-	await sleep(3500);
+	await waitForLoad(cdp, url);
+	await sleep(1000); // let late LCP candidates and long tasks arrive
 	const load = await cdp.evaluate(LOAD);
 	const runtime = await cdp.evaluate(RUNTIME);
 	const { metrics } = await cdp.send("Performance.getMetrics");
@@ -62,7 +75,7 @@ const median = (values) => {
 	const sorted = values
 		.filter((v) => typeof v === "number")
 		.sort((a, b) => a - b);
-	return sorted.length ? sorted[Math.floor(sorted.length / 2)] : Number.NaN;
+	return sorted.length ? sorted[Math.floor(sorted.length / 2)] : undefined;
 };
 
 const cdp = await connect(port);
@@ -86,7 +99,10 @@ for (const label of ["A", "B"]) {
 	console.log(
 		label,
 		keys
-			.map((k) => `${k}=${median(rows[label].map((r) => r[k])).toFixed(1)}`)
+			.map(
+				(k) =>
+					`${k}=${median(rows[label].map((r) => r[k]))?.toFixed(1) ?? "n/a"}`,
+			)
 			.join(" "),
 	);
 }
