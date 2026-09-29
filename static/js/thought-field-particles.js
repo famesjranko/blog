@@ -11,12 +11,13 @@ import { parseCssColour } from "./thought-field-maths.js";
  */
 
 /**
- * Per-particle buffers. `pos` is what the GPU draws; `base` is the
- * rest position each particle drifts around.
+ * Per-particle buffers. `pos` and `alpha` are what the GPU draws; `base`
+ * is the rest position each particle drifts around.
  * @typedef {{
  *   count: number,
  *   palette: LinearColour[],
  *   pos: Float32Array,
+ *   alpha: Float32Array,
  *   col: Float32Array,
  *   base: Float32Array,
  *   phase: Float32Array,
@@ -139,6 +140,8 @@ export function makePoints(count, palette) {
 		count,
 		palette,
 		pos: new Float32Array(count * 3),
+		// Zero: every particle is hidden until the birth reveals it.
+		alpha: new Float32Array(count),
 		col: new Float32Array(count * 3),
 		base: new Float32Array(count * 3),
 		phase: new Float32Array(count * 2),
@@ -146,6 +149,31 @@ export function makePoints(count, palette) {
 	};
 	fillField(field);
 	return field;
+}
+
+/**
+ * Where particle I drifts at TIME: its base, stretched to the hero's
+ * width, plus a slow wobble.
+ * @param {Field} field
+ * @param {number} i
+ * @param {number} aspect
+ * @param {number} time
+ * @returns {{ x: number, y: number }}
+ */
+export function driftTarget(field, i, aspect, time) {
+	const ix = i * 3;
+	const p1 = field.phase[i * 2];
+	const p2 = field.phase[i * 2 + 1];
+	return {
+		x:
+			field.base[ix] * aspect +
+			0.09 * Math.sin(0.21 * time + p1) +
+			0.05 * Math.cos(0.13 * time + 1.7 * p2),
+		y:
+			field.base[ix + 1] +
+			0.09 * Math.cos(0.17 * time + 1.3 * p2) +
+			0.05 * Math.sin(0.11 * time + 0.7 * p1),
+	};
 }
 
 /**
@@ -183,18 +211,9 @@ export function stepParticles(options) {
 	const rate = Math.min(dt * 60, 3);
 	for (let i = 0; i < field.count; i += 1) {
 		const ix = i * 3;
-		const p1 = field.phase[i * 2];
-		const p2 = field.phase[i * 2 + 1];
-		const tx =
-			field.base[ix] * aspect +
-			0.09 * Math.sin(0.21 * time + p1) +
-			0.05 * Math.cos(0.13 * time + 1.7 * p2);
-		const ty =
-			field.base[ix + 1] +
-			0.09 * Math.cos(0.17 * time + 1.3 * p2) +
-			0.05 * Math.sin(0.11 * time + 0.7 * p1);
-		field.pos[ix] += (tx - field.pos[ix]) * ease;
-		field.pos[ix + 1] += (ty - field.pos[ix + 1]) * ease;
+		const target = driftTarget(field, i, aspect, time);
+		field.pos[ix] += (target.x - field.pos[ix]) * ease;
+		field.pos[ix + 1] += (target.y - field.pos[ix + 1]) * ease;
 		applyRepulsion({ field, ix, pointer, meteors, rate });
 	}
 }

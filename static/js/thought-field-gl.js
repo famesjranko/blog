@@ -3,10 +3,8 @@
 // simulation writes into its Float32Arrays is re-uploaded each frame.
 import { orthographicProjection } from "./thought-field-maths.js";
 import {
-	FIELD_FRAGMENT_SHADER,
-	FIELD_VERTEX_SHADER,
-	METEOR_FRAGMENT_SHADER,
-	METEOR_VERTEX_SHADER,
+	POINT_FRAGMENT_SHADER,
+	POINT_VERTEX_SHADER,
 } from "./thought-field-shaders.js";
 
 /**
@@ -36,8 +34,8 @@ const CONTEXT_OPTIONS = {
 
 /** @type {PassStyle} */
 const FIELD_STYLE = {
-	vertex: FIELD_VERTEX_SHADER,
-	fragment: FIELD_FRAGMENT_SHADER,
+	vertex: POINT_VERTEX_SHADER,
+	fragment: POINT_FRAGMENT_SHADER,
 	size: 3.2,
 	glow: 1.1,
 	alpha: 0.75,
@@ -45,8 +43,8 @@ const FIELD_STYLE = {
 
 /** @type {PassStyle} */
 const METEOR_STYLE = {
-	vertex: METEOR_VERTEX_SHADER,
-	fragment: METEOR_FRAGMENT_SHADER,
+	vertex: POINT_VERTEX_SHADER,
+	fragment: POINT_FRAGMENT_SHADER,
 	size: 3.4,
 	glow: 1.3,
 	alpha: 0.9,
@@ -207,6 +205,7 @@ export function createRenderer(canvas, field, meteors) {
 			{ name: "position", data: field.pos, size: 3, dynamic: true },
 			{ name: "aColor", data: field.col, size: 3, dynamic: false },
 			{ name: "aScale", data: field.scale, size: 1, dynamic: false },
+			{ name: "aAlpha", data: field.alpha, size: 1, dynamic: true },
 		]),
 		createPass(gl, METEOR_STYLE, [
 			{ name: "position", data: meteors.pos, size: 3, dynamic: true },

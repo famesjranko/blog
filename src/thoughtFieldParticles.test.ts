@@ -20,6 +20,7 @@ function makeField(): Field {
 		count,
 		palette: [],
 		pos: base.slice(),
+		alpha: new Float32Array(count),
 		col: new Float32Array(count * 3),
 		base,
 		phase: new Float32Array(count * 2),
