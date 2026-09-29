@@ -1,12 +1,7 @@
 import { mkdir } from "node:fs/promises";
 import path from "node:path";
 import sharp from "sharp";
-import {
-	type CardImageCandidate,
-	type CardImagePiece,
-	type CardImagePlan,
-	cardImagePlans,
-} from "./cardImages.js";
+import type { RenditionCandidate, RenditionPlan } from "./renditions.js";
 
 interface GenerateOptions {
 	sourceRoot?: string;
@@ -19,7 +14,7 @@ function diskPath(root: string, sitePath: string): string {
 
 async function encodeCandidate(
 	sourceFile: string,
-	candidate: CardImageCandidate,
+	candidate: RenditionCandidate,
 	outDir: string,
 ): Promise<void> {
 	const avifFile = diskPath(outDir, candidate.avifSrc);
@@ -41,7 +36,7 @@ async function encodeCandidate(
 }
 
 async function encodePlan(
-	plan: CardImagePlan,
+	plan: RenditionPlan,
 	sourceRoot: string,
 	outDir: string,
 ): Promise<number> {
@@ -52,14 +47,16 @@ async function encodePlan(
 	return plan.candidates.length * 2;
 }
 
-/** Generate only the responsive renditions referenced by card markup. */
-export async function generateCardImages(
-	pieces: readonly CardImagePiece[],
+/**
+ * Encode every candidate of the given plans. Callers pass only the plans
+ * their markup references, so no unused rendition is written.
+ */
+export async function generateRenditions(
+	plans: readonly RenditionPlan[],
 	options: GenerateOptions = {},
 ): Promise<number> {
 	const sourceRoot = options.sourceRoot ?? "static";
 	const outDir = options.outDir ?? "dist";
-	const plans = cardImagePlans(pieces);
 	const counts = await Promise.all(
 		plans.map((plan) => encodePlan(plan, sourceRoot, outDir)),
 	);

@@ -1,23 +1,10 @@
 import MarkdownIt from "markdown-it";
-import { imageSize, webpSrc } from "./images.js";
 import { markFigureParagraphs } from "./markdownFigures.js";
+import { renderImage } from "./markdownImages.js";
 import { isExternalLink, openExternalHtmlLinks } from "./markdownLinks.js";
-import { siteUrl } from "./site.js";
-import { inlineSvg } from "./svgInline.js";
+import { internalUrl } from "./site.js";
 
 let renderer: MarkdownIt | undefined;
-
-/**
- * Prefix internal root-relative URLs (image src and link href) with the
- * site base path. Leaves protocol-relative, external, relative, anchor,
- * and other schemes alone.
- */
-function internalUrl(path: string): string {
-	if (path.startsWith("/") && !path.startsWith("//")) {
-		return siteUrl(path);
-	}
-	return path;
-}
 
 const ATTRIBUTION_PATTERN = /^\([^()]*\)\.?$/;
 
@@ -90,42 +77,6 @@ function markQuoteAttributions(md: MarkdownIt): void {
 	});
 }
 
-interface ImageSource {
-	tokens: MarkdownToken[];
-	index: number;
-}
-
-interface FigureImage extends ImageSource {
-	caption: string;
-}
-
-/**
- * An image with a title becomes a figure: the title is promoted to a
- * visible caption, so it is stripped from the img hover text. The token
- * is copied first; mutating a parameter property is banned. A trailing
- * backslash inside the title starts a new caption line.
- */
-function asFigure(
-	tokens: MarkdownToken[],
-	index: number,
-): FigureImage | undefined {
-	const token = tokens[index];
-	if (token === undefined) {
-		return undefined;
-	}
-	const title = token.attrGet("title");
-	if (title === null || title.trim() === "") {
-		return undefined;
-	}
-	const copy: MarkdownToken = Object.assign(
-		Object.create(Object.getPrototypeOf(token)),
-		token,
-	);
-	copy.attrs = (copy.attrs ?? []).filter(([name]) => name !== "title");
-	return { tokens: [copy], index: 0, caption: title };
-}
-
-type ImageRenderRule = NonNullable<MarkdownIt["renderer"]["rules"]["image"]>;
 type LinkRenderRule = NonNullable<MarkdownIt["renderer"]["rules"]["link_open"]>;
 type HtmlRenderRule = NonNullable<
 	MarkdownIt["renderer"]["rules"]["html_block"]
@@ -133,44 +84,6 @@ type HtmlRenderRule = NonNullable<
 type ParagraphRenderRule = NonNullable<
 	MarkdownIt["renderer"]["rules"]["paragraph_open"]
 >;
-
-interface ImageRenderContext {
-	md: MarkdownIt;
-	fallback: ImageRenderRule;
-	source: ImageSource;
-	options: Parameters<ImageRenderRule>[2];
-	env: Parameters<ImageRenderRule>[3];
-}
-
-/** Rewrite src for the base path and reserve the box for shipped images. */
-function prepareImageToken(token: MarkdownToken, src: string): void {
-	token.attrSet("src", internalUrl(src));
-	const size = imageSize(src);
-	if (size !== undefined) {
-		token.attrSet("width", String(size.width));
-		token.attrSet("height", String(size.height));
-	}
-}
-
-function renderImageBody(context: ImageRenderContext): string {
-	const { md, fallback, source, options, env } = context;
-	const token = source.tokens[source.index];
-	const src = token?.attrGet("src");
-	if (token !== undefined && typeof src === "string") {
-		const diagram = inlineSvg(src);
-		if (diagram !== undefined) {
-			return diagram;
-		}
-		prepareImageToken(token, src);
-	}
-	const img = fallback(source.tokens, source.index, options, env, md.renderer);
-	const webp = typeof src === "string" ? webpSrc(src) : undefined;
-	if (webp === undefined) {
-		return img;
-	}
-	const webpUrl = md.utils.escapeHtml(internalUrl(webp));
-	return `<picture><source type="image/webp" srcset="${webpUrl}">${img}</picture>`;
-}
 
 /**
  * External links open in a new tab; internal root-relative links get the
@@ -216,18 +129,9 @@ function buildRenderer(): MarkdownIt {
 		paragraph_open: renderDiagramOpen,
 		paragraph_close: renderDiagramClose,
 	});
-	const fallback = md.renderer.rules.image;
-	if (fallback !== undefined) {
-		md.renderer.rules.image = (tokens, idx, options, env) => {
-			const figure = asFigure(tokens, idx);
-			const source: ImageSource = figure ?? { tokens, index: idx };
-			const body = renderImageBody({ md, fallback, source, options, env });
-			if (figure === undefined) {
-				return body;
-			}
-			const caption = md.renderInline(figure.caption, env);
-			return `<figure>${body}<figcaption>${caption}</figcaption></figure>`;
-		};
+	const fallbackImage = md.renderer.rules.image;
+	if (fallbackImage !== undefined) {
+		md.renderer.rules.image = renderImage(md, fallbackImage);
 	}
 	Object.assign(md.renderer.rules, {
 		link_open: renderLink(md),
@@ -237,7 +141,24 @@ function buildRenderer(): MarkdownIt {
 	return md;
 }
 
-export function renderMarkdown(source: string): string {
+function markdownRenderer(): MarkdownIt {
 	renderer ??= buildRenderer();
-	return renderer.render(source);
+	return renderer;
+}
+
+export function renderMarkdown(source: string): string {
+	return markdownRenderer().render(source);
+}
+
+/**
+ * Sources of every image in a markdown body, in document order. The
+ * build generates renditions only for these, so unused images cost nothing.
+ */
+export function markdownImageSources(source: string): string[] {
+	return markdownRenderer()
+		.parse(source, {})
+		.flatMap((token) => token.children ?? [])
+		.filter((child) => child.type === "image")
+		.map((child) => child.attrGet("src"))
+		.filter((src): src is string => src !== null);
 }

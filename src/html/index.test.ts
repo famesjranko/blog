@@ -14,6 +14,7 @@ function sampleEssay(overrides: Partial<Essay> = {}): Essay {
 		draft: false,
 		slug: "on-privacy",
 		html: "<p>Body.</p>",
+		images: [],
 		sourcePath: "content/essays/on-privacy.md",
 		...overrides,
 	};
@@ -261,6 +262,7 @@ function sampleProject(overrides: Partial<Project> = {}): Project {
 		draft: false,
 		slug: "connect4-lisp-web",
 		html: "<p>Body.</p>",
+		images: [],
 		sourcePath: "content/projects/connect4-lisp-web.md",
 		...overrides,
 	};

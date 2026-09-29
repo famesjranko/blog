@@ -1,5 +1,6 @@
 import type { Essay, Project } from "./content.js";
 import { imageSize, isInternalJpeg, type ImageSize } from "./images.js";
+import { type RenditionPlan, renditionSrc } from "./renditions.js";
 
 const CARD_WIDTHS = [480, 720, 1088, 1440];
 const RATIO_WIDTH = 16;
@@ -9,18 +10,6 @@ export const CARD_IMAGE_SIZES =
 	"(min-width: 73rem) 33.25rem, (min-width: 62.5rem) calc(50vw - 3.25rem), (min-width: 42rem) calc(46vw - 0.75rem), (min-width: 25rem) 92vw, calc(100vw - 2rem)";
 
 export type CardImagePiece = Pick<Essay | Project, "cover" | "slug">;
-
-export interface CardImageCandidate {
-	width: number;
-	height: number;
-	avifSrc: string;
-	webpSrc: string;
-}
-
-export interface CardImagePlan {
-	source: string;
-	candidates: CardImageCandidate[];
-}
 
 /** The image source used by cards and social previews for a piece. */
 export function cardImageSource(piece: CardImagePiece): string {
@@ -44,11 +33,7 @@ export function cardCandidateWidths(size: ImageSize): number[] {
 	].sort((a, b) => a - b);
 }
 
-function renditionSrc(src: string, width: number, extension: string): string {
-	return src.replace(/\.(jpe?g)$/i, `.card-${width}w.${extension}`);
-}
-
-export function cardImagePlan(src: string): CardImagePlan | undefined {
+export function cardImagePlan(src: string): RenditionPlan | undefined {
 	if (!isInternalJpeg(src)) {
 		return undefined;
 	}
@@ -59,8 +44,8 @@ export function cardImagePlan(src: string): CardImagePlan | undefined {
 	const candidates = cardCandidateWidths(size).map((width) => ({
 		width,
 		height: (width / RATIO_WIDTH) * RATIO_HEIGHT,
-		avifSrc: renditionSrc(src, width, "avif"),
-		webpSrc: renditionSrc(src, width, "webp"),
+		avifSrc: renditionSrc(src, "card", width, "avif"),
+		webpSrc: renditionSrc(src, "card", width, "webp"),
 	}));
 	return candidates.length === 0 ? undefined : { source: src, candidates };
 }
@@ -68,9 +53,9 @@ export function cardImagePlan(src: string): CardImagePlan | undefined {
 /** Resolve and deduplicate every responsive card source in a collection. */
 export function cardImagePlans(
 	pieces: readonly CardImagePiece[],
-): CardImagePlan[] {
+): RenditionPlan[] {
 	const sources = new Set(pieces.map(cardImageSource));
 	return [...sources]
 		.map(cardImagePlan)
-		.filter((plan): plan is CardImagePlan => plan !== undefined);
+		.filter((plan): plan is RenditionPlan => plan !== undefined);
 }

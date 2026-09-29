@@ -1,11 +1,13 @@
 import { mkdir, rm } from "node:fs/promises";
 import { copySiteAssets } from "./assets.js";
-import { generateCardImages } from "./cardImageGenerator.js";
+import { articleImagePlans } from "./articleImages.js";
+import { cardImagePlans } from "./cardImages.js";
 import { loadEssays, loadProjects } from "./content.js";
+import { generateRenditions } from "./renditionGenerator.js";
 import { generateSite } from "./routes.js";
 
 export interface BuildResult {
-	cardImageCount: number;
+	imageCount: number;
 	essayCount: number;
 	projectCount: number;
 }
@@ -21,11 +23,14 @@ export async function buildSite(
 	const projects = await loadProjects(undefined, includeDrafts);
 	await generateSite(essays, projects, outDir);
 	await copySiteAssets(".", outDir);
-	const cardImageCount = await generateCardImages([...essays, ...projects], {
-		outDir,
-	});
+	const pieces = [...essays, ...projects];
+	const plans = [
+		...cardImagePlans(pieces),
+		...articleImagePlans(pieces.flatMap((piece) => piece.images)),
+	];
+	const imageCount = await generateRenditions(plans, { outDir });
 	return {
-		cardImageCount,
+		imageCount,
 		essayCount: essays.length,
 		projectCount: projects.length,
 	};

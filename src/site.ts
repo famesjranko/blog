@@ -33,6 +33,18 @@ export function siteUrl(path: string): string {
 	return `${basePath()}${p}`;
 }
 
+/**
+ * Prefix internal root-relative URLs (image src and link href) with the
+ * site base path. Leaves protocol-relative, external, relative, anchor,
+ * and other schemes alone.
+ */
+export function internalUrl(path: string): string {
+	if (path.startsWith("/") && !path.startsWith("//")) {
+		return siteUrl(path);
+	}
+	return path;
+}
+
 /** The public URL to advertise, regardless of the active deployment target. */
 export function canonicalSiteUrl(path: string): string {
 	const p = path.startsWith("/") ? path : `/${path}`;
