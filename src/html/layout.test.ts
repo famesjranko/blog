@@ -213,7 +213,7 @@ describe("cardCover dimensions", () => {
 		const html = cardCover(
 			piece("/img/projects/connect4-lisp-web/cover.jpg", "c", "c"),
 		);
-		expect(html).toContain('width="1536" height="640"');
+		expect(html).toContain('width="1512" height="630"');
 	});
 
 	it("leaves an unknown cover unsized", () => {
