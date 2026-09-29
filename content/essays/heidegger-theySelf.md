@@ -89,7 +89,7 @@ choice is revealed: That in choosing to be something, we also choose to not be s
 ourselves as Beings-in-the-world as our choices concretises us factually.  It is the possibility of death that illuminates us to our choice to be ourselves, qua Dasein, in totality (Wheeler 2020).
 
 
-> _“When Dasein thus brings itself back from the ‘they’, the they‑[S]elf is modified in an existentiell manner so that it becomes authentic Being‑one’s‑Self [Self-they].  This must be accomplished by making up for not choosing.  But ‘making up’ for not choosing signifies choosing to make this choice – deciding for a potentiality‑for‑Being, and making this decision from one’s own Self.  In choosing to make this choice, Dasein makes possible, first and foremost, its authentic potentiality-for-Being."_
+> _“When Dasein thus brings itself back from the ‘they’, the they-[S]elf is modified in an existentiell manner so that it becomes authentic Being-one’s-Self [Self-they].  This must be accomplished by making up for not choosing.  But ‘making up’ for not choosing signifies choosing to make this choice – deciding for a potentiality-for-Being, and making this decision from one’s own Self.  In choosing to make this choice, Dasein makes possible, first and foremost, its authentic potentiality-for-Being."_
 >
 > <p class="attribution">(Heidegger 1962, p. 313).</p>
 

@@ -82,7 +82,7 @@ In sum, Dretske has shown that there are serious problems with closure that need
 
   <p>Nagel, J 2016, <a href="https://www.youtube.com/watch?v=gyySntqfAik" target="_blank" rel="noopener noreferrer">Jennifer Nagel: Closure and Defeat</a>, online video, 2 June, Philosophy at the University of Edinburgh. Viewed 14 October 2016.</p>
 
-  <p>Nagel, J 2011, ‘The psychological basis of the Harman‐Vogel paradox’, <em>Philosophers' Imprint</em>, vol. 11, no. 5, pp. 1‐28.</p>
+  <p>Nagel, J 2011, ‘The psychological basis of the Harman-Vogel paradox’, <em>Philosophers' Imprint</em>, vol. 11, no. 5, pp. 1–28.</p>
 
   <p>Steup, M, &amp; Sosa, E 2005, <em>Contemporary debates in epistemology</em>, 2nd ed. MA: Blackwell Pub.</p>
 
