@@ -147,14 +147,6 @@
 		"width": 640,
 		"height": 360
 	},
-	"/img/placeholders/tablescan.jpg": {
-		"width": 640,
-		"height": 360
-	},
-	"/img/placeholders/tablescan.webp": {
-		"width": 640,
-		"height": 360
-	},
 	"/img/placeholders/time-travel-uni.jpg": {
 		"width": 640,
 		"height": 360
@@ -181,11 +173,11 @@
 	},
 	"/img/projects/connect4-heuristic/cover.jpg": {
 		"width": 1600,
-		"height": 900
+		"height": 667
 	},
 	"/img/projects/connect4-heuristic/cover.webp": {
 		"width": 1600,
-		"height": 900
+		"height": 667
 	},
 	"/img/projects/connect4-lisp-web/connect4-debug-scores.jpg": {
 		"width": 1600,
@@ -197,10 +189,82 @@
 	},
 	"/img/projects/connect4-lisp-web/cover.jpg": {
 		"width": 1536,
-		"height": 1024
+		"height": 640
 	},
 	"/img/projects/connect4-lisp-web/cover.webp": {
 		"width": 1536,
-		"height": 1024
+		"height": 640
+	},
+	"/img/projects/extracting-pdf-tables/cover.jpg": {
+		"width": 1600,
+		"height": 667
+	},
+	"/img/projects/extracting-pdf-tables/cover.webp": {
+		"width": 1600,
+		"height": 667
+	},
+	"/img/projects/extracting-pdf-tables/engine-arch.jpg": {
+		"width": 1600,
+		"height": 599
+	},
+	"/img/projects/extracting-pdf-tables/engine-arch.webp": {
+		"width": 1600,
+		"height": 599
+	},
+	"/img/projects/tablescan/book-viewer.jpg": {
+		"width": 1232,
+		"height": 1315
+	},
+	"/img/projects/tablescan/book-viewer.webp": {
+		"width": 1232,
+		"height": 1315
+	},
+	"/img/projects/tablescan/cover.jpg": {
+		"width": 1600,
+		"height": 667
+	},
+	"/img/projects/tablescan/cover.webp": {
+		"width": 1600,
+		"height": 667
+	},
+	"/img/projects/tablescan/detection-approved.jpg": {
+		"width": 510,
+		"height": 258
+	},
+	"/img/projects/tablescan/detection-approved.webp": {
+		"width": 510,
+		"height": 258
+	},
+	"/img/projects/tablescan/detection-pending.jpg": {
+		"width": 508,
+		"height": 232
+	},
+	"/img/projects/tablescan/detection-pending.webp": {
+		"width": 508,
+		"height": 232
+	},
+	"/img/projects/tablescan/modes.jpg": {
+		"width": 640,
+		"height": 255
+	},
+	"/img/projects/tablescan/modes.webp": {
+		"width": 640,
+		"height": 255
+	},
+	"/img/projects/tablescan/selections.jpg": {
+		"width": 1200,
+		"height": 250
+	},
+	"/img/projects/tablescan/selections.webp": {
+		"width": 1200,
+		"height": 250
+	},
+	"/img/projects/tablescan/upload.jpg": {
+		"width": 720,
+		"height": 850
+	},
+	"/img/projects/tablescan/upload.webp": {
+		"width": 720,
+		"height": 850
 	}
 }

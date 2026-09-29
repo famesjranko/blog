@@ -139,6 +139,27 @@
 		font-size: 0.85rem;
 	}
 
+	.prose .references {
+		font-family: var(--font-ui);
+		font-size: 0.9em;
+	}
+
+	.prose .references p {
+		margin-block: 0.8rem;
+		padding-left: 1.5rem;
+		text-indent: -1.5rem;
+		overflow-wrap: anywhere;
+	}
+
+	/* A note that qualifies the table directly above it. */
+	.prose .table-note {
+		margin-top: -0.6rem;
+		color: var(--color-muted);
+		font-family: var(--font-ui);
+		font-size: 0.82em;
+		line-height: 1.55;
+	}
+
 	/* Preview-only: drafts are never built for the published site. */
 	.draft-eyebrow {
 		display: inline-block;
