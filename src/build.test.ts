@@ -106,7 +106,9 @@ async function stylesheetUrlTargets(outDir: string): Promise<string[]> {
 	const urls = await Promise.all(
 		sheets.map(async (name) => {
 			const css = await readFile(path.join(cssDir, name), "utf8");
-			return [...css.matchAll(/url\("([^"]+)"\)/g)].map((m) => m[1] ?? "");
+			return [...css.matchAll(/url\(\s*["']?([^"')]+)["']?\s*\)/g)].map(
+				(m) => m[1] ?? "",
+			);
 		}),
 	);
 	return urls.flat().map((url) => path.resolve(cssDir, url));
@@ -134,7 +136,7 @@ describe("build output", () => {
 		const headers = await readFile(path.join(outDir, "_headers"), "utf8");
 
 		expect(headers).toBe(
-			"/*\n  X-Frame-Options: DENY\n  Permissions-Policy: camera=(), microphone=(), geolocation=()\n\n/img/*.avif\n  Cache-Control: public, max-age=86400\n\n/img/*.webp\n  Cache-Control: public, max-age=86400\n\n/img/*.jpg\n  Cache-Control: public, max-age=86400\n\n# Fonts are never edited in place; a changed font ships under a new name.\n/fonts/*.woff2\n  Cache-Control: public, max-age=31536000, immutable\n",
+			"/*\n  X-Frame-Options: DENY\n  Permissions-Policy: camera=(), microphone=(), geolocation=()\n\n/img/*.avif\n  Cache-Control: public, max-age=86400\n\n/img/*.webp\n  Cache-Control: public, max-age=86400\n\n/img/*.jpg\n  Cache-Control: public, max-age=86400\n\n# Font file names carry a version; replace a font by bumping it.\n/fonts/*.woff2\n  Cache-Control: public, max-age=31536000, immutable\n",
 		);
 	}, 30000);
 
@@ -228,7 +230,9 @@ describe("stylesheet build output", () => {
 		const targets = await stylesheetUrlTargets(outDir);
 		const shipped = new Set(await listFiles(outDir));
 
-		expect(targets).toContain(path.join(outDir, "fonts/gelasio-roman.woff2"));
+		expect(targets).toContain(
+			path.join(outDir, "fonts/gelasio-roman-v1.woff2"),
+		);
 		expect(targets.filter((file) => !shipped.has(file))).toEqual([]);
 	}, 30000);
 });

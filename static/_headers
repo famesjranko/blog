@@ -11,6 +11,6 @@
 /img/*.jpg
   Cache-Control: public, max-age=86400
 
-# Fonts are never edited in place; a changed font ships under a new name.
+# Font file names carry a version; replace a font by bumping it.
 /fonts/*.woff2
   Cache-Control: public, max-age=31536000, immutable
