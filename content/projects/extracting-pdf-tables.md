@@ -2,7 +2,7 @@
 title: "Extracting PDF Tables"
 description: "A 2021 university project that finds tables in PDF annual reports with YOLOv3 and reads them with Camelot."
 date: 2021-10-25
-draft: true
+draft: false
 cover: /img/projects/extracting-pdf-tables/cover.jpg
 coverAlt: "Close-up of a printed financial table with share prices and dividend figures"
 origin: university
@@ -65,7 +65,7 @@ For parsing, we compared Camelot's own report, which gives percentages for accur
 
 By the end of the project the system did what the brief asked. A user could upload a report through the website or the API and get its tables back as CSV, JSON, or a single archive. The back end passed every user story the client had set.
 
-The approach held up: where the detector placed a table correctly, Camelot usually read it well. The weaknesses were in detection, which missed up to one table in five and sometimes took infographics for tables, and in the output, since CSV flattens cells that span columns. Nothing in the system could flag these failures, and the user had no way to correct them. We had many ideas for improving the engine, but ultimately ran out of time for further refinement.
+The approach held up: where the detector placed a table correctly, Camelot usually read it well. The weaknesses were in detection, which missed more than one table in five on the weakest report and sometimes took infographics for tables, and in the output, since CSV flattens cells that span columns. Nothing in the system could flag these failures, and the user had no way to correct them. We had many ideas for improving the engine, but ultimately ran out of time for further refinement.
 
 [See this engine extended as Tablescan →](/projects/tablescan/)
 

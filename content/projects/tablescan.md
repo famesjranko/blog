@@ -1,8 +1,8 @@
 ---
 title: "Tablescan"
 description: "A containerised web front end for my 2021 PDF table extraction engine, with a review workflow and several extraction libraries."
-date: 2026-04-10
-draft: true
+date: 2026-06-09
+draft: false
 cover: /img/projects/tablescan/cover.jpg
 coverAlt: "Collage of a PDF page with a table outlined, the table lifted out, and a spreadsheet with CSV, XLSX and JSON files"
 origin: personal
@@ -68,7 +68,7 @@ Each library can be switched on or off in the upload form's advanced options. Do
 
 Each result is scored on five measures, weighted as follows: the library's own confidence (35%), header detection (20%), cell coverage (20%), row and column regularity (15%), and the validity of numeric values (10%). The highest-scoring result becomes the table's result, and the others remain available on its card.
 
-After extraction, headers that run over several rows are merged into a single header, and the XLSX export keeps them as merged cells.
+After extraction, headers that run over several rows are merged into a single header.
 
 ## Results
 
