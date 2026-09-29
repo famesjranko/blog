@@ -17,6 +17,46 @@ function piece(
 	return { cover, coverAlt, slug, draft };
 }
 
+interface Meta {
+	name: string;
+	content: string;
+}
+
+/**
+ * Builds the page's head in parser order, running the inline theme
+ * script where it appears with `stored` in localStorage, and returns
+ * the first color-scheme meta: the one the browser paints from.
+ */
+function firstColorScheme(stored: string | null) {
+	const html = page({ title: "t", content: "" });
+	const script = /<script>(.*?)<\/script>/.exec(html);
+	const meta = /<meta name="color-scheme" content="([^"]*)">/.exec(html);
+	const head: Meta[] = [];
+	const root = { dataset: {} as { theme?: string } };
+	const document = {
+		documentElement: root,
+		head: { appendChild: (el: Meta) => head.push(el) },
+		createElement: () => ({ name: "", content: "" }),
+	};
+	const localStorage = { getItem: () => stored };
+	const runScript = () =>
+		new Function("document", "localStorage", script?.[1] ?? "")(
+			document,
+			localStorage,
+		);
+	const staticMeta =
+		meta === null ? [] : [{ name: "color-scheme", content: meta[1] ?? "" }];
+	if ((script?.index ?? 0) < (meta?.index ?? Number.POSITIVE_INFINITY)) {
+		runScript();
+		head.push(...staticMeta);
+	} else {
+		head.push(...staticMeta);
+		runScript();
+	}
+	const first = head.find((el) => el.name === "color-scheme");
+	return { content: first?.content, theme: root.dataset.theme };
+}
+
 describe("footer", () => {
 	it("links to the GitHub profile in a new tab", () => {
 		const html = footer();
@@ -62,6 +102,36 @@ describe("theme toggle", () => {
 		} finally {
 			vi.unstubAllEnvs();
 		}
+	});
+});
+
+describe("first-paint colour scheme", () => {
+	it("declares both colour schemes before any stylesheet", () => {
+		// Given any page
+		const html = page({ title: "t", content: "" });
+		// When the browser paints before main.css arrives
+		const meta = html.indexOf(
+			'<meta name="color-scheme" content="light dark">',
+		);
+		// Then the head has already told it the page supports dark
+		expect(meta).toBeGreaterThan(-1);
+		expect(meta).toBeLessThan(html.indexOf('<link rel="stylesheet"'));
+	});
+
+	it("paints the first frames in a stored choice", () => {
+		// Given a visitor who chose light
+		const { content, theme } = firstColorScheme("light");
+		// Then the first color-scheme meta is theirs, whatever the OS prefers
+		expect(content).toBe("light");
+		expect(theme).toBe("light");
+	});
+
+	it("paints the first frames in the OS scheme when nothing is stored", () => {
+		// Given a visitor with nothing stored
+		const { content, theme } = firstColorScheme(null);
+		// Then the page's own meta is first
+		expect(content).toBe("light dark");
+		expect(theme).toBeUndefined();
 	});
 });
 
