@@ -98,6 +98,20 @@ async function expectedHeight(
 	return Math.round((reference.width * height) / width);
 }
 
+async function stylesheetUrlTargets(outDir: string): Promise<string[]> {
+	const cssDir = path.join(outDir, "css");
+	const sheets = (await readdir(cssDir)).filter((name) =>
+		name.endsWith(".css"),
+	);
+	const urls = await Promise.all(
+		sheets.map(async (name) => {
+			const css = await readFile(path.join(cssDir, name), "utf8");
+			return [...css.matchAll(/url\("([^"]+)"\)/g)].map((m) => m[1] ?? "");
+		}),
+	);
+	return urls.flat().map((url) => path.resolve(cssDir, url));
+}
+
 function outputUrl(outDir: string, file: string): string {
 	return `/${path.relative(outDir, file).split(path.sep).join("/")}`;
 }
@@ -120,7 +134,7 @@ describe("build output", () => {
 		const headers = await readFile(path.join(outDir, "_headers"), "utf8");
 
 		expect(headers).toBe(
-			"/*\n  X-Frame-Options: DENY\n  Permissions-Policy: camera=(), microphone=(), geolocation=()\n\n/img/*.avif\n  Cache-Control: public, max-age=86400\n\n/img/*.webp\n  Cache-Control: public, max-age=86400\n\n/img/*.jpg\n  Cache-Control: public, max-age=86400\n",
+			"/*\n  X-Frame-Options: DENY\n  Permissions-Policy: camera=(), microphone=(), geolocation=()\n\n/img/*.avif\n  Cache-Control: public, max-age=86400\n\n/img/*.webp\n  Cache-Control: public, max-age=86400\n\n/img/*.jpg\n  Cache-Control: public, max-age=86400\n\n# Fonts are never edited in place; a changed font ships under a new name.\n/fonts/*.woff2\n  Cache-Control: public, max-age=31536000, immutable\n",
 		);
 	}, 30000);
 
@@ -207,4 +221,14 @@ describe("responsive image build output", () => {
 			width: 1280,
 		});
 	});
+});
+
+describe("stylesheet build output", () => {
+	it("ships every file a stylesheet url() references", async () => {
+		const targets = await stylesheetUrlTargets(outDir);
+		const shipped = new Set(await listFiles(outDir));
+
+		expect(targets).toContain(path.join(outDir, "fonts/gelasio-roman.woff2"));
+		expect(targets.filter((file) => !shipped.has(file))).toEqual([]);
+	}, 30000);
 });
