@@ -207,4 +207,6 @@ I played two games at each search depth from one through four and was unable to 
 
 Finally, a caveat. While I am not the most accomplished Connect-4 player, I did find myself improving through testing the heuristic. I eventually felt that I had reached the limit of my playing ability. The heuristic played about as well as, or better than, I could at each search depth, including depth one. With further testing of the weight factors and a better player to compare against, I feel the heuristic could be further improved.
 
-[See this heuristic rebuilt as a web interface →](/projects/connect4-lisp-web/)
+[See this heuristic extended as a web interface →](/projects/connect4-lisp-web/)
+
+[View Connect4-Heuristic-Player on GitHub →](https://github.com/famesjranko/Connect4-Heuristic-Player)

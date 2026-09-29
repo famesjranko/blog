@@ -213,7 +213,7 @@ describe("cardCover dimensions", () => {
 		const html = cardCover(
 			piece("/img/projects/connect4-lisp-web/cover.jpg", "c", "c"),
 		);
-		expect(html).toContain('width="1536" height="1024"');
+		expect(html).toContain('width="1512" height="630"');
 	});
 
 	it("leaves an unknown cover unsized", () => {
@@ -338,8 +338,8 @@ describe("cardCover", () => {
 	});
 
 	it("emits the placeholder's size once it is in the table", () => {
-		// tablescan ships a rendered placeholder, so its size is known.
-		const html = cardCover(piece(undefined, undefined, "tablescan"));
+		// mediastack ships a rendered placeholder, so its size is known.
+		const html = cardCover(piece(undefined, undefined, "mediastack"));
 		expect(html).toContain('width="640" height="360"');
 	});
 
