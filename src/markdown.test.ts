@@ -314,7 +314,7 @@ describe("responsive article images", () => {
 		expect(html).toContain(`src="/blog${cover}"`);
 	});
 
-	it("keeps the single full-size WebP source for a JPEG of unknown size", () => {
+	it("does not plan renditions for a JPEG of unknown size", () => {
 		const html = renderMarkdown("![x](/img/essays/x/cover.jpg)");
 		expect(html).not.toContain("image/avif");
 		expect(html).not.toContain("sizes=");
