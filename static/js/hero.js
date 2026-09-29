@@ -141,8 +141,32 @@ async function startField(canvas, tier) {
 		/** @type {typeof import("./thought-field.js")} */
 		const field = await import(sibling.href);
 		field.initThoughtField(canvas, tier);
+		hideFieldOnLeave(canvas);
 	} catch {
 		// The CSS wash fallback stands alone; drop the empty canvas.
 		canvas.remove();
 	}
+}
+
+/**
+ * Chromium can draw the outgoing page once more after its WebGL
+ * texture is freed, and paints the missing canvas opaque white: a
+ * one-frame white hero on refresh or navigation. Hiding the canvas
+ * when navigation starts puts a frame without it on screen first;
+ * `pagehide` fires too late for that. Firefox has no such bug but
+ * keeps pages with a `beforeunload` listener out of its back/forward
+ * cache, so only Chromium (the engine with userAgentData) listens.
+ * A page restored from that cache shows the field again.
+ * @param {HTMLCanvasElement} canvas
+ */
+function hideFieldOnLeave(canvas) {
+	if (!("userAgentData" in navigator)) {
+		return;
+	}
+	window.addEventListener("beforeunload", () => {
+		canvas.style.setProperty("visibility", "hidden");
+	});
+	window.addEventListener("pageshow", () => {
+		canvas.style.removeProperty("visibility");
+	});
 }
