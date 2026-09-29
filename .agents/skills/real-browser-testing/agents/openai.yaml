@@ -1,0 +1,5 @@
+interface:
+  display_name: "Real-Browser Testing"
+  short_description: "Measure what a real browser shows and does, frame by frame, across builds and load conditions"
+policy:
+  allow_implicit_invocation: false
