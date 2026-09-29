@@ -146,10 +146,14 @@ function renderScript(script: string | PageScript): string {
 
 /**
  * Runs before any stylesheet so a stored theme choice paints first;
- * without it the page would flash the OS scheme, then switch.
+ * without it the page would flash the OS scheme, then switch. It also
+ * gives the browser a color-scheme meta for that choice; the browser
+ * paints the frames before main.css arrives from the first such meta.
+ * Chromium ignores later edits to it for those frames, so the script
+ * inserts its own ahead of the page's static "light dark" one.
  */
 const THEME_BOOT_SCRIPT =
-	'<script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark"){document.documentElement.dataset.theme=t}}catch(e){}</script>';
+	'<script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark"){document.documentElement.dataset.theme=t;var m=document.createElement("meta");m.name="color-scheme";m.content=t;document.head.appendChild(m)}}catch(e){}</script>';
 
 function socialImageUrl(src: string): string {
 	return src.startsWith("/") ? canonicalSiteUrl(src) : src;
@@ -201,6 +205,8 @@ export function page({
 <html lang="en">
 <head>
 <meta charset="utf-8">
+${THEME_BOOT_SCRIPT}
+<meta name="color-scheme" content="light dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" type="image/svg+xml" href="${siteUrl("/favicon.svg")}">
 <link rel="alternate" type="application/rss+xml" title="${escapeHtml(SITE_NAME)}" href="${siteUrl("/rss.xml")}">
@@ -210,8 +216,7 @@ ${
 		? `<meta name="description" content="${escapeHtml(description)}">
 `
 		: ""
-}${socialMetadata({ title, description, canonicalPath, socialImage, socialImageAlt, socialType })}${THEME_BOOT_SCRIPT}
-${styles.map((href) => `<link rel="stylesheet" href="${escapeHtml(href)}">\n`).join("")}${renderScript(siteUrl("/js/theme.js"))}${renderScript(siteUrl("/js/mobile-nav.js"))}${scripts.map(renderScript).join("")}</head>
+}${socialMetadata({ title, description, canonicalPath, socialImage, socialImageAlt, socialType })}${styles.map((href) => `<link rel="stylesheet" href="${escapeHtml(href)}">\n`).join("")}${renderScript(siteUrl("/js/theme.js"))}${renderScript(siteUrl("/js/mobile-nav.js"))}${scripts.map(renderScript).join("")}</head>
 <body>
 <a class="skip-link" href="#${escapeHtml(skipTo)}">Skip to content</a>
 ${header()}
