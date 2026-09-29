@@ -22,15 +22,15 @@ if (!valid || (mode !== undefined && !cold) || (cold && url === "-")) {
 const cdp = await connect(port);
 await cdp.send("Page.bringToFront");
 if (url !== "-" && !cold) {
-	await cdp.send("Page.navigate", { url });
+	await cdp.navigate(url);
 	await sleep(interval);
 }
 for (let i = 0; i < runs; i++) {
 	if (cold) {
-		await cdp.send("Page.navigate", { url: "about:blank" });
+		await cdp.navigate("about:blank");
 		await sleep(1000);
 		await cdp.send("Network.clearBrowserCache");
-		await cdp.send("Page.navigate", { url });
+		await cdp.navigate(url);
 	} else {
 		await cdp.send("Page.reload");
 	}

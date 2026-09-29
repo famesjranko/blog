@@ -35,12 +35,13 @@ echo "window $win"
 xwininfo -id "$win" | grep -q IsViewable || echo "warning: window $win is not viewable; its frames will not update" >&2
 
 node "$here/reload.mjs" "$port" "$url" 0 "$interval"
-seconds=$(( runs * interval / 1000 + 3 ))
-[[ -n "$cold" ]] && seconds=$(( seconds + runs ))
+# Record until the loads finish, however long the server delay makes them, then stop
+# ffmpeg with SIGINT so that it finishes the file. -t is only a safety cap.
+cap=$(( runs * (interval + 1000) * 4 / 1000 + 60 ))
 ffmpeg -nostdin -hide_banner -loglevel error -y -f x11grab -framerate 60 -window_id "$win" -i "$DISPLAY" \
-  -t "$seconds" -c:v libx264 -qp 0 -preset ultrafast "$out/rec.mkv" &
+  -t "$cap" -c:v libx264 -qp 0 -preset ultrafast "$out/rec.mkv" &
 recorder=$!
-# If a reload fails, set -e exits here; stop the recorder too, or it runs to -t.
+# If a reload fails, set -e exits here; stop the recorder too, or it runs to the cap.
 trap 'kill "$recorder" 2>/dev/null || true' EXIT
 sleep 1
 if [[ -n "$cold" ]]; then
@@ -48,8 +49,11 @@ if [[ -n "$cold" ]]; then
 else
   node "$here/reload.mjs" "$port" - "$runs" "$interval"
 fi
-wait "$recorder"
+sleep 1
+kill -INT "$recorder" 2>/dev/null || { echo "ffmpeg stopped early (cap ${cap}s reached?)" >&2; exit 1; }
+wait "$recorder" || true   # ffmpeg exits non-zero after SIGINT; the probe below checks the file
 trap - EXIT
+ffprobe -v error "$out/rec.mkv" || { echo "recording $out/rec.mkv is unreadable" >&2; exit 1; }
 
 filter="signalstats,metadata=print:key=lavfi.signalstats.YAVG:file=$out/yavg.txt"
 [[ -n "$crop" ]] && filter="crop=$crop,$filter"

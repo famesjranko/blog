@@ -13,7 +13,9 @@ if (!port || !Number.isInteger(rounds) || rounds < 1 || !urlA || !urlB) {
 
 // Observers must exist before page scripts run, so they go on every new document.
 // __contextAt records when the page first asks a connected canvas for a context.
-const OBSERVERS = `
+// The IIFE keeps every name out of the page's global scope: a top-level const here
+// would make a page script that declares the same name fail to run.
+const OBSERVERS = `(() => {
   window.__lcp = 0; window.__long = 0; window.__contextAt = 0;
   new PerformanceObserver((l) => { for (const e of l.getEntries()) window.__lcp = e.startTime; })
     .observe({ type: "largest-contentful-paint", buffered: true });
@@ -23,7 +25,8 @@ const OBSERVERS = `
   HTMLCanvasElement.prototype.getContext = function (...args) {
     if (this.isConnected && !window.__contextAt) window.__contextAt = performance.now();
     return getContext.apply(this, args);
-  };`;
+  };
+})();`;
 
 const LOAD = `(() => {
   const nav = performance.getEntriesByType("navigation")[0];
@@ -46,7 +49,7 @@ const RUNTIME = `new Promise((ok) => {
 })`;
 
 async function measure(cdp, url) {
-	await cdp.send("Page.navigate", { url });
+	await cdp.navigate(url);
 	await sleep(3500);
 	const load = await cdp.evaluate(LOAD);
 	const runtime = await cdp.evaluate(RUNTIME);

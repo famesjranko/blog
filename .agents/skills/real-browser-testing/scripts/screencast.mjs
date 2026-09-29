@@ -30,7 +30,7 @@ cdp.on("Page.screencastFrame", async ({ data, metadata, sessionId }) => {
 	await cdp.send("Page.screencastFrameAck", { sessionId });
 });
 await cdp.send("Page.enable");
-await cdp.send("Page.navigate", { url });
+await cdp.navigate(url);
 await sleep(interval);
 await cdp.send("Page.startScreencast", {
 	format: "jpeg",

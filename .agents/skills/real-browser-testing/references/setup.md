@@ -10,7 +10,7 @@ K=<repository>/.agents/skills/real-browser-testing/scripts
 ## 1. Check the tools and the machine
 
 ```bash
-for t in node python3 ffmpeg xwininfo curl; do command -v "$t" >/dev/null && echo "ok $t" || echo "MISSING $t"; done
+for t in node python3 ffmpeg ffprobe xwininfo curl; do command -v "$t" >/dev/null && echo "ok $t" || echo "MISSING $t"; done
 for b in brave-browser google-chrome chromium firefox; do command -v "$b" >/dev/null && echo "browser $b"; done
 node -e 'console.log(typeof WebSocket === "function" ? "ok node WebSocket" : "MISSING: Node 22 or later is necessary")'
 ffmpeg -hide_banner -devices 2>/dev/null | grep -q x11grab && echo "ok ffmpeg x11grab" || echo "MISSING ffmpeg x11grab"
