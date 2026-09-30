@@ -131,6 +131,30 @@ afterAll(async () => {
 	vi.unstubAllEnvs();
 });
 
+it("shows reading time on built essay and project pages", async () => {
+	// Given built essay and project pages.
+	const essay = await readFile(
+		path.join(outDir, "essays/whatis-philosophy/index.html"),
+		"utf8",
+	);
+	const project = await readFile(
+		path.join(outDir, "projects/connect4-lisp-web/index.html"),
+		"utf8",
+	);
+
+	// When their article headers are inspected.
+	const essayHeader = essay.match(
+		/<article class="prose essay">\s*<header>([\s\S]*?)<\/header>/,
+	)?.[1];
+	const projectHeader = project.match(
+		/<header class="project-header">([\s\S]*?)<\/header>/,
+	)?.[1];
+
+	// Then each header contains a plain reading estimate.
+	expect(essayHeader).toMatch(/<p class="reading-time">\d+ min read<\/p>/);
+	expect(projectHeader).toMatch(/<p class="reading-time">\d+ min read<\/p>/);
+}, 30000);
+
 describe("build output", () => {
 	it("emits site-wide Cloudflare security headers", async () => {
 		const headers = await readFile(path.join(outDir, "_headers"), "utf8");
