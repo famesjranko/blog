@@ -1,8 +1,10 @@
 import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
 import { mkdtemp, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, test } from "node:test";
+import { fileURLToPath } from "node:url";
 import {
 	commentBody,
 	marker,
@@ -13,6 +15,55 @@ import {
 const originalFetch = globalThis.fetch;
 afterEach(() => {
 	globalThis.fetch = originalFetch;
+});
+
+test("writes a capture summary as a job output without a comment token", async () => {
+	// Given a Playwright report and an attachment in the capture directory.
+	const directory = await mkdtemp(join(tmpdir(), "preview-summary-"));
+	const attachment = join(directory, "geometry.json");
+	const resultsFile = join(directory, "results.json");
+	await writeFile(attachment, JSON.stringify({ viewport: 400, content: 403 }));
+	await writeFile(
+		resultsFile,
+		JSON.stringify({
+			suites: [
+				{
+					specs: [
+						{
+							tests: [
+								{
+									results: [
+										{
+											status: "passed",
+											attachments: [
+												{ name: "geometry-overflow", path: attachment },
+											],
+										},
+									],
+								},
+							],
+						},
+					],
+				},
+			],
+		}),
+	);
+
+	// When the capture job requests its summary output.
+	const output = execFileSync(
+		process.execPath,
+		[
+			fileURLToPath(new URL("./preview-comment.mjs", import.meta.url)),
+			"--summary",
+		],
+		{ encoding: "utf8", env: { PLAYWRIGHT_RESULTS_FILE: resultsFile } },
+	);
+
+	// Then it writes the measured result in GitHub job output format.
+	assert.equal(
+		output,
+		"summary=1/1 browser tests passed; 1 viewport measurements; maximum horizontal overflow 3 px.\n",
+	);
 });
 
 test("summarizes measured overflow from Playwright attachments", async () => {

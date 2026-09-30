@@ -1,10 +1,6 @@
 name: preview capture
 on:
   pull_request:
-permissions:
-  contents: read
-  checks: read
-  issues: write
 concurrency:
   group: preview-capture-${{ github.event.pull_request.number }}
   cancel-in-progress: true
@@ -12,6 +8,13 @@ jobs:
   capture-preview:
     runs-on: ubuntu-24.04
     timeout-minutes: 30
+    permissions:
+      contents: read
+      checks: read
+    outputs:
+      preview-url: ${{ steps.preview.outputs.url }}
+      artifact-url: ${{ steps.artifact.outputs.artifact-url }}
+      summary: ${{ steps.summary.outputs.summary }}
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
@@ -33,6 +36,11 @@ jobs:
         env:
           PLAYWRIGHT_BASE_URL: ${{ steps.preview.outputs.url }}
           PLAYWRIGHT_RESULTS_DIR: ${{ runner.temp }}/blog-preview-capture
+      - name: Summarize capture measurements
+        id: summary
+        run: node scripts/preview-comment.mjs --summary >> "$GITHUB_OUTPUT"
+        env:
+          PLAYWRIGHT_RESULTS_FILE: ${{ runner.temp }}/blog-preview-capture/results.json
       - name: Upload preview capture
         if: always()
         id: artifact
@@ -41,14 +49,22 @@ jobs:
           name: preview-capture-${{ github.event.pull_request.head.sha }}
           path: ${{ runner.temp }}/blog-preview-capture/
           if-no-files-found: error
+  comment-preview:
+    needs: capture-preview
+    if: github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.user.login != 'dependabot[bot]' && github.actor != 'dependabot[bot]'
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@v7
       - name: Comment on pull request
-        if: success()
         run: node scripts/preview-comment.mjs
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPOSITORY: ${{ github.repository }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
           PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
-          PREVIEW_URL: ${{ steps.preview.outputs.url }}
-          ARTIFACT_URL: ${{ steps.artifact.outputs.artifact-url }}
-          PLAYWRIGHT_RESULTS_FILE: ${{ runner.temp }}/blog-preview-capture/results.json
+          PREVIEW_URL: ${{ needs.capture-preview.outputs.preview-url }}
+          ARTIFACT_URL: ${{ needs.capture-preview.outputs.artifact-url }}
+          PLAYWRIGHT_SUMMARY: ${{ needs.capture-preview.outputs.summary }}

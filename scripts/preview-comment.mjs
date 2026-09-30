@@ -103,6 +103,17 @@ export async function upsertComment({ repository, number, token, body }) {
 }
 
 async function main() {
+	if (process.argv[2] === "--summary") {
+		const resultsFile = process.env.PLAYWRIGHT_RESULTS_FILE;
+		if (!resultsFile) {
+			throw new Error("Missing Playwright results file");
+		}
+		const report = JSON.parse(await readFile(resultsFile, "utf8"));
+		process.stdout.write(
+			`summary=${await summarizeResults(report, resultsFile)}\n`,
+		);
+		return;
+	}
 	const {
 		GH_TOKEN: token,
 		GH_REPOSITORY: repository,
@@ -110,7 +121,7 @@ async function main() {
 		PR_HEAD_SHA: sha,
 		PREVIEW_URL: url,
 		ARTIFACT_URL: artifactUrl,
-		PLAYWRIGHT_RESULTS_FILE: resultsFile,
+		PLAYWRIGHT_SUMMARY: summary,
 	} = process.env;
 	if (
 		!token ||
@@ -119,12 +130,10 @@ async function main() {
 		!/^[a-f0-9]{40}$/.test(sha ?? "") ||
 		!url ||
 		!artifactUrl ||
-		!resultsFile
+		!summary
 	) {
 		throw new Error("Missing or invalid preview comment input");
 	}
-	const report = JSON.parse(await readFile(resultsFile, "utf8"));
-	const summary = await summarizeResults(report, resultsFile);
 	await upsertComment({
 		repository,
 		number,
