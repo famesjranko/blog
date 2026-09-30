@@ -186,3 +186,47 @@ test("updates the marked bot comment found on a later page", async () => {
 	);
 	assert.deepEqual(JSON.parse(calls[2].options.body), { body: "new result" });
 });
+
+test("reports bounded GitHub 403 diagnostics without exposing the token or response body", async () => {
+	// Given a rejected comment request with GitHub diagnostics and sensitive response data.
+	const token = "secret-preview-token";
+	globalThis.fetch = async (_url, options) => {
+		if (options?.method !== "POST") {
+			return new Response("[]");
+		}
+		return new Response(
+			JSON.stringify({
+				message: `Resource not accessible by integration ${token} ${"x".repeat(500)}`,
+				secret: "unrelated-private-response-data",
+			}),
+			{
+				status: 403,
+				headers: {
+					"X-Accepted-GitHub-Permissions": "pull_requests=write",
+					"X-GitHub-Request-Id": "ABCD:1234",
+				},
+			},
+		);
+	};
+
+	// When the capture attempts to create a pull request comment.
+	await assert.rejects(
+		upsertComment({ repository: "o/r", number: "7", token, body: "result" }),
+		(error) => {
+			// Then the error identifies the rejected request and selected safe diagnostics.
+			assert.match(
+				error.message,
+				/403 for POST https:\/\/api\.github\.com\/repos\/o\/r\/issues\/7\/comments/,
+			);
+			assert.match(error.message, /Resource not accessible by integration/);
+			assert.match(error.message, /pull_requests=write/);
+			assert.match(error.message, /ABCD:1234/);
+			assert.doesNotMatch(
+				error.message,
+				/secret-preview-token|unrelated-private-response-data/,
+			);
+			assert.ok(error.message.length < 600);
+			return true;
+		},
+	);
+});

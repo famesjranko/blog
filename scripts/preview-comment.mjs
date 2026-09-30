@@ -54,6 +54,14 @@ export function commentBody({ url, sha, artifactUrl, summary }) {
 	return `${marker}\nPreview capture for commit \`${sha}\`\n\n- Immutable preview: ${url}\n- Capture artifact: ${artifactUrl}\n- Measurements: ${summary}`;
 }
 
+function safeDiagnostic(value, token, limit) {
+	if (typeof value !== "string") {
+		return "";
+	}
+	const redacted = token ? value.replaceAll(token, "[REDACTED]") : value;
+	return redacted.replace(/[\r\n\t]/g, " ").slice(0, limit);
+}
+
 async function githubRequest(url, token, options = {}) {
 	const response = await fetch(url, {
 		...options,
@@ -65,8 +73,25 @@ async function githubRequest(url, token, options = {}) {
 		},
 	});
 	if (!response.ok) {
+		const data = await response.json().catch(() => null);
+		const message = safeDiagnostic(data?.message, token, 200);
+		const permissions = safeDiagnostic(
+			response.headers.get("X-Accepted-GitHub-Permissions"),
+			token,
+			150,
+		);
+		const requestId = safeDiagnostic(
+			response.headers.get("X-GitHub-Request-Id"),
+			token,
+			80,
+		);
+		const details = [
+			message && `message: ${message}`,
+			permissions && `accepted permissions: ${permissions}`,
+			requestId && `request ID: ${requestId}`,
+		].filter(Boolean);
 		throw new Error(
-			`GitHub comments API returned ${response.status} for ${options.method ?? "GET"} ${url}`,
+			`GitHub comments API returned ${response.status} for ${safeDiagnostic(options.method ?? "GET", token, 10)} ${safeDiagnostic(url, token, 300)}${details.length ? `; ${details.join("; ")}` : ""}`,
 		);
 	}
 	return response;
