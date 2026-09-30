@@ -13,6 +13,7 @@ function sampleEssay(overrides: Partial<Essay> = {}): Essay {
 		draft: false,
 		slug: "on-privacy",
 		html: "<p>Body.</p>",
+		readingMinutes: 1,
 		images: [],
 		sourcePath: "content/essays/on-privacy.md",
 		...overrides,

@@ -125,6 +125,7 @@ export function projectPage(project: Project): string {
 <header class="project-header">
 ${eyebrow(project)}
 <h1>${escapeHtml(project.title)}</h1>
+<p class="reading-time">${project.readingMinutes} min read</p>
 ${lede}
 </header>
 <div class="project-grid">${side}<div class="project-main">${project.html}</div></div>

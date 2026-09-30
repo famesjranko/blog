@@ -30,6 +30,10 @@
 		font-size: 1.05rem;
 	}
 
+	.prose header .reading-time {
+		font-size: 0.9rem;
+	}
+
 	.prose header time {
 		color: var(--color-muted);
 		font-family: var(--font-ui);
