@@ -102,12 +102,19 @@ test("Connect-4 diagram pair", async ({ page }) => {
 	await openStillPage(page, "/projects/connect4-heuristic/");
 	const pair = page.locator(".diagram-pair").first();
 	await expect(pair.locator("svg.diagram")).toHaveCount(2);
+	await expect(pair.locator("figcaption")).toHaveCount(2);
+	// SVG labels and captions rasterize differently across Linux distributions.
+	await pair.evaluate((element) => {
+		for (const label of element.querySelectorAll("svg text, figcaption")) {
+			(label as HTMLElement | SVGElement).style.visibility = "hidden";
+		}
+	});
 
 	// When the pair is captured.
 	await pair.scrollIntoViewIfNeeded();
 
-	// Then both diagrams and captions match the baseline.
-	await expectRegionScreenshot(pair, "diagram-pair.png", 1903);
+	// Then both board positions match the baseline.
+	await expectRegionScreenshot(pair, "diagram-pair.png", 25);
 });
 
 test("Connect-4 project figure", async ({ page }) => {
