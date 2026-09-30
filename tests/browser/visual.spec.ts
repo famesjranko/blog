@@ -7,6 +7,13 @@ test.use({
 	reducedMotion: "reduce",
 });
 
+test.beforeEach(() => {
+	test.skip(
+		process.platform !== "linux",
+		"Visual baselines target Ubuntu Chromium.",
+	);
+});
+
 async function openStillPage(page: Page, path: string) {
 	await page.goto(path);
 	await page.addStyleTag({
