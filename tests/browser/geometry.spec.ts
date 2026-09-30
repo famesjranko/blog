@@ -1,8 +1,21 @@
-import { expect, test, type Locator, type Page } from "@playwright/test";
+import { writeFile } from "node:fs/promises";
+import { expect, type Locator, type Page, test } from "@playwright/test";
+
+async function attachMeasurement(name: string, value: object) {
+	const path = test
+		.info()
+		.outputPath(`${name}-${test.info().attachments.length}.json`);
+	await writeFile(path, JSON.stringify(value, null, 2));
+	await test.info().attach(name, { path, contentType: "application/json" });
+}
 
 async function box(locator: Locator) {
 	const bounds = await locator.boundingBox();
 	expect(bounds, `visible box for ${locator}`).not.toBeNull();
+	await attachMeasurement("geometry-box", {
+		locator: locator.toString(),
+		bounds,
+	});
 	return bounds as NonNullable<typeof bounds>;
 }
 
@@ -11,6 +24,7 @@ async function expectNoHorizontalOverflow(page: Page) {
 		viewport: window.innerWidth,
 		content: document.documentElement.scrollWidth,
 	}));
+	await attachMeasurement("geometry-overflow", dimensions);
 	expect(dimensions.content, "page must fit the viewport").toBeLessThanOrEqual(
 		dimensions.viewport + 1,
 	);
@@ -189,7 +203,7 @@ test("Connect4 figures and captions fit on mobile and desktop", async ({
 		const page = await context.newPage();
 
 		// When the project page is opened.
-		await page.goto("http://127.0.0.1:4173/projects/connect4-lisp-web/");
+		await page.goto("/projects/connect4-lisp-web/");
 
 		// Then each figure and caption stays in the project content column.
 		await expectNoHorizontalOverflow(page);

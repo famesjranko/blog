@@ -1,4 +1,4 @@
-import { expect, test, type Locator, type Page } from "@playwright/test";
+import { expect, type Locator, type Page, test } from "@playwright/test";
 
 test.use({
 	viewport: { width: 1280, height: 900 },
@@ -45,6 +45,9 @@ async function expectRegionScreenshot(
 		caret: "hide",
 		maxDiffPixels,
 	});
+	const path = test.info().outputPath(name);
+	await region.screenshot({ path, animations: "disabled", caret: "hide" });
+	await test.info().attach(name, { path, contentType: "image/png" });
 }
 
 test("desktop header and primary navigation", async ({ page }) => {
