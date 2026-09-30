@@ -28,7 +28,12 @@ async function openStillPage(page: Page, path: string) {
 	});
 }
 
-async function expectRegionScreenshot(region: Locator, name: string) {
+// Ubuntu baselines allow only the observed Debian font-edge differences.
+async function expectRegionScreenshot(
+	region: Locator,
+	name: string,
+	maxDiffPixels = 0,
+) {
 	await region.evaluate(async (element) => {
 		await document.fonts.ready;
 		await Promise.all(
@@ -38,6 +43,7 @@ async function expectRegionScreenshot(region: Locator, name: string) {
 	await expect(region).toHaveScreenshot(name, {
 		animations: "disabled",
 		caret: "hide",
+		maxDiffPixels,
 	});
 }
 
@@ -53,7 +59,7 @@ test("desktop header and primary navigation", async ({ page }) => {
 	await header.scrollIntoViewIfNeeded();
 
 	// Then its name, controls, and navigation match the baseline.
-	await expectRegionScreenshot(header, "header-navigation.png");
+	await expectRegionScreenshot(header, "header-navigation.png", 9);
 });
 
 test("essay heading and first image", async ({ page }) => {
@@ -76,7 +82,7 @@ test("essay heading and first image", async ({ page }) => {
 	await article.scrollIntoViewIfNeeded();
 
 	// Then the heading and first image match the baseline.
-	await expectRegionScreenshot(article, "essay-heading-image.png");
+	await expectRegionScreenshot(article, "essay-heading-image.png", 2);
 });
 
 test("featured essay card grid", async ({ page }) => {
@@ -88,7 +94,7 @@ test("featured essay card grid", async ({ page }) => {
 	await cards.scrollIntoViewIfNeeded();
 
 	// Then both cards match the baseline.
-	await expectRegionScreenshot(cards, "card-grid.png");
+	await expectRegionScreenshot(cards, "card-grid.png", 74);
 });
 
 test("Connect-4 diagram pair", async ({ page }) => {
@@ -101,7 +107,7 @@ test("Connect-4 diagram pair", async ({ page }) => {
 	await pair.scrollIntoViewIfNeeded();
 
 	// Then both diagrams and captions match the baseline.
-	await expectRegionScreenshot(pair, "diagram-pair.png");
+	await expectRegionScreenshot(pair, "diagram-pair.png", 1903);
 });
 
 test("Connect-4 project figure", async ({ page }) => {
