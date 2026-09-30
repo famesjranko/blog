@@ -16,6 +16,7 @@
 		"format": "biome format --write .",
 		"format:check": "biome format .",
 		"test": "vitest run",
+		"test:browser": "playwright test",
 		"images": "tsx scripts/optimize-images.ts",
 		"images:check": "tsx scripts/optimize-images.ts --check",
 		"check": "make check"
@@ -28,6 +29,7 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.5.0",
+		"@playwright/test": "1.63.0",
 		"@types/markdown-it": "^14.1.2",
 		"@types/node": "^22.0.0",
 		"sharp": "^0.35.4",
