@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { CLICK_MODES } from "../static/js/thought-field-click-modes.js";
 import type { Click, ClickMode } from "../static/js/thought-field-clicks.js";
-import { createClicks, MAX_LIVE } from "../static/js/thought-field-clicks.js";
+import { createClicks } from "../static/js/thought-field-clicks.js";
 import type { Field } from "../static/js/thought-field-particles.js";
 import { stepParticles } from "../static/js/thought-field-particles.js";
 
@@ -19,6 +19,8 @@ const IDS = [
 	"gather",
 	"turbulence",
 ];
+// The issue's cap on live clicks, restated so a changed cap fails here.
+const MOST_LIVE = 8;
 const ACTIVE = CLICK_MODES.filter((mode) => mode.id !== "off");
 
 // Particles on rings 0.05 to 0.3 from PRESS, eight to a ring, at rest on
@@ -92,6 +94,15 @@ describe("the mode registry", () => {
 		for (const mode of ACTIVE) {
 			expect(mode.life, mode.id).toBeGreaterThan(0);
 		}
+	});
+
+	it("holds the press only for gather", () => {
+		// Given the registry
+		// When the modes that hold the press are listed
+		const held = CLICK_MODES.filter((mode) => mode.hold).map((m) => m.id);
+
+		// Then gather is the only one
+		expect(held).toEqual(["gather"]);
 	});
 
 	it.each(ACTIVE.map((mode) => [mode.id, mode] as const))(
@@ -187,7 +198,7 @@ describe("ten fast taps", () => {
 			frame(twin, () => {}, 5);
 
 			// Then no more than eight were ever live
-			expect(most).toBeLessThanOrEqual(MAX_LIVE);
+			expect(most).toBeLessThanOrEqual(MOST_LIVE);
 			// And the field steps exactly as one with no clicks
 			expect(clicks.live()).toEqual([]);
 			expect(Array.from(field.pos)).toEqual(Array.from(twin.pos));
