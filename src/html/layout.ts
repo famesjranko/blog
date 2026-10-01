@@ -4,7 +4,7 @@ import {
 	cardImagePlan,
 	cardImageSource,
 } from "../cardImages.js";
-import { imageSize, webpSrc } from "../images.js";
+import { imageSize } from "../images.js";
 import { renditionSources } from "../renditions.js";
 import { canonicalSiteUrl, siteUrl } from "../site.js";
 
@@ -65,10 +65,7 @@ function picture(src: string, img: string): string {
 		});
 		return `<picture>${sources}${img}</picture>`;
 	}
-	const webp = webpSrc(src);
-	return webp === undefined
-		? img
-		: `<picture><source type="image/webp" srcset="${escapeHtml(siteUrl(webp))}">${img}</picture>`;
+	return img;
 }
 
 /** The image source used by cards and social previews for a piece. */

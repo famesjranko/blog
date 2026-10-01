@@ -96,7 +96,6 @@ export async function generatePlaceholders(): Promise<void> {
 	}
 	for (const stale of stalePlaceholders(await presentPlaceholders(), needed)) {
 		await rm(stale);
-		await rm(stale.replace(/\.jpg$/i, ".webp"), { force: true });
 		console.log(`${stale}: removed (piece now has a cover)`);
 	}
 	console.log(
