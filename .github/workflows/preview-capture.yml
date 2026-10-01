@@ -19,7 +19,7 @@ jobs:
       preview-url: ${{ steps.preview.outputs.url }}
       artifact-url: ${{ steps.artifact.outputs.artifact-url }}
       summary: ${{ steps.summary.outputs.summary }}
-      capture-status: ${{ steps.capture.outcome == 'success' && 'passed' || steps.preview.outputs.preview == 'none' && 'skipped' || 'failed' }}
+      capture-status: ${{ steps.summary.outcome == 'failure' && 'failed' || steps.capture.outcome == 'success' && 'passed' || steps.preview.outputs.preview == 'none' && 'skipped' || 'failed' }}
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
@@ -48,6 +48,7 @@ jobs:
       - name: Summarize capture measurements
         id: summary
         if: steps.capture.outcome == 'success' || steps.capture.outcome == 'failure'
+        continue-on-error: true
         run: |
           if [ -f "$PLAYWRIGHT_RESULTS_FILE" ]; then
             npx tsx scripts/preview-comment.ts --summary >> "$GITHUB_OUTPUT"
@@ -69,14 +70,16 @@ jobs:
           path: test-results/preview/
           if-no-files-found: warn
       - name: Report a failed preview capture
-        if: steps.preview.outcome == 'failure' || steps.capture.outcome == 'failure'
+        if: steps.preview.outcome == 'failure' || steps.capture.outcome == 'failure' || steps.summary.outcome == 'failure'
         run: >-
           echo "::warning::Preview capture is diagnostic and did not gate this PR.
-          Resolve step: $RESOLVE_OUTCOME; capture step: $CAPTURE_OUTCOME.
+          Resolve step: $RESOLVE_OUTCOME; capture step: $CAPTURE_OUTCOME;
+          summary step: $SUMMARY_OUTCOME.
           The preview-capture artifact holds any evidence."
         env:
           RESOLVE_OUTCOME: ${{ steps.preview.outcome }}
           CAPTURE_OUTCOME: ${{ steps.capture.outcome }}
+          SUMMARY_OUTCOME: ${{ steps.summary.outcome }}
   comment-preview:
     needs: capture-preview
     if: >-
