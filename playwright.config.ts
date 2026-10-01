@@ -2,11 +2,7 @@ import { defineConfig } from "@playwright/test";
 
 // One port feeds the server, baseURL, and readiness probe, so separate
 // checkouts can run the browser checks side by side on different ports.
-const {
-	CI,
-	PLAYWRIGHT_BASE_URL: previewUrl,
-	PLAYWRIGHT_PORT = "4173",
-} = process.env;
+const { CI, PLAYWRIGHT_PORT = "4173" } = process.env;
 const port = Number(PLAYWRIGHT_PORT);
 if (!/^\d+$/.test(PLAYWRIGHT_PORT) || port < 1 || port > 65535) {
 	throw new Error(
@@ -20,22 +16,15 @@ export default defineConfig({
 	fullyParallel: true,
 	...(CI ? { workers: 1 } : {}),
 	retries: 0,
-	reporter: previewUrl
-		? [["list"], ["json", { outputFile: "test-results/results.json" }]]
-		: "list",
+	reporter: "list",
 	use: {
-		baseURL: previewUrl ?? origin,
+		baseURL: origin,
 		browserName: "chromium",
 	},
-	// A preview URL is already served, so no local server starts for it.
-	...(previewUrl
-		? {}
-		: {
-				webServer: {
-					command: `node tests/browser/serve.mjs ${port}`,
-					url: `${origin}/`,
-					reuseExistingServer: false,
-					timeout: 15_000,
-				},
-			}),
+	webServer: {
+		command: `node tests/browser/serve.mjs ${port}`,
+		url: `${origin}/`,
+		reuseExistingServer: false,
+		timeout: 15_000,
+	},
 });
