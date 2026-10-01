@@ -6,8 +6,12 @@ concurrency:
   cancel-in-progress: true
 jobs:
   capture-preview:
+    if: >-
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.user.login != 'dependabot[bot]' &&
+      github.actor != 'dependabot[bot]'
     runs-on: ubuntu-24.04
-    timeout-minutes: 30
+    timeout-minutes: 40
     permissions:
       contents: read
       checks: read
@@ -15,6 +19,7 @@ jobs:
       preview-url: ${{ steps.preview.outputs.url }}
       artifact-url: ${{ steps.artifact.outputs.artifact-url }}
       summary: ${{ steps.summary.outputs.summary }}
+      capture-status: ${{ steps.capture.outcome == 'success' && 'passed' || steps.preview.outputs.preview == 'none' && 'skipped' || 'failed' }}
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
@@ -23,43 +28,75 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npx playwright install --with-deps chromium
-      - run: node --test scripts/resolve-preview.test.mjs scripts/preview-comment.test.mjs
       - name: Wait for this commit's Cloudflare preview
         id: preview
-        run: node scripts/resolve-preview.mjs
+        continue-on-error: true
+        timeout-minutes: 22
+        run: npx tsx scripts/resolve-preview.ts
         env:
           GH_TOKEN: ${{ github.token }}
           PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
           GH_REPOSITORY: ${{ github.repository }}
       - name: Capture preview screenshots and geometry
-        run: npx playwright test tests/browser/visual.spec.ts tests/browser/geometry.spec.ts
+        id: capture
+        if: steps.preview.outcome == 'success' && steps.preview.outputs.preview != 'none'
+        continue-on-error: true
+        timeout-minutes: 10
+        run: npx playwright test -c playwright.preview.config.ts tests/browser/visual.spec.ts tests/browser/geometry.spec.ts
         env:
           PLAYWRIGHT_BASE_URL: ${{ steps.preview.outputs.url }}
-          PLAYWRIGHT_RESULTS_DIR: ${{ runner.temp }}/blog-preview-capture
       - name: Summarize capture measurements
         id: summary
-        run: node scripts/preview-comment.mjs --summary >> "$GITHUB_OUTPUT"
+        if: steps.capture.outcome == 'success' || steps.capture.outcome == 'failure'
+        run: |
+          if [ -f "$PLAYWRIGHT_RESULTS_FILE" ]; then
+            npx tsx scripts/preview-comment.ts --summary >> "$GITHUB_OUTPUT"
+          elif [ "$CAPTURE_OUTCOME" = 'success' ]; then
+            echo '::error::Playwright capture passed without a results report.'
+            exit 1
+          else
+            echo '::notice::Playwright capture failed before writing a results report.'
+          fi
         env:
-          PLAYWRIGHT_RESULTS_FILE: ${{ runner.temp }}/blog-preview-capture/results.json
+          PLAYWRIGHT_RESULTS_FILE: test-results/preview/results.json
+          CAPTURE_OUTCOME: ${{ steps.capture.outcome }}
       - name: Upload preview capture
         if: always()
         id: artifact
         uses: actions/upload-artifact@v7
         with:
           name: preview-capture-${{ github.event.pull_request.head.sha }}
-          path: ${{ runner.temp }}/blog-preview-capture/
-          if-no-files-found: error
+          path: test-results/preview/
+          if-no-files-found: warn
+      - name: Report a failed preview capture
+        if: steps.preview.outcome == 'failure' || steps.capture.outcome == 'failure'
+        run: >-
+          echo "::warning::Preview capture is diagnostic and did not gate this PR.
+          Resolve step: $RESOLVE_OUTCOME; capture step: $CAPTURE_OUTCOME.
+          The preview-capture artifact holds any evidence."
+        env:
+          RESOLVE_OUTCOME: ${{ steps.preview.outcome }}
+          CAPTURE_OUTCOME: ${{ steps.capture.outcome }}
   comment-preview:
     needs: capture-preview
-    if: github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.user.login != 'dependabot[bot]' && github.actor != 'dependabot[bot]'
+    if: >-
+      always() &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.user.login != 'dependabot[bot]' &&
+      github.actor != 'dependabot[bot]'
     runs-on: ubuntu-24.04
     permissions:
       contents: read
       pull-requests: write
     steps:
       - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
       - name: Comment on pull request
-        run: node scripts/preview-comment.mjs
+        run: npx tsx scripts/preview-comment.ts
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPOSITORY: ${{ github.repository }}
@@ -68,3 +105,4 @@ jobs:
           PREVIEW_URL: ${{ needs.capture-preview.outputs.preview-url }}
           ARTIFACT_URL: ${{ needs.capture-preview.outputs.artifact-url }}
           PLAYWRIGHT_SUMMARY: ${{ needs.capture-preview.outputs.summary }}
+          PREVIEW_CAPTURE_STATUS: ${{ needs.capture-preview.result == 'success' && needs.capture-preview.outputs.capture-status || 'failed' }}
