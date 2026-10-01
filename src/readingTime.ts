@@ -5,6 +5,7 @@ const WORD = /[\p{L}\p{N}]+(?:['’-][\p{L}\p{N}]+)*/gu;
 const markdown = new MarkdownIt({ html: true });
 
 function visibleText(body: string): string {
+	// Tag stripping is approximate: comments, script/style text, quoted >, and entities can count as words.
 	return markdown
 		.parse(body, {})
 		.flatMap((token) => {
@@ -16,9 +17,6 @@ function visibleText(body: string): string {
 			}
 			return (token.children ?? []).flatMap((child) => {
 				if (child.type === "text" || child.type === "code_inline") {
-					return [child.content];
-				}
-				if (child.type === "image") {
 					return [child.content];
 				}
 				if (child.type === "html_inline") {
