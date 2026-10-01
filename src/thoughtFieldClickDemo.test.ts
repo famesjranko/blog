@@ -7,7 +7,7 @@ import {
 	nextMode,
 	parseDemo,
 } from "../static/js/thought-field-click-demo.js";
-import { keyPick } from "../static/js/thought-field-click-panel.js";
+import { keyPick, mountPanel } from "../static/js/thought-field-click-panel.js";
 import type { ClickMode } from "../static/js/thought-field-clicks.js";
 import { createClicks } from "../static/js/thought-field-clicks.js";
 
@@ -19,8 +19,13 @@ const MODES: ReadonlyArray<ClickMode> = [
 ];
 const BOX = { left: 100, top: 50, width: 800, height: 400 };
 
+beforeEach(() => {
+	vi.resetModules();
+});
+
 afterEach(() => {
 	vi.unstubAllGlobals();
+	vi.doUnmock("../static/js/thought-field.js");
 });
 
 describe("the demo URL", () => {
@@ -211,14 +216,27 @@ function node(): Node {
 	};
 }
 
-// A page with a hero under reduced motion, so the field never starts.
-function page(search: string) {
+// A page with a hero. Under reduced motion the field never starts.
+// Otherwise it is a phone with WebGL 2, so the field starts at once.
+function page(search: string, reducedMotion = true) {
 	const body = node();
-	const hero = Object.assign(new FakeElement("section"), node());
+	const hero = Object.assign(new FakeElement("section"), node(), {
+		getBoundingClientRect: () => BOX,
+		querySelector: () => canvas,
+	});
+	const canvas = new FakeElement("canvas");
 	const listen = vi.spyOn(hero, "addEventListener");
 	const replaced: string[] = [];
 	vi.stubGlobal("HTMLElement", FakeElement);
-	vi.stubGlobal("window", { matchMedia: () => ({ matches: true }) });
+	vi.stubGlobal("HTMLCanvasElement", FakeElement);
+	vi.stubGlobal("navigator", {});
+	vi.stubGlobal("window", {
+		matchMedia: (query: string) => ({
+			matches: query.includes("reduce") ? reducedMotion : true,
+		}),
+		WebGL2RenderingContext: still,
+		requestIdleCallback: (callback: () => void) => callback(),
+	});
 	vi.stubGlobal("location", { search, href: `https://x.test/${search}` });
 	vi.stubGlobal("history", {
 		state: null,
@@ -226,20 +244,17 @@ function page(search: string) {
 	});
 	vi.stubGlobal("document", {
 		querySelector: () => hero,
-		createElement: node,
+		createElement: (tag: string) =>
+			tag === "canvas" ? { getContext: () => ({}) } : node(),
 		body,
 		addEventListener: still,
 	});
-	return { body, hero, listen, replaced };
+	return { body, hero, canvas, listen, replaced };
 }
 
-describe("hero.js and the opt-in demo", () => {
-	beforeEach(() => {
-		vi.resetModules();
-	});
-
-	it("adds nothing to a page without hero-demo", async () => {
-		// Given a page without the parameter
+describe("hero.js without hero-demo", () => {
+	it("adds nothing under reduced motion without hero-demo", async () => {
+		// Given a page under reduced motion without the parameter
 		const { body, hero, listen } = page("");
 
 		// When hero.js runs and any import it started settles
@@ -253,6 +268,31 @@ describe("hero.js and the opt-in demo", () => {
 		expect(body.children).toEqual([]);
 	});
 
+	it("starts the field without the demo on a page without hero-demo", async () => {
+		// Given a page without the parameter where the field can run
+		const { body, hero, canvas, listen } = page("", false);
+		// And a field module that records how it was started
+		const initThoughtField = vi.fn();
+		vi.doMock("../static/js/thought-field.js", () => ({ initThoughtField }));
+
+		// When hero.js runs and every import it started settles
+		await import("../static/js/hero.js");
+		await vi.dynamicImportSettled();
+
+		// Then the field starts on the canvas with no click source
+		expect(initThoughtField).toHaveBeenCalledWith(
+			canvas,
+			expect.anything(),
+			null,
+		);
+		// And the hero and the page are left as they were
+		expect(listen).not.toHaveBeenCalled();
+		expect(hero.attrs.size).toBe(0);
+		expect(body.children).toEqual([]);
+	});
+});
+
+describe("hero.js with hero-demo", () => {
 	it("mounts the panel with the reason when the field cannot run", async () => {
 		// Given a page with the parameter
 		const { body, hero, replaced } = page("?hero-demo");
@@ -268,5 +308,39 @@ describe("hero.js and the opt-in demo", () => {
 		// And the hero and the URL show scatter
 		expect(hero.attrs.get("data-click-mode")).toBe("scatter");
 		expect(replaced).toEqual(["https://x.test/?hero-demo=scatter"]);
+	});
+});
+
+describe("the panel note", () => {
+	// Mounts the panel on a stub page, shows ID and returns the live note.
+	function noteFor(id: string): string {
+		const { body } = page("?hero-demo");
+		const panel = mountPanel({
+			modes: MODES,
+			reason: "",
+			label: String,
+			pick: still,
+		});
+		panel.show(id);
+		const live = body.children[0]?.children.find((child) =>
+			child.attrs.has("aria-live"),
+		);
+		return live?.textContent ?? "";
+	}
+
+	it("tells a hold mode to press, hold and let go", () => {
+		// Given the panel on a page
+		// When the held mode gather is shown
+		// Then the note says to press and hold, then let go
+		expect(noteFor("gather")).toBe(
+			"Gather: press and hold the field, then let go.",
+		);
+	});
+
+	it("tells a tap mode to tap or click", () => {
+		// Given the panel on a page
+		// When the tap mode scatter is shown
+		// Then the note says to tap or click
+		expect(noteFor("scatter")).toBe("Scatter: tap or click the field.");
 	});
 });
