@@ -2,7 +2,9 @@
 // (x in [-aspect, aspect], y in [-1, 1], y up). Each frame the current
 // mode's force moves the particles for every live click, then the clicks
 // age. A click ends `life` seconds after its release, and the drift in
-// stepParticles then returns the field to its normal motion.
+// stepParticles then returns the field to its normal motion. Each force
+// owns its own fade over that life, so the engine keeps strength at 1:
+// a fade here as well would make every force decay twice.
 
 /**
  * @typedef {import("./thought-field-clicks.js").Click} Click
@@ -45,19 +47,14 @@ export function releaseClick(live, serial) {
 }
 
 /**
- * Strength is 1 while held, then falls linearly to 0 over the mode's life.
+ * Whether CLICK is still in the mode's life: held, or released less
+ * than LIFE seconds ago.
  * @param {Click} click
  * @param {number} life
- * @returns {number}
+ * @returns {boolean}
  */
-function envelope(click, life) {
-	if (click.released < 0) {
-		return 1;
-	}
-	if (life <= 0) {
-		return 0;
-	}
-	return Math.max(0, 1 - (click.age - click.released) / life);
+function alive(click, life) {
+	return click.released < 0 || click.age - click.released < life;
 }
 
 /**
@@ -74,10 +71,9 @@ export function advanceClicks(live, mode, dt) {
 			const age = click.age + dt;
 			const held = click.released < 0 && age < HOLD_LIMIT;
 			const released = held || click.released >= 0 ? click.released : age;
-			const aged = { ...click, age, released };
-			return { ...aged, strength: envelope(aged, mode.life) };
+			return { ...click, age, released };
 		})
-		.filter((click) => click.released < 0 || click.strength > 0);
+		.filter((click) => alive(click, mode.life));
 }
 
 /**

@@ -6,17 +6,15 @@
 import { swirlRate } from "./thought-field-wells.js";
 
 /**
- * A live click. `released` is the age at release, or -1 while held.
- * @typedef {{
- *   x: number, y: number, age: number, strength: number,
- *   mode: string, serial: number, released: number,
- * }} SwirlClick
+ * The engine's live click. `released` is the age at release, or -1
+ * while held.
+ * @typedef {import("./thought-field-clicks.js").Click} SwirlClick
  */
 
 /**
  * @typedef {{
- *   field: { count: number, pos: Float32Array },
- *   click: SwirlClick,
+ *   field: Pick<import("./thought-field-particles.js").Field, "count" | "pos">,
+ *   click: Readonly<SwirlClick>,
  *   dt: number,
  *   aspect: number,
  * }} ForceOptions

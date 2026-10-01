@@ -5,4 +5,5 @@
 import type { ForceOptions } from "./thought-field-clicks.js";
 
 export const SCATTER_RADIUS: number;
+export const SCATTER_LIFE: number;
 export function scatter(options: ForceOptions): void;

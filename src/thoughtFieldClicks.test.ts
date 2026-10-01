@@ -201,15 +201,15 @@ describe("held presses", () => {
 			clicks.step({ field, dt: 0.05, aspect: ASPECT });
 		}
 
-		// Then the click has been released and is fading
+		// Then the click has been released and is still live in its life
 		const [click] = clicks.live();
 		expect(click?.released).toBeGreaterThanOrEqual(4);
-		expect(click?.strength).toBeLessThan(1);
+		expect(click?.released).toBeLessThan(4.1);
 	});
 });
 
 describe("released presses", () => {
-	it("start fading at release and end after the mode's life", () => {
+	it("keep full strength after release and end after the mode's life", () => {
 		// Given a held press, released after a second
 		const clicks = createClicks(heldMode());
 		const serial = clicks.press(0, 0);
@@ -219,17 +219,18 @@ describe("released presses", () => {
 		}
 		clicks.release(serial);
 
-		// When a quarter, then more than all, of the 0.5 s life passes
-		for (let n = 0; n < 3; n += 1) {
+		// When most, then more than all, of the 0.5 s life passes
+		for (let n = 0; n < 9; n += 1) {
 			clicks.step({ field, dt: 0.05, aspect: ASPECT });
 		}
-		const fading = clicks.live()[0]?.strength;
-		for (let n = 0; n < 8; n += 1) {
+		const late = clicks.live()[0]?.strength;
+		for (let n = 0; n < 2; n += 1) {
 			clicks.step({ field, dt: 0.05, aspect: ASPECT });
 		}
 
-		// Then it fades on the way and is gone at the end
-		expect(fading).toBeCloseTo(0.7, 5);
+		// Then the engine leaves the fade to the force until the end
+		expect(late).toBe(1);
+		// And the click is gone once the life has passed
 		expect(clicks.live()).toEqual([]);
 	});
 });

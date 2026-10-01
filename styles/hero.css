@@ -218,9 +218,11 @@ hero is untouched. */
 		}
 	}
 
+	/* The panel is the last child of the flex-column body. Sticky keeps
+	it at the foot of the viewport, and its own place in the flow puts it
+	after the footer at the end of the page, so it never covers the footer. */
 	.click-panel {
-		position: fixed;
-		inset-inline: 0;
+		position: sticky;
 		bottom: 0;
 		z-index: 20;
 		display: grid;

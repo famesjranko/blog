@@ -11,7 +11,10 @@ import { createClicks } from "./thought-field-clicks.js";
  * @typedef {import("./thought-field-clicks.js").ClickField} ClickField
  * @typedef {import("./thought-field-clicks.js").ClickSource} ClickSource
  * @typedef {{ left: number, top: number, width: number, height: number }} Box
- * @typedef {EventTarget & { getBoundingClientRect(): Box }} PressTarget
+ * @typedef {EventTarget & {
+ *   getBoundingClientRect(): Box,
+ *   setPointerCapture(pointerId: number): void,
+ * }} PressTarget
  */
 
 export const DEMO_PARAM = "hero-demo";
@@ -99,6 +102,8 @@ function ignored(target) {
 /**
  * Turns primary presses on HERO into clicks. A release or a cancel (a
  * scroll the browser took over) releases the press of that pointer.
+ * The hero captures the pointer, so a mouse released off the hero still
+ * releases the press instead of leaving it held until HOLD_LIMIT.
  * @param {PressTarget} hero
  * @param {ClickField} clicks
  */
@@ -116,6 +121,7 @@ export function listenForPresses(hero, clicks) {
 			event.clientY,
 		);
 		if (point !== null) {
+			hero.setPointerCapture(event.pointerId);
 			held.set(event.pointerId, clicks.press(point.x, point.y));
 		}
 	};
