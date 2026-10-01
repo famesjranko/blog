@@ -1,18 +1,17 @@
+import { applyClickForces } from "./thought-field-click-step.js";
 import { parseCssColour } from "./thought-field-maths.js";
 
 /**
  * @typedef {import("./thought-field-maths.js").LinearColour} LinearColour
  * @typedef {import("./thought-field-meteors.js").Meteors} Meteors
+ * @typedef {import("./thought-field-particles.d.ts").ClickEvent} ClickEvent
  */
 
 /**
- * Pointer position in field space, plus how strongly it still repels.
  * @typedef {{ x: number, y: number, strength: number, lastMove: number }} Pointer
  */
 
 /**
- * Per-particle buffers. `pos` and `alpha` are what the GPU draws; `base`
- * is the rest position each particle drifts around.
  * @typedef {{
  *   count: number,
  *   palette: LinearColour[],
@@ -140,7 +139,6 @@ export function makePoints(count, palette) {
 		count,
 		palette,
 		pos: new Float32Array(count * 3),
-		// Zero: every particle is hidden until the birth reveals it.
 		alpha: new Float32Array(count),
 		col: new Float32Array(count * 3),
 		base: new Float32Array(count * 3),
@@ -193,8 +191,7 @@ function repel(options) {
 }
 
 /**
- * HOLD (0..1] scales the drift's pull back to the layout: 1 is the plain
- * drift, lower lets phone motion carry particles away from it.
+ * HOLD scales drift's pull home; lower values let phone motion carry particles.
  * @param {{
  *   field: Field,
  *   aspect: number,
@@ -203,10 +200,12 @@ function repel(options) {
  *   pointer: Pointer,
  *   meteors: Meteors,
  *   hold: number,
+ *   events?: ReadonlyArray<ClickEvent>,
  * }} options
  */
 export function stepParticles(options) {
-	const { field, aspect, time, dt, pointer, meteors, hold } = options;
+	const { field, aspect, time, dt } = options;
+	const { pointer, meteors, hold, events = [] } = options;
 	const ease = (1 - Math.exp(-dt * 1.1)) * hold;
 	const rate = Math.min(dt * 60, 3);
 	for (let i = 0; i < field.count; i += 1) {
@@ -215,6 +214,9 @@ export function stepParticles(options) {
 		field.pos[ix] += (target.x - field.pos[ix]) * ease;
 		field.pos[ix + 1] += (target.y - field.pos[ix + 1]) * ease;
 		applyRepulsion({ field, ix, pointer, meteors, rate });
+		if (events.length > 0) {
+			applyClickForces({ pos: field.pos, ix, events, dt, aspect });
+		}
 	}
 }
 
