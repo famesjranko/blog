@@ -52,6 +52,9 @@ async function expectRegionScreenshot(
 		maxDiffPixels,
 		threshold: 0.05,
 	});
+	const path = test.info().outputPath(name);
+	await region.screenshot({ path, animations: "disabled", caret: "hide" });
+	await test.info().attach(name, { path, contentType: "image/png" });
 }
 
 test("desktop header and primary navigation", async ({ page }) => {
