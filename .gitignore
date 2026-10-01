@@ -3,3 +3,4 @@ dist/
 refs/
 .claude/worktrees/
 .claude/settings.local.json
+test-results/
