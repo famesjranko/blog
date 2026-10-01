@@ -165,22 +165,32 @@ describe("external links", () => {
 	});
 });
 
-describe("jpeg picture fallback", () => {
-	it("wraps internal jpeg images in a picture element with a webp source", () => {
-		const html = renderMarkdown("![watch](/img/essays/x/cover.jpg)");
-		expect(html).toContain("<picture>");
-		expect(html).toContain(
-			'<source type="image/webp" srcset="/img/essays/x/cover.webp">',
-		);
-		expect(html).toContain('src="/img/essays/x/cover.jpg"');
-		expect(html).toContain('alt="watch"');
+describe("jpeg without a rendition plan", () => {
+	it("renders an unknown internal jpeg as a bare img with no webp source", () => {
+		// Given an internal JPEG that is not in the image size table.
+		const markdown = "![watch](/img/essays/x/cover.jpg)";
+
+		// When the markdown is rendered.
+		const html = renderMarkdown(markdown);
+
+		// Then the image is a bare img with its alt text.
+		expect(html).toContain('<img src="/img/essays/x/cover.jpg" alt="watch">');
+		// And no picture element or WebP source points at a missing file.
+		expect(html).not.toContain("<picture>");
+		expect(html).not.toContain(".webp");
 	});
 
-	it("prefixes both the webp source and the fallback with the base path", () => {
+	it("prefixes the bare img src with the base path", () => {
+		// Given a base path and an internal JPEG that is not in the size table.
 		vi.stubEnv("BASE_PATH", "/blog");
+
+		// When the markdown is rendered.
 		const html = renderMarkdown("![watch](/img/essays/x/cover.jpg)");
-		expect(html).toContain('srcset="/blog/img/essays/x/cover.webp"');
+
+		// Then the img src carries the base path.
 		expect(html).toContain('src="/blog/img/essays/x/cover.jpg"');
+		// And no picture element wraps it.
+		expect(html).not.toContain("<picture>");
 	});
 
 	it("does not lazy-load markdown images", () => {
@@ -191,12 +201,14 @@ describe("jpeg picture fallback", () => {
 
 describe("figure captions", () => {
 	it("promotes the image title to a visible figure caption", () => {
-		const html = renderMarkdown('![watch](/img/essays/x/cover.jpg "My title")');
+		const html = renderMarkdown(
+			'![watch](/img/essays/whatis-philosophy/cover.jpg "My title")',
+		);
 		expect(html).toContain("<picture>");
 		expect(html).toContain("<figure>");
 		expect(html).toContain("<figcaption>My title</figcaption>");
 		expect(html).not.toContain('title="My title"');
-		expect(html).toContain('src="/img/essays/x/cover.jpg"');
+		expect(html).toContain('src="/img/essays/whatis-philosophy/cover.jpg"');
 	});
 
 	it("renders caption markdown inside the figcaption", () => {

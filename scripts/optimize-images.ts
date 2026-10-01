@@ -4,37 +4,35 @@ import path from "node:path";
 import { checkPlaceholders, generatePlaceholders } from "./placeholders.js";
 
 /**
- * Image pipeline: WebP sidecars and the pixel-size table.
+ * Image pipeline: source JPEG budget, placeholders, and the
+ * pixel-size table. Responsive AVIF and WebP renditions are generated
+ * into `dist/` by the build, not here.
  *
  * Repository invariants:
- *   1. every `.jpg`/`.jpeg` under `static/img` has a same-name `.webp`
- *      sidecar;
- *   2. no JPEG is wider than MAX_WIDTH or heavier than MAX_JPEG_BYTES,
- *      since the JPEG is the fallback browsers without WebP download;
- *   3. `src/image-dimensions.json` lists the pixel size of every image
+ *   1. no JPEG is wider than MAX_WIDTH or heavier than MAX_JPEG_BYTES,
+ *      since the JPEG is the fallback for browsers that use no
+ *      rendition;
+ *   2. `src/image-dimensions.json` lists the pixel size of every image
  *      under `static/img`, keyed by its site path;
- *   4. every published piece without a cover has a rendered placeholder
+ *   3. every published piece without a cover has a rendered placeholder
  *      under `static/img/placeholders` (see `scripts/placeholders.ts`).
  *
- * Rendering (`src/images.ts`) maps URLs purely by convention and reads
- * the table at import time; it never touches the disk. This script owns
- * both guarantees.
+ * Rendering (`src/images.ts`) reads the table at import time; it never
+ * touches the disk. This script owns these guarantees.
  *
  * Usage:
  *   npm run images          render missing placeholders, shrink
  *                           oversized JPEGs in place, regenerate
- *                           sidecars and the table
+ *                           the table
  *   npm run images:check    fail when a placeholder is missing or
- *                           stale, a sidecar is missing, a JPEG is
- *                           oversized, or the table differs from the
- *                           images on disk
+ *                           stale, a JPEG is oversized, or the table
+ *                           differs from the images on disk
  */
 const IMG_ROOT = "static/img";
 const TABLE_PATH = "src/image-dimensions.json";
 const MAX_WIDTH = 1600;
 const MAX_JPEG_BYTES = 400 * 1024;
 const JPEG_QUALITY = 82;
-const WEBP_QUALITY = 80;
 const IMAGE_EXTENSIONS = [".jpg", ".jpeg", ".png", ".svg", ".webp"];
 
 function isJpegFile(name: string): boolean {
@@ -45,10 +43,6 @@ function isJpegFile(name: string): boolean {
 function isImageFile(name: string): boolean {
 	const lower = name.toLowerCase();
 	return IMAGE_EXTENSIONS.some((ext) => lower.endsWith(ext));
-}
-
-function webpPath(jpegPath: string): string {
-	return jpegPath.replace(/\.(jpe?g)$/i, ".webp");
 }
 
 /** `static/img/a/b.jpg` -> `/img/a/b.jpg`, the src content refers to. */
@@ -71,14 +65,6 @@ async function listFiles(
 		}),
 	);
 	return nested.flat().sort();
-}
-
-/** Pure existence check over an explicit file list. No sharp involved. */
-export function missingSidecars(
-	jpegs: string[],
-	exists: (p: string) => boolean,
-): string[] {
-	return jpegs.filter((jpeg) => !exists(webpPath(jpeg)));
 }
 
 function formatBytes(bytes: number): string {
@@ -145,14 +131,6 @@ async function check(): Promise<number> {
 		return 1;
 	}
 	const jpegs = await listFiles(IMG_ROOT, isJpegFile);
-	const missing = missingSidecars(jpegs, existsSync);
-	for (const jpeg of missing) {
-		console.error(`missing WebP sidecar: ${webpPath(jpeg)} (from ${jpeg})`);
-	}
-	if (missing.length > 0) {
-		console.error(`images:check: ${missing.length} missing sidecar(s)`);
-		return 1;
-	}
 	const oversized = await oversizedJpegs(jpegs);
 	for (const line of oversized) {
 		console.error(`oversized JPEG: ${line}`);
@@ -173,26 +151,9 @@ async function check(): Promise<number> {
 		return 1;
 	}
 	console.log(
-		`images:check: OK (${jpegs.length} jpeg(s), placeholders and sidecars present, size table current)`,
+		`images:check: OK (${jpegs.length} jpeg(s), placeholders present, size table current)`,
 	);
 	return 0;
-}
-
-async function convertOne(
-	jpeg: string,
-): Promise<{ before: number; after: number }> {
-	const { default: sharp } = await import("sharp");
-	const dst = webpPath(jpeg);
-	const before = (await stat(jpeg)).size;
-	await sharp(jpeg)
-		.resize({ width: MAX_WIDTH, withoutEnlargement: true })
-		.webp({ quality: WEBP_QUALITY, effort: 6 })
-		.toFile(dst);
-	const after = (await stat(dst)).size;
-	console.log(
-		`${jpeg} (${formatBytes(before)}) -> ${dst} (${formatBytes(after)})`,
-	);
-	return { before, after };
 }
 
 /**
@@ -227,17 +188,10 @@ async function shrinkJpeg(jpeg: string): Promise<void> {
 async function generate(): Promise<number> {
 	await generatePlaceholders();
 	const jpegs = await listFiles(IMG_ROOT, isJpegFile);
-	let totalBefore = 0;
-	let totalAfter = 0;
 	for (const jpeg of jpegs) {
 		await shrinkJpeg(jpeg);
-		const result = await convertOne(jpeg);
-		totalBefore += result.before;
-		totalAfter += result.after;
 	}
-	console.log(
-		`images: ${jpegs.length} jpeg(s), ${formatBytes(totalBefore)} -> ${formatBytes(totalAfter)}`,
-	);
+	console.log(`images: ${jpegs.length} jpeg(s) within budget`);
 	await writeFile(TABLE_PATH, await readTable(), "utf8");
 	console.log(`images: wrote ${TABLE_PATH}`);
 	return 0;

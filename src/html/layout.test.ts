@@ -267,12 +267,18 @@ describe("cardCover responsive sources", () => {
 });
 
 describe("cardCover compatibility", () => {
-	it("keeps the full-size WebP path for an unknown JPEG", () => {
-		const html = cardCover(piece("/img/essays/x/cover.jpg", "x", "x"));
-		expect(html).toContain(
-			'<source type="image/webp" srcset="/img/essays/x/cover.webp">',
-		);
-		expect(html).not.toContain('type="image/avif"');
+	it("renders an unknown JPEG cover as a bare img", () => {
+		// Given a card whose JPEG cover is not in the image size table.
+		const card = piece("/img/essays/x/cover.jpg", "x", "x");
+
+		// When the card cover is rendered.
+		const html = cardCover(card);
+
+		// Then the cover is a bare img with its source.
+		expect(html).toContain('<img src="/img/essays/x/cover.jpg"');
+		// And no picture element or WebP source points at a missing file.
+		expect(html).not.toContain("<picture>");
+		expect(html).not.toContain(".webp");
 	});
 
 	it("leaves png covers as plain img elements", () => {
@@ -324,10 +330,8 @@ describe("cardCover", () => {
 
 	it("falls back to the slug's rendered placeholder with an empty alt", () => {
 		const html = cardCover(piece(undefined, undefined, "other"));
-		expect(html).toContain(
-			'<source type="image/webp" srcset="/img/placeholders/other.webp">',
-		);
 		expect(html).toContain('<img src="/img/placeholders/other.jpg" alt=""');
+		expect(html).not.toContain(".webp");
 		expect(html).not.toContain("card-media--placeholder");
 	});
 
@@ -348,7 +352,6 @@ describe("cardCover", () => {
 		try {
 			const html = cardCover(piece(undefined, undefined, "other"));
 			expect(html).toContain('src="/blog/img/placeholders/other.jpg"');
-			expect(html).toContain('srcset="/blog/img/placeholders/other.webp"');
 		} finally {
 			vi.unstubAllEnvs();
 		}
