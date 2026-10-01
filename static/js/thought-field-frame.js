@@ -3,8 +3,8 @@
 // and the birth, then the draw. thought-field-loop.js decides when frames
 // run.
 import { BIRTH_TUNING, makeSeeds, stepBirth } from "./thought-field-birth.js";
-import { pointerStrength, stepParticles } from "./thought-field-particles.js";
 import { stepMeteors } from "./thought-field-meteors.js";
+import { pointerStrength, stepParticles } from "./thought-field-particles.js";
 
 /**
  * @typedef {typeof import("./thought-field-globe.js")} GlobeModule
@@ -29,6 +29,7 @@ const NO_PHYSICS = Object.freeze({ physics: null, hold: 1 });
  *   meteors: import("./thought-field-meteors.js").Meteors,
  *   dims: { aspect: number },
  *   motion: MotionInput | null,
+ *   clicks?: (dt: number) => import("./thought-field-particles.js").ClickEvent[],
  * }} LoopOptions
  */
 
@@ -56,7 +57,8 @@ function stepFrame(options, now, dt, physics) {
 	const moved =
 		physics === null ? NO_PHYSICS : stepPhysics(options, dt, physics);
 	const hold = moved.hold;
-	stepParticles({ field, aspect, time, dt, pointer, meteors, hold });
+	const events = options.clicks?.(dt) ?? [];
+	stepParticles({ field, aspect, time, dt, pointer, meteors, hold, events });
 	return moved.physics;
 }
 

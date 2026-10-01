@@ -26,6 +26,38 @@ export interface Field {
 	scale: Float32Array;
 }
 
+export type ClickMode =
+	| "off"
+	| "shockwave"
+	| "gravity-implosion"
+	| "gravity-slow"
+	| "vortex-alternate"
+	| "vortex-position"
+	| "scatter"
+	| "gather"
+	| "turbulence";
+
+interface ClickEventBase {
+	x: number;
+	y: number;
+	age: number;
+	strength: number;
+	heldFor?: number;
+	spin?: number;
+}
+
+export type ClickEvent =
+	| (ClickEventBase & {
+			mode: "gather";
+			phase?: "hold" | "release" | "cancel";
+	  })
+	| {
+			[M in Exclude<ClickMode, "gather">]: ClickEventBase & {
+				mode: M;
+				phase?: number;
+			};
+	  }[Exclude<ClickMode, "gather">];
+
 export interface StepParticlesOptions {
 	field: Field;
 	aspect: number;
@@ -37,6 +69,7 @@ export interface StepParticlesOptions {
 	};
 	// Share (0..1] of the drift's pull back to the layout; 1 without motion.
 	hold: number;
+	events?: ReadonlyArray<ClickEvent>;
 }
 
 export function buildPalette(element?: {
