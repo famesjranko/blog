@@ -1,17 +1,45 @@
 import { readFile } from "node:fs/promises";
 import { resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
-
 export const marker = "<!-- blog-preview-capture -->";
-
-function allSpecs(suites) {
+type Attachment = { name: string; path?: string };
+type Result = { status?: string; attachments?: Attachment[] };
+type BrowserTest = { results?: Result[] };
+type Suite = { specs?: { tests?: BrowserTest[] }[]; suites?: Suite[] };
+type Report = { suites?: Suite[] };
+type Status = "passed" | "failed" | "skipped";
+interface CommentInput {
+	sha: string;
+	status: Status;
+	url?: string;
+	artifactUrl?: string;
+	summary?: string;
+}
+interface CommentRequest {
+	repository: string;
+	number: string;
+	token: string;
+	body: string;
+}
+function captureStatus(value: string | undefined): Status {
+	if (value === "passed" || value === "failed" || value === "skipped") {
+		return value;
+	}
+	throw new Error("Missing or invalid preview capture status");
+}
+function allSpecs(suites: Suite[]): { tests?: BrowserTest[] }[] {
 	return suites.flatMap((suite) => [
 		...(suite.specs ?? []),
 		...allSpecs(suite.suites ?? []),
 	]);
 }
-
-async function readOverflow(attachment, directory) {
+async function readOverflow(
+	attachment: Attachment,
+	directory: string,
+): Promise<number> {
+	if (!attachment.path) {
+		throw new Error("Geometry attachment has no path");
+	}
 	const path = resolve(attachment.path);
 	if (!path.startsWith(`${directory}${sep}`)) {
 		throw new Error("Geometry attachment is outside the capture directory");
@@ -22,8 +50,10 @@ async function readOverflow(attachment, directory) {
 	}
 	return Math.max(0, content - viewport);
 }
-
-export async function summarizeResults(report, resultsFile) {
+export async function summarizeResults(
+	report: Report,
+	resultsFile: string,
+): Promise<string> {
 	const tests = allSpecs(report.suites ?? []).flatMap(
 		(spec) => spec.tests ?? [],
 	);
@@ -50,11 +80,22 @@ export async function summarizeResults(report, resultsFile) {
 	return `${passed}/${tests.length} browser tests passed; ${overflows.length} viewport measurements; maximum horizontal overflow ${Math.max(...overflows)} px.`;
 }
 
-export function commentBody({ url, sha, artifactUrl, summary }) {
-	return `${marker}\nPreview capture for commit \`${sha}\`\n\n- Immutable preview: ${url}\n- Capture artifact: ${artifactUrl}\n- Measurements: ${summary}`;
+export function commentBody({
+	url,
+	sha,
+	artifactUrl,
+	summary,
+	status,
+}: CommentInput): string {
+	return [
+		`${marker}\nPreview capture for commit \`${sha}\`\n`,
+		`- Outcome: ${status}`,
+		...(url ? [`- Immutable preview: ${url}`] : []),
+		...(artifactUrl ? [`- Capture artifact: ${artifactUrl}`] : []),
+		...(summary ? [`- Measurements: ${summary}`] : []),
+	].join("\n");
 }
-
-function safeDiagnostic(value, token, limit) {
+function safeDiagnostic(value: unknown, token: string, limit: number): string {
 	if (typeof value !== "string") {
 		return "";
 	}
@@ -62,7 +103,11 @@ function safeDiagnostic(value, token, limit) {
 	return redacted.replace(/[\r\n\t]/g, " ").slice(0, limit);
 }
 
-async function githubRequest(url, token, options = {}) {
+async function githubRequest(
+	url: string,
+	token: string,
+	options: RequestInit = {},
+): Promise<Response> {
 	const response = await fetch(url, {
 		...options,
 		headers: {
@@ -73,7 +118,9 @@ async function githubRequest(url, token, options = {}) {
 		},
 	});
 	if (!response.ok) {
-		const data = await response.json().catch(() => null);
+		const data = (await response.json().catch(() => null)) as {
+			message?: unknown;
+		} | null;
 		const message = safeDiagnostic(data?.message, token, 200);
 		const permissions = safeDiagnostic(
 			response.headers.get("X-Accepted-GitHub-Permissions"),
@@ -97,21 +144,37 @@ async function githubRequest(url, token, options = {}) {
 	return response;
 }
 
-export async function upsertComment({ repository, number, token, body }) {
+export async function upsertComment({
+	repository,
+	number,
+	token,
+	body,
+}: CommentRequest): Promise<void> {
 	const base = `https://api.github.com/repos/${repository}/issues/${number}/comments`;
-	let existing;
+	let existing: { id: number } | undefined;
 	for (let page = 1; ; page++) {
 		const response = await githubRequest(
 			`${base}?per_page=100&page=${page}`,
 			token,
 		);
-		const comments = await response.json();
+		const comments: unknown = await response.json();
 		if (!Array.isArray(comments)) {
 			throw new Error("GitHub comments API returned invalid data");
 		}
 		existing = comments.find(
-			(comment) =>
-				comment.user?.type === "Bot" && comment.body?.includes(marker),
+			(comment): comment is { id: number } =>
+				comment !== null &&
+				typeof comment === "object" &&
+				"user" in comment &&
+				comment.user !== null &&
+				typeof comment.user === "object" &&
+				"login" in comment.user &&
+				comment.user.login === "github-actions[bot]" &&
+				"body" in comment &&
+				typeof comment.body === "string" &&
+				comment.body.includes(marker) &&
+				"id" in comment &&
+				typeof comment.id === "number",
 		);
 		if (existing || comments.length < 100) {
 			break;
@@ -127,17 +190,20 @@ export async function upsertComment({ repository, number, token, body }) {
 	);
 }
 
-async function main() {
+async function printSummary(): Promise<void> {
+	const { PLAYWRIGHT_RESULTS_FILE: resultsFile } = process.env;
+	if (!resultsFile) {
+		throw new Error("Missing Playwright results file");
+	}
+	const report = JSON.parse(await readFile(resultsFile, "utf8"));
+	process.stdout.write(
+		`summary=${await summarizeResults(report, resultsFile)}\n`,
+	);
+}
+
+export async function main(): Promise<void> {
 	if (process.argv[2] === "--summary") {
-		const resultsFile = process.env.PLAYWRIGHT_RESULTS_FILE;
-		if (!resultsFile) {
-			throw new Error("Missing Playwright results file");
-		}
-		const report = JSON.parse(await readFile(resultsFile, "utf8"));
-		process.stdout.write(
-			`summary=${await summarizeResults(report, resultsFile)}\n`,
-		);
-		return;
+		return printSummary();
 	}
 	const {
 		GH_TOKEN: token,
@@ -147,15 +213,18 @@ async function main() {
 		PREVIEW_URL: url,
 		ARTIFACT_URL: artifactUrl,
 		PLAYWRIGHT_SUMMARY: summary,
+		PREVIEW_CAPTURE_STATUS: rawStatus,
 	} = process.env;
+	const status = captureStatus(rawStatus);
 	if (
 		!token ||
-		!/^[\w.-]+\/[\w.-]+$/.test(repository ?? "") ||
-		!/^[1-9]\d*$/.test(number ?? "") ||
+		!repository ||
+		!number ||
+		!sha ||
+		!/^[\w.-]+\/[\w.-]+$/.test(repository) ||
+		!/^[1-9]\d*$/.test(number) ||
 		!/^[a-f0-9]{40}$/.test(sha ?? "") ||
-		!url ||
-		!artifactUrl ||
-		!summary
+		(status === "passed" && (!url || !artifactUrl || !summary))
 	) {
 		throw new Error("Missing or invalid preview comment input");
 	}
@@ -163,7 +232,13 @@ async function main() {
 		repository,
 		number,
 		token,
-		body: commentBody({ url, sha, artifactUrl, summary }),
+		body: commentBody({
+			sha,
+			status,
+			...(url ? { url } : {}),
+			...(artifactUrl ? { artifactUrl } : {}),
+			...(summary ? { summary } : {}),
+		}),
 	});
 }
 
