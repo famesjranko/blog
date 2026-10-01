@@ -1,6 +1,8 @@
 import { densityCount } from "./thought-field-maths.js";
+import { createHeroDemo, demoRequested } from "./hero-demo.js";
 
 /** @typedef {import("./thought-field.js").Tier} Tier */
+/** @typedef {{ ready: (setMode: (mode: import("./thought-field-click-input.js").ClickMode) => void) => void, unavailable: () => void }} HeroDemo */
 
 // A navigation still pending after this long has most likely been
 // stopped. One that commits later can show the white frame again.
@@ -8,13 +10,16 @@ const LEAVE_GRACE_MS = 5000;
 
 const hero = document.querySelector("[data-hero]");
 if (hero instanceof HTMLElement && "matchMedia" in window) {
+	const demo = demoRequested() ? createHeroDemo(hero) : null;
 	const reducedMotion = window.matchMedia(
 		"(prefers-reduced-motion: reduce)",
 	).matches;
 	const coarsePointer = window.matchMedia("(pointer: coarse)").matches;
 	setupParallax(hero, reducedMotion || coarsePointer);
 	if (!reducedMotion) {
-		scheduleField(hero);
+		scheduleField(hero, demo);
+	} else {
+		demo?.unavailable();
 	}
 }
 
@@ -94,18 +99,20 @@ function webglAvailable() {
 	return probe !== null;
 }
 
-/** @param {HTMLElement} hero */
-function scheduleField(hero) {
+/** @param {HTMLElement} hero @param {HeroDemo | null} demo */
+function scheduleField(hero, demo) {
 	const canvas = hero.querySelector("[data-thought-field]");
 	if (!(canvas instanceof HTMLCanvasElement)) {
+		demo?.unavailable();
 		return;
 	}
 	const tier = pickTier(hero);
 	if (tier === null || !webglAvailable()) {
+		demo?.unavailable();
 		return;
 	}
 	const start = () => {
-		void startField(canvas, tier);
+		void startField(canvas, tier, demo);
 	};
 	if (!("IntersectionObserver" in window) || heroAlreadyVisible(hero)) {
 		idle(start);
@@ -138,17 +145,20 @@ function idle(callback) {
 /**
  * @param {HTMLCanvasElement} canvas
  * @param {Tier} tier
+ * @param {HeroDemo | null} demo
  */
-async function startField(canvas, tier) {
+async function startField(canvas, tier, demo) {
 	try {
 		const sibling = new URL("./thought-field.js", import.meta.url);
 		/** @type {typeof import("./thought-field.js")} */
 		const field = await import(sibling.href);
-		field.initThoughtField(canvas, tier);
+		const instance = field.initThoughtField(canvas, tier);
+		demo?.ready(instance.setMode);
 		hideFieldOnLeave(canvas);
 	} catch {
 		// The CSS wash fallback stands alone; drop the empty canvas.
 		canvas.remove();
+		demo?.unavailable();
 	}
 }
 
