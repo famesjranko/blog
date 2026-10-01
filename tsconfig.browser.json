@@ -1,0 +1,15 @@
+{
+	"$schema": "https://json.schemastore.org/tsconfig",
+	"extends": "./tsconfig.json",
+	"compilerOptions": {
+		"lib": ["ES2022", "DOM", "DOM.Iterable"],
+		"allowJs": true,
+		"checkJs": true
+	},
+	"include": [
+		"playwright.config.ts",
+		"playwright.preview.config.ts",
+		"tests/browser/**/*.ts",
+		"tests/browser/**/*.mjs"
+	]
+}

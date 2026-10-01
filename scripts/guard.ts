@@ -11,28 +11,41 @@ import {
 } from "./guard/limits.js";
 import type { CheckContext, Violation } from "./guard/limits.js";
 
-function listFiles(dir: string): string[] {
-	const found: string[] = [];
-	for (const entry of readdirSync(dir)) {
-		const full = path.join(dir, entry);
-		if (statSync(full).isDirectory()) {
-			found.push(...listFiles(full));
-		} else {
-			found.push(full);
-		}
+// Roots may be directories or single files; root config files run in the
+// build and test toolchain, so they are held to the same rules as scripts.
+const ROOTS = [
+	"src",
+	"scripts",
+	"styles",
+	"static",
+	"tests",
+	"playwright.config.ts",
+	"playwright.preview.config.ts",
+	"vitest.config.ts",
+];
+const SCRIPT_EXTENSIONS = [".ts", ".js", ".mjs"];
+
+function listFiles(target: string): string[] {
+	if (!statSync(target).isDirectory()) {
+		return [target];
 	}
-	return found;
+	return readdirSync(target).flatMap((entry) =>
+		listFiles(path.join(target, entry)),
+	);
+}
+
+function isScript(file: string): boolean {
+	return SCRIPT_EXTENSIONS.some((extension) => file.endsWith(extension));
+}
+
+function isTest(file: string): boolean {
+	return file.endsWith(".test.ts") || file.endsWith(".spec.ts");
 }
 
 function targetFiles(): string[] {
-	const files: string[] = [];
-	for (const root of ["src", "scripts", "styles", "static"]) {
-		if (existsSync(root)) {
-			files.push(...listFiles(root));
-		}
-	}
-	return files
-		.filter((f) => f.endsWith(".ts") || f.endsWith(".css") || f.endsWith(".js"))
+	return ROOTS.filter((root) => existsSync(root))
+		.flatMap(listFiles)
+		.filter((f) => isScript(f) || f.endsWith(".css"))
 		.sort();
 }
 
@@ -45,7 +58,7 @@ function checkFileLength(file: string, text: string): Violation[] {
 	const lines = countLines(text);
 	const limit = file.endsWith(".css")
 		? MAX_STYLE_LINES
-		: file.endsWith(".test.ts")
+		: isTest(file)
 			? MAX_TEST_LINES
 			: MAX_SOURCE_LINES;
 	if (lines <= limit) {
@@ -85,7 +98,7 @@ function main(): number {
 		const text = readFileSync(file, "utf8");
 		violations.push(...checkSuppressions(file, text));
 		violations.push(...checkFileLength(file, text));
-		if (file.endsWith(".ts") || file.endsWith(".js")) {
+		if (isScript(file)) {
 			const sourceFile = ts.createSourceFile(
 				file,
 				text,

@@ -1,22 +1,30 @@
+import { randomUUID } from "node:crypto";
 import { writeFile } from "node:fs/promises";
 import { expect, type Locator, type Page, test } from "@playwright/test";
 
 async function attachMeasurement(name: string, value: object) {
-	const path = test
-		.info()
-		.outputPath(`${name}-${test.info().attachments.length}.json`);
+	// Measurements run concurrently (see homeCards), so a counter read before
+	// the await gives two calls one file; a random name cannot collide.
+	const path = test.info().outputPath(`${name}-${randomUUID()}.json`);
 	await writeFile(path, JSON.stringify(value, null, 2));
 	await test.info().attach(name, { path, contentType: "application/json" });
 }
 
 async function box(locator: Locator) {
 	const bounds = await locator.boundingBox();
-	expect(bounds, `visible box for ${locator}`).not.toBeNull();
+	if (bounds === null) {
+		throw new Error(`expected a visible box for ${locator}`);
+	}
 	await attachMeasurement("geometry-box", {
 		locator: locator.toString(),
 		bounds,
 	});
-	return bounds as NonNullable<typeof bounds>;
+	return bounds;
+}
+
+function homeCards(page: Page) {
+	const cards = page.locator(".card-grid").first().locator(":scope > li");
+	return Promise.all([box(cards.nth(0)), box(cards.nth(1))]);
 }
 
 async function expectNoHorizontalOverflow(page: Page) {
@@ -70,14 +78,31 @@ test("home mobile hero, header, and cards fit one column", async ({
 	await expectMobileGutters(page, 390);
 	await expectHeaderSeparation(page);
 	expect((await box(page.locator(".hero h1"))).width).toBeLessThan(360);
-	const cards = page.locator(".card-grid").first().locator(":scope > li");
-	const first = await box(cards.nth(0));
-	const second = await box(cards.nth(1));
+	const [first, second] = await homeCards(page);
 	expect(second.y, "mobile cards stack").toBeGreaterThan(
 		first.y + first.height,
 	);
+	await context.close();
+});
+
+test("home mobile navigation opens from its toggle", async ({ browser }) => {
+	// Given the home page on a narrow touch viewport.
+	const context = await browser.newContext({
+		viewport: { width: 390, height: 844 },
+		isMobile: true,
+		hasTouch: true,
+	});
+	const page = await context.newPage();
+	await page.goto("/");
+	const nav = page.locator("#mobile-nav");
+	// And the mobile navigation starts closed.
+	await expect(nav).toBeHidden();
+
+	// When the navigation toggle is pressed.
 	await page.getByRole("button", { name: "Open navigation" }).click();
-	await expect(page.locator("#mobile-nav")).toBeVisible();
+
+	// Then the mobile navigation is visible.
+	await expect(nav).toBeVisible();
 	await context.close();
 });
 
@@ -94,9 +119,7 @@ test("home desktop cards form two columns and the header stays separate", async 
 	// Then the header and cards fit their desktop layout.
 	await expectNoHorizontalOverflow(page);
 	await expectHeaderSeparation(page);
-	const cards = page.locator(".card-grid").first().locator(":scope > li");
-	const first = await box(cards.nth(0));
-	const second = await box(cards.nth(1));
+	const [first, second] = await homeCards(page);
 	expect(
 		Math.abs(second.y - first.y),
 		"desktop cards share a row",
@@ -104,21 +127,54 @@ test("home desktop cards form two columns and the header stays separate", async 
 	expect(second.x, "desktop cards occupy separate columns").toBeGreaterThan(
 		first.x + first.width,
 	);
+});
+
+test("home cards stack one pixel below the 42rem breakpoint", async ({
+	page,
+}) => {
+	// Given a 671 pixel viewport, one pixel narrower than 42rem.
 	await page.setViewportSize({ width: 671, height: 800 });
-	const before = await box(cards.nth(0));
-	const beforeNext = await box(cards.nth(1));
-	expect(beforeNext.y, "cards stack below 42rem").toBeGreaterThan(
-		before.y + before.height,
+
+	// When the home page is opened.
+	await page.goto("/");
+
+	// Then the second card sits below the first.
+	const [first, second] = await homeCards(page);
+	expect(second.y, "cards stack below 42rem").toBeGreaterThan(
+		first.y + first.height,
 	);
+});
+
+test("home cards share a row at the 42rem breakpoint", async ({ page }) => {
+	// Given a 672 pixel viewport, exactly 42rem wide.
 	await page.setViewportSize({ width: 672, height: 800 });
-	const after = await box(cards.nth(0));
-	const afterNext = await box(cards.nth(1));
+
+	// When the home page is opened.
+	await page.goto("/");
+
+	// Then the first two cards share a row.
+	const [first, second] = await homeCards(page);
 	expect(
-		Math.abs(afterNext.y - after.y),
+		Math.abs(second.y - first.y),
 		"cards share a row at 42rem",
 	).toBeLessThan(2);
+});
+
+test("theme toggle switches a light page to the dark theme", async ({
+	page,
+}) => {
+	// Given the home page in a light colour scheme.
+	await page.emulateMedia({ colorScheme: "light" });
+	await page.goto("/");
+	const html = page.locator("html");
+	// And the page does not use the dark theme.
+	await expect(html).not.toHaveAttribute("data-theme", "dark");
+
+	// When the theme toggle is pressed.
 	await page.getByRole("button", { name: "Dark theme" }).click();
-	await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+
+	// Then the page uses the dark theme.
+	await expect(html).toHaveAttribute("data-theme", "dark");
 });
 
 test("Dreyfus essay keeps its reading measure at portrait desktop width", async ({
@@ -176,7 +232,7 @@ test("philosophy image aligns with mobile prose and selects enough pixels", asyn
 		Math.abs(picture.width - prose.width),
 		"image and prose widths agree",
 	).toBeLessThan(2);
-	const pixels = await image.evaluate(async (element) => {
+	const pixels = await image.evaluate(async (element: HTMLImageElement) => {
 		const response = await fetch(element.currentSrc);
 		const bitmap = await createImageBitmap(await response.blob());
 		return {
@@ -192,24 +248,20 @@ test("philosophy image aligns with mobile prose and selects enough pixels", asyn
 	await context.close();
 });
 
-test("Connect4 figures and captions fit on mobile and desktop", async ({
-	browser,
-}) => {
-	for (const width of [390, 1280]) {
-		// Given a mobile or desktop viewport.
-		const context = await browser.newContext({
-			viewport: { width, height: 900 },
-		});
-		const page = await context.newPage();
+for (const width of [390, 1280]) {
+	test(`Connect4 figure and caption fit the content column at ${width} pixels`, async ({
+		page,
+	}) => {
+		// Given a viewport of the stated width.
+		await page.setViewportSize({ width, height: 900 });
 
-		// When the project page is opened.
+		// When the Connect4 project page is opened.
 		await page.goto("/projects/connect4-lisp-web/");
 
-		// Then each figure and caption stays in the project content column.
+		// Then the first figure stays in the project content column.
 		await expectNoHorizontalOverflow(page);
 		const content = await box(page.locator(".project-main"));
 		const figure = await box(page.locator("figure").first());
-		const caption = await box(page.locator("figure figcaption").first());
 		expect(figure.x, "figure starts in content column").toBeGreaterThanOrEqual(
 			content.x - 1,
 		);
@@ -217,6 +269,8 @@ test("Connect4 figures and captions fit on mobile and desktop", async ({
 			figure.x + figure.width,
 			"figure fits content column",
 		).toBeLessThanOrEqual(content.x + content.width + 1);
+		// And its caption stays within the figure.
+		const caption = await box(page.locator("figure figcaption").first());
 		expect(caption.x, "caption starts within figure").toBeGreaterThanOrEqual(
 			figure.x - 1,
 		);
@@ -224,29 +278,29 @@ test("Connect4 figures and captions fit on mobile and desktop", async ({
 			caption.x + caption.width,
 			"caption fits figure",
 		).toBeLessThanOrEqual(figure.x + figure.width + 1);
-		await context.close();
-	}
-});
+	});
+}
 
-test("short error page footer reaches the viewport bottom", async ({
+test("short error page fills a tall viewport with hero and footer", async ({
 	page,
 }) => {
-	// Given a tall desktop viewport.
-	await page.setViewportSize({ width: 1280, height: 1000 });
+	// Given a desktop viewport taller than the error page content.
+	await page.setViewportSize({ width: 1280, height: 2000 });
 
 	// When the short error page is opened.
 	await page.goto("/404.html");
 
-	// Then its footer follows the hero and the page fills the viewport.
+	// Then its footer reaches the viewport bottom.
 	await expectNoHorizontalOverflow(page);
-	const main = await box(page.locator("main"));
+	const hero = await box(page.locator(".hero"));
 	const footer = await box(page.locator(".site-footer"));
 	expect(
 		footer.y + footer.height,
 		"footer reaches viewport bottom",
-	).toBeGreaterThanOrEqual(999);
+	).toBeGreaterThanOrEqual(1999);
+	// And the hero reaches down to the footer with no gap.
 	expect(
-		Math.abs(footer.y - main.y - main.height),
+		Math.abs(footer.y - hero.y - hero.height),
 		"footer directly follows the hero",
 	).toBeLessThan(2);
 });

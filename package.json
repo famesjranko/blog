@@ -10,7 +10,7 @@
 	"scripts": {
 		"prebuild": "npm run images",
 		"build": "tsx src/build.ts",
-		"typecheck": "tsc --noEmit && tsc -p tsconfig.static.json",
+		"typecheck": "tsc --noEmit && tsc -p tsconfig.static.json && tsc -p tsconfig.browser.json",
 		"lint": "biome lint --error-on-warnings .",
 		"guard": "tsx scripts/guard.ts",
 		"format": "biome format --write .",
