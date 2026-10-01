@@ -42,10 +42,10 @@ test: ## vitest run
 build: ## Generate card placeholders and build dist/ (BASE_PATH=/repo for project-site URLs, empty locally)
 	npm run build
 
-images: ## Regenerate WebP sidecars for JPEGs under static/img
+images: ## Render placeholders, shrink oversized JPEGs, and regenerate the image size table
 	npm run images
 
-images-check: ## Fail when a JPEG lacks its required WebP sidecar (no conversion)
+images-check: ## Fail when a placeholder is stale, a JPEG is oversized, or the size table is stale (no conversion)
 	npm run images:check
 
 preview: ## Build and serve dist/ at http://localhost:8000 and on the LAN (PORT=8001, DRAFTS=false to override)

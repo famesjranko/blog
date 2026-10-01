@@ -4,7 +4,7 @@ import {
 	cardImagePlan,
 	cardImageSource,
 } from "../cardImages.js";
-import { imageSize, webpSrc } from "../images.js";
+import { imageSize } from "../images.js";
 import { renditionSources } from "../renditions.js";
 import { canonicalSiteUrl, siteUrl } from "../site.js";
 
@@ -24,9 +24,10 @@ export function escapeHtml(value: string): string {
  * placeholder art for the slug, which is decorative and so carries an
  * empty alt. Root-relative sources are prefixed with the site base
  * path, mirroring the markdown image rule, so covers keep working
- * under BASE_PATH. Internal JPEG covers render as `<picture>` with a
- * responsive AVIF and WebP sources; the original file remains the
- * fallback `<img>`. All other sources keep their previous rendering.
+ * under BASE_PATH. An internal JPEG cover listed in the size table
+ * renders as `<picture>` with responsive AVIF and WebP sources, and the
+ * original file remains the fallback `<img>`. Any other cover, including
+ * an internal JPEG the size table does not list, renders as a bare `<img>`.
  * A draft (only ever built under SHOW_DRAFTS) gets a badge over the art.
  */
 export type CoverPiece = Pick<
@@ -65,10 +66,7 @@ function picture(src: string, img: string): string {
 		});
 		return `<picture>${sources}${img}</picture>`;
 	}
-	const webp = webpSrc(src);
-	return webp === undefined
-		? img
-		: `<picture><source type="image/webp" srcset="${escapeHtml(siteUrl(webp))}">${img}</picture>`;
+	return img;
 }
 
 /** The image source used by cards and social previews for a piece. */
