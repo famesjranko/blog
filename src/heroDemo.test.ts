@@ -43,10 +43,18 @@ class Hero {
 	}
 
 	querySelector(selector: string): object | null {
-		if (selector === "#hero-demo-mode") return this.select;
-		if (selector === ".hero-demo-status") return this.status;
-		if (selector === ".hero-demo") return this.details;
-		if (selector === "[data-demo-active]") return this.active;
+		if (selector === "#hero-demo-mode") {
+			return this.select;
+		}
+		if (selector === ".hero-demo-status") {
+			return this.status;
+		}
+		if (selector === ".hero-demo") {
+			return this.details;
+		}
+		if (selector === "[data-demo-active]") {
+			return this.active;
+		}
 		return null;
 	}
 }

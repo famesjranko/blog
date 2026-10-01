@@ -26,23 +26,36 @@ function charge(heldFor) {
 }
 
 /**
+ * @param {GatherOptions} options
+ * @returns {boolean}
+ */
+function validInput({ x, y, event, dt, aspect }) {
+	if (
+		event.mode !== "gather" ||
+		event.phase === "cancel" ||
+		event.strength <= 0
+	) {
+		return false;
+	}
+	if (dt <= 0 || aspect <= 0) {
+		return false;
+	}
+	if (event.heldFor !== undefined && !Number.isFinite(event.heldFor)) {
+		return false;
+	}
+	return [x, y, event.x, event.y, event.age, event.strength, dt, aspect].every(
+		Number.isFinite,
+	);
+}
+
+/**
  * Returns one frame of radial displacement for a particle at (x, y).
  * @param {GatherOptions} options
  * @returns {{ x: number, y: number }}
  */
 export function effect(options) {
-	const { x, y, event, dt, aspect } = options;
-	if (
-		event.mode !== "gather" ||
-		event.phase === "cancel" ||
-		![x, y, event.x, event.y, event.age, event.strength, dt, aspect].every(
-			Number.isFinite,
-		) ||
-		(event.heldFor !== undefined && !Number.isFinite(event.heldFor)) ||
-		dt <= 0 ||
-		aspect <= 0 ||
-		event.strength <= 0
-	) {
+	const { x, y, event, dt } = options;
+	if (!validInput(options)) {
 		return ZERO;
 	}
 
