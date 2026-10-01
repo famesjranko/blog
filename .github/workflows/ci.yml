@@ -19,6 +19,8 @@ jobs:
       - run: npx playwright install --with-deps chromium
       - run: make check
   browser-windows:
+    # Deliberately a browser-only subset: the full gate runs once on Ubuntu
+    # through make check, and the Windows runner image has no GNU make.
     runs-on: windows-2025
     steps:
       - uses: actions/checkout@v7

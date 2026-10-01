@@ -1,21 +1,29 @@
-import { tmpdir } from "node:os";
-import { join } from "node:path";
 import { defineConfig } from "@playwright/test";
+
+// One port feeds the server, baseURL, and readiness probe, so separate
+// checkouts can run the browser checks side by side on different ports.
+const { CI, PLAYWRIGHT_PORT = "4173" } = process.env;
+const port = Number(PLAYWRIGHT_PORT);
+if (!/^\d+$/.test(PLAYWRIGHT_PORT) || port < 1 || port > 65535) {
+	throw new Error(
+		`PLAYWRIGHT_PORT must be an integer from 1 to 65535, got "${PLAYWRIGHT_PORT}"`,
+	);
+}
+const origin = `http://127.0.0.1:${port}`;
 
 export default defineConfig({
 	testDir: "tests/browser",
-	outputDir: join(tmpdir(), "blog-playwright-results"),
 	fullyParallel: true,
-	workers: process.env.CI ? 1 : undefined,
+	...(CI ? { workers: 1 } : {}),
 	retries: 0,
 	reporter: "list",
 	use: {
-		baseURL: "http://127.0.0.1:4173",
+		baseURL: origin,
 		browserName: "chromium",
 	},
 	webServer: {
-		command: "node tests/browser/serve.mjs",
-		url: "http://127.0.0.1:4173/",
+		command: `node tests/browser/serve.mjs ${port}`,
+		url: `${origin}/`,
 		reuseExistingServer: false,
 		timeout: 15_000,
 	},
