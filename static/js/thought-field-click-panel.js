@@ -1,7 +1,8 @@
 // The click demo's switcher: a fixed bar at the foot of the viewport
 // with previous and next buttons around a native select. On a phone the
 // select opens the system picker, so one tap lists every mode. Desktop
-// also takes the keys 1-9, [ and ] (keyPick).
+// also takes a number key for the mode in that place, and [ and ] to
+// step (keyPick).
 
 /**
  * @typedef {import("./thought-field-clicks.js").ClickMode} ClickMode
@@ -57,8 +58,10 @@ function hint(mode) {
 	if (mode === undefined || mode.id === "off") {
 		return "Off: the hero has no click effect.";
 	}
-	const hold = mode.hold ? ` Hold for ${mode.label}.` : "";
-	return `${mode.label}: tap or click the field.${hold}`;
+	const action = mode.hold
+		? "press and hold the field, then let go"
+		: "tap or click the field";
+	return `${mode.label}: ${action}.`;
 }
 
 /**
