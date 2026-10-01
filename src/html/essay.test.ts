@@ -13,6 +13,7 @@ function sampleEssay(): Essay {
 		draft: false,
 		slug: "on-privacy",
 		html: "<p>Body.</p>",
+		readingMinutes: 3,
 		images: [],
 		sourcePath: "content/essays/on-privacy.md",
 	};
@@ -28,6 +29,22 @@ function registerEssayTests(): void {
 	registerDraftLabelTest();
 	registerPublishedLabelTest();
 	registerStylesheetOrderTest();
+	registerReadingTimeTest();
+}
+
+function registerReadingTimeTest(): void {
+	it("shows the estimate near the essay title", () => {
+		// Given an essay with a three minute reading estimate.
+		const essay = sampleEssay();
+
+		// When its page is rendered.
+		const html = essayPage(essay);
+
+		// Then the estimate follows the title as plain text.
+		expect(html).toContain(
+			'<h1>On Privacy</h1>\n<p class="reading-time">3 min read</p>',
+		);
+	});
 }
 
 function registerContentColumnTest(): void {
