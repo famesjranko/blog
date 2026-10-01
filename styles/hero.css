@@ -1,4 +1,4 @@
-@layer hero, hero-mobile, motion;
+@layer hero, hero-mobile, motion, hero-demo;
 
 @layer hero {
 	/* The hero is always dark, whatever the page theme: every token
@@ -201,5 +201,69 @@
 			animation: none;
 			transition: none;
 		}
+	}
+}
+
+/* The opt-in click demo (`?hero-demo`). Every selector here matches only
+elements or attributes thought-field-click-demo.js creates, so the normal
+hero is untouched. */
+@layer hero-demo {
+	/* A long press must not select text or open the callout menu.
+	touch-action stays as it is, so the page still scrolls. */
+	@media (pointer: coarse) {
+		.hero[data-click-demo] {
+			user-select: none;
+			-webkit-user-select: none;
+			-webkit-touch-callout: none;
+		}
+	}
+
+	/* The panel is the last child of the flex-column body. Sticky keeps
+	it at the foot of the viewport, and its own place in the flow puts it
+	after the footer at the end of the page, so it never covers the footer. */
+	.click-panel {
+		position: sticky;
+		bottom: 0;
+		z-index: 20;
+		display: grid;
+		grid-template-columns: auto minmax(0, 18rem) auto;
+		justify-content: center;
+		align-items: center;
+		gap: 0.25rem 0.5rem;
+		padding: 0.5rem 0.75rem calc(0.5rem + env(safe-area-inset-bottom));
+		background: color-mix(in srgb, var(--color-bg) 88%, transparent);
+		border-top: 1px solid var(--color-border);
+		color: var(--color-text);
+		font-family: var(--font-ui);
+		backdrop-filter: blur(8px);
+	}
+
+	.click-panel-step,
+	.click-panel-select {
+		min-height: 44px;
+		border: 1px solid var(--color-border);
+		border-radius: 999px;
+		background: var(--color-surface);
+		color: var(--color-text);
+		font: inherit;
+	}
+
+	.click-panel-step {
+		min-width: 44px;
+		font-size: 1.25rem;
+		line-height: 1;
+	}
+
+	.click-panel-select {
+		width: 100%;
+		padding-inline: 1rem;
+	}
+
+	.click-panel-note {
+		grid-column: 1 / -1;
+		margin: 0;
+		color: var(--color-muted);
+		font-size: 0.85rem;
+		text-align: center;
 	}
 }

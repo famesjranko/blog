@@ -1,6 +1,10 @@
 import { densityCount } from "./thought-field-maths.js";
 
-/** @typedef {import("./thought-field.js").Tier} Tier */
+/**
+ * @typedef {import("./thought-field.js").Tier} Tier
+ * @typedef {typeof import("./thought-field-click-demo.js")} DemoModule
+ * @typedef {import("./thought-field-clicks.js").ClickSource} ClickSource
+ */
 
 // A navigation still pending after this long has most likely been
 // stopped. One that commits later can show the white frame again.
@@ -13,8 +17,13 @@ if (hero instanceof HTMLElement && "matchMedia" in window) {
 	).matches;
 	const coarsePointer = window.matchMedia("(pointer: coarse)").matches;
 	setupParallax(hero, reducedMotion || coarsePointer);
-	if (!reducedMotion) {
-		scheduleField(hero);
+	// The click demo is opt-in; without the parameter none of its modules
+	// is fetched and the field starts exactly as it always has.
+	const demo = new URLSearchParams(location.search).has("hero-demo");
+	if (reducedMotion) {
+		fieldOff(hero, demo, "reduced motion is on");
+	} else {
+		scheduleField(hero, demo);
 	}
 }
 
@@ -94,18 +103,26 @@ function webglAvailable() {
 	return probe !== null;
 }
 
-/** @param {HTMLElement} hero */
-function scheduleField(hero) {
+/**
+ * @param {HTMLElement} hero
+ * @param {boolean} demo whether the page asked for the click demo
+ */
+function scheduleField(hero, demo) {
 	const canvas = hero.querySelector("[data-thought-field]");
 	if (!(canvas instanceof HTMLCanvasElement)) {
 		return;
 	}
 	const tier = pickTier(hero);
-	if (tier === null || !webglAvailable()) {
+	if (tier === null) {
+		fieldOff(hero, demo, "data saver is on");
+		return;
+	}
+	if (!webglAvailable()) {
+		fieldOff(hero, demo, "WebGL 2 is not available");
 		return;
 	}
 	const start = () => {
-		void startField(canvas, tier);
+		void startField({ hero, canvas, tier, demo });
 	};
 	if (!("IntersectionObserver" in window) || heroAlreadyVisible(hero)) {
 		idle(start);
@@ -136,20 +153,60 @@ function idle(callback) {
 }
 
 /**
- * @param {HTMLCanvasElement} canvas
- * @param {Tier} tier
+ * @param {{
+ *   hero: HTMLElement,
+ *   canvas: HTMLCanvasElement,
+ *   tier: Tier,
+ *   demo: boolean,
+ * }} options
  */
-async function startField(canvas, tier) {
+async function startField(options) {
+	const { hero, canvas, tier, demo } = options;
+	/** @type {ClickSource | null} */
+	let clicks = null;
 	try {
 		const sibling = new URL("./thought-field.js", import.meta.url);
 		/** @type {typeof import("./thought-field.js")} */
 		const field = await import(sibling.href);
-		field.initThoughtField(canvas, tier);
+		// A demo that cannot load leaves the field running as normal.
+		clicks = demo
+			? await loadDemo()
+					.then((module) => module.startDemo(hero))
+					.catch(() => null)
+			: null;
+		field.initThoughtField(canvas, tier, clicks);
 		hideFieldOnLeave(canvas);
 	} catch {
-		// The CSS wash fallback stands alone; drop the empty canvas.
+		// The CSS wash fallback stands alone; drop the empty canvas. A
+		// panel the demo already mounted stays the only one.
 		canvas.remove();
+		fieldOff(hero, demo && clicks === null, "the field failed to load");
 	}
+}
+
+/** @returns {Promise<DemoModule>} */
+async function loadDemo() {
+	const url = new URL("./thought-field-click-demo.js", import.meta.url);
+	return import(url.href);
+}
+
+/**
+ * When the page asked for the click demo but the field cannot run, the
+ * panel still mounts and says why. The demo never overrides the reason.
+ * @param {HTMLElement} hero
+ * @param {boolean} demo
+ * @param {string} reason
+ */
+function fieldOff(hero, demo, reason) {
+	if (!demo) {
+		return;
+	}
+	loadDemo().then(
+		(module) => module.showFieldOff(hero, reason),
+		() => {
+			// Without the demo module there is no panel to show.
+		},
+	);
 }
 
 /**
