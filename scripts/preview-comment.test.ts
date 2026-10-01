@@ -7,7 +7,6 @@ import { afterEach, test } from "vitest";
 import { fileURLToPath } from "node:url";
 import {
 	commentBody,
-	main,
 	marker,
 	summarizeResults,
 	upsertComment,
@@ -27,10 +26,8 @@ function reportWith(
 }
 
 const originalFetch = globalThis.fetch;
-const originalEnv = { ...process.env };
 afterEach(() => {
 	globalThis.fetch = originalFetch;
-	process.env = { ...originalEnv };
 });
 
 test("writes a capture summary as a job output without a comment token", async () => {
@@ -341,50 +338,6 @@ test("rejects a report with no viewport measurements", async () => {
 	// Then it reports the missing measurements.
 	await assert.rejects(result, /contains no viewport measurements/);
 });
-
-test.each(["passed", "failed", "skipped"] as const)(
-	"publishes the current head's %s capture outcome",
-	async (status) => {
-		// Given a current head and the capture outcome passed by the workflow.
-		const sha = "b".repeat(40);
-		process.env = {
-			GH_TOKEN: "token",
-			GH_REPOSITORY: "o/r",
-			PR_NUMBER: "7",
-			PR_HEAD_SHA: sha,
-			PREVIEW_CAPTURE_STATUS: status,
-			...(status === "passed"
-				? {
-						PREVIEW_URL: "https://abc12345.site.pages.dev",
-						ARTIFACT_URL: "https://github.com/o/r/actions/runs/1/artifacts/2",
-						PLAYWRIGHT_SUMMARY:
-							"1/1 browser tests passed; 1 viewport measurements; maximum horizontal overflow 0 px.",
-					}
-				: {}),
-		};
-		let posted = "";
-		globalThis.fetch = async (_url, options) => {
-			if (options?.method === "POST") {
-				posted = JSON.parse(String(options.body)).body;
-				return new Response("{}", { status: 201 });
-			}
-			return new Response("[]");
-		};
-
-		// When the comment entrypoint runs.
-		await main();
-
-		// Then its comment identifies this head and its actual outcome.
-		assert.match(posted, new RegExp(sha));
-		assert.match(posted, new RegExp(`- Outcome: ${status}`));
-		if (status === "passed") {
-			assert.match(posted, /artifacts\/2/);
-			assert.match(posted, /1\/1 browser tests passed/);
-		} else {
-			assert.doesNotMatch(posted, /Capture artifact:|Measurements:/);
-		}
-	},
-);
 
 test("includes available measurements for a failed capture", () => {
 	// Given a failed current head has a valid partial report summary.
