@@ -6,12 +6,10 @@
 // maths, no DOM, so Node can test it directly.
 
 /**
- * A live click in field space: x in [-aspect, aspect], y in [-1, 1], y
- * up. `age` is seconds since the press, `released` the age at release or
- * -1 while held, `strength` a multiplier where 1 is a normal press.
- * @typedef {{ x: number, y: number, age: number, strength: number, released: number }} RadialClick
- * @typedef {{ count: number, pos: Float32Array }} RadialField
- * @typedef {{ field: RadialField, click: RadialClick, dt: number, aspect: number }} RadialForceOptions
+ * The parts of a live click and of the field that the forces read.
+ * @typedef {Pick<import("./thought-field-clicks.js").Click, "x" | "y" | "age" | "strength" | "released">} RadialClick
+ * @typedef {Pick<import("./thought-field-particles.js").Field, "count" | "pos">} RadialField
+ * @typedef {{ field: RadialField, click: Readonly<RadialClick>, dt: number, aspect: number }} RadialForceOptions
  */
 
 /**

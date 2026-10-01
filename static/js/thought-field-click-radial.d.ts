@@ -1,26 +1,18 @@
 // Hand-written types for thought-field-click-radial.js so the Node test
 // suite can import the browser module without switching the compiler to
 // check JavaScript. Keep in step with the JSDoc in the .js file. The
-// click and field are the structural shapes the forces read, so this
-// module does not depend on the click engine's types.
+// click and field are the parts of the engine's types the forces read,
+// so a test can build them without a whole field.
 
-// Field space: x in [-aspect, aspect], y in [-1, 1], y up.
-export interface RadialClick {
-	x: number;
-	y: number;
-	// Seconds since the press.
-	age: number;
-	// 1 is a normal press.
-	strength: number;
-	// The age at release, or -1 while held.
-	released: number;
-}
+import type { Click } from "./thought-field-clicks.js";
+import type { Field } from "./thought-field-particles.js";
 
-export interface RadialField {
-	count: number;
-	// x, y, z per particle.
-	pos: Float32Array;
-}
+export type RadialClick = Pick<
+	Click,
+	"x" | "y" | "age" | "strength" | "released"
+>;
+
+export type RadialField = Pick<Field, "count" | "pos">;
 
 export interface RadialForceOptions {
 	field: RadialField;

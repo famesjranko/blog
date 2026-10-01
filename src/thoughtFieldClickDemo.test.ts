@@ -109,6 +109,21 @@ describe("presses on the hero", () => {
 		expect(clicks.live()).toMatchObject([{ x: 1, y: 0.5, released: 0 }]);
 	});
 
+	it("release when a mouse lets go off the hero", () => {
+		// Given a hero listening for presses in a held mode, and a page
+		const hero = pressTarget();
+		const page = new EventTarget();
+		const clicks = createClicks(MODES[2] as ClickMode);
+		listenForPresses(hero, clicks);
+		hero.dispatchEvent(pointer("pointerdown", 3));
+
+		// When the mouse is dragged off the hero and let go over the page
+		hero.lift(pointer("pointerup", 3), page);
+
+		// Then the press is released at once
+		expect(clicks.live()).toMatchObject([{ released: 0 }]);
+	});
+
 	it("ignore presses on links", () => {
 		// Given a hero listening for presses, with a link in it
 		vi.stubGlobal("Element", FakeElement);
@@ -135,10 +150,23 @@ class FakeElement extends EventTarget {
 	}
 }
 
+// A hero with the browser's pointer capture: a pointerup goes to the
+// element that captured that pointer, and otherwise to the element under
+// the pointer.
 function pressTarget() {
-	return Object.assign(new EventTarget(), {
+	const captured = new Set<number>();
+	const hero = Object.assign(new EventTarget(), {
 		getBoundingClientRect: () => BOX,
+		setPointerCapture: (pointerId: number) => {
+			captured.add(pointerId);
+		},
+		lift: (event: Event, under: EventTarget) => {
+			const { pointerId } = event as Event & { pointerId: number };
+			(captured.has(pointerId) ? hero : under).dispatchEvent(event);
+			captured.delete(pointerId);
+		},
 	});
+	return hero;
 }
 
 // A primary press halfway between the hero's centre and its top-right

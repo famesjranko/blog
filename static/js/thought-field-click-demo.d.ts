@@ -19,6 +19,7 @@ export interface Box {
 
 export interface PressTarget extends EventTarget {
 	getBoundingClientRect(): Box;
+	setPointerCapture(pointerId: number): void;
 }
 
 // startDemo and showFieldOff take the page's hero element.
