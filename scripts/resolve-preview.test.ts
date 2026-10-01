@@ -31,14 +31,13 @@ const pending = check({
 
 describe("decide on a completed check", () => {
 	it("selects the immutable preview for the exact PR head", () => {
-		// Given successful checks for an older commit and the requested head.
-		const older = summary.replaceAll(
-			hashUrl,
-			"https://aa11bb22.andrewjmcdonald-com.pages.dev",
-		);
+		// Given a successful head check and a newer one for another commit.
+		const other = summary
+			.replace("b0a91e3", "aaaaaaa")
+			.replaceAll(hashUrl, "https://aa11bb22.andrewjmcdonald-com.pages.dev");
 		const checks = [
-			check({ head_sha: "a".repeat(40), output: { summary: older } }),
-			check({}),
+			check({ id: 1 }),
+			check({ id: 2, head_sha: "a".repeat(40), output: { summary: other } }),
 		];
 
 		// When the preview is decided for the requested head.
@@ -155,6 +154,20 @@ describe("parsePreview", () => {
 		const parse = () => parsePreview(alias, sha);
 
 		// Then the alias is rejected.
+		expect(parse).toThrow(/not an immutable hash URL/);
+	});
+
+	it("rejects a plain http Preview URL", () => {
+		// Given a summary whose hash Preview URL uses http.
+		const plain = summary.replaceAll(
+			hashUrl,
+			hashUrl.replace("https:", "http:"),
+		);
+
+		// When the summary is parsed for the requested head.
+		const parse = () => parsePreview(plain, sha);
+
+		// Then the insecure URL is rejected.
 		expect(parse).toThrow(/not an immutable hash URL/);
 	});
 });

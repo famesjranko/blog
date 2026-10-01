@@ -176,7 +176,9 @@ async function main(): Promise<void> {
 			);
 			return;
 		case "no-preview":
-			// No URL output, so the capture steps skip and the job stays green.
+			// An explicit marker, not a missing url, skips capture; a resolver
+			// that silently writes nothing then fails capture loudly instead.
+			await appendFile(lookup.output, "preview=none\n");
 			process.stdout.write(
 				`::notice::No Cloudflare Pages preview for ${lookup.sha}; likely a fork PR or a skipped build. Preview capture skipped.\n`,
 			);

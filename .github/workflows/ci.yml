@@ -71,8 +71,10 @@ jobs:
           GH_REPOSITORY: ${{ github.repository }}
       - name: Capture preview screenshots and geometry
         id: capture
-        if: steps.preview.outputs.url != ''
+        if: steps.preview.outcome == 'success' && steps.preview.outputs.preview != 'none'
         continue-on-error: true
+        # Fails the step, and so warns, before the job timeout turns the PR red.
+        timeout-minutes: 10
         run: npx playwright test -c playwright.preview.config.ts tests/browser/visual.spec.ts tests/browser/geometry.spec.ts
         env:
           PLAYWRIGHT_BASE_URL: ${{ steps.preview.outputs.url }}
