@@ -1,10 +1,11 @@
+import { randomUUID } from "node:crypto";
 import { writeFile } from "node:fs/promises";
 import { expect, type Locator, type Page, test } from "@playwright/test";
 
 async function attachMeasurement(name: string, value: object) {
-	const path = test
-		.info()
-		.outputPath(`${name}-${test.info().attachments.length}.json`);
+	// Measurements run concurrently (see homeCards), so a counter read before
+	// the await gives two calls one file; a random name cannot collide.
+	const path = test.info().outputPath(`${name}-${randomUUID()}.json`);
 	await writeFile(path, JSON.stringify(value, null, 2));
 	await test.info().attach(name, { path, contentType: "application/json" });
 }
