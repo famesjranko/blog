@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>C — phone sheet</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 32px; background: #e9e8e2; color: #17202a; font: 15px/1.5 system-ui, sans-serif; }
+  h1 { margin: 0 0 6px; font: 500 26px Georgia, serif; }
+  .intro { margin: 0 0 28px; color: #58616a; }
+  .gallery { display: flex; align-items: start; gap: 28px; flex-wrap: wrap; }
+  .sample { margin: 0; }
+  figcaption { margin-bottom: 10px; font-size: 12px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; }
+  .desktop { width: min(850px, calc(100vw - 64px)); }
+  .phone { width: 390px; max-width: calc(100vw - 64px); }
+  .screen { position: relative; isolation: isolate; overflow: hidden; min-height: 520px; border: 1px solid #34465a; border-radius: 10px; background: #101c2b; color: #f7f5ef; box-shadow: 0 16px 38px #17202a27; }
+  .screen::before { position: absolute; z-index: -1; inset: 0; content: ""; background: radial-gradient(circle at 80% 30%, #3c617870, transparent 34%), radial-gradient(circle at 25% 75%, #57426466, transparent 40%), linear-gradient(135deg, #0c1724, #18283b); }
+  .top { display: flex; justify-content: space-between; align-items: center; padding: 20px 35px; border-bottom: 1px solid #ffffff20; font-size: 13px; }
+  .brand { font-family: Georgia, serif; font-size: 19px; }
+  .nav { color: #bac5cd; }
+  .hero { padding: 84px 8% 30px; }
+  .eyebrow { color: #adbcc8; font-size: 10px; letter-spacing: .12em; }
+  .hero h2 { margin: 18px 0; font: 400 clamp(38px, 5vw, 59px)/1.06 Georgia, serif; }
+  .hero p { max-width: 400px; color: #c4d0d6; }
+  .actions { display: flex; gap: 9px; margin-top: 25px; }
+  .actions span { padding: 8px 17px; border: 1px solid #ddd; border-radius: 30px; font-size: 12px; }
+  .trigger { position: absolute; right: 24px; bottom: 24px; padding: 10px 16px; border: 1px solid #dce8eea8; border-radius: 999px; background: #101e2be0; font-size: 12px; }
+  .phone .screen { min-height: 690px; }
+  .phone .top { padding: 18px 20px; }
+  .phone .nav { font-size: 19px; }
+  .phone .hero { padding: 125px 25px 0; }
+  .phone .hero h2 { font-size: 39px; }
+  .phone .actions { flex-wrap: wrap; }
+  .phone .shade { position: absolute; inset: 0; background: #07101aaa; }
+  .sheet { position: absolute; right: 0; bottom: 0; left: 0; padding: 10px 20px 24px; border-radius: 18px 18px 0 0; background: #ecf0ef; color: #152739; box-shadow: 0 -12px 40px #0007; }
+  .grab { width: 36px; height: 4px; margin: 0 auto 20px; border-radius: 4px; background: #9baab3; }
+  .sheet-header { display: flex; justify-content: space-between; align-items: center; }
+  .sheet h3 { margin: 0; font: 500 23px Georgia, serif; }
+  .close { color: #52616c; font-size: 22px; }
+  .sheet p { margin: 5px 0 20px; color: #52616c; font-size: 12px; }
+  .choice { display: flex; justify-content: space-between; margin-top: 8px; padding: 13px; border: 1px solid #c2cdd2; border-radius: 8px; background: white; font-size: 13px; }
+  .choice.active { border-color: #245578; background: #e0edf2; font-weight: 700; }
+  .choice.active::after { content: "✓"; }
+</style>
+<h1>C · Phone sheet</h1>
+<p class="intro">A small desktop trigger opens a phone sheet with six click and press effects for the existing particle field, plus Off.</p>
+<div class="gallery">
+  <figure class="sample desktop"><figcaption>Desktop · trigger at rest</figcaption><div class="screen">
+    <div class="top"><span class="brand">Andrew McDonald</span><span class="nav">Essays &nbsp; Projects &nbsp; About</span></div>
+    <div class="hero"><div class="eyebrow">ANDREW MCDONALD · BACKEND &amp; SYSTEMS ENGINEER · MELBOURNE</div><h2>From philosophy<br>to software</h2><p>A personal collection of essays, projects, and notes.</p><div class="actions"><span>Read essays</span><span>Browse projects</span></div></div>
+    <div class="trigger">Preview click effects ↗</div>
+  </div></figure>
+  <figure class="sample phone"><figcaption>Phone · 390px · sheet open</figcaption><div class="screen">
+    <div class="top"><span class="brand">Andrew McDonald</span><span class="nav">☰</span></div>
+    <div class="hero"><div class="eyebrow">BACKEND &amp; SYSTEMS ENGINEER</div><h2>From philosophy<br>to software</h2><p>A personal collection of essays, projects, and notes.</p><div class="actions"><span>Read essays</span><span>Browse projects</span></div></div>
+    <div class="shade"></div><div class="sheet"><div class="grab"></div><div class="sheet-header"><h3>Preview click interaction</h3><span class="close">×</span></div><p>Choose how the particle field responds to a click or press.</p><div class="choice active">Off</div><div class="choice">Shockwave</div><div class="choice">Gravity well <small>Short implosion / slow pull</small></div><div class="choice">Vortex</div><div class="choice">Particle scatter</div><div class="choice">Press → gather → release</div><div class="choice">Local turbulence</div></div>
+  </div></figure>
+</div>
+</html>
