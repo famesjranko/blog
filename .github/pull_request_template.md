@@ -4,7 +4,7 @@ Describe the problem and the change.
 
 ## Visual review
 
-Read [STYLE.md](../STYLE.md) for the site's visual intent. Select one impact:
+Read [STYLE.md](https://github.com/famesjranko/blog/blob/main/STYLE.md) for the site's visual intent. Select one impact:
 
 - [ ] None. This PR has no visible change.
 - [ ] Changed. This PR changes a visible page or interaction.
@@ -23,6 +23,6 @@ below. Add rows as needed.
 | --- | --- | --- | --- | --- | --- | --- |
 | | | | | | | |
 
-Intentional deviations from [STYLE.md](../STYLE.md): <!-- Explain, or write None. -->
+Intentional deviations from [STYLE.md](https://github.com/famesjranko/blog/blob/main/STYLE.md): <!-- Explain, or write None. -->
 
 Visual sign-off: <!-- Record the reviewer for a visual change, or write N/A. -->
