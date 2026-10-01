@@ -10,7 +10,10 @@ import { buildPalette, makePoints } from "./thought-field-particles.js";
  * @typedef {{ count: number, pixelRatio: number }} Tier
  */
 
-/** @typedef {import("./thought-field-particles.js").Pointer} Pointer */
+/**
+ * @typedef {import("./thought-field-particles.js").Pointer} Pointer
+ * @typedef {import("./thought-field-clicks.js").ClickSource} ClickSource
+ */
 
 /**
  * @param {Element | null} hero
@@ -76,11 +79,13 @@ function resizeState(options) {
  * Boots the particle field on CANVAS. The hero forces a dark colour
  * scheme regardless of the page theme, so the palette is read from the
  * hero element and drawn additively.
+ * CLICKS is the opt-in click demo's source; the normal hero passes none.
  * @param {HTMLCanvasElement} canvas
  * @param {Tier} tier
+ * @param {ClickSource | null} [clicks]
  * @returns {{ destroy: () => void }}
  */
-export function initThoughtField(canvas, tier) {
+export function initThoughtField(canvas, tier, clicks = null) {
 	const hero =
 		canvas.closest("[data-hero]") ??
 		canvas.parentElement ??
@@ -100,6 +105,7 @@ export function initThoughtField(canvas, tier) {
 		meteors,
 		dims: resize.dims,
 		motion,
+		clicks,
 	});
 	loop.start();
 	return {

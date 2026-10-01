@@ -29,6 +29,7 @@ const NO_PHYSICS = Object.freeze({ physics: null, hold: 1 });
  *   meteors: import("./thought-field-meteors.js").Meteors,
  *   dims: { aspect: number },
  *   motion: MotionInput | null,
+ *   clicks: import("./thought-field-clicks.js").ClickSource | null,
  * }} LoopOptions
  */
 
@@ -48,7 +49,7 @@ const NO_PHYSICS = Object.freeze({ physics: null, hold: 1 });
  * @returns {Physics | null}
  */
 function stepFrame(options, now, dt, physics) {
-	const { field, pointer, meteors, dims } = options;
+	const { field, pointer, meteors, dims, clicks } = options;
 	const aspect = dims.aspect;
 	const time = now / 1000;
 	pointer.strength = pointerStrength(pointer.lastMove, now);
@@ -57,6 +58,10 @@ function stepFrame(options, now, dt, physics) {
 		physics === null ? NO_PHYSICS : stepPhysics(options, dt, physics);
 	const hold = moved.hold;
 	stepParticles({ field, aspect, time, dt, pointer, meteors, hold });
+	// Null unless the page opted into the click demo.
+	if (clicks !== null) {
+		clicks.step({ field, dt, aspect });
+	}
 	return moved.physics;
 }
 
