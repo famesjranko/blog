@@ -104,7 +104,9 @@ describe("the mode registry", () => {
 		// Then gather is the only one
 		expect(held).toEqual(["gather"]);
 	});
+});
 
+describe("each candidate's force", () => {
 	it.each(ACTIVE.map((mode) => [mode.id, mode] as const))(
 		"%s moves particles near the press point",
 		(_, mode) => {

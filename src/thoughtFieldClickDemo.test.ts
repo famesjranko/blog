@@ -161,7 +161,7 @@ function pressTarget() {
 			captured.add(pointerId);
 		},
 		lift: (event: Event, under: EventTarget) => {
-			const { pointerId } = event as PointerEvent;
+			const { pointerId } = event as Event & { pointerId: number };
 			(captured.has(pointerId) ? hero : under).dispatchEvent(event);
 			captured.delete(pointerId);
 		},
