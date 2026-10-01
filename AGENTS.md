@@ -22,6 +22,9 @@ Do not introduce a frontend framework, template engine, alternate static-site ge
 
 Prefer the smallest change that fits the existing design.
 
+For visual changes, read [STYLE.md](STYLE.md) and include the evidence requested
+by the PR template.
+
 Do not introduce speculative abstractions, generic component systems, dependency injection, unnecessary classes, or utility layers for hypothetical future needs.
 
 ## Diagrams
