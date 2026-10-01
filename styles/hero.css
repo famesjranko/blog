@@ -151,6 +151,10 @@
 		padding-bottom: clamp(11rem, 22svh, 14rem);
 	}
 
+	.hero:has(.hero-demo[open]) .hero-inner {
+		padding-bottom: clamp(14rem, 28svh, 17rem);
+	}
+
 	.hero-demo {
 		position: absolute;
 		right: 1.5rem;
@@ -230,6 +234,10 @@
 
 		.hero-inner {
 			padding-block: clamp(3rem, 8svh, 5rem);
+		}
+
+		.hero:has(.hero-demo[open]) .hero-inner {
+			padding-bottom: clamp(15rem, 30svh, 18rem);
 		}
 
 		.hero-inner h1 {
