@@ -5,6 +5,7 @@ import { describe, expect, it } from "vitest";
 import {
 	loadEssay,
 	loadEssays,
+	loadProject,
 	loadProjects,
 	pickFeatured,
 } from "./content.js";
@@ -132,6 +133,23 @@ describe("loadEssays draft filtering", () => {
 });
 
 describe("loadProjects draft filtering", () => {
+	it("excludes front matter from the reading estimate", async () => {
+		// Given a project with 201 description words and one body word.
+		const dir = await mkdtemp(path.join(tmpdir(), "project-time-"));
+		const file = path.join(dir, "frontmatter.md");
+		const metadata = Array(201).fill("metadata").join(" ");
+		await writeFile(
+			file,
+			`---\ntitle: Project\ndate: 2024-01-01\norigin: personal\ndescription: ${metadata}\n---\n\nBody.`,
+		);
+
+		// When the project is loaded.
+		const project = await loadProject(file);
+
+		// Then only the body contributes to its reading estimate.
+		expect(project.readingMinutes).toBe(1);
+	});
+
 	it("excludes drafts by default", async () => {
 		const dir = await mkdtemp(path.join(tmpdir(), "projects-"));
 		await writeProjectFixture(dir, "published.md", false);

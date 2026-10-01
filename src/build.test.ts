@@ -138,7 +138,7 @@ it("shows reading time on built essay and project pages", async () => {
 		"utf8",
 	);
 	const project = await readFile(
-		path.join(outDir, "projects/connect4-lisp-web/index.html"),
+		path.join(outDir, "projects/extracting-pdf-tables/index.html"),
 		"utf8",
 	);
 
@@ -150,9 +150,9 @@ it("shows reading time on built essay and project pages", async () => {
 		/<header class="project-header">([\s\S]*?)<\/header>/,
 	)?.[1];
 
-	// Then each header contains a plain reading estimate.
-	expect(essayHeader).toMatch(/<p class="reading-time">\d+ min read<\/p>/);
-	expect(projectHeader).toMatch(/<p class="reading-time">\d+ min read<\/p>/);
+	// Then the essay shows two minutes and the project shows six minutes.
+	expect(essayHeader).toContain('<p class="reading-time">2 min read</p>');
+	expect(projectHeader).toContain('<p class="reading-time">6 min read</p>');
 }, 30000);
 
 describe("build output", () => {
