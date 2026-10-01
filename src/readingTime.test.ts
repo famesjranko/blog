@@ -48,3 +48,41 @@ describe("readingMinutes", () => {
 		expect(minutes).toBe(1);
 	});
 });
+
+describe("readingMinutes with embedded content", () => {
+	it("does not count image alt text as prose", () => {
+		// Given 200 prose words and an image with one alt-text word.
+		const prose = Array(200).fill("word").join(" ");
+		const body = `${prose}\n\n![caption](image.png)`;
+
+		// When its reading time is estimated.
+		const minutes = readingMinutes(body);
+
+		// Then the image does not increase the estimate.
+		expect(minutes).toBe(1);
+	});
+
+	it("counts visible text in a raw HTML block", () => {
+		// Given 200 prose words and one visible word in a raw HTML block.
+		const prose = Array(200).fill("word").join(" ");
+		const body = `${prose}\n\n<div>extra</div>`;
+
+		// When its reading time is estimated.
+		const minutes = readingMinutes(body);
+
+		// Then the visible HTML word increases the estimate.
+		expect(minutes).toBe(2);
+	});
+
+	it("does not count inline HTML attributes as prose", () => {
+		// Given 200 prose words and an inline HTML tag with an attribute.
+		const prose = Array(200).fill("word").join(" ");
+		const body = `${prose} <span title="extra"></span>`;
+
+		// When its reading time is estimated.
+		const minutes = readingMinutes(body);
+
+		// Then the attribute does not increase the estimate.
+		expect(minutes).toBe(1);
+	});
+});
