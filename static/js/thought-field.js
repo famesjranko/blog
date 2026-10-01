@@ -1,3 +1,4 @@
+import { createClickInput } from "./thought-field-click-input.js";
 import { createRenderer } from "./thought-field-gl.js";
 import { createLoop } from "./thought-field-loop.js";
 import { makeMeteors } from "./thought-field-meteors.js";
@@ -78,7 +79,7 @@ function resizeState(options) {
  * hero element and drawn additively.
  * @param {HTMLCanvasElement} canvas
  * @param {Tier} tier
- * @returns {{ destroy: () => void }}
+ * @returns {{ setMode: ReturnType<typeof createClickInput>["setMode"], destroy: () => void }}
  */
 export function initThoughtField(canvas, tier) {
 	const hero =
@@ -92,6 +93,10 @@ export function initThoughtField(canvas, tier) {
 	const pointer = pointerState(hero);
 	const resize = resizeState({ hero, renderer, tier });
 	const motion = motionInput();
+	const clickInput = createClickInput(
+		/** @type {HTMLElement} */ (hero),
+		resize.dims,
+	);
 	const loop = createLoop({
 		renderer,
 		field,
@@ -100,11 +105,14 @@ export function initThoughtField(canvas, tier) {
 		meteors,
 		dims: resize.dims,
 		motion,
+		clicks: clickInput.step,
 	});
 	loop.start();
 	return {
+		setMode: clickInput.setMode,
 		destroy: () => {
 			loop.destroy();
+			clickInput.destroy();
 			resize.destroy();
 			pointer.destroy();
 			motion?.destroy();
