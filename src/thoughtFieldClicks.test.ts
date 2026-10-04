@@ -4,7 +4,11 @@ import type {
 	ClickField,
 	ClickMode,
 } from "../static/js/thought-field-clicks.js";
-import { createClicks } from "../static/js/thought-field-clicks.js";
+import {
+	createClicks,
+	HOLD_LIMIT,
+	HOVER_RETURN,
+} from "../static/js/thought-field-clicks.js";
 import type { Field } from "../static/js/thought-field-particles.js";
 import { stepParticles } from "../static/js/thought-field-particles.js";
 
@@ -232,5 +236,113 @@ describe("released presses", () => {
 		expect(late).toBe(1);
 		// And the click is gone once the life has passed
 		expect(clicks.live()).toEqual([]);
+	});
+});
+
+function yieldingMode(): ClickMode {
+	return { ...heldMode(), id: "yield", yieldHover: true };
+}
+
+function run(clicks: ClickField, seconds: number): void {
+	const field = makeField();
+	const frames = Math.round(seconds / FRAME);
+	for (let n = 0; n < frames; n += 1) {
+		clicks.step({ field, dt: FRAME, aspect: ASPECT });
+	}
+}
+
+describe("hover scale", () => {
+	it("stays 1 for a mode that does not yield, even while held", () => {
+		// Given a held press in a mode without yieldHover
+		const clicks = createClicks(heldMode());
+		clicks.press(0, 0);
+
+		// When a second of frames passes
+		run(clicks, 1);
+
+		// Then the hover is not scaled
+		expect(clicks.hover()).toBe(1);
+	});
+
+	it("is 1 for a yielding mode with no live click", () => {
+		// Given a yielding mode and no press
+		const clicks = createClicks(yieldingMode());
+
+		// When a frame runs
+		run(clicks, FRAME);
+
+		// Then the hover is not scaled
+		expect(clicks.hover()).toBe(1);
+	});
+
+	it("is 0 while a yielding press is held", () => {
+		// Given a held press in a yielding mode
+		const clicks = createClicks(yieldingMode());
+		clicks.press(0, 0);
+
+		// When a second of frames passes
+		run(clicks, 1);
+
+		// Then the hover is silent
+		expect(clicks.hover()).toBe(0);
+	});
+});
+
+describe("hover return", () => {
+	it("returns over HOVER_RETURN after release", () => {
+		// Given a yielding press held for a second, then released
+		const clicks = createClicks({ ...yieldingMode(), life: 2 });
+		const serial = clicks.press(0, 0);
+		run(clicks, 1);
+		clicks.release(serial);
+
+		// When half of HOVER_RETURN passes
+		run(clicks, HOVER_RETURN / 2);
+		const half = clicks.hover();
+		// And the rest of it passes
+		run(clicks, HOVER_RETURN / 2);
+		const full = clicks.hover();
+		// And more time passes
+		run(clicks, 0.3);
+
+		// Then the hover is half back, then fully back, and stays so
+		expect(half).toBeCloseTo(0.5, 5);
+		expect(full).toBeCloseTo(1, 5);
+		expect(clicks.hover()).toBe(1);
+	});
+});
+
+describe("hover after a timed-out press", () => {
+	it("starts the same return when a press times out at HOLD_LIMIT", () => {
+		// Given a yielding press that is never released
+		const clicks = createClicks({ ...yieldingMode(), life: 2 });
+		clicks.press(0, 0);
+
+		// When it runs to just before HOLD_LIMIT
+		run(clicks, HOLD_LIMIT - 0.5);
+		const before = clicks.hover();
+		// And on to 0.3 s after the automatic release
+		run(clicks, 0.5 + 0.3);
+
+		// Then the hover was silent, and is now half back to within two frames
+		// (the release lands on the first frame past HOLD_LIMIT)
+		expect(before).toBe(0);
+		expect(Math.abs(clicks.hover() - 0.5)).toBeLessThan(
+			(2 * FRAME) / HOVER_RETURN,
+		);
+	});
+
+	it("waits for the slowest click when several are live", () => {
+		// Given one press released long ago and one still held
+		const clicks = createClicks({ ...yieldingMode(), life: 5 });
+		const first = clicks.press(0, 0);
+		clicks.press(1, 0);
+		clicks.release(first);
+
+		// When well over HOVER_RETURN passes
+		run(clicks, 1);
+
+		// Then the held click keeps the hover silent
+		expect(clicks.hover()).toBe(0);
 	});
 });

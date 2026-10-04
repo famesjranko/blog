@@ -159,7 +159,7 @@ export function startDemo(hero) {
 	const clicks = createClicks(modeById(DEFAULT_MODE));
 	mountDemo(hero, clicks, "");
 	listenForPresses(hero, clicks);
-	return { step: clicks.step };
+	return { step: clicks.step, hover: clicks.hover };
 }
 
 /**
