@@ -224,13 +224,15 @@ export function stepParticles(options) {
 function applyRepulsion(options) {
 	const { field, ix, pointer, meteors, rate } = options;
 	if (pointer.strength > 0) {
+		// Small and soft, so the hover leaves particles under the cursor
+		// for a press and hold to turn.
 		repel({
 			pos: field.pos,
 			ix,
 			cx: pointer.x,
 			cy: pointer.y,
-			radius2: 0.45 * 0.45,
-			push: 0.02 * rate * pointer.strength,
+			radius2: 0.3 * 0.3,
+			push: 0.01 * rate * pointer.strength,
 		});
 	}
 	for (const slot of meteors.slots) {
