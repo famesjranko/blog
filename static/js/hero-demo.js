@@ -2,14 +2,9 @@
 
 const options = [
 	["off", "Off"],
-	["shockwave", "Shockwave"],
-	["gravity-implosion", "Gravity well (short implosion)"],
-	["gravity-slow", "Gravity well (slow pull)"],
-	["vortex-alternate", "Vortex (alternating)"],
-	["vortex-position", "Vortex (position)"],
-	["scatter", "Particle scatter"],
-	["gather", "Press → gather → release"],
-	["turbulence", "Local turbulence"],
+	["hold-pull", "Hold: pull inward"],
+	["hold-push", "Hold: push outward"],
+	["hold-orbit", "Hold: orbit"],
 ];
 
 /** @returns {boolean} */
@@ -26,9 +21,9 @@ export function createHeroDemo(hero) {
 	const markup = `<details class="hero-demo" data-click-selector>
 <summary>Preview click interaction: <span data-demo-active>Off</span></summary>
 <div class="hero-demo-body">
-<label for="hero-demo-mode">Click or press effect</label>
+<label for="hero-demo-mode">Particle effect</label>
 <select id="hero-demo-mode">${options.map(([value, label]) => `<option value="${value}">${label}</option>`).join("")}</select>
-<p class="hero-demo-hint">Click or tap the field to try it. This choice is temporary.</p>
+<p class="hero-demo-hint">Choose a hold mode, then press and hold the field. Release to see its short tail. This choice is temporary.</p>
 <p class="hero-demo-status" role="status" hidden></p>
 </div></details>`;
 	hero.insertAdjacentHTML("beforeend", markup);
