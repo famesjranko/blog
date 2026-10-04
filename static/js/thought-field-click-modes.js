@@ -1,7 +1,15 @@
 // The click modes the hero demo switches between, in panel order. `off`
 // is the hero with no click interaction, kept for comparison. Each life
 // is the one its force module fades over, so a click is dropped just as
-// its force reaches zero. Only Gather needs the press held.
+// its force reaches zero. Well, Bloom, Spin and Gather need the press
+// held. Well and Bloom also silence the pointer hover while held.
+
+import {
+	bloomForce,
+	HOLD_TUNING,
+	spinForce,
+	wellForce,
+} from "./thought-field-click-hold.js";
 import {
 	attractForce,
 	gatherForce,
@@ -21,6 +29,29 @@ import {
 /** @type {ReadonlyArray<ClickMode>} */
 export const CLICK_MODES = Object.freeze([
 	{ id: "off", label: "Off", hold: false, life: 0, force: () => {} },
+	{
+		id: "well",
+		label: "Well",
+		hold: true,
+		yieldHover: true,
+		life: HOLD_TUNING.well.life,
+		force: wellForce,
+	},
+	{
+		id: "bloom",
+		label: "Bloom",
+		hold: true,
+		yieldHover: true,
+		life: HOLD_TUNING.bloom.life,
+		force: bloomForce,
+	},
+	{
+		id: "spin",
+		label: "Spin",
+		hold: true,
+		life: HOLD_TUNING.spin.life,
+		force: spinForce,
+	},
 	{
 		id: "scatter",
 		label: "Scatter",

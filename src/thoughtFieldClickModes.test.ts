@@ -1,7 +1,11 @@
 import { describe, expect, it } from "vitest";
+import { parseDemo } from "../static/js/thought-field-click-demo.js";
 import { CLICK_MODES } from "../static/js/thought-field-click-modes.js";
 import type { Click, ClickMode } from "../static/js/thought-field-clicks.js";
-import { createClicks } from "../static/js/thought-field-clicks.js";
+import {
+	createClicks,
+	HOVER_RETURN,
+} from "../static/js/thought-field-clicks.js";
 import type { Field } from "../static/js/thought-field-particles.js";
 import { stepParticles } from "../static/js/thought-field-particles.js";
 
@@ -11,6 +15,9 @@ const PRESS = { x: 0.2, y: -0.1 };
 // The candidates of issue #40, in panel order, with `off` first.
 const IDS = [
 	"off",
+	"well",
+	"bloom",
+	"spin",
 	"scatter",
 	"shockwave",
 	"implode",
@@ -71,7 +78,7 @@ function frame(field: Field, step: (field: Field) => void, time: number): void {
 }
 
 describe("the mode registry", () => {
-	it("lists the eight modes once each, in panel order", () => {
+	it("lists the eleven modes once each, in panel order", () => {
 		// Given the registry
 		// When its ids are read
 		const ids = CLICK_MODES.map((mode) => mode.id);
@@ -96,13 +103,42 @@ describe("the mode registry", () => {
 		}
 	});
 
-	it("holds the press only for gather", () => {
+	it("holds the press for well, bloom, spin and gather", () => {
 		// Given the registry
 		// When the modes that hold the press are listed
 		const held = CLICK_MODES.filter((mode) => mode.hold).map((m) => m.id);
 
-		// Then gather is the only one
-		expect(held).toEqual(["gather"]);
+		// Then they are the three hold variants and gather
+		expect(held).toEqual(["well", "bloom", "spin", "gather"]);
+	});
+});
+
+describe("the hold modes in the registry", () => {
+	it("yields the hover for well and bloom, each living past the return", () => {
+		// Given the registry
+		// When the modes that yield the pointer hover are listed
+		const yielding = CLICK_MODES.filter((mode) => mode.yieldHover);
+
+		// Then they are well and bloom
+		expect(yielding.map((mode) => mode.id)).toEqual(["well", "bloom"]);
+		// And each lives at least as long as the hover takes to return
+		for (const mode of yielding) {
+			expect(mode.life, mode.id).toBeGreaterThanOrEqual(HOVER_RETURN);
+		}
+	});
+
+	it("opens scatter by default and each hold variant by name", () => {
+		// Given the registry
+		// When the demo parses a bare, an unknown and each variant's query
+		const opened = (query: string) => parseDemo(query, CLICK_MODES);
+
+		// Then a bare or unknown id opens scatter
+		expect(opened("?hero-demo")).toBe("scatter");
+		expect(opened("?hero-demo=nope")).toBe("scatter");
+		// And each hold variant opens itself
+		for (const id of ["well", "bloom", "spin"]) {
+			expect(opened(`?hero-demo=${id}`), id).toBe(id);
+		}
 	});
 });
 
@@ -123,6 +159,49 @@ describe("each candidate's force", () => {
 
 			// Then at least one particle has moved
 			expect(largestMove(before, field.pos)).toBeGreaterThan(0.001);
+		},
+	);
+});
+
+const HELD_MODES = CLICK_MODES.filter((mode) =>
+	["well", "bloom", "spin"].includes(mode.id),
+);
+
+// What the held click does over `frames` frames: each frame it pushes a
+// fresh field at rest, so the sum reads the force's strength at that
+// point of the hold and not the field's own drift.
+function push(clicks: ReturnType<typeof createClicks>, frames: number): number {
+	let total = 0;
+	for (let n = 0; n < frames; n += 1) {
+		const field = makeField();
+		const before = field.pos.slice();
+		clicks.step({ field, dt: FRAME, aspect: ASPECT });
+		for (let i = 0; i < before.length; i += 1) {
+			total += Math.abs((field.pos[i] ?? 0) - (before[i] ?? 0));
+		}
+	}
+	return total;
+}
+
+describe("each hold variant held through the engine", () => {
+	it.each(HELD_MODES.map((mode) => [mode.id, mode] as const))(
+		"%s pushes harder at the end of a 1.5 s hold than at the start",
+		(id, mode) => {
+			// Given a press held in this mode
+			const clicks = createClicks(mode);
+			clicks.press(PRESS.x, PRESS.y);
+
+			// When the first 0.1 s, the hold up to 1.4 s, and the last 0.1 s run
+			const first = push(clicks, 6);
+			push(clicks, 78);
+			const last = push(clicks, 6);
+
+			// Then the last 0.1 s moves the field further than the first
+			expect(last, id).toBeGreaterThan(first);
+			// And the press is still held
+			expect(clicks.live()[0]?.released).toBe(-1);
+			// And the pointer hover is silenced for well and bloom and kept for spin
+			expect(clicks.hover(), id).toBe(id === "spin" ? 1 : 0);
 		},
 	);
 });
