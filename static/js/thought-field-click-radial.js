@@ -76,7 +76,7 @@ const NEAR = 1e-6;
  * @param {number} d distance from the centre, field units
  * @param {number} radius field units
  */
-function falloff(d, radius) {
+export function falloff(d, radius) {
 	if (d >= radius) {
 		return 0;
 	}
@@ -89,7 +89,7 @@ function falloff(d, radius) {
  * @param {number} d distance from the centre, field units
  * @param {number} core field units
  */
-function soften(d, core) {
+export function soften(d, core) {
 	return d / Math.hypot(d, core);
 }
 
@@ -97,7 +97,7 @@ function soften(d, core) {
  * @param {number} t seconds after release
  * @param {number} life seconds
  */
-function fade(t, life) {
+export function fade(t, life) {
 	if (t >= life) {
 		return 0;
 	}
