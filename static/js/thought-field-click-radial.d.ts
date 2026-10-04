@@ -69,3 +69,6 @@ export function shockwaveForce(options: RadialForceOptions): void;
 export function implodeForce(options: RadialForceOptions): void;
 export function attractForce(options: RadialForceOptions): void;
 export function gatherForce(options: RadialForceOptions): void;
+export function falloff(d: number, radius: number): number;
+export function soften(d: number, core: number): number;
+export function fade(t: number, life: number): number;
