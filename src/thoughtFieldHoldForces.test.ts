@@ -105,7 +105,7 @@ it("dispatches hold forces to particle positions without changing unrelated even
 });
 
 it("bounds the frame step and ignores distant, expired, and invalid samples", () => {
-	// Given a nearby push, a distant particle, and malformed inputs.
+	// Given a particle close to a held push, a distant particle, and malformed inputs.
 	const event = {
 		mode: "hold-push" as const,
 		x: 0,
@@ -119,7 +119,7 @@ it("bounds the frame step and ignores distant, expired, and invalid samples", ()
 		effect({ x, y: 0, event: { ...event, age }, dt, aspect: 2 });
 
 	// When the force is sampled over a long frame and outside its valid range.
-	const longFrame = sample(0.3, 10);
+	const longFrame = sample(0.05, 10);
 	const far = sample(2, 1 / 60);
 	const expired = effect({
 		x: 0.3,
