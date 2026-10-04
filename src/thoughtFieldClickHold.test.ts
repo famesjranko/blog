@@ -95,9 +95,11 @@ describe("hold forces while held", () => {
 			const mid = moved(force, click({ age: 1.5, released: HELD })).total;
 			const late = moved(force, click({ age: 3.5, released: HELD })).total;
 
-			// Then it moves more mid-hold than early, and still moves late
+			// Then it moves more mid-hold than early
 			expect(mid).toBeGreaterThan(early);
-			expect(late).toBeGreaterThan(0);
+
+			// And it moves at least as much late in the hold as mid-hold
+			expect(late).toBeGreaterThanOrEqual(mid * (1 - 1e-6));
 		},
 	);
 
