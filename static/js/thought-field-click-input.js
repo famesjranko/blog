@@ -1,16 +1,24 @@
 import { evolveVortices } from "./thought-field-click-vortex.js";
+import {
+	advanceHold,
+	finishGather,
+	finishHold,
+	HOLD_TAIL,
+	isHoldEvent,
+	isHoldMode,
+	startGather,
+	startHold,
+} from "./thought-field-hold-state.js";
 
 /**
  * @typedef {"off" | "shockwave" | "gravity-implosion" | "gravity-slow" |
  *   "vortex-alternate" | "vortex-position" | "scatter" | "gather" |
- *   "turbulence"} ClickMode
+ *   "turbulence" | import("./thought-field-hold-state.js").HoldMode} ClickMode
  * @typedef {{ x: number, y: number, age: number, strength: number,
- *   mode: Exclude<ClickMode, "off" | "gather">, phase?: number,
+ *   mode: Exclude<ClickMode, "off" | "gather" | import("./thought-field-hold-state.js").HoldMode>, phase?: number,
  *   heldFor?: number, spin?: number }} PulseEvent
- * @typedef {{ x: number, y: number, age: number, strength: number,
- *   mode: "gather", phase: "hold" | "release" | "cancel",
- *   heldFor?: number, spin?: number }} GatherEvent
- * @typedef {PulseEvent | GatherEvent} ClickEvent
+ * @typedef {PulseEvent | import("./thought-field-hold-state.js").GatherEvent |
+ *   import("./thought-field-hold-state.js").HoldEvent} ClickEvent
  * @typedef {{ id: number, x: number, y: number, heldFor: number }} Held
  * @typedef {{ mode: ClickMode, events: ClickEvent[], held: Held | null,
  *   sequence: number, destroyed: boolean }} State
@@ -74,17 +82,12 @@ function onDown(source, hero, event) {
 		return;
 	}
 	state.held = { id: event.pointerId, ...point, heldFor: 0 };
-	if (state.mode === "gather") {
-		/** @type {GatherEvent} */
-		const gather = {
-			...point,
-			age: 0,
-			strength: 1,
-			mode: "gather",
-			phase: "hold",
-			heldFor: 0,
-		};
-		state.events = [...state.events, gather].slice(-MAX_EVENTS);
+	if (isHoldMode(state.mode)) {
+		state.events = [...state.events, startHold(state.mode, point)].slice(
+			-MAX_EVENTS,
+		);
+	} else if (state.mode === "gather") {
+		state.events = [...state.events, startGather(point)].slice(-MAX_EVENTS);
 	}
 }
 
@@ -98,6 +101,16 @@ function onUp(source, hero, event) {
 	state.held = null;
 	const protectedTarget = isProtected(event.target);
 	const point = protectedTarget ? null : position(hero, event);
+	if (isHoldMode(state.mode)) {
+		const other = state.events.filter((item) => !isHoldEvent(item));
+		const released = finishHold(
+			state.events.filter(isHoldEvent),
+			current.heldFor,
+			protectedTarget,
+		);
+		state.events = [...other, ...released].slice(-MAX_EVENTS);
+		return;
+	}
 	if (state.mode === "gather") {
 		state.events = state.events.filter(
 			(item) => item.mode !== "gather" || item.phase !== "hold",
@@ -106,16 +119,10 @@ function onUp(source, hero, event) {
 			return;
 		}
 		const releasePoint = point ?? { x: current.x, y: current.y };
-		/** @type {GatherEvent} */
-		const gather = {
-			...releasePoint,
-			age: 0,
-			strength: 1,
-			mode: "gather",
-			phase: "release",
-			heldFor: current.heldFor,
-		};
-		state.events = [...state.events, gather].slice(-MAX_EVENTS);
+		state.events = [
+			...state.events,
+			finishGather(releasePoint, current.heldFor),
+		].slice(-MAX_EVENTS);
 		return;
 	}
 	if (point !== null && state.mode !== "off") {
@@ -140,12 +147,16 @@ function onCancel(source, event) {
 	}
 	state.held = null;
 	state.events = state.events.filter(
-		(item) => item.mode !== "gather" || item.phase !== "hold",
+		(item) =>
+			!isHoldEvent(item) && (item.mode !== "gather" || item.phase !== "hold"),
 	);
 }
 
 /** @param {ClickEvent} item @param {number} dt @param {Held | null} held @returns {ClickEvent} */
 function ageEvent(item, dt, held) {
+	if (isHoldEvent(item)) {
+		return advanceHold(item, dt, held?.heldFor ?? item.heldFor);
+	}
 	if (item.mode === "gather" && item.phase === "hold") {
 		return { ...item, heldFor: held?.heldFor ?? item.heldFor };
 	}
@@ -154,6 +165,9 @@ function ageEvent(item, dt, held) {
 
 /** @param {ClickEvent} item @returns {number} */
 function lifetime(item) {
+	if (isHoldEvent(item)) {
+		return item.phase === "hold" ? Infinity : HOLD_TAIL;
+	}
 	return item.mode === "gather" && item.phase === "hold"
 		? Infinity
 		: LIFETIME[item.mode];
@@ -188,19 +202,7 @@ function setMode(source, mode) {
 	if (state.destroyed) {
 		return;
 	}
-	if (
-		![
-			"off",
-			"shockwave",
-			"gravity-implosion",
-			"gravity-slow",
-			"vortex-alternate",
-			"vortex-position",
-			"scatter",
-			"gather",
-			"turbulence",
-		].includes(mode)
-	) {
+	if (mode !== "off" && !isHoldMode(mode) && !Object.hasOwn(LIFETIME, mode)) {
 		throw new RangeError(`Unknown click mode: ${mode}`);
 	}
 	state.mode = mode;
