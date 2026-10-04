@@ -28,12 +28,15 @@ export interface ForceOptions {
 export type Force = (options: ForceOptions) => void;
 
 // `life` counts seconds after release. A mode without `hold` releases
-// its click at press.
+// its click at press. `yieldHover` silences the pointer hover while a
+// click is held and returns it over HOVER_RETURN after release; absent,
+// the hover runs as normal.
 export interface ClickMode {
 	id: string;
 	label: string;
 	hold: boolean;
 	life: number;
+	yieldHover?: true;
 	force: Force;
 }
 
@@ -46,6 +49,8 @@ export interface StepOptions {
 // What the frame loop calls after stepParticles.
 export interface ClickSource {
 	step(options: StepOptions): void;
+	// Scale in [0, 1] for the pointer hover strength this frame.
+	hover(): number;
 }
 
 export interface ClickField extends ClickSource {
@@ -60,6 +65,7 @@ export interface ClickField extends ClickSource {
 
 export const MAX_LIVE: number;
 export const HOLD_LIMIT: number;
+export const HOVER_RETURN: number;
 export function pressClick(
 	live: ReadonlyArray<Click>,
 	press: { x: number; y: number; mode: ClickMode; serial: number },
@@ -76,4 +82,5 @@ export function advanceClicks(
 export function applyClicks(
 	options: StepOptions & { live: ReadonlyArray<Click>; mode: ClickMode },
 ): void;
+export function hoverScale(live: ReadonlyArray<Click>, mode: ClickMode): number;
 export function createClicks(initial: ClickMode): ClickField;

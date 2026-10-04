@@ -53,6 +53,11 @@ function stepFrame(options, now, dt, physics) {
 	const aspect = dims.aspect;
 	const time = now / 1000;
 	pointer.strength = pointerStrength(pointer.lastMove, now);
+	// Null unless the page opted into the click demo; a held click can
+	// yield the hover.
+	if (clicks !== null) {
+		pointer.strength *= clicks.hover();
+	}
 	stepMeteors(meteors, aspect, time, dt);
 	const moved =
 		physics === null ? NO_PHYSICS : stepPhysics(options, dt, physics);

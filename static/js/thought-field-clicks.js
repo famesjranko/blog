@@ -17,6 +17,8 @@ export const MAX_LIVE = 8;
 // A press held this long is released, so a lost pointerup cannot pin a
 // click to the field.
 export const HOLD_LIMIT = 4;
+// Seconds a yielding mode takes to hand the hover back after release.
+export const HOVER_RETURN = 0.6;
 
 /**
  * Adds a click at (X, Y). A mode without `hold` releases it at once.
@@ -88,8 +90,32 @@ export function applyClicks(options) {
 }
 
 /**
+ * How much of the pointer hover to keep. A mode with `yieldHover`
+ * silences it while a click is held, because the hover push would beat
+ * a held pull. After release it ramps back over HOVER_RETURN, so the
+ * hover does not blast a gathered knot apart. The slowest click sets
+ * the pace.
+ * @param {ReadonlyArray<Click>} live
+ * @param {ClickMode} mode
+ * @returns {number}
+ */
+export function hoverScale(live, mode) {
+	if (mode.yieldHover !== true) {
+		return 1;
+	}
+	let scale = 1;
+	for (const click of live) {
+		const back =
+			click.released < 0 ? 0 : (click.age - click.released) / HOVER_RETURN;
+		scale = Math.min(scale, back);
+	}
+	return scale;
+}
+
+/**
  * The live-click state for one hero, starting in MODE. `step` is what
- * the frame loop calls after stepParticles.
+ * the frame loop calls after stepParticles; `hover` scales the pointer
+ * push for that frame.
  * @param {ClickMode} initial
  * @returns {ClickField}
  */
@@ -101,6 +127,7 @@ export function createClicks(initial) {
 	return {
 		mode: () => mode,
 		live: () => live,
+		hover: () => hoverScale(live, mode),
 		press: (x, y) => {
 			serial += 1;
 			live = pressClick(live, { x, y, mode, serial });
