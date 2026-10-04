@@ -84,25 +84,25 @@ describe("stepParticles hold", () => {
 
 describe("click force selection", () => {
 	const click = { x: 0.3, y: -0.25, age: 0.12, strength: 1 };
-	const modes: ClickEvent["mode"][] = [
-		"shockwave",
-		"gravity-implosion",
-		"gravity-slow",
-		"vortex-alternate",
-		"vortex-position",
-		"scatter",
-		"gather",
-		"turbulence",
+	const events: ClickEvent[] = [
+		{ ...click, mode: "shockwave" },
+		{ ...click, mode: "gravity-implosion" },
+		{ ...click, mode: "gravity-slow" },
+		{ ...click, mode: "vortex-alternate" },
+		{ ...click, mode: "vortex-position" },
+		{ ...click, mode: "scatter" },
+		{ ...click, mode: "gather" },
+		{ ...click, mode: "turbulence" },
 	];
 
-	it.each(modes)("moves the existing particles for %s", (mode) => {
+	it.each(events)("moves the existing particles for $mode", (event) => {
 		// Given a field and its ordinary drift position.
 		const field = makeField();
 		const ordinary = makeField();
 		step(ordinary, 1);
 
 		// When one click in the selected mode is stepped.
-		step(field, 1, [{ ...click, mode }]);
+		step(field, 1, [event]);
 
 		// Then the selected force changes the field's own position buffer.
 		expect(Array.from(field.pos)).not.toEqual(Array.from(ordinary.pos));
