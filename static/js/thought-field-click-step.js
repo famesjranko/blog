@@ -1,5 +1,6 @@
 import { effect as gather } from "./thought-field-click-gather.js";
 import { effect as gravity } from "./thought-field-click-gravity.js";
+import { effect as hold } from "./thought-field-hold-forces.js";
 import { effect as scatter } from "./thought-field-click-scatter.js";
 import { effect as shockwave } from "./thought-field-click-shockwave.js";
 import { effect as turbulence } from "./thought-field-click-turbulence.js";
@@ -32,6 +33,10 @@ function displacement(options) {
 			return gather({ x, y, event, dt, aspect });
 		case "turbulence":
 			return turbulence({ x, y, event, dt, aspect });
+		case "hold-pull":
+		case "hold-push":
+		case "hold-orbit":
+			return hold({ x, y, event, dt, aspect });
 		default:
 			return { x: 0, y: 0 };
 	}

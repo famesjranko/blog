@@ -37,6 +37,8 @@ export type ClickMode =
 	| "gather"
 	| "turbulence";
 
+export type HoldMode = "hold-pull" | "hold-push" | "hold-orbit";
+
 interface ClickEventBase {
 	x: number;
 	y: number;
@@ -47,6 +49,11 @@ interface ClickEventBase {
 }
 
 export type ClickEvent =
+	| (ClickEventBase & {
+			mode: HoldMode;
+			phase: "hold" | "release";
+			heldFor: number;
+	  })
 	| (ClickEventBase & {
 			mode: "gather";
 			phase?: "hold" | "release" | "cancel";
