@@ -125,7 +125,13 @@ async function fetchChecks({
 	if (!response.ok) {
 		throw new Error(`GitHub check-runs API returned ${response.status}`);
 	}
-	return checkRunsSchema.parse(await response.json()).check_runs;
+	let body: unknown;
+	try {
+		body = await response.json();
+	} catch {
+		throw new Error("GitHub check-runs API returned invalid JSON");
+	}
+	return checkRunsSchema.parse(body).check_runs;
 }
 
 // Thin I/O around decide(): every wait, grace, and deadline choice is there.

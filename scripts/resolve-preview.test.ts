@@ -1,4 +1,6 @@
 import { describe, expect, it } from "vitest";
+import { spawnSync } from "node:child_process";
+import { resolve } from "node:path";
 import { type CheckRun, decide, parsePreview } from "./resolve-preview.js";
 
 const sha = "b0a91e364b529ce41ec93cf5bd98f17b15ff1d2f";
@@ -169,5 +171,38 @@ describe("parsePreview", () => {
 
 		// Then the insecure URL is rejected.
 		expect(parse).toThrow(/not an immutable hash URL/);
+	});
+});
+
+describe("check-runs response parsing", () => {
+	it("does not disclose malformed response bodies or the API token", () => {
+		// Given a successful API response containing the same value as the token.
+		const sourcePath = resolve("scripts/resolve-preview.ts");
+		const script = [
+			'globalThis.fetch = async () => new Response("tok7", { status: 200 });',
+			`process.argv[1] = ${JSON.stringify(sourcePath)};`,
+			'await import("./scripts/resolve-preview.ts");',
+		].join(" ");
+		const result = spawnSync(
+			process.execPath,
+			["--import", "tsx", "--eval", script],
+			{
+				encoding: "utf8",
+				env: {
+					...process.env,
+					GH_REPOSITORY: "andy/blog",
+					GH_TOKEN: "tok7",
+					PR_HEAD_SHA: sha,
+					GITHUB_OUTPUT: "/tmp/resolve-preview-test-output",
+				},
+			},
+		);
+
+		// When the resolver handles the mocked response.
+
+		// Then it reports a fixed diagnostic without response content or token.
+		expect(result.status).toBe(1);
+		expect(result.stderr).toBe("GitHub check-runs API returned invalid JSON\n");
+		expect(result.stderr).not.toContain("tok7");
 	});
 });
