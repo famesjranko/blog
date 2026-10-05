@@ -20,6 +20,7 @@ const ROOTS = [
 	"static",
 	"tests",
 	"playwright.config.ts",
+	"playwright.preview.config.ts",
 	"vitest.config.ts",
 ];
 const SCRIPT_EXTENSIONS = [".ts", ".js", ".mjs"];

@@ -1,10 +1,24 @@
-import { expect, test, type Locator, type Page } from "@playwright/test";
+import { randomUUID } from "node:crypto";
+import { writeFile } from "node:fs/promises";
+import { expect, type Locator, type Page, test } from "@playwright/test";
+
+async function attachMeasurement(name: string, value: object) {
+	// Measurements run concurrently (see homeCards), so a counter read before
+	// the await gives two calls one file; a random name cannot collide.
+	const path = test.info().outputPath(`${name}-${randomUUID()}.json`);
+	await writeFile(path, JSON.stringify(value, null, 2));
+	await test.info().attach(name, { path, contentType: "application/json" });
+}
 
 async function box(locator: Locator) {
 	const bounds = await locator.boundingBox();
 	if (bounds === null) {
 		throw new Error(`expected a visible box for ${locator}`);
 	}
+	await attachMeasurement("geometry-box", {
+		locator: locator.toString(),
+		bounds,
+	});
 	return bounds;
 }
 
@@ -18,6 +32,7 @@ async function expectNoHorizontalOverflow(page: Page) {
 		viewport: window.innerWidth,
 		content: document.documentElement.scrollWidth,
 	}));
+	await attachMeasurement("geometry-overflow", dimensions);
 	expect(dimensions.content, "page must fit the viewport").toBeLessThanOrEqual(
 		dimensions.viewport + 1,
 	);
