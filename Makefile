@@ -1,4 +1,4 @@
-.PHONY: install check typecheck lint guard format format-check test build images images-check preview preview-wsl clean help
+.PHONY: install check typecheck lint guard format format-check test browser build images images-check preview preview-wsl clean help
 
 PORT ?= 8000
 # Preview builds include draft pieces; DRAFTS=false previews the published shape.
@@ -9,9 +9,10 @@ help: ## Show targets
 
 install: ## Install dependencies and the repo git hooks
 	npm ci
+	npx playwright install chromium
 	git config core.hooksPath scripts/hooks
 
-check: ## Canonical gate (same as CI): format-check + lint + guard + typecheck + test + images-check + build
+check: ## Canonical gate (same as CI): format-check + lint + guard + typecheck + test + images-check + build + browser
 	$(MAKE) --no-print-directory format-check
 	$(MAKE) --no-print-directory lint
 	$(MAKE) --no-print-directory guard
@@ -19,6 +20,7 @@ check: ## Canonical gate (same as CI): format-check + lint + guard + typecheck +
 	$(MAKE) --no-print-directory test
 	$(MAKE) --no-print-directory images-check
 	$(MAKE) --no-print-directory build
+	$(MAKE) --no-print-directory browser
 	echo "OK: all checks passed."
 
 typecheck: ## tsc --noEmit
@@ -38,6 +40,9 @@ format-check: ## Fail on unformatted files (CI)
 
 test: ## vitest run
 	npm run test
+
+browser: ## Playwright geometry checks against the local dist/ build
+	npm run test:browser
 
 build: ## Generate card placeholders and build dist/ (BASE_PATH=/repo for project-site URLs, empty locally)
 	npm run build
