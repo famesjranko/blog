@@ -1,7 +1,7 @@
 // One frame of the hero field and the state carried between frames:
 // pointer, meteors, the snow globe where there is phone motion, the drift,
-// and the birth, then the draw. thought-field-loop.js decides when frames
-// run.
+// the press-and-hold orbit, and the birth, then the draw.
+// thought-field-loop.js decides when frames run.
 import { BIRTH_TUNING, makeSeeds, stepBirth } from "./thought-field-birth.js";
 import { pointerStrength, stepParticles } from "./thought-field-particles.js";
 import { stepMeteors } from "./thought-field-meteors.js";
@@ -29,6 +29,7 @@ const NO_PHYSICS = Object.freeze({ physics: null, hold: 1 });
  *   meteors: import("./thought-field-meteors.js").Meteors,
  *   dims: { aspect: number },
  *   motion: MotionInput | null,
+ *   orbit: import("./thought-field-orbit.js").Orbit,
  * }} LoopOptions
  */
 
@@ -48,15 +49,19 @@ const NO_PHYSICS = Object.freeze({ physics: null, hold: 1 });
  * @returns {Physics | null}
  */
 function stepFrame(options, now, dt, physics) {
-	const { field, pointer, meteors, dims } = options;
+	const { field, pointer, meteors, dims, orbit } = options;
 	const aspect = dims.aspect;
 	const time = now / 1000;
-	pointer.strength = pointerStrength(pointer.lastMove, now);
+	orbit.advance(dt);
+	// Hover repulsion pauses while the orbit runs, so the two do not fight.
+	pointer.strength =
+		pointerStrength(pointer.lastMove, now) * orbit.hoverShare();
 	stepMeteors(meteors, aspect, time, dt);
 	const moved =
 		physics === null ? NO_PHYSICS : stepPhysics(options, dt, physics);
 	const hold = moved.hold;
 	stepParticles({ field, aspect, time, dt, pointer, meteors, hold });
+	orbit.stir(field, dt);
 	return moved.physics;
 }
 
