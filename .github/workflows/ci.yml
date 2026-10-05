@@ -41,3 +41,55 @@ jobs:
       - run: npx playwright install chromium
       - run: npm run build
       - run: npm run test:browser
+  capture-preview:
+    # Review evidence only: the local make check is the deterministic gate,
+    # so remote faults warn instead of failing the PR. Fork PRs get no
+    # Cloudflare preview, so the job runs only for same-repository heads.
+    if: >-
+      github.event_name == 'pull_request' &&
+      github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    permissions:
+      contents: read
+      checks: read
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Wait for this commit's Cloudflare preview
+        id: preview
+        continue-on-error: true
+        # The resolver gives up at 20 minutes; this backstop also fails only the step.
+        timeout-minutes: 22
+        run: npx tsx scripts/resolve-preview.ts
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          GH_REPOSITORY: ${{ github.repository }}
+      - name: Capture preview screenshots and geometry
+        id: capture
+        if: steps.preview.outcome == 'success' && steps.preview.outputs.preview != 'none'
+        continue-on-error: true
+        # Fails the step, and so warns, before the job timeout turns the PR red.
+        timeout-minutes: 10
+        run: npx playwright test -c playwright.preview.config.ts tests/browser/visual.spec.ts tests/browser/geometry.spec.ts
+        env:
+          PLAYWRIGHT_BASE_URL: ${{ steps.preview.outputs.url }}
+      - name: Upload preview capture
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: preview-capture-${{ github.event.pull_request.head.sha }}
+          path: test-results/preview/
+          if-no-files-found: warn
+      - name: Report a failed preview capture
+        if: steps.preview.outcome == 'failure' || steps.capture.outcome == 'failure'
+        run: >-
+          echo "::warning::Preview capture is diagnostic and did not gate this PR.
+          Resolve step: ${{ steps.preview.outcome }}; capture step: ${{ steps.capture.outcome }}.
+          The preview-capture artifact holds any evidence."
