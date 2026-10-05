@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { imageSize, isInternalJpeg, webpSrc } from "./images.js";
+import { imageSize, isInternalJpeg } from "./images.js";
 
 describe("imageSize", () => {
 	it("returns the pixel size of a shipped internal image", () => {
@@ -50,33 +50,5 @@ describe("isInternalJpeg", () => {
 
 	it("rejects relative paths", () => {
 		expect(isInternalJpeg("img/foo.jpg")).toBe(false);
-	});
-});
-
-describe("webpSrc", () => {
-	it("maps a jpg source to its same-name webp sidecar", () => {
-		expect(webpSrc("/img/essays/x/cover.jpg")).toBe("/img/essays/x/cover.webp");
-	});
-
-	it("maps a jpeg source to its same-name webp sidecar", () => {
-		expect(webpSrc("/img/essays/x/cover.jpeg")).toBe(
-			"/img/essays/x/cover.webp",
-		);
-	});
-
-	it("returns undefined for png sources", () => {
-		expect(webpSrc("/img/essays/x/table1.png")).toBeUndefined();
-	});
-
-	it("returns undefined for svg sources", () => {
-		expect(webpSrc("/img/projects/c/diagram.svg")).toBeUndefined();
-	});
-
-	it("returns undefined for external urls", () => {
-		expect(webpSrc("https://example.com/foo.jpg")).toBeUndefined();
-	});
-
-	it("returns undefined for relative paths", () => {
-		expect(webpSrc("img/foo.jpg")).toBeUndefined();
 	});
 });

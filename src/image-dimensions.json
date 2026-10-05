@@ -3,23 +3,11 @@
 		"width": 1024,
 		"height": 576
 	},
-	"/img/essays/as-knowledge-holders/cover.webp": {
-		"width": 1024,
-		"height": 576
-	},
 	"/img/essays/descript-philosophy/cover.jpg": {
 		"width": 1600,
 		"height": 679
 	},
-	"/img/essays/descript-philosophy/cover.webp": {
-		"width": 1600,
-		"height": 679
-	},
 	"/img/essays/dretske-closure/cover.jpg": {
-		"width": 1498,
-		"height": 633
-	},
-	"/img/essays/dretske-closure/cover.webp": {
 		"width": 1498,
 		"height": 633
 	},
@@ -31,15 +19,7 @@
 		"width": 1313,
 		"height": 533
 	},
-	"/img/essays/dreyfus-review/cover.webp": {
-		"width": 1313,
-		"height": 533
-	},
 	"/img/essays/ethics-google/cover.jpg": {
-		"width": 1600,
-		"height": 563
-	},
-	"/img/essays/ethics-google/cover.webp": {
 		"width": 1600,
 		"height": 563
 	},
@@ -47,15 +27,7 @@
 		"width": 1311,
 		"height": 551
 	},
-	"/img/essays/heidegger-theyself/cover.webp": {
-		"width": 1311,
-		"height": 551
-	},
 	"/img/essays/inferential-knowledge/cover.jpg": {
-		"width": 1600,
-		"height": 636
-	},
-	"/img/essays/inferential-knowledge/cover.webp": {
 		"width": 1600,
 		"height": 636
 	},
@@ -63,15 +35,7 @@
 		"width": 1600,
 		"height": 695
 	},
-	"/img/essays/jtb-knowledge/cover.webp": {
-		"width": 1600,
-		"height": 695
-	},
 	"/img/essays/kant-enlightenment/cover.jpg": {
-		"width": 1600,
-		"height": 599
-	},
-	"/img/essays/kant-enlightenment/cover.webp": {
 		"width": 1600,
 		"height": 599
 	},
@@ -79,15 +43,7 @@
 		"width": 1600,
 		"height": 689
 	},
-	"/img/essays/knowledge-thatandhow/cover.webp": {
-		"width": 1600,
-		"height": 689
-	},
 	"/img/essays/plato-allegory/cover.jpg": {
-		"width": 1293,
-		"height": 543
-	},
-	"/img/essays/plato-allegory/cover.webp": {
 		"width": 1293,
 		"height": 543
 	},
@@ -95,15 +51,7 @@
 		"width": 1600,
 		"height": 685
 	},
-	"/img/essays/time-travel/cover.webp": {
-		"width": 1600,
-		"height": 685
-	},
 	"/img/essays/whatis-philosophy/cover.jpg": {
-		"width": 1280,
-		"height": 540
-	},
-	"/img/essays/whatis-philosophy/cover.webp": {
 		"width": 1280,
 		"height": 540
 	},
@@ -111,15 +59,7 @@
 		"width": 640,
 		"height": 360
 	},
-	"/img/placeholders/esp32-s3-internet-monitor.webp": {
-		"width": 640,
-		"height": 360
-	},
 	"/img/placeholders/mediastack.jpg": {
-		"width": 640,
-		"height": 360
-	},
-	"/img/placeholders/mediastack.webp": {
 		"width": 640,
 		"height": 360
 	},
@@ -127,15 +67,7 @@
 		"width": 640,
 		"height": 360
 	},
-	"/img/placeholders/minesweeper-flags.webp": {
-		"width": 640,
-		"height": 360
-	},
 	"/img/placeholders/musicmeta.jpg": {
-		"width": 640,
-		"height": 360
-	},
-	"/img/placeholders/musicmeta.webp": {
 		"width": 640,
 		"height": 360
 	},
@@ -143,15 +75,7 @@
 		"width": 640,
 		"height": 360
 	},
-	"/img/placeholders/object-tracking-demo.webp": {
-		"width": 640,
-		"height": 360
-	},
 	"/img/placeholders/time-travel-uni.jpg": {
-		"width": 640,
-		"height": 360
-	},
-	"/img/placeholders/time-travel-uni.webp": {
 		"width": 640,
 		"height": 360
 	},
@@ -175,15 +99,7 @@
 		"width": 1512,
 		"height": 630
 	},
-	"/img/projects/connect4-heuristic/cover.webp": {
-		"width": 1512,
-		"height": 630
-	},
 	"/img/projects/connect4-lisp-web/connect4-debug-scores.jpg": {
-		"width": 1600,
-		"height": 868
-	},
-	"/img/projects/connect4-lisp-web/connect4-debug-scores.webp": {
 		"width": 1600,
 		"height": 868
 	},
@@ -191,15 +107,7 @@
 		"width": 1512,
 		"height": 630
 	},
-	"/img/projects/connect4-lisp-web/cover.webp": {
-		"width": 1512,
-		"height": 630
-	},
 	"/img/projects/extracting-pdf-tables/cover.jpg": {
-		"width": 1512,
-		"height": 630
-	},
-	"/img/projects/extracting-pdf-tables/cover.webp": {
 		"width": 1512,
 		"height": 630
 	},
@@ -207,15 +115,7 @@
 		"width": 1600,
 		"height": 599
 	},
-	"/img/projects/extracting-pdf-tables/engine-arch.webp": {
-		"width": 1600,
-		"height": 599
-	},
 	"/img/projects/tablescan/book-viewer.jpg": {
-		"width": 1232,
-		"height": 1315
-	},
-	"/img/projects/tablescan/book-viewer.webp": {
 		"width": 1232,
 		"height": 1315
 	},
@@ -223,15 +123,7 @@
 		"width": 1512,
 		"height": 630
 	},
-	"/img/projects/tablescan/cover.webp": {
-		"width": 1512,
-		"height": 630
-	},
 	"/img/projects/tablescan/detection-approved.jpg": {
-		"width": 510,
-		"height": 258
-	},
-	"/img/projects/tablescan/detection-approved.webp": {
 		"width": 510,
 		"height": 258
 	},
@@ -239,15 +131,7 @@
 		"width": 508,
 		"height": 232
 	},
-	"/img/projects/tablescan/detection-pending.webp": {
-		"width": 508,
-		"height": 232
-	},
 	"/img/projects/tablescan/modes.jpg": {
-		"width": 640,
-		"height": 255
-	},
-	"/img/projects/tablescan/modes.webp": {
 		"width": 640,
 		"height": 255
 	},
@@ -255,15 +139,7 @@
 		"width": 1200,
 		"height": 250
 	},
-	"/img/projects/tablescan/selections.webp": {
-		"width": 1200,
-		"height": 250
-	},
 	"/img/projects/tablescan/upload.jpg": {
-		"width": 720,
-		"height": 850
-	},
-	"/img/projects/tablescan/upload.webp": {
 		"width": 720,
 		"height": 850
 	}
