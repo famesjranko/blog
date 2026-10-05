@@ -26,19 +26,28 @@ class FakeElement extends EventTarget {
 	}
 }
 
-type Press = { on: FakeElement; button?: number; isPrimary?: boolean };
+type PointerOptions = {
+	on: FakeElement;
+	button?: number;
+	buttons?: number;
+	clientX?: number;
+	clientY?: number;
+	isPrimary?: boolean;
+	pointerId?: number;
+};
 
 // A pointer event as the module reads it. PointerEvent is stubbed as
 // Event, so this passes the module's instanceof check.
-function pointer(type: string, press: Press): Event {
+function pointer(type: string, options: PointerOptions): Event {
 	return Object.defineProperties(new Event(type), {
-		target: { value: press.on },
-		pointerId: { value: 1 },
-		isPrimary: { value: press.isPrimary ?? true },
-		button: { value: press.button ?? 0 },
+		target: { value: options.on },
+		pointerId: { value: options.pointerId ?? 1 },
+		isPrimary: { value: options.isPrimary ?? true },
+		button: { value: options.button ?? 0 },
+		buttons: { value: options.buttons ?? 1 },
 		// The centre of the hero's 200 by 100 box.
-		clientX: { value: 100 },
-		clientY: { value: 50 },
+		clientX: { value: options.clientX ?? 100 },
+		clientY: { value: options.clientY ?? 50 },
 	});
 }
 
@@ -53,10 +62,14 @@ function page() {
 
 // Whether a particle just right of the hero's centre moves this frame.
 function orbiting(orbit: Orbit): boolean {
-	const field = { count: 1, pos: Float32Array.from([0.25, 0, 0]) };
+	return orbitingAt(orbit, 0.25, 0);
+}
+
+function orbitingAt(orbit: Orbit, x: number, y: number): boolean {
+	const field = { count: 1, pos: Float32Array.from([x, y, 0]) };
 	orbit.advance(DT);
 	orbit.stir(field, DT);
-	return field.pos[1] !== 0;
+	return field.pos[0] !== x || field.pos[1] !== y;
 }
 
 async function listening(hero: FakeElement): Promise<Orbit> {
@@ -68,9 +81,10 @@ async function listening(hero: FakeElement): Promise<Orbit> {
 	return orbit;
 }
 
-const win = new EventTarget();
+let win: EventTarget;
 
 beforeEach(() => {
+	win = new EventTarget();
 	vi.stubGlobal("window", win);
 	vi.stubGlobal("Element", FakeElement);
 	vi.stubGlobal("PointerEvent", Event);
@@ -105,7 +119,7 @@ describe("where a press starts an orbit", () => {
 		expect(orbiting(orbit)).toBe(false);
 	});
 
-	it("starts no orbit on a press on hero text", async () => {
+	it("starts an orbit on a press on hero text", async () => {
 		// Given a hero listening for presses
 		const { hero, text } = page();
 		const orbit = await listening(hero);
@@ -113,8 +127,8 @@ describe("where a press starts an orbit", () => {
 		// When the primary button goes down on the standfirst
 		hero.dispatchEvent(pointer("pointerdown", { on: text }));
 
-		// Then nothing orbits
-		expect(orbiting(orbit)).toBe(false);
+		// Then particles near the text orbit
+		expect(orbiting(orbit)).toBe(true);
 	});
 
 	it("starts no orbit on a secondary button press", async () => {
@@ -146,6 +160,23 @@ describe("which pointer starts an orbit", () => {
 	});
 });
 
+describe("orbit pointer movement", () => {
+	it("follows the held pointer across the field", async () => {
+		// Given a held press at the centre of the open field
+		const { hero, inner } = page();
+		const orbit = await listening(hero);
+		hero.dispatchEvent(pointer("pointerdown", { on: inner }));
+
+		// When that pointer moves right while its primary button stays held
+		win.dispatchEvent(
+			pointer("pointermove", { on: inner, clientX: 150, buttons: 1 }),
+		);
+
+		// Then a particle near the new point orbits there
+		expect(orbitingAt(orbit, 1.25, 0)).toBe(true);
+	});
+});
+
 describe("orbit pointer release", () => {
 	it("ends the hold on pointerup", async () => {
 		// Given a held press in the open field
@@ -171,6 +202,40 @@ describe("orbit pointer release", () => {
 
 		// When the browser cancels the pointer and the tail passes
 		win.dispatchEvent(pointer("pointercancel", { on: inner }));
+		for (let t = 0; t < TAIL_S; t += DT) {
+			orbit.advance(DT);
+		}
+
+		// Then nothing orbits
+		expect(orbiting(orbit)).toBe(false);
+	});
+});
+
+describe("stale orbit pointer cleanup", () => {
+	it("ends a stale hold when movement has no primary button", async () => {
+		// Given a pointerup was missed after a hold began
+		const { hero, inner } = page();
+		const orbit = await listening(hero);
+		hero.dispatchEvent(pointer("pointerdown", { on: inner }));
+
+		// When the pointer next moves with no primary button held
+		win.dispatchEvent(pointer("pointermove", { on: inner, buttons: 0 }));
+		for (let t = 0; t < TAIL_S; t += DT) {
+			orbit.advance(DT);
+		}
+
+		// Then nothing orbits
+		expect(orbiting(orbit)).toBe(false);
+	});
+
+	it("ends the hold when the window loses focus", async () => {
+		// Given a held press in the open field
+		const { hero, inner } = page();
+		const orbit = await listening(hero);
+		hero.dispatchEvent(pointer("pointerdown", { on: inner }));
+
+		// When the pointer context leaves the window
+		win.dispatchEvent(new Event("blur"));
 		for (let t = 0; t < TAIL_S; t += DT) {
 			orbit.advance(DT);
 		}

@@ -6,6 +6,7 @@ import type { Field } from "./thought-field-particles.js";
 
 export interface Orbit {
 	press(x: number, y: number, pointerId: number): void;
+	move(x: number, y: number, pointerId: number): void;
 	release(pointerId: number): void;
 	advance(dt: number): void;
 	// Share [0, 1] of hover repulsion: 0 while orbiting or fading.

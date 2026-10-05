@@ -3,8 +3,6 @@ import type { Orbit } from "../static/js/thought-field-orbit.js";
 import { createOrbit } from "../static/js/thought-field-orbit.js";
 
 const DT = 1 / 60;
-// Restated from the brief so a changed cap or tail fails here.
-const CAP_S = 4;
 const TAIL_S = 0.25;
 // Exact in a Float32Array, so a still particle reads exactly zero.
 const NEAR = 0.25;
@@ -88,6 +86,18 @@ describe("other pointers while held", () => {
 		// Then the orbit is still running
 		expect(speed(orbit)).toBeGreaterThan(0);
 	});
+
+	it("ignores movement from another pointer", () => {
+		// Given a hold at full strength at the origin
+		const orbit = pressed();
+		run(orbit, 1);
+
+		// When pointer 2 moves far from the origin
+		orbit.move(1, 1, 2);
+
+		// Then particles near the origin still orbit it
+		expect(speed(orbit)).toBeGreaterThan(0);
+	});
 });
 
 describe("orbit press during the fade", () => {
@@ -146,31 +156,18 @@ describe("orbit release", () => {
 	});
 });
 
-describe("orbit safety release", () => {
-	it("keeps orbiting at full strength just before the cap", () => {
+describe("long orbit hold", () => {
+	it("keeps orbiting while the pointer remains held", () => {
 		// Given a hold at full strength
 		const orbit = pressed();
 		run(orbit, 1);
 		const held = speed(orbit);
 
-		// When it is still held at 3.9 s
-		run(orbit, CAP_S - 1.1);
+		// When the pointer remains held well past the former safety timeout
+		run(orbit, 9);
 
-		// Then the orbit has not weakened
+		// Then the orbit remains at full strength
 		expect(speed(orbit)).toBeCloseTo(held, 9);
-	});
-
-	it("starts the fade by 4 s when pointerup never arrives", () => {
-		// Given a hold at full strength
-		const orbit = pressed();
-		run(orbit, 1);
-		const held = speed(orbit);
-
-		// When it is still held at 4 s
-		run(orbit, CAP_S - 1);
-
-		// Then the orbit is already weaker than the hold
-		expect(speed(orbit)).toBeLessThan(held * 0.99);
 	});
 });
 

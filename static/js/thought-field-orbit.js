@@ -5,14 +5,12 @@
 
 /** @typedef {import("./thought-field-particles.js").Field} Field */
 
-// Times are in seconds, distances in field units. A hold still pressed
-// at `cap` fades as if released, in case its pointerup never arrives.
+// Times are in seconds and distances are in field units.
 const TUNING = Object.freeze({
 	radius: 0.65,
 	speed: 2.4,
 	maxStep: 0.03,
 	rampIn: 0.5,
-	cap: 4,
 	tail: 0.25,
 	hoverRamp: 0.5,
 });
@@ -21,7 +19,7 @@ const TUNING = Object.freeze({
  * `idle`: nothing. `hold`: pressed, orbiting. `fade`: released, the
  * orbit falls to zero. `resume`: no orbit, hover repulsion ramps back.
  * @typedef {"idle" | "hold" | "fade" | "resume"} OrbitPhase
- * @typedef {Exclude<OrbitPhase, "idle">} TimedPhase
+ * @typedef {Exclude<OrbitPhase, "idle" | "hold">} TimedPhase
  */
 
 /**
@@ -34,17 +32,17 @@ const TUNING = Object.freeze({
 
 /** @type {Readonly<Record<TimedPhase, number>>} */
 const LENGTH = {
-	hold: TUNING.cap,
 	fade: TUNING.tail,
 	resume: TUNING.hoverRamp,
 };
 
 /** @type {Readonly<Record<TimedPhase, OrbitPhase>>} */
-const NEXT = { hold: "fade", fade: "resume", resume: "idle" };
+const NEXT = { fade: "resume", resume: "idle" };
 
 /**
  * @typedef {{
  *   press: (x: number, y: number, pointerId: number) => void,
+ *   move: (x: number, y: number, pointerId: number) => void,
  *   release: (pointerId: number) => void,
  *   advance: (dt: number) => void,
  *   hoverShare: () => number,
@@ -71,6 +69,12 @@ export function createOrbit() {
 				state.pointerId = pointerId;
 			}
 		},
+		move: (x, y, pointerId) => {
+			if (state.phase === "hold" && pointerId === state.pointerId) {
+				state.x = x;
+				state.y = y;
+			}
+		},
 		release: (pointerId) => {
 			if (state.phase === "hold" && pointerId === state.pointerId) {
 				enter("fade");
@@ -81,7 +85,7 @@ export function createOrbit() {
 				return;
 			}
 			state.age += dt;
-			if (state.age >= LENGTH[state.phase]) {
+			if (state.phase !== "hold" && state.age >= LENGTH[state.phase]) {
 				enter(NEXT[state.phase]);
 			}
 		},
