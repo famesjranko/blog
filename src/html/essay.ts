@@ -32,6 +32,7 @@ export function essayPage(essay: Essay): string {
 		content: `<div class="wrap"><article class="prose essay">
 <header>
 ${draft}<h1>${escapeHtml(essay.title)}</h1>
+<p class="reading-time">${essay.readingMinutes} min read</p>
 ${subtitle}
 </header>
 ${essay.html}

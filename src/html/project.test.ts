@@ -20,6 +20,7 @@ function sampleProject(overrides: Partial<Project> = {}): Project {
 		draft: false,
 		slug: "connect4-lisp-web",
 		html: "<p>Body.</p>",
+		readingMinutes: 4,
 		images: [],
 		sourcePath: "content/projects/connect4-lisp-web.md",
 		...overrides,
@@ -151,6 +152,19 @@ describe("projectIndexPage", () => {
 		expect(html).toContain('<div class="wrap index-page">');
 		expect(html).toContain('<p class="index-count">');
 	});
+});
+
+it("shows the estimate near the project title", () => {
+	// Given a project with a four minute reading estimate.
+	const project = sampleProject();
+
+	// When its page is rendered.
+	const html = projectPage(project);
+
+	// Then the estimate follows the title as plain text.
+	expect(html).toContain(
+		'<h1>Connect-4 web</h1>\n<p class="reading-time">4 min read</p>',
+	);
 });
 
 describe("projectPage header", () => {
