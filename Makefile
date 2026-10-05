@@ -9,6 +9,7 @@ help: ## Show targets
 
 install: ## Install dependencies and the repo git hooks
 	npm ci
+	npx playwright install chromium
 	git config core.hooksPath scripts/hooks
 
 check: ## Canonical gate (same as CI): format-check + lint + guard + typecheck + test + images-check + build + browser
