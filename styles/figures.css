@@ -4,6 +4,15 @@
 		height: auto;
 	}
 
+	/* Essay, note, and project covers share the established project-cover
+	frame. Other article images retain their source proportions. */
+	.prose .article-cover-image {
+		display: block;
+		width: 100%;
+		aspect-ratio: 12 / 5;
+		object-fit: cover;
+	}
+
 	.prose figure {
 		margin-block: 2rem;
 		text-align: center;

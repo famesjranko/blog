@@ -57,6 +57,9 @@ interface ImageRenderContext {
 /** Rewrite src for the base path and reserve the box for shipped images. */
 function prepareImageToken(token: MarkdownToken, src: string): void {
 	token.attrSet("src", internalUrl(src));
+	if (src.toLowerCase().endsWith("/cover.jpg")) {
+		token.attrJoin("class", "article-cover-image");
+	}
 	const size = imageSize(src);
 	if (size !== undefined) {
 		token.attrSet("width", String(size.width));

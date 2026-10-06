@@ -55,19 +55,23 @@
 		"width": 1280,
 		"height": 540
 	},
-	"/img/placeholders/emperors-new-clothes.jpg": {
-		"width": 640,
-		"height": 360
+	"/img/notes/emperors-new-clothes/cover.jpg": {
+		"width": 1600,
+		"height": 900
+	},
+	"/img/notes/historical-retort/cover.jpg": {
+		"width": 1600,
+		"height": 900
+	},
+	"/img/notes/i-heart-huckabees/cover.jpg": {
+		"width": 1600,
+		"height": 900
+	},
+	"/img/notes/peep-show/cover.jpg": {
+		"width": 1600,
+		"height": 900
 	},
 	"/img/placeholders/esp32-s3-internet-monitor.jpg": {
-		"width": 640,
-		"height": 360
-	},
-	"/img/placeholders/historical-retort.jpg": {
-		"width": 640,
-		"height": 360
-	},
-	"/img/placeholders/i-heart-huckabees.jpg": {
 		"width": 640,
 		"height": 360
 	},
@@ -84,10 +88,6 @@
 		"height": 360
 	},
 	"/img/placeholders/object-tracking-demo.jpg": {
-		"width": 640,
-		"height": 360
-	},
-	"/img/placeholders/peep-show.jpg": {
 		"width": 640,
 		"height": 360
 	},

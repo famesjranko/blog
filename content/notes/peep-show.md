@@ -2,12 +2,16 @@
 title: "On Peep Show"
 description: "The show's first-person camera as phenomenology, and Mark and Jeremy as Sartrean conflict and Beauvoirian reciprocity."
 date: 2020-07-12
+cover: /img/notes/peep-show/cover.jpg
+coverAlt: "First-person view of two pairs of feet in a flat beneath fractured profiles"
 topics:
   - sartre
   - de beauvoir
   - phenomenology
   - television
 ---
+
+![First-person view of two pairs of feet in a flat beneath fractured profiles](/img/notes/peep-show/cover.jpg)
 
 *Peep Show* is a British television sitcom following the lives of Mark Corrigan and Jeremy Usborne, two very different and dysfunctional friends living together in a London flat. Mark is socially awkward and despondent, with a cynical outlook on life; while Jeremy is irresponsible and juvenile, but carefree – each the attitudinal and social antithetical partner to the other. The show is filmed from a unique first-person point-of-view perspective. The camera is positioned relative to each characters’ visual perspective, along with voice-over narration of their inner subjective dialogue:
 

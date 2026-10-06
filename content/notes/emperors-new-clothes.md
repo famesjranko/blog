@@ -2,10 +2,14 @@
 title: "On The Emperor’s New Clothes"
 description: "The watching crowd as Heidegger's they-self, and the child who says what everyone sees."
 date: 2020-07-25
+cover: /img/notes/emperors-new-clothes/cover.jpg
+coverAlt: "An empty crowned royal robe leads a procession while a child looks on"
 topics:
   - heidegger
   - authenticity
 ---
+
+![An empty crowned royal robe leads a procession while a child looks on](/img/notes/emperors-new-clothes/cover.jpg)
 
 <div class="note-tale">
 

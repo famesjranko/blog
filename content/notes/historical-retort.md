@@ -2,10 +2,14 @@
 title: "The Historical Retort"
 description: "Why Kant's split between public and private reason leaves the Enlightenment open to the power it questions."
 date: 2016-05-31
+cover: /img/notes/historical-retort/cover.jpg
+coverAlt: "Dark geometric blocks facing a bright abstract cityscape"
 topics:
   - kant
   - enlightenment
 ---
+
+![Dark geometric blocks facing a bright abstract cityscape](/img/notes/historical-retort/cover.jpg)
 
 As a growing confidence in reason leads to the questioning of authority, both political and moral, leading to a defensive response by those in power to retain power. This inevitable confrontation between reason and power has historically led to revolution, as was the case in both the French Revolution and America’s Independence – whose end products were far from the enlightened ideals that motivated them.
 

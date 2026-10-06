@@ -2,11 +2,15 @@
 title: "On I Heart Huckabees"
 description: "Brad Stand's Shania Twain story as bad faith, and what is left when it stops working."
 date: 2020-07-02
+cover: /img/notes/i-heart-huckabees/cover.jpg
+coverAlt: "A faceless businessman seated beside an empty chair and a sandwich"
 topics:
   - sartre
   - bad faith
   - film
 ---
+
+![A faceless businessman seated beside an empty chair and a sandwich](/img/notes/i-heart-huckabees/cover.jpg)
 
 *I Heart Huckabees* centres on Albert Markovski (Jason Schwartzman), a young man who heads a small environmental group aiming to prevent a large department chain from building a new store and destroying local marsh land. In doing so he experiences an existential crisis of self and turns to The Existential Detectives, played by Lily Tomlin and Dustin Hoffman. To this end, he is forced to confront both himself as being, his place in the world and the choices he makes, along with Other’s who inhabit the world with him.
 
