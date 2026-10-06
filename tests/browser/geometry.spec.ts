@@ -281,6 +281,28 @@ for (const width of [390, 1280]) {
 	});
 }
 
+test("a wide markdown table scrolls inside the column on a phone", async ({
+	page,
+}) => {
+	// Given a phone-width viewport.
+	await page.setViewportSize({ width: 360, height: 800 });
+
+	// When the PDF tables article with its six-column results table is opened.
+	await page.goto("/projects/extracting-pdf-tables/");
+
+	// Then the page itself does not scroll sideways.
+	await expectNoHorizontalOverflow(page);
+	// And the table's hidden columns can still be reached inside its container.
+	const scroller = page.locator(".prose table").first().locator("..");
+	const scroll = await scroller.evaluate((element) => ({
+		visible: element.clientWidth,
+		content: element.scrollWidth,
+	}));
+	expect(scroll.content, "table scrolls within its container").toBeGreaterThan(
+		scroll.visible,
+	);
+});
+
 test("short error page fills a tall viewport with hero and footer", async ({
 	page,
 }) => {

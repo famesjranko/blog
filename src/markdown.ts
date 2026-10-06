@@ -109,6 +109,17 @@ function renderHtml(): HtmlRenderRule {
 	return (tokens, idx) => openExternalHtmlLinks(tokens[idx]?.content ?? "");
 }
 
+/**
+ * A table cannot shrink below its widest words, so on a phone a wide one
+ * would widen the whole page. The wrapper scrolls it in place instead.
+ */
+function wrapTables(md: MarkdownIt): void {
+	Object.assign(md.renderer.rules, {
+		table_open: () => '<div class="table-scroll">\n<table>\n',
+		table_close: () => "</table>\n</div>\n",
+	});
+}
+
 function buildRenderer(): MarkdownIt {
 	const md = new MarkdownIt({
 		html: true,
@@ -138,6 +149,7 @@ function buildRenderer(): MarkdownIt {
 		html_block: renderHtml(),
 		html_inline: renderHtml(),
 	});
+	wrapTables(md);
 	return md;
 }
 
