@@ -118,10 +118,6 @@ export function homePage(
 			eyebrow: HERO_EYEBROW,
 			titleLines: HERO_TITLE_LINES,
 			standfirst: HERO_STANDFIRST,
-			actions: [
-				{ label: "Read essays", href: siteUrl("/essays/") },
-				{ label: "Browse projects", href: siteUrl("/projects/") },
-			],
 		})}
 ${essaySection}${projectsSection}${recentNotesSection(notes)}`,
 	});
