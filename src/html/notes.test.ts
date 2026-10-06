@@ -69,6 +69,10 @@ describe("noteIndexPage", () => {
 
 		// Then the row shows the placeholder art for the note's slug.
 		expect(html).toContain('src="/img/placeholders/peep-show.jpg"');
+		// And the art explicitly links to the note with an accessible name.
+		expect(html).toContain(
+			'<a class="note-cover-link" href="/notes/peep-show/" aria-label="Read On Peep Show">',
+		);
 	});
 });
 
@@ -108,7 +112,7 @@ describe("recentNotesSection", () => {
 });
 
 describe("homePage notes", () => {
-	it("places recent notes between featured essays and featured projects", () => {
+	it("places recent notes after featured essays and featured projects", () => {
 		// Given one essay, one note, and one project.
 		const essay = sampleNote({
 			section: "essays",
@@ -119,13 +123,13 @@ describe("homePage notes", () => {
 		// When the homepage renders.
 		const html = homePage([essay], [sampleProject()], [sampleNote()]);
 
-		// Then the notes section sits after the essays and before the projects.
+		// Then the primary essay and project sections both precede the notes.
 		const essays = html.indexOf('id="featured-essays"');
 		const notes = html.indexOf('id="recent-notes"');
 		const projects = html.indexOf('id="featured-projects"');
 		expect(essays).toBeGreaterThan(-1);
-		expect(notes).toBeGreaterThan(essays);
-		expect(projects).toBeGreaterThan(notes);
+		expect(projects).toBeGreaterThan(essays);
+		expect(notes).toBeGreaterThan(projects);
 	});
 
 	it("skips to the notes when there are no essays", () => {

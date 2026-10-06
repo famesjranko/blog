@@ -69,10 +69,10 @@ function skipTarget(counts: {
 	if (counts.essays > 0) {
 		return "featured-essays";
 	}
-	if (counts.notes > 0) {
-		return "recent-notes";
+	if (counts.projects > 0) {
+		return "featured-projects";
 	}
-	return counts.projects > 0 ? "featured-projects" : "main";
+	return counts.notes > 0 ? "recent-notes" : "main";
 }
 
 export function homePage(
@@ -123,6 +123,6 @@ export function homePage(
 				{ label: "Browse projects", href: siteUrl("/projects/") },
 			],
 		})}
-${essaySection}${recentNotesSection(notes)}${projectsSection}`,
+${essaySection}${projectsSection}${recentNotesSection(notes)}`,
 	});
 }

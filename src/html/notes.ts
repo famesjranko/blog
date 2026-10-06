@@ -28,6 +28,12 @@ function noteDescription(note: Essay): string {
 		: `<p class="note-desc">${escapeHtml(note.description)}</p>`;
 }
 
+function noteCover(note: Essay): string {
+	const url = siteUrl(writingPath(note));
+	const label = `Read ${note.title}`;
+	return `<a class="note-cover-link" href="${url}" aria-label="${escapeHtml(label)}">${cardCover(note, NOTE_IMAGE_SIZES)}</a>`;
+}
+
 /** A ruled row: text on the left, the cover on the right. */
 export function noteRow(note: Essay): string {
 	const topics = note.topics.map((topic) => topicLink(topic)).join("");
@@ -39,7 +45,7 @@ ${noteTitle(note, 2)}
 ${noteDescription(note)}
 <p class="entry-meta"><span class="entry-topics">${topics}</span></p>
 </div>
-${cardCover(note, NOTE_IMAGE_SIZES)}
+${noteCover(note)}
 </li>`;
 }
 

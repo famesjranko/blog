@@ -36,10 +36,6 @@ In being confronted with the reality of truly facing the dissonance between this
 
 Upon experiencing this moment of existential crisis, Brad emerges from his office and experiences the world as absurd. All things previously affirming to him appear disorienting and jarring; at once known but now completely alienated from him. He is thrust, in a sense born again, into a world he no longer recognises as one he belongs. Shortly afterward, he is pressed for the Shania story in a corporate meeting to secure a promotion, the undeniability of his hollowness sickens him, and he pukes in his own hand – sickened by both the actuality of his bad-faith, as well as the affirmation of it through the gaze of the Other.
 
-<div class="note-closing">
-
 His eventual unravelling leads to him losing his house, his job, and his girlfriend. In short, all the sources of reliable affirmations he has ever known – the simulacrum of his bad-faith. It’s in his final line of the film that he states: “I don’t have a job. I don’t even know who I am.” It is in this final moment of the film that he recognises his freedom and goes from being a being-in-itself and becomes a being-for-itself.
-
-</div>
 
 </div>

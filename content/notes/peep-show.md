@@ -17,13 +17,9 @@ In this sense, the show represents a phenomenological exploration of the ontolog
 
 <div class="note-section">
 
-<div class="note-paired">
-
 While the show explores many existential themes, one which stands out in the relationship of Mark and Jeremy is that of the conflict between the Self and that of the Other. Both define themselves through the objectification of the other, while also recognising each other as sovereign subjective beings. Their relationship is expressed in both terms of conflict (Sartre) and reciprocity (De Beauvoir). Conflict in their inability to perceive the other in purely subjective terms (lack of intersubjectivity); reciprocity through both their rejection of the objectified role of otherness enforced upon them by the other, and mutual recognition of their brotherhood.
 
 The key to their reciprocal relationing is their mutually beneficial friendship, which conforms to a reciprocating form of the Hegelian *master-slave* dialectic: each is the master to the slave of the other within their respective domains of expertise. Whereas their conflict is caused by each objectifying the other in affirmation and distinction of their self as the Subject, in relation to the other as mere Object. In this sense, their relationship operates dynamically between modes of the *Self and Self*, and the *Self and Other*; between the authentic state of ethical freedom and transcendence, and the inauthentic state of bad-faith and imminence. Predominantly, both languish within the domain of bad-faith.
-
-</div>
 
 In the rare moments of honest reflective examination of their projects - Sartrean “existential psychoanalysis” – their lack of freedom revealed self-imposed through their choices. It is in these moments that Mark and Jeremy exhibit genuine ability to define their projects and express their natures as undefined and free through radical choice. However, both invariably recoil from this moment out of fear. Choosing instead inauthenticity over freedom; turning toward the safety and comfort of certainty and immanence, rather than transcend and face the uncertainty of their natures as undefined, as nothing. It is this constant failure of authenticity - choosing immanence over freedom - that the heart of the comedy of the show resides.
 

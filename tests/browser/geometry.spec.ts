@@ -304,3 +304,19 @@ test("short error page fills a tall viewport with hero and footer", async ({
 		"footer directly follows the hero",
 	).toBeLessThan(2);
 });
+
+test("note cover images open their article", async ({ page }) => {
+	// Given the notes index and its first linked cover image.
+	await page.goto("/notes/");
+	const cover = page.locator(".note-cover-link").first();
+	const href = await cover.getAttribute("href");
+	if (href === null) {
+		throw new Error("expected the note cover to have a destination");
+	}
+
+	// When the image itself is clicked.
+	await cover.locator("img").click();
+
+	// Then the browser opens that note article.
+	expect(page.url()).toContain(href);
+});

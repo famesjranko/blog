@@ -15,21 +15,13 @@ The swindlers promptly set up their looms and get to work on the Emperor’s new
 
 One can see the above story as illustrating, in certain aspects, Heidegger’s notion of the *They Self*. This is most exemplified by focusing the analysis on the citizens and the boy who cried out, rather than the emperor himself. The citizens ‘see’ the emperor parading through the city apparently without clothes on, but instead of following the inquiry into their own; they instead *fall* into the *averageness* of the They Self. In contrast, the boy who cried out that “the emperor is wearing nothing at all!” does manage to explicate this enquiry into his own, bringing forth into the world meaning derived *ontologico-existentially* by *Dasein* as a *Being-in* and as a *Being-in-the-world*.
 
-<div class="note-hinge">
-
 The above sentence has quite a few terms that require unpacking to elucidate further; however, for the sake of the brief commentary, I will focus specifically on the key term of ‘They Self’.
-
-</div>
 
 For Heidegger, the They Self (*Das Man*) can be thought of as the ‘world of the other’, the public world we all know and experience. It is the world we experience most in our average *everydayness* as beings-in-the-*world*. This world of the They Self provides an understanding of our *everyday-self*, which can be thought of as our self in its *everydayness*. However, this understanding is ultimately a dominating one which creates a *distantiality* from ourselves as Dasein, as it causes us to be concerned with and disturbed by deviations from the prescribed norm – we understand ourselves in the way the They Self understands us. For Heidegger, distantiality is best understood as a *flight towards* the They Self and away from *Dasein-in-itself*, which ultimately affects how we interpret and understand the world in its totality, since we become absorbed into the world and hence meaning of the They Self. Ultimately, this distancing and absorption leads to an *averageness*, or a ‘typicalness’ of how everyone is meant to be and of how everything is.
 
 From this typicalness of the average comes, what Heidegger refers to as a *levelling-down*. That is, the averageness of the They Self dictates a limited range of possibilities for Dasein-in-its-being. This world, limited in its possibility, feels so concrete and sure to us and is so readily accessible to us that we inevitably ‘*fall prey’* to it, becoming *tranquilised* by it. But as we’ve already touched on, the world of the They Self leads to a type of distancing from ourselves as Dasein-in-itself; thus, this apparently concrete world ultimately leads to an *alienation* of Dasein from itself through its *entanglement* with it – the complete absorption into the They Self: Dasein knows itself only through the They Self. Heidegger refers to this entangled state as one of *inauthenticity*.
 
-<div class="note-hinge">
-
 On face value this might appear a rather pessimistic perspective. However, there is a possible path out of this *aggravating* circularity of Dasein’s falling into and subsequent entanglement within the world of the They Self, out of inauthenticity and toward a state of *authenticity*.
-
-</div>
 
 For Heidegger, we are most authentic when we are most connected to ourselves as Dasein and take responsibility and understanding of our possibilities from our own existence, and that such authentic-ness is possible through our *state-of-mind* or *mood* - that by which we comport and relate meaning between the world and ourselves. Specifically, it is within the state of *angst* that we come to view our *alienation* by the They Self and are able to turn towards ourselves as Dasein-in-itself and can reify our very being and its relation to the world of everydayness; to its possibilities apart and from the limitations of They Self. Moreover, that such acts of authenticity can *illuminate* the world of the They Self itself; transforming the *public* (other inauthentic Dasein) of the They Self into *people* (other authentic Dasein) – in this case, public and people are the relative plural forms of inauthentic and authentic.
 
@@ -41,10 +33,6 @@ We can see many of these characteristics of the They Self within the tale of the
 
 In this sense, the citizens are being inauthentic as that of the public. They know themselves only within the limited possibilities allowed to them as citizens. And because of this the citizens are frozen in a sense of angst as what they see as themselves and how they are meant to act as citizens is in conflict. We can think of this as each citizen not wanting to stand out as singular in fear of threat; in fear of making oneself seen and thus vulnerable to and in such a way of concern to itself. This fear of standing out for the citizen is akin to a fear of death; in that their very existence within the world of the They Self may be threatened through a perceived act of non-conformity. As citizens, their very being does not conform to a possibility of anything beyond the generalised being that is defined as ‘citizen’, and as such their sense of existence itself is threatened; non-existence being equivalent to death.
 
-<div class="note-closing">
-
 It is only when the child says that which is clear for all, does the ‘mood’ of the citizens being to shift in an authentic and meaningful way. This shifting of mood from fear of non-conformity, and thus death, to recognition of a shared comportment to the world as beings-with-one-another in the world, allows the citizens to redefine the world of the they Self through their being as Dasein-with within it. In this moment, they stop being simple public beings of the They Self and become people able to impart meaning upon and into it. They are able to both access their own relatedness to the world authentically through a flight towards themselves as a being-in-the-world, as well as re-join the world of the everydayness to which they are most common and is most common to them with self-related and derived meaning; thus being a part of and affecting it in kind.
-
-</div>
 
 </div>
