@@ -49,6 +49,10 @@ subject inside the central 70%, and fill the outer edges with background that
 the card can cut away. A 16:9 image fits the card without loss, but its article
 hero is taller than the others.
 
+The card-safe margins can make the subject look small on the article page. In
+that case, keep the margin version as `cover` and point the article's first
+image at a tighter crop of the same picture.
+
 Before you add a cover, check its crop on the home or projects page. Write
 `coverAlt` for the whole image.
 
