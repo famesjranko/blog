@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="diagram diagram-pipeline" viewBox="0 0 760 860" role="img" aria-labelledby="pipe-title pipe-desc">
+  <title id="pipe-title">One enrich call, from cache read to result</title>
+  <desc id="pipe-desc">A request first reads the cache. Inside a 30-second deadline, MusicBrainz resolves the artist, then every type starts at once in one of three kinds: regular, mergeable or composite. Each result passes a confidence gate and settles on its own. One cache write follows, and the caller gets the results.</desc>
+  <defs>
+    <marker id="pipe-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path class="arrow-head" d="M0 0 L10 5 L0 10 z"/>
+    </marker>
+  </defs>
+
+  <rect class="node node-io" x="230" y="16" width="300" height="44" rx="22"/>
+  <text class="label copy" x="380" y="44" text-anchor="middle">artistProfile("Radiohead")</text>
+  <line class="flow" x1="380" y1="60" x2="380" y2="88" marker-end="url(#pipe-arrow)"/>
+
+  <rect class="node" x="230" y="92" width="300" height="56" rx="8"/>
+  <text class="heading" x="250" y="117">1  Read the cache</text>
+  <text class="muted" x="250" y="137">per type, before any network call</text>
+  <line class="flow" x1="530" y1="120" x2="586" y2="120" marker-end="url(#pipe-arrow)"/>
+  <rect class="node node-side" x="590" y="96" width="156" height="48" rx="8"/>
+  <text class="muted" x="604" y="116">all types cached:</text>
+  <text class="muted" x="604" y="134">return at once</text>
+  <line class="flow" x1="380" y1="148" x2="380" y2="196" marker-end="url(#pipe-arrow)"/>
+
+  <rect class="deadline" x="16" y="172" width="728" height="508" rx="12"/>
+  <text class="deadline-label" x="32" y="194">30-second deadline</text>
+
+  <rect class="node" x="230" y="200" width="300" height="56" rx="8"/>
+  <text class="heading" x="250" y="225">2  Resolve identity</text>
+  <text class="muted" x="250" y="245">MusicBrainz, score 80 or more</text>
+
+  <path class="flow" d="M380 256 V276 H140 V300" marker-end="url(#pipe-arrow)"/>
+  <line class="flow" x1="380" y1="276" x2="380" y2="300" marker-end="url(#pipe-arrow)"/>
+  <path class="flow" d="M380 276 H620 V300" marker-end="url(#pipe-arrow)"/>
+  <text class="muted" x="400" y="290">3  every type starts at once</text>
+
+  <rect class="node lane-regular" x="36" y="304" width="208" height="104" rx="8"/>
+  <text class="heading" x="52" y="330">Regular</text>
+  <text class="label" x="52" y="354">providers in priority</text>
+  <text class="label" x="52" y="374">order; the first</text>
+  <text class="label" x="52" y="394">success wins</text>
+
+  <rect class="node lane-merge" x="276" y="304" width="208" height="104" rx="8"/>
+  <text class="heading" x="292" y="330">Mergeable (8)</text>
+  <text class="label" x="292" y="354">every provider at</text>
+  <text class="label" x="292" y="374">once; answers merged</text>
+  <text class="label" x="292" y="394">with confidence</text>
+
+  <rect class="node lane-composite" x="516" y="304" width="208" height="104" rx="8"/>
+  <text class="heading" x="532" y="330">Composite (2)</text>
+  <text class="label" x="532" y="354">waits for the types</text>
+  <text class="label" x="532" y="374">it is built from,</text>
+  <text class="label" x="532" y="394">then synthesises</text>
+  <path class="flow flow-wait" d="M484 356 H512" marker-end="url(#pipe-arrow)"/>
+
+
+  <path class="flow" d="M140 408 V452 H380"/>
+  <path class="flow" d="M620 408 V452 H380" />
+  <line class="flow" x1="380" y1="408" x2="380" y2="476" marker-end="url(#pipe-arrow)"/>
+
+  <rect class="node" x="180" y="480" width="400" height="56" rx="8"/>
+  <rect class="node node-side" x="592" y="460" width="140" height="96" rx="8"/>
+  <text class="muted" x="604" y="482">each provider call:</text>
+  <text class="muted" x="604" y="501">per-host rate limit,</text>
+  <text class="muted" x="604" y="520">bounded retries,</text>
+  <text class="muted" x="604" y="539">circuit breaker</text>
+  <text class="heading" x="200" y="505">4  Gate each answer</text>
+  <text class="muted" x="200" y="525">confidence 0.5 or more, and data that fits the type</text>
+  <line class="flow" x1="380" y1="536" x2="380" y2="580" marker-end="url(#pipe-arrow)"/>
+
+  <rect class="node" x="180" y="584" width="400" height="56" rx="8"/>
+  <text class="heading" x="200" y="609">5  Settle each type as it lands</text>
+  <text class="muted" x="200" y="629">a snapshot goes to enrichProgressive</text>
+  <line class="flow" x1="580" y1="612" x2="616" y2="612" marker-end="url(#pipe-arrow)"/>
+  <rect class="node node-side" x="620" y="588" width="112" height="48" rx="8"/>
+  <text class="muted" x="634" y="608">streamed</text>
+  <text class="muted" x="634" y="626">results</text>
+
+  <line class="flow" x1="380" y1="640" x2="380" y2="712" marker-end="url(#pipe-arrow)"/>
+
+  <rect class="node" x="180" y="716" width="400" height="56" rx="8"/>
+  <text class="heading" x="200" y="741">6  Write the cache once</text>
+  <text class="muted" x="200" y="761">nothing is written if the deadline passed</text>
+  <line class="flow" x1="380" y1="772" x2="380" y2="800" marker-end="url(#pipe-arrow)"/>
+
+  <rect class="node node-io" x="230" y="804" width="300" height="44" rx="22"/>
+  <text class="label copy" x="380" y="832" text-anchor="middle">EnrichmentResults → profile</text>
+</svg>

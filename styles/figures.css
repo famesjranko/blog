@@ -13,8 +13,10 @@
 		object-fit: cover;
 	}
 
+	/* Zero the UA's 40px inline margin: on a phone it costs a figure a
+	fifth of the text column. */
 	.prose figure {
-		margin-block: 2rem;
+		margin: 2rem 0;
 		text-align: center;
 	}
 

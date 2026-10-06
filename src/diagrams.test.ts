@@ -13,6 +13,8 @@ const CONTENT_DIAGRAMS = [
 	"static/img/projects/connect4-heuristic/connect4-depth2.svg",
 	"static/img/projects/connect4-heuristic/connect4-depth3.svg",
 	"static/img/projects/connect4-heuristic/connect4-depth4.svg",
+	"static/img/projects/musicmeta/pipeline.svg",
+	"static/img/projects/musicmeta/timeline.svg",
 ];
 
 const ROOT_TAG = /<svg\b[^>]*>/;

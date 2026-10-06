@@ -83,10 +83,6 @@
 		"width": 640,
 		"height": 360
 	},
-	"/img/placeholders/musicmeta.jpg": {
-		"width": 640,
-		"height": 360
-	},
 	"/img/placeholders/object-tracking-demo.jpg": {
 		"width": 640,
 		"height": 360
@@ -130,6 +126,34 @@
 	"/img/projects/extracting-pdf-tables/engine-arch.jpg": {
 		"width": 1600,
 		"height": 599
+	},
+	"/img/projects/musicmeta/cover-article.jpg": {
+		"width": 1512,
+		"height": 630
+	},
+	"/img/projects/musicmeta/cover.jpg": {
+		"width": 1512,
+		"height": 630
+	},
+	"/img/projects/musicmeta/how-we-got-this.jpg": {
+		"width": 980,
+		"height": 683
+	},
+	"/img/projects/musicmeta/nirvana-search.jpg": {
+		"width": 1008,
+		"height": 488
+	},
+	"/img/projects/musicmeta/pipeline.svg": {
+		"width": 760,
+		"height": 860
+	},
+	"/img/projects/musicmeta/radiohead-summary.jpg": {
+		"width": 1008,
+		"height": 609
+	},
+	"/img/projects/musicmeta/timeline.svg": {
+		"width": 760,
+		"height": 462
 	},
 	"/img/projects/tablescan/book-viewer.jpg": {
 		"width": 1232,
