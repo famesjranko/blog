@@ -37,6 +37,21 @@ gutters, image sizing, cards, or breakpoints. At a narrow width, the content
 must have breathing room on both sides. At a wide width, columns must not look
 crowded or leave an unintended gap.
 
+## Cover images
+
+A cover appears in two places. The article page shows the whole image at its
+own proportions. Cards crop it to 16:9 and keep the centre (`.card-media` in
+`styles/main.css`). Compose every cover so that both views work.
+
+Use the wide banner shape of the existing covers, about 2.4:1 (for example
+1512×630). The card keeps only the central 74% of that width. Put the whole
+subject inside the central 70%, and fill the outer edges with background that
+the card can cut away. A 16:9 image fits the card without loss, but its article
+hero is taller than the others.
+
+Before you add a cover, check its crop on the home or projects page. Write
+`coverAlt` for the whole image.
+
 ## Colour and interaction
 
 Light and dark themes must keep text, links, controls, borders, and diagrams
