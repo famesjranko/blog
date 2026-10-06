@@ -2,7 +2,7 @@
 title: "Musicmeta"
 description: "A Kotlin library unifying eleven public music APIs behind one enrichment engine."
 date: 2026-03-21
-draft: true
+draft: false
 cover: /img/projects/musicmeta/cover.jpg
 coverAlt: "A vinyl record whose music fans out into a row of image panels, joined by thin lines that converge on a single artist profile card"
 featured: true
