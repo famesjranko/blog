@@ -107,222 +107,192 @@
 
 @layer prose {
 	.prototype-note .note-section {
+		display: contents;
+	}
+
+	/* Emperor: tale, theoretical hinge, and return to the crowd. */
+	.prototype-recommended .note-tale {
+		max-width: 60ch;
+		margin: 0 auto 2.2rem;
+	}
+
+	.prototype-recommended .note-tale > :first-child {
 		margin-top: 0;
 	}
 
-	/* A — quiet chapters: a visible mark explains each larger pause. */
-	.prototype-a > p:first-of-type {
-		font-size: 1.1em;
-		line-height: 1.72;
+	.prototype-recommended .note-tale > :last-child {
+		margin-bottom: 0;
 	}
 
-	.prototype-a .note-section {
-		position: relative;
-		margin-top: 3.4rem;
-		padding-top: 1.35rem;
-	}
-
-	.prototype-a .note-section::before {
-		content: "◆";
-		position: absolute;
-		top: 0;
-		left: 50%;
-		color: var(--color-accent);
-		font-size: 0.55rem;
-		transform: translateX(-50%);
-	}
-
-	.prototype-a .note-feature-quote {
-		background: transparent;
-	}
-
-	/* B — editorial fields: each existing section becomes a clear movement. */
-	.prototype-b > p:first-of-type::first-letter {
+	.prototype-recommended .note-tale > p:first-child::first-letter {
 		float: left;
 		margin: 0.08em 0.1em 0 0;
-		color: var(--color-accent);
-		font-size: 3.25em;
-		line-height: 0.78;
+		font-size: 3em;
+		line-height: 0.8;
 	}
 
-	.prototype-b .note-section {
-		margin-block: 2.5rem;
-		padding: 1rem 1.6rem;
-		border: 1px solid var(--color-border);
-		border-radius: 0.65rem;
-		background: var(--color-surface);
-		box-shadow: 0 0.75rem 2rem rgb(0 0 0 / 0.04);
+	.note-revelation {
+		font-weight: 650;
+		text-decoration-line: underline;
+		text-decoration-color: color-mix(
+			in srgb,
+			var(--color-accent) 45%,
+			transparent
+		);
+		text-decoration-thickness: 0.08em;
+		text-underline-offset: 0.18em;
 	}
 
-	.prototype-b .note-section > :first-child {
-		margin-top: 0.5rem;
+	.prototype-recommended .note-aside {
+		color: var(--color-muted);
+		font-family: var(--font-ui);
+		font-size: 0.88em;
+		line-height: 1.65;
 	}
 
-	.prototype-b .note-section > :last-child {
-		margin-bottom: 0.5rem;
-	}
-
-	/* C — key passages: only the article's decisive turn is pulled forward. */
-	.prototype-c .note-section {
-		display: contents;
-	}
-
-	.prototype-c > p:first-of-type::first-line {
-		font-variant: small-caps;
-		letter-spacing: 0.025em;
-	}
-
-	.prototype-c.prototype-historical-retort .note-section > p:last-child,
-	.prototype-c.prototype-peep-show .note-section > p:last-child {
-		margin-block: 2.2rem;
-		padding: 0.85rem 0 0.85rem 1.2rem;
-		border-left: 3px solid var(--color-accent);
-		font-size: 1.08em;
-		line-height: 1.72;
-	}
-
-	.prototype-c.prototype-emperors-new-clothes
-		.note-section:last-of-type
-		> p:last-child,
-	.prototype-c.prototype-i-heart-huckabees
-		.note-section:last-of-type
-		> p:last-child {
-		margin-block: 2.2rem;
-		padding: 0.85rem 0 0.85rem 1.2rem;
-		border-left: 3px solid var(--color-accent);
-		font-size: 1.08em;
-		line-height: 1.72;
-	}
-
-	.prototype-c .note-feature-quote {
-		margin-inline: -1.25rem;
-		background: var(--color-wash-2);
-	}
-
-	/* D — each treatment follows the material of its particular note. */
-	.prototype-d .note-section {
-		display: contents;
-	}
-
-	.prototype-contrast p {
-		margin: 0;
-		padding: 1.15rem;
-		line-height: 1.58;
-	}
-
-	.prototype-d.prototype-emperors-new-clothes > header + p {
-		margin-block: 0;
-		padding: 1.4rem 1.6rem 0;
-		background: var(--color-wash-1);
-		border-radius: 0.7rem 0.7rem 0 0;
-	}
-
-	.prototype-d.prototype-emperors-new-clothes > header + p + p {
-		margin-block: 0;
-		padding-block: 0.5rem 1.5rem;
-		padding-inline: 1.6rem;
-		border-radius: 0 0 0.7rem 0.7rem;
-		background: var(--color-wash-1);
-	}
-
-	.prototype-refrain {
-		padding-inline: 0.12em;
-		background: color-mix(in srgb, var(--color-accent) 14%, transparent);
+	.prototype-recommended .note-hinge {
+		max-width: 57ch;
+		margin: 2rem auto;
+		font-size: 1.06em;
 		font-style: italic;
-		box-decoration-break: clone;
 	}
 
-	.prototype-contrast {
+	.prototype-recommended .note-application {
+		margin-top: 2.25rem;
+	}
+
+	/* Historical Retort: one comparison, followed by its inference. */
+	.note-reason-contrast {
+		margin: 1.75rem 0 1.4rem;
+		padding-block: 0.9rem;
+		border-block: 1px solid var(--color-border);
+	}
+
+	.note-reason-worlds {
 		display: grid;
-		grid-template-columns: 1fr 1fr;
-		margin-block: 2.2rem;
-		border: 1px solid var(--color-border);
-		border-radius: 0.7rem;
-		overflow: hidden;
-		background: var(--color-surface);
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 1.5rem;
 	}
 
-	.prototype-contrast p:nth-child(odd) {
-		background: var(--color-wash-2);
+	.note-reason-worlds > p {
+		margin: 0;
 	}
 
-	.prototype-contrast p:nth-child(n + 3) {
+	.note-reason-summary {
+		margin: 0.85rem 0 0;
+		padding-top: 0.8rem;
 		border-top: 1px solid var(--color-border);
-	}
-
-	.prototype-thesis {
-		font-size: 1.12em;
 		font-style: italic;
-		line-height: 1.68;
 	}
 
-	.prototype-d.prototype-i-heart-huckabees .note-feature-quote {
-		position: relative;
-		margin-block: 2.5rem;
-		padding: 1.6rem 1.8rem 1.4rem;
+	.note-reason-conclusion {
+		margin-top: 1.4rem;
+	}
+
+	/* Huckabees: performed anecdote versus exposed final admission. */
+	.prototype-note .note-performance-quote {
+		max-width: 56ch;
+		margin: 2rem auto 2.4rem;
+		padding-block: 1rem;
+		padding-inline: 0;
 		border: 0;
-		border-radius: 0.65rem;
-		background: var(--color-wash-3);
+		border-block: 1px solid var(--color-border);
+		font-size: 1.03em;
+	}
+
+	.prototype-note .note-performance-quote > p,
+	.prototype-note .note-collapse-quote > p {
+		margin: 0;
+	}
+
+	.prototype-note .note-collapse-quote {
+		max-width: 38ch;
+		margin: 1.9rem auto 1rem;
+		padding: 0;
+		border: 0;
+		text-align: center;
+		font-size: 1.15em;
+		font-style: italic;
+	}
+
+	/* Peep Show: the formal and philosophical pairs share one motif. */
+	.peep-pair {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		margin-block: 1.5rem;
+	}
+
+	.peep-pair > span {
+		padding-inline: 1rem;
+	}
+
+	.peep-pair > span + span {
+		border-inline-start: 1px solid var(--color-border);
+	}
+
+	.peep-pair-pov {
+		text-align: center;
+		font-size: 1.05em;
+	}
+
+	.peep-pair-relation {
+		line-height: 1.7;
+	}
+
+	.peep-pair-relation strong {
+		color: var(--color-accent);
+		font-family: var(--font-ui);
+		font-size: 0.85em;
+		letter-spacing: 0.04em;
+	}
+
+	.note-source-quote {
+		display: block;
+		max-width: 52ch;
+		margin: 1.5rem auto;
+		text-align: center;
 		font-size: 1.08em;
+		font-style: italic;
 	}
 
-	.prototype-d.prototype-i-heart-huckabees .note-feature-quote::before {
-		content: "“";
-		position: absolute;
-		top: -0.3em;
-		left: 0.2em;
-		color: var(--color-accent);
-		font-size: 4.5rem;
-		line-height: 1;
+	.prototype-restrained .peep-pair-pov {
+		display: block;
+		margin-block: 1.5rem;
 	}
 
-	.prototype-d.prototype-peep-show .note-embedded-quote {
-		position: relative;
-		max-width: 46ch;
-		margin-block: 2rem;
-		padding: 1.5rem 2rem;
-		font-size: 1.18em;
-		line-height: 1.6;
+	.prototype-restrained .peep-pair-pov > span {
+		display: inline;
+		padding: 0;
 	}
 
-	.prototype-d.prototype-peep-show .note-embedded-quote::before,
-	.prototype-d.prototype-peep-show .note-embedded-quote::after {
-		position: absolute;
-		color: var(--color-accent);
-		font-size: 2.8rem;
-		line-height: 1;
-	}
-
-	.prototype-d.prototype-peep-show .note-embedded-quote::before {
-		content: "“";
-		top: 0.15rem;
-		left: 0;
-	}
-
-	.prototype-d.prototype-peep-show .note-embedded-quote::after {
-		content: "”";
-		right: 0;
-		bottom: -0.35rem;
+	.prototype-restrained .peep-pair-pov > span + span {
+		border: 0;
 	}
 }
 
 @layer responsive {
 	@media (max-width: 42rem) {
 		.prototype-note-row ol,
-		.prototype-contrast {
+		.note-reason-worlds,
+		.peep-pair {
 			grid-template-columns: 1fr;
 		}
 
-		.prototype-contrast p:nth-child(n + 2) {
+		.note-reason-worlds {
+			gap: 0.65rem;
+		}
+
+		.peep-pair > span {
+			padding: 0.65rem 0;
+		}
+
+		.peep-pair > span + span {
+			border-inline-start: 0;
 			border-top: 1px solid var(--color-border);
 		}
 
-		.prototype-b .note-section {
-			padding-inline: 1rem;
-		}
-
-		.prototype-c .note-feature-quote {
-			margin-inline: 0;
+		.prototype-restrained .peep-pair-pov > span + span {
+			border: 0;
 		}
 	}
 }

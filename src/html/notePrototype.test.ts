@@ -46,7 +46,9 @@ describe("note formatting prototypes", () => {
 		// When the prototype index is rendered.
 		const html = notePrototypeIndex(notes);
 		const links =
-			html.match(/href="\/prototypes\/notes\/[^"]+\/[abcd]\/"/g) ?? [];
+			html.match(
+				/href="\/prototypes\/notes\/[^"]+\/(recommended|restrained)\/"/g,
+			) ?? [];
 
 		// Then each note has one link for each option.
 		expect(links).toHaveLength(notes.length * PROTOTYPE_OPTIONS.length);
