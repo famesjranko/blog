@@ -11,7 +11,11 @@ import { recentNotesSection } from "./notes.js";
 import { projectEntry } from "./project.js";
 
 // Homepage hero copy. Edit freely; no logic depends on it.
-const HERO_EYEBROW = "ANDREW MCDONALD · BACKEND & SYSTEMS ENGINEER · MELBOURNE";
+// Non-breaking spaces keep each phrase whole and the separator on the
+// phrase before it, so a narrow screen wraps only after a separator.
+const HERO_EYEBROW = ["BACKEND & SYSTEMS ENGINEER", "MELBOURNE"]
+	.map((phrase) => phrase.replaceAll(" ", "\u00a0"))
+	.join("\u00a0· ");
 const HERO_TITLE_LINES = ["From philosophy", "to software"];
 const HERO_STANDFIRST = "A personal collection of essays, projects, and notes.";
 
@@ -118,10 +122,6 @@ export function homePage(
 			eyebrow: HERO_EYEBROW,
 			titleLines: HERO_TITLE_LINES,
 			standfirst: HERO_STANDFIRST,
-			actions: [
-				{ label: "Read essays", href: siteUrl("/essays/") },
-				{ label: "Browse projects", href: siteUrl("/projects/") },
-			],
 		})}
 ${essaySection}${projectsSection}${recentNotesSection(notes)}`,
 	});

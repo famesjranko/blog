@@ -45,11 +45,7 @@ export function errorPage(status: ErrorStatus): string {
 			eyebrow: String(status),
 			titleLines: copy.headline,
 			standfirst: copy.standfirst,
-			actions: [
-				{ label: "Home", href: siteUrl("/") },
-				{ label: "Essays", href: siteUrl("/essays/") },
-				{ label: "Projects", href: siteUrl("/projects/") },
-			],
+			actions: [{ label: "Home", href: siteUrl("/") }],
 		}),
 	});
 }
