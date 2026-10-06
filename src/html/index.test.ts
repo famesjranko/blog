@@ -56,10 +56,14 @@ describe("homePage hero", () => {
 
 describe("homePage hero copy", () => {
 	it("renders the eyebrow before the headline", () => {
+		// Given the home page.
 		const html = homePage([sampleEssay()]);
+
+		// Then the eyebrow can wrap only after its separator.
 		expect(html).toContain(
-			"ANDREW MCDONALD · BACKEND &amp; SYSTEMS ENGINEER · MELBOURNE",
+			"BACKEND\u00a0&amp;\u00a0SYSTEMS\u00a0ENGINEER\u00a0· MELBOURNE",
 		);
+		// And it comes before the headline.
 		expect(html.indexOf("hero-eyebrow")).toBeLessThan(html.indexOf("<h1>"));
 	});
 
