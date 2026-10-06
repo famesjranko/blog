@@ -119,7 +119,9 @@ export function projectPage(project: Project): string {
 			siteUrl("/css/figures.css"),
 			siteUrl("/css/project.css"),
 			siteUrl("/css/diagrams.css"),
+			siteUrl("/css/lightbox.css"),
 		],
+		scripts: [siteUrl("/js/lightbox.js")],
 		content: `<div class="wrap"><article class="prose project">
 <header class="project-header">
 ${meta}

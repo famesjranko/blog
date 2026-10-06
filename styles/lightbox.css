@@ -1,0 +1,83 @@
+@layer prose {
+	.prose .zoomable {
+		cursor: zoom-in;
+	}
+
+	/* Chrome outlines a focused SVG even after a tap, so a diagram would
+	keep a ring when the dialog hands focus back. Keyboard focus still
+	gets the site ring through :focus-visible. */
+	.prose .zoomable:focus:not(:focus-visible) {
+		outline: none;
+	}
+
+	/* Keep the scrollbar's space so the page does not shift sideways
+	while the dialog holds the scroll. */
+	html:has(.lightbox[open]) {
+		overflow: hidden;
+		scrollbar-gutter: stable;
+	}
+
+	.lightbox {
+		width: 100vw;
+		max-width: none;
+		height: 100dvh;
+		max-height: none;
+		margin: 0;
+		padding: 0;
+		border: 0;
+		background: transparent;
+		cursor: zoom-out;
+	}
+
+	.lightbox[open] {
+		display: grid;
+		place-items: center;
+	}
+
+	/* The backdrop follows the page theme, so the image sits on the
+	reader's chosen background instead of a fixed dark scrim. */
+	.lightbox::backdrop {
+		background: color-mix(in srgb, var(--color-bg) 94%, transparent);
+		backdrop-filter: blur(4px);
+	}
+
+	.lightbox .lightbox-stage {
+		max-width: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.lightbox .lightbox-stage img {
+		display: block;
+		max-width: min(92vw, 1200px);
+		max-height: 88vh;
+		border: 1px solid var(--color-border);
+		border-radius: 8px;
+		box-shadow:
+			0 1px 2px rgb(0 0 0 / 6%),
+			0 16px 48px rgb(0 0 0 / 14%);
+	}
+
+	.lightbox .lightbox-stage svg {
+		display: block;
+		width: auto;
+		max-width: 88vw;
+		height: 82vh;
+	}
+
+	.lightbox-close {
+		position: fixed;
+		top: 1rem;
+		right: 1rem;
+		width: 2.5rem;
+		height: 2.5rem;
+		border: 1px solid var(--color-border);
+		border-radius: 50%;
+		background: var(--color-surface);
+		color: var(--color-text);
+		font:
+			1.5rem / 1 system-ui,
+			sans-serif;
+		cursor: pointer;
+	}
+}

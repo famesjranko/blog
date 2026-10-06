@@ -36,7 +36,9 @@ export function essayPage(essay: Essay): string {
 			siteUrl("/css/essay-discussion.css"),
 			siteUrl("/css/diagrams.css"),
 			...(isNote ? [siteUrl("/css/notes.css")] : []),
+			siteUrl("/css/lightbox.css"),
 		],
+		scripts: [siteUrl("/js/lightbox.js")],
 		content: `<div class="wrap"><article class="prose essay${isNote ? " note" : ""}">
 <header>
 ${meta}
