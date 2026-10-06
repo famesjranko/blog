@@ -230,7 +230,8 @@ ${
 		? `<meta name="description" content="${escapeHtml(description)}">
 `
 		: ""
-}${socialMetadata({ title, description, canonicalPath, socialImage, socialImageAlt, socialType })}${styles.map((href) => `<link rel="stylesheet" href="${escapeHtml(href)}">\n`).join("")}${renderScript(siteUrl("/js/theme.js"))}${renderScript(siteUrl("/js/mobile-nav.js"))}${scripts.map(renderScript).join("")}</head>
+}${socialMetadata({ title, description, canonicalPath, socialImage, socialImageAlt, socialType })}<link rel="stylesheet" href="${siteUrl("/css/fonts.css")}">
+${styles.map((href) => `<link rel="stylesheet" href="${escapeHtml(href)}">\n`).join("")}${renderScript(siteUrl("/js/theme.js"))}${renderScript(siteUrl("/js/mobile-nav.js"))}${scripts.map(renderScript).join("")}</head>
 <body>
 <a class="skip-link" href="#${escapeHtml(skipTo)}">Skip to content</a>
 ${header()}
