@@ -1,0 +1,62 @@
+/* The reading font is installed Georgia where the system has it, and
+Gelasio otherwise. Android maps the family name "Georgia" to its own
+serif, so a plain `Georgia, Gelasio` stack never reaches Gelasio there. local() matches a font's own full or
+PostScript name, which no alias provides; without real Georgia these
+faces fail to load and the stack falls through to Gelasio. Georgia ships
+four static faces, so each needs its own rule. No @layer here: this sheet
+loads before main.css and must not fix the layer order. */
+@font-face {
+	font-family: "Georgia Installed";
+	font-style: normal;
+	font-weight: 400;
+	src: local("Georgia"), local("Georgia-Regular");
+}
+
+@font-face {
+	font-family: "Georgia Installed";
+	font-style: normal;
+	font-weight: 700;
+	src: local("Georgia Bold"), local("Georgia-Bold");
+}
+
+@font-face {
+	font-family: "Georgia Installed";
+	font-style: italic;
+	font-weight: 400;
+	src: local("Georgia Italic"), local("Georgia-Italic");
+}
+
+@font-face {
+	font-family: "Georgia Installed";
+	font-style: italic;
+	font-weight: 700;
+	src: local("Georgia Bold Italic"), local("Georgia-BoldItalic");
+}
+
+/* Gelasio shares Georgia's glyph widths, so systems without Georgia
+(Linux, Android) get the same measure instead of a condensed Times clone.
+Browsers fetch it only when Georgia is missing. Variable weight axis;
+latin subset. Licence: static/fonts/OFL.txt. */
+@font-face {
+	font-family: Gelasio;
+	font-style: normal;
+	font-weight: 400 700;
+	font-display: swap;
+	src: url("../fonts/gelasio-roman-v1.woff2") format("woff2");
+	unicode-range:
+		U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+		U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+		U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+	font-family: Gelasio;
+	font-style: italic;
+	font-weight: 400 700;
+	font-display: swap;
+	src: url("../fonts/gelasio-italic-v1.woff2") format("woff2");
+	unicode-range:
+		U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+		U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+		U+2212, U+2215, U+FEFF, U+FFFD;
+}

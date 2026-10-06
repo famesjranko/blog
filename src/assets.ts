@@ -14,6 +14,7 @@ const STYLES = [
 	"hero.css",
 	"header.css",
 	"notes.css",
+	"fonts.css",
 ];
 
 /**
