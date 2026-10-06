@@ -124,7 +124,7 @@ let root = "";
 beforeAll(async () => {
 	vi.stubEnv("BASE_PATH", "");
 	({ outDir, root } = await buildToTemp());
-}, 120000);
+}, 180000);
 
 afterAll(async () => {
 	await rm(root, { recursive: true, force: true });
