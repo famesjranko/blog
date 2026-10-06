@@ -1,0 +1,140 @@
+/*
+ * Notes are shorter pieces, so they are not cards. The index lists them
+ * as ruled rows with the cover beside the text; the homepage shows them
+ * as text-only blocks between the essay and project card grids.
+ */
+@layer entries {
+	.note-meta {
+		margin: 0 0 0.5rem;
+		color: var(--color-muted);
+		font-size: 0.78rem;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+	}
+
+	.note-title {
+		margin: 0 0 0.45rem;
+		font-family: var(--font-reading);
+		font-weight: 400;
+		font-size: 1.3rem;
+		line-height: 1.25;
+	}
+
+	.note-title a {
+		color: var(--color-text);
+		text-decoration: none;
+	}
+
+	/* The title link covers its row or block, so the image is a target too. */
+	.note-title a::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+	}
+
+	@media (hover: hover) {
+		.note-title a:hover {
+			text-decoration: underline;
+			text-underline-offset: 0.2em;
+		}
+	}
+
+	.note-row:has(.note-title a:focus-visible),
+	.note-block:has(.note-title a:focus-visible) {
+		outline: 2px solid var(--color-accent);
+		outline-offset: 4px;
+	}
+
+	.note-desc {
+		margin: 0;
+		max-width: 60ch;
+		color: var(--color-muted);
+		line-height: 1.6;
+	}
+
+	.note-rows,
+	.note-blocks {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.note-rows {
+		border-top: 1px solid var(--color-border);
+	}
+
+	.note-row {
+		position: relative;
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 1rem;
+		padding-block: 1.75rem;
+		border-bottom: 1px solid var(--color-border);
+	}
+
+	/* Preview-only: drafts are never built for the published site. */
+	.note-row-draft {
+		border-bottom-style: dashed;
+	}
+
+	.note-row .card-media {
+		order: -1;
+		border-radius: 0.5rem;
+	}
+
+	.note-row .card-media img {
+		transition: transform 400ms ease;
+	}
+
+	@media (hover: hover) {
+		.note-row:hover .card-media img {
+			transform: scale(1.03);
+		}
+	}
+
+	.note-blocks {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 2rem 2.5rem;
+	}
+
+	.note-block {
+		position: relative;
+		padding-top: 0.9rem;
+		border-top: 2px solid var(--color-accent);
+	}
+
+	.note-block .note-title {
+		font-size: 1.2rem;
+	}
+}
+
+@layer responsive {
+	@media (min-width: 42rem) {
+		.note-row {
+			grid-template-columns: 1fr 35%;
+			gap: 3rem;
+			align-items: center;
+		}
+
+		.note-row .card-media {
+			order: 0;
+		}
+
+		.note-blocks {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.note-row .card-media img {
+			transition: none;
+		}
+
+		@media (hover: hover) {
+			.note-row:hover .card-media img {
+				transform: none;
+			}
+		}
+	}
+}

@@ -11,6 +11,7 @@ function sampleEssay(): Essay {
 		philosophers: ["Kant"],
 		featured: false,
 		draft: false,
+		section: "essays",
 		slug: "on-privacy",
 		html: "<p>Body.</p>",
 		readingMinutes: 3,

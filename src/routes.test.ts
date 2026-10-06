@@ -18,6 +18,7 @@ function sampleEssay(overrides: Partial<Essay> = {}): Essay {
 		philosophers: [],
 		featured: false,
 		draft: false,
+		section: "essays",
 		slug: "on-mind",
 		html: "<p>Body.</p>",
 		readingMinutes: 1,
@@ -32,7 +33,7 @@ async function generate(
 	projects: Project[] = [],
 ): Promise<string> {
 	const dir = await mkdtemp(path.join(tmpdir(), "blog-routes-"));
-	await generateSite(essays, projects, dir);
+	await generateSite({ essays, notes: [], projects }, dir);
 	return dir;
 }
 

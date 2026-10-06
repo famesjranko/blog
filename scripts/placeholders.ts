@@ -1,7 +1,7 @@
 import { existsSync } from "node:fs";
 import { mkdir, readdir, rm } from "node:fs/promises";
 import path from "node:path";
-import { loadEssays, loadProjects } from "../src/content.js";
+import { loadEssays, loadNotes, loadProjects } from "../src/content.js";
 import { isInternalJpeg } from "../src/images.js";
 import {
 	PLACEHOLDER_DIR,
@@ -17,7 +17,7 @@ import { accents, kmeans, pixelsOf } from "../src/placeholder/palette.js";
 /**
  * Generated cover art for pieces that ship without a cover image.
  *
- * Every essay or project, draft or published, whose frontmatter has no
+ * Every essay, note, or project, draft or published, whose frontmatter has no
  * `cover` gets `static/img/placeholders/<slug>.jpg`, a fluid-ink render
  * seeded by the slug and coloured from the real covers. Drafts are
  * included so preview builds (SHOW_DRAFTS) have card art too. The file
@@ -31,11 +31,12 @@ const CLUSTERS = 6;
 const JPEG_QUALITY = 86;
 
 async function allPieces(): Promise<Piece[]> {
-	const [essays, projects] = await Promise.all([
+	const [essays, notes, projects] = await Promise.all([
 		loadEssays(undefined, true),
+		loadNotes(true),
 		loadProjects(undefined, true),
 	]);
-	return [...essays, ...projects];
+	return [...essays, ...notes, ...projects];
 }
 
 async function presentPlaceholders(): Promise<string[]> {

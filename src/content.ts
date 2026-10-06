@@ -13,7 +13,14 @@ import {
 	normalizeProjectFrontmatter,
 } from "./schema.js";
 
+/**
+ * The writing sections. Notes are shorter pieces that share the essay
+ * model; the section alone decides where a piece lives.
+ */
+export type WritingSection = "essays" | "notes";
+
 export interface Essay extends EssayMeta {
+	section: WritingSection;
 	slug: string;
 	html: string;
 	readingMinutes: number;
@@ -54,13 +61,22 @@ export function topicSlug(topic: string): string {
 	return slug;
 }
 
-export async function loadEssay(filePath: string): Promise<Essay> {
+/** Root-relative URL path of an essay or note page. */
+export function writingPath(piece: Pick<Essay, "section" | "slug">): string {
+	return `/${piece.section}/${piece.slug}/`;
+}
+
+export async function loadEssay(
+	filePath: string,
+	section: WritingSection = "essays",
+): Promise<Essay> {
 	const source = await readFile(filePath, "utf8");
 	const { data, content } = matter(source);
 	const raw = RawFrontmatterSchema.parse(data);
 	const meta = normalizeFrontmatter(raw);
 	return {
 		...meta,
+		section,
 		slug: makeSlug(filePath),
 		html: renderMarkdown(content),
 		readingMinutes: readingMinutes(content),
@@ -72,12 +88,17 @@ export async function loadEssay(filePath: string): Promise<Essay> {
 export async function loadEssays(
 	pattern = "content/essays/**/*.md",
 	includeDrafts = false,
+	section: WritingSection = "essays",
 ): Promise<Essay[]> {
 	const files = await glob(pattern);
-	const essays = await Promise.all(files.map((f) => loadEssay(f)));
+	const essays = await Promise.all(files.map((f) => loadEssay(f, section)));
 	return essays
 		.filter((e) => includeDrafts || !e.draft)
 		.sort((a, b) => b.date.getTime() - a.date.getTime());
+}
+
+export function loadNotes(includeDrafts = false): Promise<Essay[]> {
+	return loadEssays("content/notes/**/*.md", includeDrafts, "notes");
 }
 
 export async function loadProject(filePath: string): Promise<Project> {

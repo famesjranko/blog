@@ -1,4 +1,4 @@
-import type { Essay, Project } from "../content.js";
+import { type Essay, type Project, topicSlug } from "../content.js";
 import {
 	CARD_IMAGE_SIZES,
 	cardImagePlan,
@@ -35,6 +35,10 @@ export type CoverPiece = Pick<
 	"cover" | "coverAlt" | "slug" | "draft"
 >;
 
+export function topicLink(topic: string): string {
+	return `<a href="${siteUrl(`/topics/${topicSlug(topic)}/`)}">${escapeHtml(topic)}</a>`;
+}
+
 export const DRAFT_BADGE = `<span class="draft-badge">Draft</span>`;
 
 /** Card class list; drafts get a modifier so the whole card reads as one. */
@@ -42,7 +46,10 @@ export function cardClass(piece: Pick<CoverPiece, "draft">): string {
 	return piece.draft ? "card card-draft" : "card";
 }
 
-export function cardCover(piece: CoverPiece): string {
+export function cardCover(
+	piece: CoverPiece,
+	sizes: string = CARD_IMAGE_SIZES,
+): string {
 	const { cover, coverAlt } = piece;
 	const src = coverSrc(piece);
 	const alt = cover === undefined ? "" : (coverAlt ?? "");
@@ -51,16 +58,16 @@ export function cardCover(piece: CoverPiece): string {
 	const dimensions =
 		size === undefined ? "" : ` width="${size.width}" height="${size.height}"`;
 	const img = `<img src="${escapeHtml(url)}" alt="${escapeHtml(alt)}"${dimensions} loading="lazy" decoding="async">`;
-	const art = picture(src, img);
+	const art = picture(src, img, sizes);
 	const badge = piece.draft ? DRAFT_BADGE : "";
 	return `<div class="card-media">${art}${badge}</div>`;
 }
 
-function picture(src: string, img: string): string {
+function picture(src: string, img: string, sizes: string): string {
 	const plan = cardImagePlan(src);
 	if (plan !== undefined) {
 		const sources = renditionSources(plan, {
-			sizes: CARD_IMAGE_SIZES,
+			sizes,
 			url: siteUrl,
 			escapeHtml,
 		});
@@ -74,19 +81,28 @@ export function coverSrc(piece: Pick<CoverPiece, "cover" | "slug">): string {
 	return cardImageSource(piece);
 }
 
+function navLinks(): string {
+	return (
+		`<a href="${siteUrl("/essays/")}">Essays</a>` +
+		`<a href="${siteUrl("/notes/")}">Notes</a>` +
+		`<a href="${siteUrl("/projects/")}">Projects</a>`
+	);
+}
+
 export function header(): string {
+	const links = navLinks();
 	return (
 		`<header class="site-header"><div class="wrap header-inner">` +
 		`<a class="site-name" href="${siteUrl("/")}">${escapeHtml(SITE_NAME)}</a>` +
 		`<div class="header-actions">` +
-		`<nav class="desktop-nav" aria-label="Primary"><a href="${siteUrl("/essays/")}">Essays</a><a href="${siteUrl("/projects/")}">Projects</a></nav>` +
+		`<nav class="desktop-nav" aria-label="Primary">${links}</nav>` +
 		`<button class="theme-toggle" type="button" data-theme-toggle aria-label="Dark theme">` +
 		`<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M8 2a6 6 0 0 0 0 12z" fill="currentColor"/></svg>` +
 		`</button>` +
 		`<button class="menu-toggle" type="button" popovertarget="mobile-nav" aria-label="Open navigation">` +
 		`<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M2 4h12M2 8h12M2 12h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg>` +
 		`</button>` +
-		`<nav id="mobile-nav" popover aria-label="Mobile"><a href="${siteUrl("/essays/")}">Essays</a><a href="${siteUrl("/projects/")}">Projects</a></nav></div></div></header>`
+		`<nav id="mobile-nav" popover aria-label="Mobile">${links}</nav></div></div></header>`
 	);
 }
 
