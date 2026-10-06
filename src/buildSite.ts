@@ -1,8 +1,9 @@
 import { mkdir, rm } from "node:fs/promises";
-import { copySiteAssets } from "./assets.js";
 import { articleImagePlans } from "./articleImages.js";
+import { copySiteAssets } from "./assets.js";
 import { cardImagePlans } from "./cardImages.js";
 import { loadEssays, loadNotes, loadProjects } from "./content.js";
+import { generateNotePrototypes } from "./notePrototypes.js";
 import { generateRenditions } from "./renditionGenerator.js";
 import { generateSite } from "./routes.js";
 
@@ -24,6 +25,9 @@ export async function buildSite(
 	const notes = await loadNotes(includeDrafts);
 	const projects = await loadProjects(undefined, includeDrafts);
 	await generateSite({ essays, notes, projects }, outDir);
+	if (includeDrafts) {
+		await generateNotePrototypes(notes, outDir);
+	}
 	await copySiteAssets(".", outDir);
 	const pieces = [...essays, ...notes, ...projects];
 	const plans = [

@@ -1,0 +1,328 @@
+@layer entries {
+	.prototype-index {
+		padding-block: 3rem 5rem;
+	}
+
+	.prototype-index > header {
+		max-width: 48rem;
+		margin-bottom: 3rem;
+	}
+
+	.prototype-index h1,
+	.prototype-note-row h2 {
+		font-family: var(--font-reading);
+		font-weight: 400;
+	}
+
+	.prototype-index h1 {
+		margin: 0.2rem 0 0.5rem;
+		font-size: clamp(2rem, 1.5rem + 2vw, 3rem);
+	}
+
+	.prototype-kicker {
+		margin: 0;
+		color: var(--color-accent);
+		font-size: 0.78rem;
+		font-weight: 700;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+	}
+
+	.prototype-note-row {
+		padding-block: 2rem;
+		border-top: 1px solid var(--color-border);
+	}
+
+	.prototype-note-row h2 {
+		margin: 0 0 1rem;
+	}
+
+	.prototype-note-row ol {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 0.8rem;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.prototype-note-row a {
+		display: block;
+		height: 100%;
+		padding: 1rem;
+		border: 1px solid var(--color-border);
+		border-radius: 0.55rem;
+		background: var(--color-surface);
+		color: var(--color-text);
+		text-decoration: none;
+	}
+
+	.prototype-note-row a:hover {
+		border-color: var(--color-accent);
+	}
+
+	.prototype-note-row a span {
+		display: block;
+		margin-top: 0.35rem;
+		color: var(--color-muted);
+		font-size: 0.9rem;
+		line-height: 1.5;
+	}
+
+	.prototype-toolbar {
+		width: min(calc(100% - 2rem), 68rem);
+		margin: 1.5rem auto 0;
+		padding: 1rem;
+		border: 1px solid var(--color-border);
+		border-radius: 0.6rem;
+		background: var(--color-surface);
+		font-size: 0.85rem;
+	}
+
+	.prototype-toolbar nav {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.45rem;
+		margin-block: 0.8rem;
+	}
+
+	.prototype-toolbar nav a {
+		padding: 0.3rem 0.65rem;
+		border: 1px solid var(--color-border);
+		border-radius: 999px;
+		color: var(--color-text);
+		text-decoration: none;
+	}
+
+	.prototype-toolbar nav a[aria-current="page"] {
+		border-color: var(--color-accent);
+		background: var(--color-wash-1);
+	}
+
+	.prototype-toolbar p {
+		margin: 0;
+		color: var(--color-muted);
+	}
+}
+
+@layer prose {
+	.prototype-note .note-section {
+		margin-top: 0;
+	}
+
+	/* A — quiet chapters: a visible mark explains each larger pause. */
+	.prototype-a > p:first-of-type {
+		font-size: 1.1em;
+		line-height: 1.72;
+	}
+
+	.prototype-a .note-section {
+		position: relative;
+		margin-top: 3.4rem;
+		padding-top: 1.35rem;
+	}
+
+	.prototype-a .note-section::before {
+		content: "◆";
+		position: absolute;
+		top: 0;
+		left: 50%;
+		color: var(--color-accent);
+		font-size: 0.55rem;
+		transform: translateX(-50%);
+	}
+
+	.prototype-a .note-feature-quote {
+		background: transparent;
+	}
+
+	/* B — editorial fields: each existing section becomes a clear movement. */
+	.prototype-b > p:first-of-type::first-letter {
+		float: left;
+		margin: 0.08em 0.1em 0 0;
+		color: var(--color-accent);
+		font-size: 3.25em;
+		line-height: 0.78;
+	}
+
+	.prototype-b .note-section {
+		margin-block: 2.5rem;
+		padding: 1rem 1.6rem;
+		border: 1px solid var(--color-border);
+		border-radius: 0.65rem;
+		background: var(--color-surface);
+		box-shadow: 0 0.75rem 2rem rgb(0 0 0 / 0.04);
+	}
+
+	.prototype-b .note-section > :first-child {
+		margin-top: 0.5rem;
+	}
+
+	.prototype-b .note-section > :last-child {
+		margin-bottom: 0.5rem;
+	}
+
+	/* C — key passages: only the article's decisive turn is pulled forward. */
+	.prototype-c .note-section {
+		display: contents;
+	}
+
+	.prototype-c > p:first-of-type::first-line {
+		font-variant: small-caps;
+		letter-spacing: 0.025em;
+	}
+
+	.prototype-c.prototype-historical-retort .note-section > p:last-child,
+	.prototype-c.prototype-peep-show .note-section > p:last-child {
+		margin-block: 2.2rem;
+		padding: 0.85rem 0 0.85rem 1.2rem;
+		border-left: 3px solid var(--color-accent);
+		font-size: 1.08em;
+		line-height: 1.72;
+	}
+
+	.prototype-c.prototype-emperors-new-clothes
+		.note-section:last-of-type
+		> p:last-child,
+	.prototype-c.prototype-i-heart-huckabees
+		.note-section:last-of-type
+		> p:last-child {
+		margin-block: 2.2rem;
+		padding: 0.85rem 0 0.85rem 1.2rem;
+		border-left: 3px solid var(--color-accent);
+		font-size: 1.08em;
+		line-height: 1.72;
+	}
+
+	.prototype-c .note-feature-quote {
+		margin-inline: -1.25rem;
+		background: var(--color-wash-2);
+	}
+
+	/* D — each treatment follows the material of its particular note. */
+	.prototype-d .note-section {
+		display: contents;
+	}
+
+	.prototype-contrast p {
+		margin: 0;
+		padding: 1.15rem;
+		line-height: 1.58;
+	}
+
+	.prototype-d.prototype-emperors-new-clothes > header + p {
+		margin-block: 0;
+		padding: 1.4rem 1.6rem 0;
+		background: var(--color-wash-1);
+		border-radius: 0.7rem 0.7rem 0 0;
+	}
+
+	.prototype-d.prototype-emperors-new-clothes > header + p + p {
+		margin-block: 0;
+		padding-block: 0.5rem 1.5rem;
+		padding-inline: 1.6rem;
+		border-radius: 0 0 0.7rem 0.7rem;
+		background: var(--color-wash-1);
+	}
+
+	.prototype-refrain {
+		padding-inline: 0.12em;
+		background: color-mix(in srgb, var(--color-accent) 14%, transparent);
+		font-style: italic;
+		box-decoration-break: clone;
+	}
+
+	.prototype-contrast {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		margin-block: 2.2rem;
+		border: 1px solid var(--color-border);
+		border-radius: 0.7rem;
+		overflow: hidden;
+		background: var(--color-surface);
+	}
+
+	.prototype-contrast p:nth-child(odd) {
+		background: var(--color-wash-2);
+	}
+
+	.prototype-contrast p:nth-child(n + 3) {
+		border-top: 1px solid var(--color-border);
+	}
+
+	.prototype-thesis {
+		font-size: 1.12em;
+		font-style: italic;
+		line-height: 1.68;
+	}
+
+	.prototype-d.prototype-i-heart-huckabees .note-feature-quote {
+		position: relative;
+		margin-block: 2.5rem;
+		padding: 1.6rem 1.8rem 1.4rem;
+		border: 0;
+		border-radius: 0.65rem;
+		background: var(--color-wash-3);
+		font-size: 1.08em;
+	}
+
+	.prototype-d.prototype-i-heart-huckabees .note-feature-quote::before {
+		content: "“";
+		position: absolute;
+		top: -0.3em;
+		left: 0.2em;
+		color: var(--color-accent);
+		font-size: 4.5rem;
+		line-height: 1;
+	}
+
+	.prototype-d.prototype-peep-show .note-embedded-quote {
+		position: relative;
+		max-width: 46ch;
+		margin-block: 2rem;
+		padding: 1.5rem 2rem;
+		font-size: 1.18em;
+		line-height: 1.6;
+	}
+
+	.prototype-d.prototype-peep-show .note-embedded-quote::before,
+	.prototype-d.prototype-peep-show .note-embedded-quote::after {
+		position: absolute;
+		color: var(--color-accent);
+		font-size: 2.8rem;
+		line-height: 1;
+	}
+
+	.prototype-d.prototype-peep-show .note-embedded-quote::before {
+		content: "“";
+		top: 0.15rem;
+		left: 0;
+	}
+
+	.prototype-d.prototype-peep-show .note-embedded-quote::after {
+		content: "”";
+		right: 0;
+		bottom: -0.35rem;
+	}
+}
+
+@layer responsive {
+	@media (max-width: 42rem) {
+		.prototype-note-row ol,
+		.prototype-contrast {
+			grid-template-columns: 1fr;
+		}
+
+		.prototype-contrast p:nth-child(n + 2) {
+			border-top: 1px solid var(--color-border);
+		}
+
+		.prototype-b .note-section {
+			padding-inline: 1rem;
+		}
+
+		.prototype-c .note-feature-quote {
+			margin-inline: 0;
+		}
+	}
+}
