@@ -55,6 +55,22 @@
 		"width": 1280,
 		"height": 540
 	},
+	"/img/notes/emperors-new-clothes/cover.jpg": {
+		"width": 1600,
+		"height": 900
+	},
+	"/img/notes/historical-retort/cover.jpg": {
+		"width": 1600,
+		"height": 900
+	},
+	"/img/notes/i-heart-huckabees/cover.jpg": {
+		"width": 1600,
+		"height": 900
+	},
+	"/img/notes/peep-show/cover.jpg": {
+		"width": 1600,
+		"height": 900
+	},
 	"/img/placeholders/esp32-s3-internet-monitor.jpg": {
 		"width": 640,
 		"height": 360

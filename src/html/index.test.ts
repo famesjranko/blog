@@ -12,6 +12,7 @@ function sampleEssay(overrides: Partial<Essay> = {}): Essay {
 		philosophers: ["Kant"],
 		featured: false,
 		draft: false,
+		section: "essays",
 		slug: "on-privacy",
 		html: "<p>Body.</p>",
 		readingMinutes: 1,

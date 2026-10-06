@@ -2,11 +2,12 @@ import {
 	type Essay,
 	type Project,
 	pickFeatured,
-	topicSlug,
+	writingPath,
 } from "../content.js";
 import { siteUrl } from "../site.js";
 import { hero, heroAssets } from "./hero.js";
-import { cardClass, cardCover, escapeHtml, page } from "./layout.js";
+import { cardClass, cardCover, escapeHtml, page, topicLink } from "./layout.js";
+import { recentNotesSection } from "./notes.js";
 import { projectEntry } from "./project.js";
 
 // Homepage hero copy. Edit freely; no logic depends on it.
@@ -14,15 +15,11 @@ const HERO_EYEBROW = "ANDREW MCDONALD · BACKEND & SYSTEMS ENGINEER · MELBOURNE
 const HERO_TITLE_LINES = ["From philosophy", "to software"];
 const HERO_STANDFIRST = "A personal collection of essays, projects, and notes.";
 
-export function topicLink(topic: string): string {
-	return `<a href="${siteUrl(`/topics/${topicSlug(topic)}/`)}">${escapeHtml(topic)}</a>`;
-}
-
 /** Card title level: h2 straight under a page h1, h3 inside a homepage section. */
 export type CardHeading = 2 | 3;
 
 export function essayEntry(essay: Essay, heading: CardHeading = 2): string {
-	const url = siteUrl(`/essays/${essay.slug}/`);
+	const url = siteUrl(writingPath(essay));
 	const cover = cardCover(essay);
 	const description =
 		essay.description !== undefined
@@ -64,14 +61,25 @@ function featuredSection(options: {
 }
 
 /** The hero is decoration, so the skip link lands on the first real section. */
-function skipTarget(essayCount: number, projectCount: number): string {
-	if (essayCount > 0) {
+function skipTarget(counts: {
+	essays: number;
+	notes: number;
+	projects: number;
+}): string {
+	if (counts.essays > 0) {
 		return "featured-essays";
 	}
-	return projectCount > 0 ? "featured-projects" : "main";
+	if (counts.projects > 0) {
+		return "featured-projects";
+	}
+	return counts.notes > 0 ? "recent-notes" : "main";
 }
 
-export function homePage(essays: Essay[], projects: Project[] = []): string {
+export function homePage(
+	essays: Essay[],
+	projects: Project[] = [],
+	notes: Essay[] = [],
+): string {
 	const featuredEssays = pickFeatured(essays);
 	const featuredProjects = pickFeatured(projects);
 	const essaySection =
@@ -94,12 +102,18 @@ export function homePage(essays: Essay[], projects: Project[] = []): string {
 					indexLabel: "More projects",
 					entry: featuredProjects.map((p) => projectEntry(p, 3)).join("\n"),
 				});
+	const assets = heroAssets();
 	return page({
 		title: "Andrew J. McDonald",
 		canonicalPath: "/",
 		description: HERO_STANDFIRST,
-		skipTo: skipTarget(featuredEssays.length, featuredProjects.length),
-		...heroAssets(),
+		skipTo: skipTarget({
+			essays: featuredEssays.length,
+			notes: notes.length,
+			projects: featuredProjects.length,
+		}),
+		scripts: assets.scripts,
+		styles: [...assets.styles, siteUrl("/css/notes.css")],
 		content: `${hero({
 			eyebrow: HERO_EYEBROW,
 			titleLines: HERO_TITLE_LINES,
@@ -109,6 +123,6 @@ export function homePage(essays: Essay[], projects: Project[] = []): string {
 				{ label: "Browse projects", href: siteUrl("/projects/") },
 			],
 		})}
-${essaySection}${projectsSection}`,
+${essaySection}${projectsSection}${recentNotesSection(notes)}`,
 	});
 }

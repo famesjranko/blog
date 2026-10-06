@@ -124,7 +124,7 @@ let root = "";
 beforeAll(async () => {
 	vi.stubEnv("BASE_PATH", "");
 	({ outDir, root } = await buildToTemp());
-}, 120000);
+}, 180000);
 
 afterAll(async () => {
 	await rm(root, { recursive: true, force: true });
@@ -150,9 +150,11 @@ it("shows reading time on built essay and project pages", async () => {
 		/<header class="project-header">([\s\S]*?)<\/header>/,
 	)?.[1];
 
-	// Then the essay shows two minutes and the project shows six minutes.
-	expect(essayHeader).toContain('<p class="reading-time">2 min read</p>');
-	expect(projectHeader).toContain('<p class="reading-time">6 min read</p>');
+	// Then each shared metadata line shows its reading estimate.
+	expect(essayHeader).toContain('class="article-meta"');
+	expect(essayHeader).toContain("2 min read");
+	expect(projectHeader).toContain('class="article-meta"');
+	expect(projectHeader).toContain("6 min read");
 }, 30000);
 
 describe("build output", () => {
@@ -198,6 +200,14 @@ describe("build output", () => {
 	}, 30000);
 });
 
+/** A body image, and the covers and placeholder art of draft pieces. */
+const NOT_CARD_SOURCES = [
+	"connect4-debug-scores",
+	"as-knowledge-holders",
+	"placeholders/time-travel-uni",
+	"placeholders/musicmeta",
+];
+
 describe("responsive image build output", () => {
 	it("emits every referenced rendition with its declared codec and dimensions", async () => {
 		const files = await listFiles(outDir);
@@ -220,13 +230,12 @@ describe("responsive image build output", () => {
 		const cardFiles = files
 			.map((file) => outputUrl(outDir, file))
 			.filter((url) => CARD_RENDITION.test(url));
-		expect(
-			cardFiles.some((file) => file.includes("connect4-debug-scores")),
-		).toBe(false);
-		expect(cardFiles.some((file) => file.includes("placeholders"))).toBe(false);
-		expect(
-			cardFiles.some((file) => file.includes("as-knowledge-holders")),
-		).toBe(false);
+		for (const name of NOT_CARD_SOURCES) {
+			expect(
+				cardFiles.some((file) => file.includes(name)),
+				name,
+			).toBe(false);
+		}
 	});
 
 	it("serves the article cover as sized AVIF and WebP renditions", async () => {

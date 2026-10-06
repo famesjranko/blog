@@ -7,5 +7,5 @@ const includeDrafts = showDrafts();
 const result = await buildSite(outDir, includeDrafts);
 
 console.log(
-	`Built ${result.essayCount} essay(s), ${result.projectCount} project(s), and ${result.imageCount} responsive image(s) -> ${outDir}/${includeDrafts ? " (drafts included)" : ""}`,
+	`Built ${result.essayCount} essay(s), ${result.noteCount} note(s), ${result.projectCount} project(s), and ${result.imageCount} responsive image(s) -> ${outDir}/${includeDrafts ? " (drafts included)" : ""}`,
 );

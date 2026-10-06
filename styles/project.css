@@ -7,21 +7,8 @@
 		max-width: var(--prose-width);
 	}
 
-	.project-eyebrow {
-		margin: 0 0 0.9rem;
-		color: var(--color-muted);
-		font-family: var(--font-ui);
-		font-size: 0.82rem;
-		letter-spacing: 0.06em;
-		text-transform: uppercase;
-	}
-
 	.project-lede {
 		font-size: 1.05rem;
-	}
-
-	.project-eyebrow .draft-eyebrow {
-		margin: 0 0.5rem 0 0;
 	}
 
 	.project-grid {

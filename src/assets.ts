@@ -13,6 +13,7 @@ const STYLES = [
 	"diagrams.css",
 	"hero.css",
 	"header.css",
+	"notes.css",
 ];
 
 /**

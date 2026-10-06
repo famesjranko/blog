@@ -54,6 +54,7 @@ function registerEssayStylesheetTest(): void {
 			"diagrams.css",
 			"hero.css",
 			"header.css",
+			"notes.css",
 		]) {
 			await writeFile(path.join(root, "styles", style), "body {}\n");
 		}
@@ -87,6 +88,7 @@ function registerDeclarationExclusionTest(): void {
 			"diagrams.css",
 			"hero.css",
 			"header.css",
+			"notes.css",
 		]) {
 			await writeFile(path.join(root, "styles", style), "body {}\n");
 		}

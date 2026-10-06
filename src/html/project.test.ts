@@ -161,9 +161,9 @@ it("shows the estimate near the project title", () => {
 	// When its page is rendered.
 	const html = projectPage(project);
 
-	// Then the estimate follows the title as plain text.
+	// Then the shared metadata line shows the origin, year, and estimate.
 	expect(html).toContain(
-		'<h1>Connect-4 web</h1>\n<p class="reading-time">4 min read</p>',
+		'<p class="article-meta">Personal project <span aria-hidden="true">·</span> <time datetime="2026-03-15">2026</time> <span aria-hidden="true">·</span> 4 min read</p>\n<h1>Connect-4 web</h1>',
 	);
 });
 
@@ -174,19 +174,17 @@ describe("projectPage header", () => {
 		expect(html).toContain('<div class="project-grid">');
 	});
 
-	it("shows the origin without a date in the eyebrow", () => {
-		const html = projectPage(sampleProject());
-		expect(html).toContain('class="project-eyebrow"');
-		expect(html).toContain("Personal project");
-		expect(html).not.toContain("<time");
-	});
+	it("shows the origin and date in the shared metadata line", () => {
+		// Given a dated personal project.
+		const project = sampleProject();
 
-	it("prefixes the eyebrow with a draft label for drafts only", () => {
-		const draft = projectPage(sampleProject({ draft: true }));
-		expect(draft).toContain(
-			'<p class="project-eyebrow"><span class="draft-eyebrow">Draft</span>Personal project</p>',
-		);
-		expect(projectPage(sampleProject())).not.toContain("draft-eyebrow");
+		// When its page is rendered.
+		const html = projectPage(project);
+
+		// Then its origin and year appear in the common article metadata.
+		expect(html).toContain('class="article-meta"');
+		expect(html).toContain("Personal project");
+		expect(html).toContain('<time datetime="2026-03-15">2026</time>');
 	});
 
 	it("uses the description as the lede and meta description", () => {
@@ -205,6 +203,24 @@ describe("projectPage header", () => {
 		expect(html).toContain('<link rel="stylesheet" href="/css/project.css">');
 		expect(html).toContain('<link rel="stylesheet" href="/css/diagrams.css">');
 		expect(html).not.toContain("/css/essay.css");
+	});
+});
+
+describe("projectPage status", () => {
+	it("prefixes the metadata with a draft label for drafts only", () => {
+		// Given draft and published versions of one project.
+		const draftProject = sampleProject({ draft: true });
+		const publishedProject = sampleProject();
+
+		// When both pages are rendered.
+		const draft = projectPage(draftProject);
+		const published = projectPage(publishedProject);
+
+		// Then only the draft has a badge before the project origin.
+		expect(draft).toContain(
+			'<p class="article-meta"><span class="draft-eyebrow">Draft</span>Personal project',
+		);
+		expect(published).not.toContain("draft-eyebrow");
 	});
 });
 

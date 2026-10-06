@@ -165,6 +165,30 @@ describe("external links", () => {
 	});
 });
 
+describe("article cover images", () => {
+	it("marks an article cover for the shared hero frame", () => {
+		// Given an article cover image.
+		const markdown = "![watch](/img/essays/x/cover.jpg)";
+
+		// When the Markdown renders.
+		const html = renderMarkdown(markdown);
+
+		// Then the image opts into the shared article-cover frame.
+		expect(html).toContain('class="article-cover-image"');
+	});
+
+	it("does not mark an ordinary article image as a cover", () => {
+		// Given an ordinary image within an article.
+		const markdown = "![watch](/img/essays/x/example.jpg)";
+
+		// When the Markdown renders.
+		const html = renderMarkdown(markdown);
+
+		// Then the image retains its own presentation.
+		expect(html).not.toContain("article-cover-image");
+	});
+});
+
 describe("jpeg without a rendition plan", () => {
 	it("renders an unknown internal jpeg as a bare img with no webp source", () => {
 		// Given an internal JPEG that is not in the image size table.
@@ -174,7 +198,9 @@ describe("jpeg without a rendition plan", () => {
 		const html = renderMarkdown(markdown);
 
 		// Then the image is a bare img with its alt text.
-		expect(html).toContain('<img src="/img/essays/x/cover.jpg" alt="watch">');
+		expect(html).toContain(
+			'<img src="/img/essays/x/cover.jpg" alt="watch" class="article-cover-image">',
+		);
 		// And no picture element or WebP source points at a missing file.
 		expect(html).not.toContain("<picture>");
 		expect(html).not.toContain(".webp");
@@ -314,7 +340,7 @@ describe("responsive article images", () => {
 		const sizes =
 			"(min-width: 40rem) 50rem, (min-width: 25rem) 92vw, calc(100vw - 2rem)";
 		expect(html).toContain(
-			`<picture><source type="image/avif" srcset="${srcset("", "avif")}" sizes="${sizes}"><source type="image/webp" srcset="${srcset("", "webp")}" sizes="${sizes}"><img src="${cover}" alt="city" width="1280" height="540"></picture>`,
+			`<picture><source type="image/avif" srcset="${srcset("", "avif")}" sizes="${sizes}"><source type="image/webp" srcset="${srcset("", "webp")}" sizes="${sizes}"><img src="${cover}" alt="city" class="article-cover-image" width="1280" height="540"></picture>`,
 		);
 	});
 

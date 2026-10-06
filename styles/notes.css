@@ -1,0 +1,190 @@
+/*
+ * Notes are shorter pieces, so they are not cards. The index lists them
+ * as ruled rows with the cover beside the text; the homepage shows them
+ * as text-only blocks between the essay and project card grids.
+ */
+@layer entries {
+	.note-title {
+		margin: 0 0 0.45rem;
+		font-family: var(--font-reading);
+		font-weight: 400;
+		font-size: 1.3rem;
+		line-height: 1.25;
+	}
+
+	.note-title a {
+		color: var(--color-text);
+		text-decoration: none;
+	}
+
+	/* Homepage blocks have no nested links, so the title covers the block. */
+	.note-block .note-title a::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+	}
+
+	@media (hover: hover) {
+		.note-title a:hover {
+			text-decoration: underline;
+			text-underline-offset: 0.2em;
+		}
+	}
+
+	.note-row:has(.note-title a:focus-visible),
+	.note-block:has(.note-title a:focus-visible) {
+		outline: 2px solid var(--color-accent);
+		outline-offset: 4px;
+	}
+
+	.note-desc {
+		margin: 0;
+		max-width: 60ch;
+		color: var(--color-muted);
+		line-height: 1.6;
+	}
+
+	.note-rows,
+	.note-blocks {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.note-rows {
+		border-top: 1px solid var(--color-border);
+	}
+
+	.note-row {
+		position: relative;
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 1rem;
+		padding-block: 1.75rem;
+		border-bottom: 1px solid var(--color-border);
+	}
+
+	/* Preview-only: drafts are never built for the published site. */
+	.note-row-draft {
+		border-bottom-style: dashed;
+	}
+
+	.note-row .card-media {
+		border-radius: 0.5rem;
+	}
+
+	.note-cover-link {
+		order: -1;
+		min-width: 0;
+		border-radius: 0.5rem;
+	}
+
+	.note-row .card-media img {
+		transition: transform 400ms ease;
+	}
+
+	@media (hover: hover) {
+		.note-cover-link:hover .card-media img {
+			transform: scale(1.03);
+		}
+	}
+
+	.note-blocks {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 2rem 2.5rem;
+	}
+
+	.note-block {
+		position: relative;
+		padding-top: 0.9rem;
+		border-top: 2px solid var(--color-accent);
+	}
+
+	.note-block .note-title {
+		font-size: 1.2rem;
+	}
+}
+
+@layer prose {
+	.prose.note > p:first-of-type {
+		font-size: 1.08em;
+		line-height: 1.72;
+	}
+
+	.prose.note .note-feature-quote {
+		margin-block: 2rem 2.4rem;
+		padding: 1.1rem 1.35rem;
+		border: 0;
+		border-top: 1px solid var(--color-border);
+		border-bottom: 1px solid var(--color-border);
+		font-size: 1.05em;
+	}
+
+	.prose.note .note-tale {
+		max-width: 59ch;
+		margin: 0.25rem auto 2.4rem;
+		padding-block: 0.9rem 1rem;
+		border-block: 1px solid var(--color-border);
+	}
+
+	.prose.note .note-tale > p {
+		margin-block: 0;
+		line-height: 1.82;
+	}
+
+	.prose.note .note-tale > p + p {
+		margin-top: 0.35rem;
+		text-indent: 1.5em;
+	}
+
+	.prose.note .note-pov,
+	.prose.note .note-source-quote {
+		display: block;
+		max-width: 52ch;
+		margin: 1.5rem auto;
+		text-align: center;
+		font-size: 1.08em;
+		font-style: italic;
+	}
+}
+
+@layer responsive {
+	@media (min-width: 42rem) {
+		.note-row {
+			grid-template-columns: 1fr 35%;
+			gap: 3rem;
+			align-items: center;
+		}
+
+		.note-cover-link {
+			order: 0;
+		}
+
+		.note-blocks {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+
+	@media (max-width: 42rem) {
+		.prose.note .note-tale {
+			max-width: none;
+		}
+
+		.prose.note .note-tale > p + p {
+			text-indent: 1.15em;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.note-cover-link .card-media img {
+			transition: none;
+		}
+
+		@media (hover: hover) {
+			.note-cover-link:hover .card-media img {
+				transform: none;
+			}
+		}
+	}
+}

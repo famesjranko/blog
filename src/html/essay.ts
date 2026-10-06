@@ -1,5 +1,6 @@
-import type { Essay } from "../content.js";
+import { type Essay, writingPath } from "../content.js";
 import { siteUrl } from "../site.js";
+import { articleMeta } from "./articleMeta.js";
 import { coverSrc, escapeHtml, page } from "./layout.js";
 
 export function essayPage(essay: Essay): string {
@@ -7,10 +8,16 @@ export function essayPage(essay: Essay): string {
 		essay.description !== undefined
 			? `<p>${escapeHtml(essay.description)}</p>`
 			: "";
-	const draft = essay.draft ? `<p class="draft-eyebrow">Draft</p>\n` : "";
+	const isNote = essay.section === "notes";
+	const meta = articleMeta({
+		label: isNote ? "Note" : "Essay",
+		date: essay.date,
+		readingMinutes: essay.readingMinutes,
+		draft: essay.draft,
+	});
 	return page({
 		title: essay.title,
-		canonicalPath: `/essays/${essay.slug}/`,
+		canonicalPath: writingPath(essay),
 		socialImage: coverSrc(essay),
 		...(essay.cover === undefined || essay.coverAlt === undefined
 			? {}
@@ -28,11 +35,12 @@ export function essayPage(essay: Essay): string {
 			siteUrl("/css/essay-patterns.css"),
 			siteUrl("/css/essay-discussion.css"),
 			siteUrl("/css/diagrams.css"),
+			...(isNote ? [siteUrl("/css/notes.css")] : []),
 		],
-		content: `<div class="wrap"><article class="prose essay">
+		content: `<div class="wrap"><article class="prose essay${isNote ? " note" : ""}">
 <header>
-${draft}<h1>${escapeHtml(essay.title)}</h1>
-<p class="reading-time">${essay.readingMinutes} min read</p>
+${meta}
+<h1>${escapeHtml(essay.title)}</h1>
 ${subtitle}
 </header>
 ${essay.html}

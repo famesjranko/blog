@@ -1,9 +1,10 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
-import type { Essay, Project } from "./content.js";
+import { type Essay, type Project, writingPath } from "./content.js";
 import { essayPage } from "./html/essay.js";
 import { errorPage } from "./html/error.js";
 import { essayIndexPage, homePage } from "./html/index.js";
+import { noteIndexPage } from "./html/notes.js";
 import { projectIndexPage, projectPage } from "./html/project.js";
 import { allTopics, topicPage } from "./html/topic.js";
 import { SITE_NAME, escapeHtml } from "./html/layout.js";
@@ -17,16 +18,31 @@ async function write(outDir: string, rel: string, body: string): Promise<void> {
 	await writeFile(full, body, "utf8");
 }
 
+export interface SiteContent {
+	essays: Essay[];
+	notes: Essay[];
+	projects: Project[];
+}
+
+/** Essays and notes together, newest first, for topics and the feed. */
+function allWriting({ essays, notes }: SiteContent): Essay[] {
+	return [...essays, ...notes].sort(
+		(a, b) => b.date.getTime() - a.date.getTime(),
+	);
+}
+
 export async function generateSite(
-	essays: Essay[],
-	projects: Project[],
+	content: SiteContent,
 	outDir = "dist",
 ): Promise<void> {
+	const { essays, notes, projects } = content;
 	assertUniqueSlugs("essay", essays);
+	assertUniqueSlugs("note", notes);
 	assertUniqueSlugs("project", projects);
 	assertPredecessorsResolve(projects);
-	for (const essay of essays) {
-		await write(outDir, `essays/${essay.slug}/index.html`, essayPage(essay));
+	const writing = allWriting(content);
+	for (const piece of writing) {
+		await write(outDir, `${writingPath(piece)}index.html`, essayPage(piece));
 	}
 	for (const project of projects) {
 		await write(
@@ -35,19 +51,20 @@ export async function generateSite(
 			projectPage(project),
 		);
 	}
-	await write(outDir, "index.html", homePage(essays, projects));
+	await write(outDir, "index.html", homePage(essays, projects, notes));
 	await write(outDir, "essays/index.html", essayIndexPage(essays));
+	await write(outDir, "notes/index.html", noteIndexPage(notes));
 	await write(outDir, "projects/index.html", projectIndexPage(projects));
-	for (const topic of allTopics(essays)) {
+	for (const topic of allTopics(writing)) {
 		await write(
 			outDir,
 			`topics/${topic.slug}/index.html`,
-			topicPage(topic, essays),
+			topicPage(topic, writing),
 		);
 	}
 	await write(outDir, "404.html", errorPage(404));
-	await write(outDir, "rss.xml", rss(essays));
-	await write(outDir, "sitemap.xml", sitemap(essays, projects));
+	await write(outDir, "rss.xml", rss(writing));
+	await write(outDir, "sitemap.xml", sitemap(writing, projects));
 }
 
 interface SluggedContent {
@@ -89,7 +106,7 @@ function assertPredecessorsResolve(projects: Project[]): void {
 }
 
 function rssItem(essay: Essay): string {
-	const url = absoluteSiteUrl(`/essays/${essay.slug}/`);
+	const url = absoluteSiteUrl(writingPath(essay));
 	const description =
 		essay.description === undefined
 			? ""
@@ -125,19 +142,20 @@ function rss(allEssays: Essay[]): string {
 }
 
 /** Drafts (only present under SHOW_DRAFTS) stay out of crawler surfaces. */
-function sitemap(allEssays: Essay[], allProjects: Project[]): string {
-	const essays = allEssays.filter((e) => !e.draft);
+function sitemap(allWriting: Essay[], allProjects: Project[]): string {
+	const writing = allWriting.filter((e) => !e.draft);
 	const projects = allProjects.filter((p) => !p.draft);
 	const urls = [
-		"",
-		"essays/",
-		"projects/",
-		...essays.map((e) => `essays/${e.slug}/`),
-		...projects.map((p) => `projects/${p.slug}/`),
-		...allTopics(essays).map((t) => `topics/${t.slug}/`),
+		"/",
+		"/essays/",
+		"/notes/",
+		"/projects/",
+		...writing.map(writingPath),
+		...projects.map((p) => `/projects/${p.slug}/`),
+		...allTopics(writing).map((t) => `/topics/${t.slug}/`),
 	];
 	const items = urls
-		.map((u) => `<url><loc>${absoluteSiteUrl(`/${u}`)}</loc></url>`)
+		.map((u) => `<url><loc>${absoluteSiteUrl(u)}</loc></url>`)
 		.join("\n");
 	return `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${items}</urlset>`;
 }
