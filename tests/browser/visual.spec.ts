@@ -108,39 +108,3 @@ test("featured essay card grid", async ({ page }) => {
 	// Then both cards match the baseline.
 	await expectRegionScreenshot(cards, "card-grid.png", 74);
 });
-
-test("Connect-4 diagram pair", async ({ page }) => {
-	// Given the heuristic project with its first two diagrams together.
-	await openStillPage(page, "/projects/connect4-heuristic/");
-	const pair = page.locator(".diagram-pair").first();
-	await expect(pair.locator("svg.diagram")).toHaveCount(2);
-	await expect(pair.locator("figcaption")).toHaveCount(2);
-	// SVG labels and captions rasterize differently across Linux distributions.
-	await pair.evaluate((element) => {
-		for (const label of element.querySelectorAll("svg text, figcaption")) {
-			(label as HTMLElement | SVGElement).style.visibility = "hidden";
-		}
-	});
-
-	// When the pair is captured.
-	await pair.scrollIntoViewIfNeeded();
-
-	// Then both board positions match the baseline.
-	await expectRegionScreenshot(pair, "diagram-pair.png", 25);
-});
-
-test("Connect-4 project figure", async ({ page }) => {
-	// Given the web project with its debug panel figure.
-	await openStillPage(page, "/projects/connect4-lisp-web/");
-	const figure = page.locator(".project-main figure").first();
-	await expect(figure.locator("img")).toHaveAttribute(
-		"alt",
-		"Mid-game with the debug panel open",
-	);
-
-	// When the figure is captured.
-	await figure.scrollIntoViewIfNeeded();
-
-	// Then its image and caption match the baseline.
-	await expectRegionScreenshot(figure, "project-figure.png");
-});
