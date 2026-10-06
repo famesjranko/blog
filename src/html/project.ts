@@ -1,6 +1,7 @@
 import type { Project } from "../content.js";
 import { siteUrl } from "../site.js";
 import type { CardHeading } from "./index.js";
+import { articleMeta } from "./articleMeta.js";
 import { cardClass, cardCover, coverSrc, escapeHtml, page } from "./layout.js";
 
 export function originLabel(origin: Project["origin"]): string {
@@ -85,14 +86,6 @@ function projectFacts(project: Project): string {
 	return `<dl class="project-facts">${rows.join("")}</dl>`;
 }
 
-function eyebrow(project: Project): string {
-	const origin = escapeHtml(originLabel(project.origin));
-	const label = project.draft
-		? `<span class="draft-eyebrow">Draft</span>${origin}`
-		: origin;
-	return `<p class="project-eyebrow">${label}</p>`;
-}
-
 export function projectPage(project: Project): string {
 	const lede =
 		project.description !== undefined
@@ -103,6 +96,12 @@ export function projectPage(project: Project): string {
 		facts === ""
 			? ""
 			: `<aside class="project-side" aria-label="Project facts">${facts}</aside>`;
+	const meta = articleMeta({
+		label: originLabel(project.origin),
+		date: project.date,
+		readingMinutes: project.readingMinutes,
+		draft: project.draft,
+	});
 	return page({
 		title: project.title,
 		canonicalPath: `/projects/${project.slug}/`,
@@ -123,9 +122,8 @@ export function projectPage(project: Project): string {
 		],
 		content: `<div class="wrap"><article class="prose project">
 <header class="project-header">
-${eyebrow(project)}
+${meta}
 <h1>${escapeHtml(project.title)}</h1>
-<p class="reading-time">${project.readingMinutes} min read</p>
 ${lede}
 </header>
 <div class="project-grid">${side}<div class="project-main">${project.html}</div></div>

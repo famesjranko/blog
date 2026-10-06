@@ -29,6 +29,7 @@ function registerEssayTests(): void {
 	registerMissingDescriptionTest();
 	registerDraftLabelTest();
 	registerPublishedLabelTest();
+	registerNoteHeaderTest();
 	registerStylesheetOrderTest();
 	registerReadingTimeTest();
 }
@@ -41,9 +42,9 @@ function registerReadingTimeTest(): void {
 		// When its page is rendered.
 		const html = essayPage(essay);
 
-		// Then the estimate follows the title as plain text.
+		// Then the shared metadata line shows its type, year, and estimate.
 		expect(html).toContain(
-			'<h1>On Privacy</h1>\n<p class="reading-time">3 min read</p>',
+			'<p class="article-meta">Essay <span aria-hidden="true">·</span> <time datetime="2020-05-14">2020</time> <span aria-hidden="true">·</span> 3 min read</p>\n<h1>On Privacy</h1>',
 		);
 	});
 }
@@ -83,9 +84,15 @@ function registerMissingDescriptionTest(): void {
 
 function registerDraftLabelTest(): void {
 	it("labels a draft in the header before the title", () => {
-		const html = essayPage({ ...sampleEssay(), draft: true });
+		// Given a draft essay.
+		const essay = { ...sampleEssay(), draft: true };
+
+		// When its page is rendered.
+		const html = essayPage(essay);
+
+		// Then the draft badge precedes the common article metadata.
 		expect(html).toContain(
-			'<header>\n<p class="draft-eyebrow">Draft</p>\n<h1>On Privacy</h1>',
+			'<header>\n<p class="article-meta"><span class="draft-eyebrow">Draft</span>Essay',
 		);
 	});
 }
@@ -93,6 +100,21 @@ function registerDraftLabelTest(): void {
 function registerPublishedLabelTest(): void {
 	it("shows no draft label on a published essay", () => {
 		expect(essayPage(sampleEssay())).not.toContain("draft-eyebrow");
+	});
+}
+
+function registerNoteHeaderTest(): void {
+	it("identifies notes in the shared article header", () => {
+		// Given an essay-model piece in the notes section.
+		const note = { ...sampleEssay(), section: "notes" as const };
+
+		// When its page is rendered.
+		const html = essayPage(note);
+
+		// Then the article identifies itself as a note and loads note styles.
+		expect(html).toContain('<article class="prose essay note">');
+		expect(html).toContain('<p class="article-meta">Note ');
+		expect(html).toContain('<link rel="stylesheet" href="/css/notes.css">');
 	});
 }
 

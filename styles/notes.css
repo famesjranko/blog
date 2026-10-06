@@ -109,6 +109,81 @@
 	}
 }
 
+@layer prose {
+	.prose.note > p:first-of-type {
+		font-size: 1.08em;
+		line-height: 1.72;
+	}
+
+	.prose.note .note-section {
+		margin-top: 3rem;
+	}
+
+	.prose.note .note-hinge {
+		margin-block: 2rem;
+		padding: 0.85rem 0 0.85rem 1.15rem;
+		border-left: 2px solid var(--color-accent);
+	}
+
+	.prose.note .note-hinge p,
+	.prose.note .note-closing p,
+	.prose.note .note-contrast p {
+		margin: 0;
+	}
+
+	.prose.note .note-feature-quote {
+		margin-block: 2rem 2.4rem;
+		padding: 1.1rem 1.35rem;
+		border: 0;
+		border-top: 1px solid var(--color-border);
+		border-bottom: 1px solid var(--color-border);
+		font-size: 1.05em;
+	}
+
+	.prose.note .note-closing {
+		margin-top: 2.4rem;
+		padding-top: 1.25rem;
+		border-top: 1px solid var(--color-border);
+	}
+
+	.prose.note .note-contrast {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 1.25rem;
+		margin-block: 2rem;
+	}
+
+	.prose.note .note-contrast > div {
+		padding: 1rem 1.15rem;
+		border-top: 2px solid var(--color-accent);
+		background: color-mix(in srgb, var(--color-text) 3%, transparent);
+	}
+
+	.prose.note .note-embedded-quote {
+		display: block;
+		max-width: 52ch;
+		margin: 1.5rem auto;
+		text-align: center;
+		font-size: 1.08em;
+		font-style: italic;
+	}
+
+	.prose.note .note-paired {
+		margin-block: 2rem;
+		padding-block: 1rem;
+		border-top: 1px solid var(--color-border);
+		border-bottom: 1px solid var(--color-border);
+	}
+
+	.prose.note .note-paired > :first-child {
+		margin-top: 0;
+	}
+
+	.prose.note .note-paired > :last-child {
+		margin-bottom: 0;
+	}
+}
+
 @layer responsive {
 	@media (min-width: 42rem) {
 		.note-row {
@@ -123,6 +198,16 @@
 
 		.note-blocks {
 			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+
+	@media (max-width: 42rem) {
+		.prose.note .note-section {
+			margin-top: 2.5rem;
+		}
+
+		.prose.note .note-contrast {
+			grid-template-columns: 1fr;
 		}
 	}
 

@@ -150,9 +150,11 @@ it("shows reading time on built essay and project pages", async () => {
 		/<header class="project-header">([\s\S]*?)<\/header>/,
 	)?.[1];
 
-	// Then the essay shows two minutes and the project shows six minutes.
-	expect(essayHeader).toContain('<p class="reading-time">2 min read</p>');
-	expect(projectHeader).toContain('<p class="reading-time">6 min read</p>');
+	// Then each shared metadata line shows its reading estimate.
+	expect(essayHeader).toContain('class="article-meta"');
+	expect(essayHeader).toContain("2 min read");
+	expect(projectHeader).toContain('class="article-meta"');
+	expect(projectHeader).toContain("6 min read");
 }, 30000);
 
 describe("build output", () => {
