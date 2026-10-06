@@ -120,10 +120,6 @@
 		line-height: 1.72;
 	}
 
-	.prose.note .note-section {
-		margin-top: 3rem;
-	}
-
 	.prose.note .note-feature-quote {
 		margin-block: 2rem 2.4rem;
 		padding: 1.1rem 1.35rem;
@@ -133,7 +129,25 @@
 		font-size: 1.05em;
 	}
 
-	.prose.note .note-embedded-quote {
+	.prose.note .note-tale {
+		max-width: 59ch;
+		margin: 0.25rem auto 2.4rem;
+		padding-block: 0.9rem 1rem;
+		border-block: 1px solid var(--color-border);
+	}
+
+	.prose.note .note-tale > p {
+		margin-block: 0;
+		line-height: 1.82;
+	}
+
+	.prose.note .note-tale > p + p {
+		margin-top: 0.35rem;
+		text-indent: 1.5em;
+	}
+
+	.prose.note .note-pov,
+	.prose.note .note-source-quote {
 		display: block;
 		max-width: 52ch;
 		margin: 1.5rem auto;
@@ -161,8 +175,12 @@
 	}
 
 	@media (max-width: 42rem) {
-		.prose.note .note-section {
-			margin-top: 2.5rem;
+		.prose.note .note-tale {
+			max-width: none;
+		}
+
+		.prose.note .note-tale > p + p {
+			text-indent: 1.15em;
 		}
 	}
 
