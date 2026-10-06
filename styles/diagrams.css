@@ -114,4 +114,141 @@ is supplied separately by figures.css. */
 		text-anchor: middle;
 		dominant-baseline: middle;
 	}
+
+	/* The pipeline is a 760px flowchart shown near full size, so its type
+	sits a little under body text. The three lane colours keep the kinds of
+	type apart in both themes. */
+	.prose .diagram-pipeline text {
+		font-family: var(--font-ui);
+		font-size: 14px;
+	}
+
+	.prose .diagram-pipeline .heading {
+		font-size: 15px;
+		font-weight: 600;
+	}
+
+	.prose .diagram-pipeline .muted {
+		font-size: 13px;
+	}
+
+	.prose .diagram-pipeline .node {
+		fill: var(--color-surface);
+		stroke: var(--color-border);
+		stroke-width: 1.5;
+	}
+
+	.prose .diagram-pipeline .node-io {
+		stroke: var(--color-accent);
+		stroke-width: 2;
+	}
+
+	.prose .diagram-pipeline .node-side {
+		fill: none;
+		stroke-dasharray: 4 4;
+	}
+
+	.prose .diagram-pipeline .lane-regular,
+	.prose .diagram-pipeline .lane-merge,
+	.prose .diagram-pipeline .lane-composite {
+		stroke-width: 2;
+	}
+
+	.prose .diagram-pipeline .lane-regular {
+		stroke: var(--color-accent);
+	}
+
+	.prose .diagram-pipeline .lane-merge {
+		stroke: var(--color-diagram-x);
+	}
+
+	.prose .diagram-pipeline .lane-composite {
+		stroke: var(--color-diagram-o);
+	}
+
+	.prose .diagram-pipeline .flow {
+		fill: none;
+		stroke: var(--color-muted);
+		stroke-width: 1.5;
+	}
+
+	.prose .diagram-pipeline .flow-wait {
+		stroke-dasharray: 4 3;
+	}
+
+	.prose .diagram-pipeline .arrow-head {
+		fill: var(--color-muted);
+	}
+
+	.prose .diagram-pipeline .deadline {
+		fill: none;
+		stroke: var(--color-diagram-o);
+		stroke-width: 1.5;
+		stroke-dasharray: 6 5;
+	}
+
+	.prose .diagram-pipeline .deadline-label {
+		fill: var(--color-diagram-o);
+		font-size: 13px;
+		font-weight: 600;
+	}
+
+	/* The timeline shares the pipeline's lanes and deadline, drawn as
+	filled bars on a time axis. */
+	.prose .diagram-timeline .axis {
+		fill: none;
+		stroke: var(--color-muted);
+		stroke-width: 1.5;
+	}
+
+	.prose .diagram-timeline .start-line {
+		stroke: var(--color-muted);
+		stroke-dasharray: 2 4;
+	}
+
+	.prose .diagram-timeline .bar {
+		fill: var(--color-muted);
+		stroke: none;
+	}
+
+	.prose .diagram-timeline .bar-identity {
+		fill: var(--color-text);
+	}
+
+	.prose .diagram-timeline .bar.lane-regular {
+		fill: var(--color-accent);
+	}
+
+	.prose .diagram-timeline .bar.lane-merge {
+		fill: var(--color-diagram-x);
+	}
+
+	.prose .diagram-timeline .bar.lane-composite {
+		fill: var(--color-diagram-o);
+	}
+
+	.prose .diagram-timeline .bar-miss,
+	.prose .diagram-timeline .bar-wait {
+		fill: none;
+		stroke-width: 1.5;
+		stroke-dasharray: 3 3;
+	}
+
+	.prose .diagram-timeline .bar-miss {
+		stroke: var(--color-muted);
+	}
+
+	.prose .diagram-timeline .bar-wait {
+		stroke: var(--color-diagram-o);
+		opacity: 0.7;
+	}
+
+	.prose .diagram-timeline .merge-tick {
+		stroke: var(--color-diagram-x);
+		stroke-width: 2.5;
+	}
+
+	.prose .diagram-timeline .snapshot {
+		fill: var(--color-accent);
+	}
 }

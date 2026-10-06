@@ -131,6 +131,26 @@
 		"width": 1600,
 		"height": 599
 	},
+	"/img/projects/musicmeta/how-we-got-this.jpg": {
+		"width": 980,
+		"height": 683
+	},
+	"/img/projects/musicmeta/nirvana-search.jpg": {
+		"width": 1008,
+		"height": 488
+	},
+	"/img/projects/musicmeta/pipeline.svg": {
+		"width": 760,
+		"height": 860
+	},
+	"/img/projects/musicmeta/radiohead-summary.jpg": {
+		"width": 1008,
+		"height": 609
+	},
+	"/img/projects/musicmeta/timeline.svg": {
+		"width": 760,
+		"height": 462
+	},
 	"/img/projects/tablescan/book-viewer.jpg": {
 		"width": 1232,
 		"height": 1315

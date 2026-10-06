@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="diagram diagram-pipeline diagram-timeline" viewBox="0 0 760 462" role="img" aria-labelledby="time-title time-desc">
+  <title id="time-title">Timeline of one enrich call for an artist</title>
+  <desc id="time-desc">After a cache read, MusicBrainz resolves identity. Then every type starts at the same moment. Regular types try providers in turn, mergeable types ask several providers at once and merge, and composite types wait for the types they are built from. Snapshots go out as the identity and each type settle. The cache is written once at the end, inside a 30-second deadline, and the last snapshot follows it.</desc>
+  <defs>
+    <marker id="time-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path class="arrow-head" d="M0 0 L10 5 L0 10 z"/>
+    </marker>
+  </defs>
+
+  <line class="axis" x1="220" y1="40" x2="740" y2="40" marker-end="url(#time-arrow)"/>
+  <text class="muted" x="220" y="30">time</text>
+
+  <line class="deadline" x1="716" y1="48" x2="716" y2="432"/>
+  <text class="deadline-label" x="710" y="30" text-anchor="end">30-second deadline</text>
+
+  <line class="start-line" x1="322" y1="48" x2="322" y2="382"/>
+  <text class="muted" x="326" y="62">every type starts</text>
+
+  <text class="label" x="20" y="92">Cache read</text>
+  <rect class="bar" x="220" y="80" width="14" height="16" rx="3"/>
+
+  <text class="label" x="20" y="132">Identity</text>
+  <text class="muted" x="140" y="132">MusicBrainz</text>
+  <rect class="bar bar-identity" x="238" y="120" width="80" height="16" rx="3"/>
+
+  <text class="label" x="20" y="172">Photo</text>
+  <text class="muted" x="140" y="172">regular</text>
+  <rect class="bar bar-miss" x="326" y="160" width="40" height="16" rx="3"/>
+  <rect class="bar lane-regular" x="370" y="160" width="62" height="16" rx="3"/>
+  <text class="muted" x="436" y="173">first provider missed; the next answered</text>
+
+  <text class="label" x="20" y="212">Genre</text>
+  <text class="muted" x="140" y="212">mergeable</text>
+  <rect class="bar lane-merge" x="326" y="200" width="70" height="5" rx="2"/>
+  <rect class="bar lane-merge" x="326" y="206" width="116" height="5" rx="2"/>
+  <rect class="bar lane-merge" x="326" y="212" width="94" height="5" rx="2"/>
+  <line class="merge-tick" x1="446" y1="196" x2="446" y2="220"/>
+  <text class="muted" x="452" y="213">merged</text>
+
+  <text class="label" x="20" y="252">Genre discovery</text>
+  <text class="muted" x="140" y="252">composite</text>
+  <rect class="bar bar-wait" x="326" y="240" width="118" height="16" rx="3"/>
+  <rect class="bar lane-composite" x="448" y="240" width="40" height="16" rx="3"/>
+  <path class="flow flow-wait" d="M446 220 V236" marker-end="url(#time-arrow)"/>
+
+  <text class="label" x="20" y="292">Members</text>
+  <text class="muted" x="140" y="292">regular</text>
+  <rect class="bar lane-regular" x="326" y="280" width="58" height="16" rx="3"/>
+
+  <text class="label" x="20" y="332">Discography</text>
+  <text class="muted" x="140" y="332">regular</text>
+  <rect class="bar lane-regular" x="326" y="320" width="190" height="16" rx="3"/>
+
+  <text class="label" x="20" y="372">Timeline</text>
+  <text class="muted" x="140" y="372">composite</text>
+  <rect class="bar bar-wait" x="326" y="360" width="192" height="16" rx="3"/>
+  <rect class="bar lane-composite" x="522" y="360" width="40" height="16" rx="3"/>
+  <path class="flow flow-wait" d="M516 336 L520 356" marker-end="url(#time-arrow)"/>
+
+  <text class="label" x="20" y="412">Snapshots</text>
+  <line class="grid" x1="220" y1="408" x2="716" y2="408"/>
+  <circle class="snapshot" cx="318" cy="408" r="5"/>
+  <circle class="snapshot" cx="384" cy="408" r="5"/>
+  <circle class="snapshot" cx="432" cy="408" r="5"/>
+  <circle class="snapshot" cx="446" cy="408" r="5"/>
+  <circle class="snapshot" cx="488" cy="408" r="5"/>
+  <circle class="snapshot" cx="516" cy="408" r="5"/>
+  <circle class="snapshot" cx="612" cy="408" r="5"/>
+
+  <text class="label" x="20" y="444">Cache write</text>
+  <rect class="bar" x="580" y="432" width="22" height="16" rx="3"/>
+  <text class="muted" x="608" y="445">once</text>
+
+</svg>
