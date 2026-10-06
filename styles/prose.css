@@ -109,6 +109,15 @@
 		line-height: 1.5;
 	}
 
+	.prose .table-scroll {
+		overflow-x: auto;
+		margin-block: 1.5em;
+	}
+
+	.prose .table-scroll table {
+		margin: 0;
+	}
+
 	.prose th,
 	.prose td {
 		padding: 0.6rem 0.8rem;
