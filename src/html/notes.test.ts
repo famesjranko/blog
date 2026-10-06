@@ -45,8 +45,8 @@ function sampleProject(): Project {
 }
 
 describe("noteIndexPage", () => {
-	it("lists each note as a row with its year, reading time, and link", () => {
-		// Given one note from 2020 that takes three minutes to read.
+	it("lists each note without article metadata", () => {
+		// Given one note with a date and reading time.
 		const note = sampleNote();
 
 		// When the notes index renders.
@@ -54,10 +54,11 @@ describe("noteIndexPage", () => {
 
 		// Then the page counts one note.
 		expect(html).toContain('<p class="index-count">1 note</p>');
-		// And the row shows the year and reading time.
-		expect(html).toContain("2020 · 3 min");
 		// And the title links to the note under /notes/.
 		expect(html).toContain('<a href="/notes/peep-show/">On Peep Show</a>');
+		// And article metadata stays off the index row.
+		expect(html).not.toContain("2020 · 3 min");
+		expect(html).not.toContain("note-meta");
 	});
 
 	it("gives a coverless note its generated placeholder art", () => {
@@ -109,6 +110,20 @@ describe("recentNotesSection", () => {
 		expect(newest).toBeGreaterThan(-1);
 		expect(newest).toBeLessThan(next);
 	});
+
+	it("leaves article metadata off the homepage note blocks", () => {
+		// Given one note with a date and reading time.
+		const note = sampleNote();
+
+		// When the homepage notes section renders.
+		const html = recentNotesSection([note]);
+
+		// Then its title and description remain without article metadata.
+		expect(html).toContain("On Peep Show");
+		expect(html).toContain("The first-person camera as phenomenology.");
+		expect(html).not.toContain("2020 · 3 min");
+		expect(html).not.toContain("note-meta");
+	});
 });
 
 describe("homePage notes", () => {
@@ -145,7 +160,7 @@ describe("homePage notes", () => {
 });
 
 describe("header notes link", () => {
-	it("links the notes index between essays and projects in both menus", () => {
+	it("lists essays, projects, then notes in both menus", () => {
 		// Given the site header.
 		const html = header();
 
@@ -154,14 +169,14 @@ describe("header notes link", () => {
 			(match) => match[2],
 		);
 
-		// Then each menu lists Essays, Notes, then Projects.
+		// Then each menu matches the homepage section order.
 		expect(links).toEqual([
 			"Essays",
-			"Notes",
 			"Projects",
+			"Notes",
 			"Essays",
-			"Notes",
 			"Projects",
+			"Notes",
 		]);
 	});
 });

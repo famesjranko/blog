@@ -4,14 +4,6 @@
  * as text-only blocks between the essay and project card grids.
  */
 @layer entries {
-	.note-meta {
-		margin: 0 0 0.5rem;
-		color: var(--color-muted);
-		font-size: 0.78rem;
-		letter-spacing: 0.1em;
-		text-transform: uppercase;
-	}
-
 	.note-title {
 		margin: 0 0 0.45rem;
 		font-family: var(--font-reading);

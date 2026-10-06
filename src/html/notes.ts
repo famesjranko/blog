@@ -12,11 +12,6 @@ export const RECENT_NOTES_COUNT = 4;
 const NOTE_IMAGE_SIZES =
 	"(min-width: 73rem) 23.8rem, (min-width: 42rem) calc(35vw - 1.75rem), (min-width: 25rem) 92vw, calc(100vw - 2rem)";
 
-/** Notes are dated by year only; the UTC year matches the frontmatter date. */
-function noteMeta(note: Essay): string {
-	return `<p class="note-meta">${note.date.getUTCFullYear()} · ${note.readingMinutes} min</p>`;
-}
-
 function noteTitle(note: Essay, heading: 2 | 3): string {
 	const url = siteUrl(writingPath(note));
 	return `<h${heading} class="note-title"><a href="${url}">${escapeHtml(note.title)}</a></h${heading}>`;
@@ -40,7 +35,6 @@ export function noteRow(note: Essay): string {
 	const draft = note.draft ? " note-row-draft" : "";
 	return `<li class="note-row${draft}">
 <div class="note-text">
-${noteMeta(note)}
 ${noteTitle(note, 2)}
 ${noteDescription(note)}
 <p class="entry-meta"><span class="entry-topics">${topics}</span></p>
@@ -52,7 +46,6 @@ ${noteCover(note)}
 /** A homepage block: text only, so the section stays lighter than the cards. */
 export function noteBlock(note: Essay): string {
 	return `<li class="note-block">
-${noteMeta(note)}
 ${noteTitle(note, 3)}
 ${noteDescription(note)}
 </li>`;

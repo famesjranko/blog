@@ -84,8 +84,8 @@ export function coverSrc(piece: Pick<CoverPiece, "cover" | "slug">): string {
 function navLinks(): string {
 	return (
 		`<a href="${siteUrl("/essays/")}">Essays</a>` +
-		`<a href="${siteUrl("/notes/")}">Notes</a>` +
-		`<a href="${siteUrl("/projects/")}">Projects</a>`
+		`<a href="${siteUrl("/projects/")}">Projects</a>` +
+		`<a href="${siteUrl("/notes/")}">Notes</a>`
 	);
 }
 
