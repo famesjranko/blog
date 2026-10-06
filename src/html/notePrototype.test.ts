@@ -3,7 +3,7 @@ import { loadNotes } from "../content.js";
 import {
 	notePrototypeIndex,
 	notePrototypePage,
-	PROTOTYPE_OPTIONS,
+	optionsForNote,
 } from "./notePrototype.js";
 
 function bodyText(html: string): string {
@@ -27,7 +27,7 @@ describe("note formatting prototypes", () => {
 
 		// When every formatting option is rendered.
 		const comparisons = notes.flatMap((note) =>
-			PROTOTYPE_OPTIONS.map((option) => ({
+			optionsForNote(note).map((option) => ({
 				actual: bodyText(articleBody(notePrototypePage(note, option))),
 				expected: bodyText(note.html),
 			})),
@@ -39,18 +39,18 @@ describe("note formatting prototypes", () => {
 		}
 	});
 
-	it("links to four options for every note", async () => {
-		// Given all notes and the four prototype options.
+	it("links to the baseline and the focused Emperor options", async () => {
+		// Given all notes and their available prototype options.
 		const notes = await loadNotes(true);
 
 		// When the prototype index is rendered.
 		const html = notePrototypeIndex(notes);
 		const links =
 			html.match(
-				/href="\/prototypes\/notes\/[^"]+\/(recommended|restrained)\/"/g,
+				/href="\/prototypes\/notes\/[^"]+\/(restrained|book|folio|inset)\/"/g,
 			) ?? [];
 
-		// Then each note has one link for each option.
-		expect(links).toHaveLength(notes.length * PROTOTYPE_OPTIONS.length);
+		// Then every note has a baseline and Emperor has three opening options.
+		expect(links).toHaveLength(notes.length + 3);
 	});
 });

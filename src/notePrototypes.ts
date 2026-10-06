@@ -4,7 +4,7 @@ import type { Essay } from "./content.js";
 import {
 	notePrototypeIndex,
 	notePrototypePage,
-	PROTOTYPE_OPTIONS,
+	optionsForNote,
 } from "./html/notePrototype.js";
 
 async function write(outDir: string, rel: string, body: string): Promise<void> {
@@ -23,7 +23,7 @@ export async function generateNotePrototypes(
 	await copyFile("styles/note-prototypes.css", path.join(root, "styles.css"));
 	await write(outDir, "prototypes/notes/index.html", notePrototypeIndex(notes));
 	for (const note of notes) {
-		for (const option of PROTOTYPE_OPTIONS) {
+		for (const option of optionsForNote(note)) {
 			await write(
 				outDir,
 				`prototypes/notes/${note.slug}/${option.id}/index.html`,

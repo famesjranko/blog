@@ -4,56 +4,59 @@ import { articleMeta } from "./articleMeta.js";
 import { escapeHtml, page } from "./layout.js";
 
 export interface PrototypeOption {
-	id: "recommended" | "restrained";
+	id: "restrained" | "book" | "folio" | "inset";
 	name: string;
 	description: string;
 }
 
-export const PROTOTYPE_OPTIONS: PrototypeOption[] = [
+const RESTRAINED: PrototypeOption = {
+	id: "restrained",
+	name: "Restrained baseline",
+	description: "Normal prose rhythm with only the clearest passage emphasised.",
+};
+
+const EMPEROR_OPENINGS: PrototypeOption[] = [
 	{
-		id: "recommended",
-		name: "Content-led recommendation",
+		id: "book",
+		name: "Book-style narrative",
 		description:
-			"One treatment derived from this note's own argument and form.",
+			"A slightly narrower measure and paragraph indent change the reading mode without decoration.",
 	},
 	{
-		id: "restrained",
-		name: "Restrained fallback",
+		id: "folio",
+		name: "Folio rules",
 		description:
-			"Normal prose rhythm with only the clearest passage emphasised.",
+			"Two quiet hairlines delimit the complete folktale before the analysis begins.",
+	},
+	{
+		id: "inset",
+		name: "Quiet narrative inset",
+		description:
+			"A small alignment shift presents the opening as a tale nested inside the analysis.",
 	},
 ];
 
-const RECOMMENDATIONS: Record<string, string> = {
-	"emperors-new-clothes":
-		"A folktale opening, an inline revelation, and quiet typographic turns into theory and application.",
-	"historical-retort":
-		"One open public/private comparison at the climax; the medicine analogy remains prose.",
-	"i-heart-huckabees":
-		"The rehearsed Shania story is framed; Brad's final admission is left exposed.",
-	"peep-show":
-		"A two-perspective motif connects the camera premise to conflict and reciprocity.",
-};
+export function optionsForNote(note: Essay): PrototypeOption[] {
+	return note.slug === "emperors-new-clothes"
+		? [RESTRAINED, ...EMPEROR_OPENINGS]
+		: [RESTRAINED];
+}
 
 function optionUrl(note: Essay, option: PrototypeOption): string {
 	return siteUrl(`/prototypes/notes/${note.slug}/${option.id}/`);
 }
 
-function optionDescription(note: Essay, option: PrototypeOption): string {
-	return option.id === "recommended"
-		? (RECOMMENDATIONS[note.slug] ?? option.description)
-		: option.description;
-}
-
 function optionNav(note: Essay, selected: PrototypeOption): string {
-	const links = PROTOTYPE_OPTIONS.map((option) => {
-		const current = option.id === selected.id ? ' aria-current="page"' : "";
-		return `<a href="${optionUrl(note, option)}"${current}>${escapeHtml(option.name)}</a>`;
-	}).join("");
+	const links = optionsForNote(note)
+		.map((option) => {
+			const current = option.id === selected.id ? ' aria-current="page"' : "";
+			return `<a href="${optionUrl(note, option)}"${current}>${escapeHtml(option.name)}</a>`;
+		})
+		.join("");
 	return `<aside class="prototype-toolbar" aria-label="Prototype controls">
 <a class="prototype-back" href="${siteUrl("/prototypes/notes/")}">All notes</a>
 <nav aria-label="Formatting options">${links}</nav>
-<p><strong>${escapeHtml(selected.name)}</strong> — ${escapeHtml(optionDescription(note, selected))}</p>
+<p><strong>${escapeHtml(selected.name)}</strong> — ${escapeHtml(selected.description)}</p>
 </aside>`;
 }
 
@@ -61,54 +64,6 @@ function withoutSections(html: string): string {
 	return html
 		.replaceAll('<div class="note-section">', "")
 		.replaceAll("</div>", "");
-}
-
-function emperorBody(html: string): string {
-	return `<div class="note-tale">${html}`
-		.replace('<div class="note-section">', '</div>\n<div class="note-theory">')
-		.replace('<div class="note-section">', '<div class="note-application">')
-		.replace(
-			"“the emperor is wearing nothing at all!”",
-			'<span class="note-revelation">“the emperor is wearing nothing at all!”</span>',
-		)
-		.replace(
-			"<p>The above sentence has quite a few terms",
-			'<p class="note-aside">The above sentence has quite a few terms',
-		)
-		.replace(
-			"<p>On face value this might appear",
-			'<p class="note-hinge">On face value this might appear',
-		);
-}
-
-function historicalBody(html: string): string {
-	return withoutSections(html)
-		.replace(
-			"<p>A world of only private reason",
-			'<div class="note-reason-contrast"><div class="note-reason-worlds"><p>A world of only private reason',
-		)
-		.replace("ideals. Whereas a world", "ideals.</p>\n<p>Whereas a world")
-		.replace(
-			"ideals. A world",
-			'ideals.</p>\n</div>\n<p class="note-reason-summary">A world',
-		)
-		.replace(
-			"interesting. It is by",
-			'interesting.</p>\n</div>\n<p class="note-reason-conclusion">It is by',
-		);
-}
-
-function huckabeesBody(html: string): string {
-	return withoutSections(html)
-		.replace("note-feature-quote", "note-performance-quote")
-		.replace(
-			"states: “I don’t have a job.",
-			'states:</p>\n<blockquote class="note-collapse-quote"><p>“I don’t have a job.',
-		)
-		.replace(
-			"I don’t even know who I am.” It is in",
-			"I don’t even know who I am.”</p></blockquote>\n<p>It is in",
-		);
 }
 
 function peepQuote(html: string): string {
@@ -121,30 +76,8 @@ function peepQuote(html: string): string {
 function peepPov(html: string): string {
 	return html.replace(
 		"we see what they see; we hear what they think.</p>",
-		'<span class="peep-pair peep-pair-pov"><span>we see what they see;</span>\n<span>we hear what they think.</span></span></p>',
+		'<span class="peep-pov"><span>we see what they see;</span> <span>we hear what they think.</span></span></p>',
 	);
-}
-
-function peepBody(html: string): string {
-	return peepPov(peepQuote(withoutSections(html)))
-		.replace(
-			"reciprocity (De Beauvoir). Conflict in",
-			'reciprocity (De Beauvoir).</p>\n<span class="peep-pair peep-pair-relation"><span><strong>Conflict</strong> in',
-		)
-		.replace(
-			"mutual recognition of their brotherhood.</p>",
-			"mutual recognition of their brotherhood.</span></span>",
-		);
-}
-
-function recommendedBody(note: Essay): string {
-	const renderers: Record<string, (html: string) => string> = {
-		"emperors-new-clothes": emperorBody,
-		"historical-retort": historicalBody,
-		"i-heart-huckabees": huckabeesBody,
-		"peep-show": peepBody,
-	};
-	return (renderers[note.slug] ?? withoutSections)(note.html);
 }
 
 function restrainedBody(note: Essay): string {
@@ -158,9 +91,20 @@ function restrainedBody(note: Essay): string {
 	return note.slug === "peep-show" ? peepPov(peepQuote(body)) : body;
 }
 
+function emperorOpening(note: Essay, option: PrototypeOption): string {
+	const marker = '<div class="note-section">';
+	const boundary = note.html.indexOf(marker);
+	if (boundary < 0) {
+		return withoutSections(note.html);
+	}
+	const opening = note.html.slice(0, boundary);
+	const analysis = withoutSections(note.html.slice(boundary + marker.length));
+	return `<div class="note-tale note-tale-${option.id}">${opening}</div>\n${analysis}`;
+}
+
 function articleBody(note: Essay, option: PrototypeOption): string {
-	return option.id === "recommended"
-		? recommendedBody(note)
+	return note.slug === "emperors-new-clothes" && option.id !== "restrained"
+		? emperorOpening(note, option)
 		: restrainedBody(note);
 }
 
@@ -196,10 +140,12 @@ ${articleBody(note, option)}
 }
 
 function noteRow(note: Essay): string {
-	const options = PROTOTYPE_OPTIONS.map(
-		(option) =>
-			`<li><a href="${optionUrl(note, option)}"><strong>${escapeHtml(option.name)}</strong><span>${escapeHtml(optionDescription(note, option))}</span></a></li>`,
-	).join("");
+	const options = optionsForNote(note)
+		.map(
+			(option) =>
+				`<li><a href="${optionUrl(note, option)}"><strong>${escapeHtml(option.name)}</strong><span>${escapeHtml(option.description)}</span></a></li>`,
+		)
+		.join("");
 	return `<section class="prototype-note-row"><h2>${escapeHtml(note.title)}</h2><ol>${options}</ol></section>`;
 }
 
@@ -211,6 +157,6 @@ export function notePrototypeIndex(notes: Essay[]): string {
 			siteUrl("/css/header.css"),
 			siteUrl("/prototypes/notes/styles.css"),
 		],
-		content: `<div class="wrap prototype-index"><header><p class="prototype-kicker">Local review</p><h1>Content-led note formats</h1><p>One close-reading recommendation and one restrained fallback for each note. The published note pages are unchanged.</p></header>${notes.map(noteRow).join("")}</div>`,
+		content: `<div class="wrap prototype-index"><header><p class="prototype-kicker">Local review</p><h1>Restrained note formats</h1><p>The restrained treatment is now the shared baseline. Only the folktale opening in <em>On The Emperor’s New Clothes</em> remains under review.</p></header>${notes.map(noteRow).join("")}</div>`,
 	});
 }

@@ -110,27 +110,6 @@
 		display: contents;
 	}
 
-	/* Emperor: tale, theoretical hinge, and return to the crowd. */
-	.prototype-recommended .note-tale {
-		max-width: 60ch;
-		margin: 0 auto 2.2rem;
-	}
-
-	.prototype-recommended .note-tale > :first-child {
-		margin-top: 0;
-	}
-
-	.prototype-recommended .note-tale > :last-child {
-		margin-bottom: 0;
-	}
-
-	.prototype-recommended .note-tale > p:first-child::first-letter {
-		float: left;
-		margin: 0.08em 0.1em 0 0;
-		font-size: 3em;
-		line-height: 0.8;
-	}
-
 	.note-revelation {
 		font-weight: 650;
 		text-decoration-line: underline;
@@ -143,156 +122,75 @@
 		text-underline-offset: 0.18em;
 	}
 
-	.prototype-recommended .note-aside {
-		color: var(--color-muted);
-		font-family: var(--font-ui);
-		font-size: 0.88em;
-		line-height: 1.65;
+	.note-tale {
+		margin-top: 0.25rem;
+		margin-bottom: 2.4rem;
 	}
 
-	.prototype-recommended .note-hinge {
-		max-width: 57ch;
-		margin: 2rem auto;
-		font-size: 1.06em;
-		font-style: italic;
+	.note-tale > :first-child {
+		margin-top: 0;
 	}
 
-	.prototype-recommended .note-application {
-		margin-top: 2.25rem;
+	.note-tale > :last-child {
+		margin-bottom: 0;
 	}
 
-	/* Historical Retort: one comparison, followed by its inference. */
-	.note-reason-contrast {
-		margin: 1.75rem 0 1.4rem;
-		padding-block: 0.9rem;
+	.note-tale-book {
+		max-width: 59ch;
+		margin-inline: auto;
+	}
+
+	.note-tale-book > p {
+		margin-block: 0;
+		line-height: 1.82;
+	}
+
+	.note-tale-book > p + p {
+		margin-top: 0.35rem;
+		text-indent: 1.5em;
+	}
+
+	.note-tale-folio {
+		padding-block: 0.9rem 1rem;
 		border-block: 1px solid var(--color-border);
 	}
 
-	.note-reason-worlds {
-		display: grid;
-		grid-template-columns: repeat(2, minmax(0, 1fr));
-		gap: 1.5rem;
+	.note-tale-inset {
+		max-width: 61ch;
+		margin-inline: auto;
+		padding-inline: clamp(0.65rem, 2.5vw, 1.4rem);
 	}
 
-	.note-reason-worlds > p {
-		margin: 0;
-	}
-
-	.note-reason-summary {
-		margin: 0.85rem 0 0;
-		padding-top: 0.8rem;
-		border-top: 1px solid var(--color-border);
-		font-style: italic;
-	}
-
-	.note-reason-conclusion {
-		margin-top: 1.4rem;
-	}
-
-	/* Huckabees: performed anecdote versus exposed final admission. */
-	.prototype-note .note-performance-quote {
-		max-width: 56ch;
-		margin: 2rem auto 2.4rem;
-		padding-block: 1rem;
-		padding-inline: 0;
-		border: 0;
-		border-block: 1px solid var(--color-border);
-		font-size: 1.03em;
-	}
-
-	.prototype-note .note-performance-quote > p,
-	.prototype-note .note-collapse-quote > p {
-		margin: 0;
-	}
-
-	.prototype-note .note-collapse-quote {
-		max-width: 38ch;
-		margin: 1.9rem auto 1rem;
-		padding: 0;
-		border: 0;
-		text-align: center;
-		font-size: 1.15em;
-		font-style: italic;
-	}
-
-	/* Peep Show: the formal and philosophical pairs share one motif. */
-	.peep-pair {
-		display: grid;
-		grid-template-columns: repeat(2, minmax(0, 1fr));
-		margin-block: 1.5rem;
-	}
-
-	.peep-pair > span {
-		padding-inline: 1rem;
-	}
-
-	.peep-pair > span + span {
-		border-inline-start: 1px solid var(--color-border);
-	}
-
-	.peep-pair-pov {
-		text-align: center;
-		font-size: 1.05em;
-	}
-
-	.peep-pair-relation {
-		line-height: 1.7;
-	}
-
-	.peep-pair-relation strong {
-		color: var(--color-accent);
-		font-family: var(--font-ui);
-		font-size: 0.85em;
-		letter-spacing: 0.04em;
-	}
-
+	.peep-pov,
 	.note-source-quote {
 		display: block;
-		max-width: 52ch;
 		margin: 1.5rem auto;
 		text-align: center;
 		font-size: 1.08em;
 		font-style: italic;
 	}
 
-	.prototype-restrained .peep-pair-pov {
-		display: block;
-		margin-block: 1.5rem;
-	}
-
-	.prototype-restrained .peep-pair-pov > span {
-		display: inline;
-		padding: 0;
-	}
-
-	.prototype-restrained .peep-pair-pov > span + span {
-		border: 0;
+	.note-source-quote {
+		max-width: 52ch;
 	}
 }
 
 @layer responsive {
 	@media (max-width: 42rem) {
-		.prototype-note-row ol,
-		.note-reason-worlds,
-		.peep-pair {
+		.prototype-note-row ol {
 			grid-template-columns: 1fr;
 		}
 
-		.note-reason-worlds {
-			gap: 0.65rem;
+		.note-tale-book {
+			max-width: none;
 		}
 
-		.peep-pair > span {
-			padding: 0.65rem 0;
+		.note-tale-book > p + p {
+			text-indent: 1.15em;
 		}
 
-		.peep-pair > span + span {
-			border-inline-start: 0;
-			border-top: 1px solid var(--color-border);
-		}
-
-		.prototype-restrained .peep-pair-pov > span + span {
-			border: 0;
+		.note-tale-inset {
+			padding-inline: 0.45rem;
 		}
 	}
 }
