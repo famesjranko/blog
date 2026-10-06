@@ -11,6 +11,7 @@ const STYLES = [
 	"essay-discussion.css",
 	"project.css",
 	"diagrams.css",
+	"lightbox.css",
 	"hero.css",
 	"header.css",
 	"notes.css",
