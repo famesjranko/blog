@@ -83,10 +83,6 @@
 		"width": 640,
 		"height": 360
 	},
-	"/img/placeholders/musicmeta.jpg": {
-		"width": 640,
-		"height": 360
-	},
 	"/img/placeholders/object-tracking-demo.jpg": {
 		"width": 640,
 		"height": 360
@@ -130,6 +126,10 @@
 	"/img/projects/extracting-pdf-tables/engine-arch.jpg": {
 		"width": 1600,
 		"height": 599
+	},
+	"/img/projects/musicmeta/cover.jpg": {
+		"width": 1512,
+		"height": 630
 	},
 	"/img/projects/musicmeta/how-we-got-this.jpg": {
 		"width": 980,

@@ -53,10 +53,10 @@ describe("projectEntry card", () => {
 	});
 
 	it("renders the slug's placeholder art when no cover is set", () => {
-		const html = projectEntry(sampleProject({ slug: "musicmeta" }));
-		expect(html).toContain('src="/img/placeholders/musicmeta.jpg"');
+		const html = projectEntry(sampleProject({ slug: "mediastack" }));
+		expect(html).toContain('src="/img/placeholders/mediastack.jpg"');
 		expect(html).toContain(
-			'srcset="/img/placeholders/musicmeta.card-480w.webp 480w, /img/placeholders/musicmeta.card-640w.webp 640w"',
+			'srcset="/img/placeholders/mediastack.card-480w.webp 480w, /img/placeholders/mediastack.card-640w.webp 640w"',
 		);
 		expect(html).toContain('alt=""');
 	});

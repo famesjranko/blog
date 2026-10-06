@@ -3,6 +3,8 @@ title: "Musicmeta"
 description: "A Kotlin library unifying eleven public music APIs behind one enrichment engine."
 date: 2026-03-21
 draft: true
+cover: /img/projects/musicmeta/cover.jpg
+coverAlt: "A vinyl record whose music fans out into a row of image panels, joined by thin lines that converge on a single artist profile card"
 featured: true
 origin: personal
 repo: https://github.com/famesjranko/musicmeta
@@ -12,6 +14,8 @@ stack:
   - android
   - gradle
 ---
+
+![A vinyl record whose music fans out into a row of image panels, joined by thin lines that converge on a single artist profile card](/img/projects/musicmeta/cover.jpg)
 
 Musicmeta began as the metadata code inside Cascade, a DLNA music player for Android that I started first. A player like Cascade needs more than the tags stored in a music file: it needs album art, artist photos, biographies, genres and similar artists. Public music APIs supply all of this for free. However, each one identifies artists and albums in its own way and limits how often it may be called, so an app that wants the data has to reconcile those sources itself.
 
