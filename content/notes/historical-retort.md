@@ -1,5 +1,5 @@
 ---
-title: "The Historical Retort"
+title: "The Failure of Divided Reason"
 description: "Why Kant's split between public and private reason leaves the Enlightenment open to the power it questions."
 date: 2016-05-31
 cover: /img/notes/historical-retort/cover.jpg

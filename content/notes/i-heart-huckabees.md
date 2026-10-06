@@ -1,5 +1,5 @@
 ---
-title: "On I Heart Huckabees"
+title: "Bad Faith and the Stories We Tell Ourselves"
 description: "Brad Stand's Shania Twain story as bad faith, and what is left when it stops working."
 date: 2020-07-02
 cover: /img/notes/i-heart-huckabees/cover.jpg

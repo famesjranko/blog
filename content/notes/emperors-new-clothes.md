@@ -1,5 +1,5 @@
 ---
-title: "On The Emperor’s New Clothes"
+title: "The Crowd, the Child, and the They-Self"
 description: "The watching crowd as Heidegger's they-self, and the child who says what everyone sees."
 date: 2020-07-25
 cover: /img/notes/emperors-new-clothes/cover.jpg

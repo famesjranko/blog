@@ -1,5 +1,5 @@
 ---
-title: "On Peep Show"
+title: "Peep Show and the Comedy of Bad Faith"
 description: "The show's first-person camera as phenomenology, and Mark and Jeremy as Sartrean conflict and Beauvoirian reciprocity."
 date: 2020-07-12
 cover: /img/notes/peep-show/cover.jpg
