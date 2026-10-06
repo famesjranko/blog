@@ -1,9 +1,4 @@
 import { expect, test, type Locator, type Page } from "@playwright/test";
-import { readFileSync } from "node:fs";
-
-const isDebian =
-	process.platform === "linux" &&
-	/^ID=debian$/m.test(readFileSync("/etc/os-release", "utf8"));
 
 test.use({
 	viewport: { width: 1280, height: 900 },
@@ -12,10 +7,12 @@ test.use({
 	reducedMotion: "reduce",
 });
 
+// Text rendering varies with each Linux distribution's fonts, so the
+// baselines match only the Ubuntu CI runner that made them.
 test.beforeEach(() => {
 	test.skip(
-		process.platform !== "linux",
-		"Visual baselines target Ubuntu Chromium.",
+		process.platform !== "linux" || process.env["CI"] !== "true",
+		"Visual baselines run only on the Ubuntu CI runner.",
 	);
 });
 
@@ -33,7 +30,6 @@ async function openStillPage(page: Page, path: string) {
 	});
 }
 
-// Debian font edges need their own baselines; Ubuntu CI uses the original names.
 async function expectRegionScreenshot(
 	region: Locator,
 	name: string,
@@ -45,8 +41,7 @@ async function expectRegionScreenshot(
 			Array.from(element.querySelectorAll("img"), (image) => image.decode()),
 		);
 	});
-	const snapshotName = isDebian ? name.replace(/\.png$/, "-debian.png") : name;
-	await expect(region).toHaveScreenshot(snapshotName, {
+	await expect(region).toHaveScreenshot(name, {
 		animations: "disabled",
 		caret: "hide",
 		maxDiffPixels,
