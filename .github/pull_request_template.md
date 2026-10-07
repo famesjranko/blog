@@ -13,15 +13,11 @@ Affected routes: <!-- List routes, or write N/A. -->
 
 Cloudflare preview URL: <!-- Use the preview for this PR, or write N/A. -->
 
-For a visual change, add before and after screenshots for at least one
-narrow/mobile viewport and one wide/desktop viewport. Record the viewport,
-device pixel ratio (DPR), theme, and platform for each capture. For a colour
-or theming change, show both light and dark themes. Link or embed the captures
-below. Add rows as needed.
+For a visual change, check the affected routes on the preview at one
+narrow/mobile and one wide/desktop width. For a colour or theming change, check
+both light and dark themes. Screenshots are optional.
 
-| Route | Before | After | Viewport | DPR | Theme | Platform |
-| --- | --- | --- | --- | --- | --- | --- |
-| | | | | | | |
+Checked: <!-- Viewports and themes checked, or N/A. -->
 
 Intentional deviations from [STYLE.md](https://github.com/famesjranko/blog/blob/main/STYLE.md): <!-- Explain, or write None. -->
 
