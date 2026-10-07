@@ -100,6 +100,37 @@ describe("legacy image paths", () => {
 	});
 });
 
+describe("raw HTML paths", () => {
+	it("prefixes root-relative src and href in raw HTML with the base path", () => {
+		// Given a site deployed under /blog.
+		vi.stubEnv("BASE_PATH", "/blog");
+
+		// When raw HTML with a root-relative link and image is rendered.
+		const html = renderMarkdown(
+			'<figure>\n<a href="/projects/x/"><img src="/img/x.jpg" alt="x"></a>\n</figure>',
+		);
+
+		// Then both paths carry the base path.
+		expect(html).toContain('href="/blog/projects/x/"');
+		expect(html).toContain('src="/blog/img/x.jpg"');
+	});
+
+	it("leaves external and protocol-relative raw HTML paths alone", () => {
+		// Given a site deployed under /blog.
+		vi.stubEnv("BASE_PATH", "/blog");
+
+		// When raw HTML with external and protocol-relative paths is rendered.
+		const html = renderMarkdown(
+			'<figure>\n<a href="https://example.com/watch"><img src="//example.com/x.jpg" alt="x"></a>\n</figure>',
+		);
+
+		// Then neither path gains the base path.
+		expect(html).toContain('href="https://example.com/watch"');
+		expect(html).toContain('src="//example.com/x.jpg"');
+		expect(html).not.toContain("/blog/");
+	});
+});
+
 describe("internal link hrefs", () => {
 	it("prefixes root-relative hrefs with the base path", () => {
 		vi.stubEnv("BASE_PATH", "/blog");

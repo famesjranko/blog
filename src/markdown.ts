@@ -1,7 +1,11 @@
 import MarkdownIt from "markdown-it";
 import { markFigureParagraphs } from "./markdownFigures.js";
 import { renderImage } from "./markdownImages.js";
-import { isExternalLink, openExternalHtmlLinks } from "./markdownLinks.js";
+import {
+	baseHtmlPaths,
+	isExternalLink,
+	openExternalHtmlLinks,
+} from "./markdownLinks.js";
 import { internalUrl } from "./site.js";
 
 let renderer: MarkdownIt | undefined;
@@ -106,7 +110,8 @@ function renderLink(md: MarkdownIt): LinkRenderRule {
 }
 
 function renderHtml(): HtmlRenderRule {
-	return (tokens, idx) => openExternalHtmlLinks(tokens[idx]?.content ?? "");
+	return (tokens, idx) =>
+		openExternalHtmlLinks(baseHtmlPaths(tokens[idx]?.content ?? ""));
 }
 
 /**

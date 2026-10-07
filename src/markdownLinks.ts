@@ -1,3 +1,5 @@
+import { internalUrl } from "./site.js";
+
 export function isExternalLink(href: string): boolean {
 	return (
 		href.startsWith("http://") ||
@@ -36,4 +38,16 @@ export function openExternalHtmlLinks(html: string): string {
 			: insertAnchorAttribute(anchor, 'target="_blank"');
 		return secureRel(withTarget);
 	});
+}
+
+/**
+ * Raw HTML gets the base path that markdown links and images get, so a
+ * root-relative `src` or `href` survives a project-site deployment.
+ */
+export function baseHtmlPaths(html: string): string {
+	return html.replace(
+		/\b(src|href)=(["'])(\/[^"']*)\2/gi,
+		(_match, attribute: string, quote: string, path: string) =>
+			`${attribute}=${quote}${internalUrl(path)}${quote}`,
+	);
 }
