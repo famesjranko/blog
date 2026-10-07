@@ -160,6 +160,34 @@ test("home cards share a row at the 42rem breakpoint", async ({ page }) => {
 	).toBeLessThan(2);
 });
 
+test("project card topics sit at the bottom of every card", async ({
+	page,
+}) => {
+	// Given a desktop viewport where project cards share rows.
+	await page.setViewportSize({ width: 1280, height: 800 });
+
+	// When the projects index is opened.
+	await page.goto("/projects/");
+
+	// Then each card's topics end the same distance above its bottom edge.
+	const gaps = await page
+		.locator(".card")
+		.evaluateAll((cards) =>
+			cards.map(
+				(card) =>
+					card.getBoundingClientRect().bottom -
+					(card.querySelector(".entry-meta")?.getBoundingClientRect().bottom ??
+						Number.NaN),
+			),
+		);
+	await attachMeasurement("topic-gaps", { gaps });
+	expect(gaps.length, "projects index has cards").toBeGreaterThan(1);
+	expect(
+		Math.max(...gaps) - Math.min(...gaps),
+		"topics align to card bottoms",
+	).toBeLessThan(2);
+});
+
 test("theme toggle switches a light page to the dark theme", async ({
 	page,
 }) => {
