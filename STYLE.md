@@ -72,7 +72,8 @@ animation or transition changes.
 ## Visual sign-off
 
 Request explicit visual sign-off for changes to fonts, prose measure, gutters,
-breakpoints, cards, images, theme colours, focus states, or motion. Include
-before and after views at narrow/mobile and wide/desktop widths. Include both
-themes for colour or theming changes. State any intentional departure from this
-document in the PR so a reviewer can judge it in context.
+breakpoints, cards, images, theme colours, focus states, or motion. Check the
+affected routes on the PR's Cloudflare preview at narrow/mobile and wide/desktop
+widths, and in both themes for colour or theming changes. Record what you
+checked in the PR. Screenshots are optional. State any intentional departure
+from this document in the PR so a reviewer can judge it in context.
