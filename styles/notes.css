@@ -69,6 +69,10 @@
 		border-bottom-style: dashed;
 	}
 
+	.note-row .entry-meta {
+		padding-top: 1.25rem;
+	}
+
 	.note-row .card-media {
 		border-radius: 0.5rem;
 	}

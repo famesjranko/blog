@@ -275,7 +275,8 @@
 		display: flex;
 		flex-direction: column;
 		gap: 0.5rem;
-		margin: 0;
+		/* Cards in a row stretch to one height; keep topics on the bottom edge. */
+		margin: auto 0 0;
 		padding-top: 0.75rem;
 		color: var(--color-muted);
 		font-size: 0.8rem;
