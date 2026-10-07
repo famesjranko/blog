@@ -32,6 +32,17 @@ describe("originLabel", () => {
 		expect(originLabel("university")).toBe("University project");
 	});
 
+	it("labels professional origins", () => {
+		// Given a project done as paid work.
+		const origin = "professional";
+
+		// When its origin is labelled.
+		const label = originLabel(origin);
+
+		// Then the label names it a professional project.
+		expect(label).toBe("Professional project");
+	});
+
 	it("labels personal origins", () => {
 		expect(originLabel("personal")).toBe("Personal project");
 	});

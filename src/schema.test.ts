@@ -125,6 +125,22 @@ describe("project origin", () => {
 		expect(meta.origin).toBe("university");
 	});
 
+	it("keeps an explicit professional origin", () => {
+		// Given frontmatter for a project done as paid work.
+		const raw = {
+			title: "AR telehealth",
+			date: "2022-08-15",
+			origin: "professional",
+			draft: false,
+		};
+
+		// When the frontmatter is normalised.
+		const meta = normalizeProjectFrontmatter(raw);
+
+		// Then the professional origin is kept.
+		expect(meta.origin).toBe("professional");
+	});
+
 	it("rejects an unknown origin instead of guessing", () => {
 		expect(() =>
 			normalizeProjectFrontmatter({
