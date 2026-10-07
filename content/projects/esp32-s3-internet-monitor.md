@@ -2,7 +2,7 @@
 title: "ESP32-S3 Internet Monitor"
 description: "Firmware for a Waveshare ESP32-S3-Matrix that checks the internet connection every ten seconds and shows the result on an 8x8 LED matrix."
 date: 2025-12-02
-draft: true
+draft: false
 cover: /img/projects/esp32-s3-internet-monitor/cover.jpg
 coverAlt: "An ESP32-S3-Matrix board on a wooden desk, powered by a USB-C cable, its 8x8 LEDs glowing in rows from red through yellow to green in front of a painted wall"
 origin: personal
