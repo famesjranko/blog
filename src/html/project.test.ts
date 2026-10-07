@@ -217,6 +217,19 @@ describe("projectPage header", () => {
 	});
 });
 
+describe("projectPage scripts", () => {
+	it("loads the script that turns video posters into players", () => {
+		// Given a project.
+		const project = sampleProject();
+
+		// When its page is rendered.
+		const html = projectPage(project);
+
+		// Then the page loads the video script.
+		expect(html).toContain('<script src="/js/video-embed.js" defer></script>');
+	});
+});
+
 describe("projectPage status", () => {
 	it("prefixes the metadata with a draft label for drafts only", () => {
 		// Given draft and published versions of one project.

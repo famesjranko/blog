@@ -72,4 +72,69 @@
 			grid-template-columns: 1fr;
 		}
 	}
+
+	/* A video poster is a plain link to the provider's page.
+	video-embed.js swaps it for the provider's player on click, so nothing
+	from the provider loads until the reader asks for the video. */
+	.prose .video-embed .video-poster,
+	.prose .video-embed iframe {
+		position: relative;
+		display: block;
+		width: 100%;
+		aspect-ratio: 16 / 9;
+		overflow: hidden;
+		border: 1px solid var(--color-border);
+		border-radius: 8px;
+		background: rgb(0 0 0);
+		box-shadow:
+			0 1px 2px rgb(0 0 0 / 6%),
+			0 8px 24px rgb(0 0 0 / 8%);
+		text-decoration: none;
+	}
+	.prose .video-embed .video-poster img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		border: 0;
+		border-radius: 0;
+		box-shadow: none;
+	}
+	.prose .video-poster::before,
+	.prose .video-poster::after {
+		content: "";
+		position: absolute;
+		top: 50%;
+		left: 50%;
+	}
+	.prose .video-poster::before {
+		width: 4.5rem;
+		height: 4.5rem;
+		margin: -2.25rem 0 0 -2.25rem;
+		border-radius: 50%;
+		background: rgb(0 0 0 / 62%);
+		box-shadow: 0 0 0 2px rgb(255 255 255 / 85%);
+	}
+	/* A border triangle, nudged right of centre so it looks centred. */
+	.prose .video-poster::after {
+		margin: -0.9rem 0 0 -0.45rem;
+		border-style: solid;
+		border-width: 0.9rem 0 0.9rem 1.4rem;
+		border-color: transparent transparent transparent rgb(255 255 255);
+	}
+	.prose .video-poster:hover::before,
+	.prose .video-poster:focus-visible::before {
+		background: var(--color-accent);
+	}
+	.prose .video-badge {
+		position: absolute;
+		right: 0.6rem;
+		bottom: 0.6rem;
+		padding: 0.2rem 0.5rem;
+		border-radius: 4px;
+		background: rgb(0 0 0 / 70%);
+		color: rgb(255 255 255);
+		font-family: var(--font-ui);
+		font-size: 0.75rem;
+		line-height: 1.4;
+	}
 }
