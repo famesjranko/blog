@@ -23,7 +23,6 @@ for (const poster of document.querySelectorAll(".video-poster[data-embed]")) {
 		player.src = src;
 		player.title = poster.querySelector("img")?.alt ?? "Video";
 		player.allow = "autoplay; encrypted-media; fullscreen; picture-in-picture";
-		player.allowFullscreen = true;
 		poster.replaceWith(player);
 		player.focus();
 	});

@@ -46,7 +46,7 @@ export function openExternalHtmlLinks(html: string): string {
  */
 export function baseHtmlPaths(html: string): string {
 	return html.replace(
-		/\b(src|href)=(["'])(\/[^"']*)\2/gi,
+		/(?<![\w-])(src|href)=(["'])(\/[^"']*)\2/gi,
 		(_match, attribute: string, quote: string, path: string) =>
 			`${attribute}=${quote}${internalUrl(path)}${quote}`,
 	);
