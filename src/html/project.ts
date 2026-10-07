@@ -4,8 +4,14 @@ import type { CardHeading } from "./index.js";
 import { articleMeta } from "./articleMeta.js";
 import { cardClass, cardCover, coverSrc, escapeHtml, page } from "./layout.js";
 
+const ORIGIN_LABELS: Record<Project["origin"], string> = {
+	university: "University project",
+	professional: "Professional project",
+	personal: "Personal project",
+};
+
 export function originLabel(origin: Project["origin"]): string {
-	return origin === "university" ? "University project" : "Personal project";
+	return ORIGIN_LABELS[origin];
 }
 
 function stackList(stack: string[]): string {
@@ -56,7 +62,7 @@ export function projectIndexPage(projects: Project[]): string {
 		title: "Projects",
 		canonicalPath: "/projects/",
 		description:
-			"Software projects, from university coursework to personal builds.",
+			"Software projects, from university coursework to professional and personal builds.",
 		content: `<div class="wrap index-page"><h1>Projects</h1><p class="index-count">${count}</p><ol class="card-grid">${entries}</ol></div>`,
 	});
 }
@@ -121,7 +127,7 @@ export function projectPage(project: Project): string {
 			siteUrl("/css/diagrams.css"),
 			siteUrl("/css/lightbox.css"),
 		],
-		scripts: [siteUrl("/js/lightbox.js")],
+		scripts: [siteUrl("/js/lightbox.js"), siteUrl("/js/video-embed.js")],
 		content: `<div class="wrap"><article class="prose project">
 <header class="project-header">
 ${meta}

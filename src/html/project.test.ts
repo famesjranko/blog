@@ -32,6 +32,17 @@ describe("originLabel", () => {
 		expect(originLabel("university")).toBe("University project");
 	});
 
+	it("labels professional origins", () => {
+		// Given a project done as paid work.
+		const origin = "professional";
+
+		// When its origin is labelled.
+		const label = originLabel(origin);
+
+		// Then the label names it a professional project.
+		expect(label).toBe("Professional project");
+	});
+
 	it("labels personal origins", () => {
 		expect(originLabel("personal")).toBe("Personal project");
 	});
@@ -203,6 +214,19 @@ describe("projectPage header", () => {
 		expect(html).toContain('<link rel="stylesheet" href="/css/project.css">');
 		expect(html).toContain('<link rel="stylesheet" href="/css/diagrams.css">');
 		expect(html).not.toContain("/css/essay.css");
+	});
+});
+
+describe("projectPage scripts", () => {
+	it("loads the script that turns video posters into players", () => {
+		// Given a project.
+		const project = sampleProject();
+
+		// When its page is rendered.
+		const html = projectPage(project);
+
+		// Then the page loads the video script.
+		expect(html).toContain('<script src="/js/video-embed.js" defer></script>');
 	});
 });
 

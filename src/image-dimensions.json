@@ -91,6 +91,22 @@
 		"width": 640,
 		"height": 360
 	},
+	"/img/projects/ar-telehealth/cisco-film-poster.jpg": {
+		"width": 1280,
+		"height": 720
+	},
+	"/img/projects/ar-telehealth/cover.jpg": {
+		"width": 1512,
+		"height": 630
+	},
+	"/img/projects/ar-telehealth/hololens-portal.jpg": {
+		"width": 720,
+		"height": 480
+	},
+	"/img/projects/ar-telehealth/lab-demonstration.jpg": {
+		"width": 720,
+		"height": 478
+	},
 	"/img/projects/connect4-heuristic/connect4-depth1.svg": {
 		"width": 760,
 		"height": 820

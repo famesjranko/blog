@@ -61,10 +61,14 @@ export function normalizeFrontmatter(
 
 /**
  * Project origin facet. The section split is writing-vs-building
- * (essays vs projects); university-vs-personal is per-page metadata,
- * with predecessor links joining rebuild pairs.
+ * (essays vs projects); university, professional or personal is
+ * per-page metadata, with predecessor links joining rebuild pairs.
  */
-export const ProjectOriginSchema = z.enum(["university", "personal"]);
+export const ProjectOriginSchema = z.enum([
+	"university",
+	"professional",
+	"personal",
+]);
 
 export type ProjectOrigin = z.infer<typeof ProjectOriginSchema>;
 
