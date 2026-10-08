@@ -222,7 +222,10 @@ export function page({
 ${THEME_BOOT_SCRIPT}
 <meta name="color-scheme" content="light dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" sizes="32x32" href="${siteUrl("/favicon-32.png")}">
+<link rel="icon" type="image/png" sizes="192x192" href="${siteUrl("/favicon-192.png")}">
 <link rel="icon" type="image/svg+xml" href="${siteUrl("/favicon.svg")}">
+<link rel="apple-touch-icon" sizes="180x180" href="${siteUrl("/apple-touch-icon.png")}">
 <link rel="alternate" type="application/rss+xml" title="${escapeHtml(SITE_NAME)}" href="${siteUrl("/rss.xml")}">
 <title>${escapeHtml(title)}</title>
 ${

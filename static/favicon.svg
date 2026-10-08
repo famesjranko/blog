@@ -1,1 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" role="img"><title>Site favicon</title><text y="13" font-size="13">◊</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title id="title">Andrew prompt: a lowercase a and terminal cursor</title>
+  <rect x="2" y="2" width="60" height="60" fill="#172b36"/>
+  <path d="M32 25H22Q14 25 14 35Q14 45 24 45H33V25M34 45H38" fill="none" stroke="#b7dda8" stroke-width="5" stroke-linecap="square" stroke-linejoin="miter"/>
+  <rect x="43" y="40" width="10" height="5" fill="#b7dda8"/>
+</svg>
