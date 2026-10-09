@@ -145,14 +145,7 @@ The observer is a read-only view with no role in task decisions. It shows tasks 
 
 ![The team observer's workflow graph: 29 tasks over 9 steps, with workers and explorers converging on two reviewers and a final check, sent back twice, waiting on acceptance before packaging](/img/agentic/team-workflow.jpg "A run of 29 tasks over 9 steps. Workers and explorers converge on two reviewers; the final check, in purple, has been sent back twice and waits for acceptance before packaging can begin.")
 
-![The top of the lead agent's observer card: model, context window use, lifetime token counts, and an accept command whose note names the README lines and Explorer evidence it read](/img/agentic/lead-card-crop.png "The lead in a separate run: its context use, and an accept call whose note names the evidence it read.")
-
-<details class="editorial-note">
-<summary>The full card</summary>
-
-![The lead agent's full observer card, continuing with the command's result, the lead's message to the user, and its next spawn](/img/agentic/lead-card.png)
-
-</details>
+![The lead agent's observer card: model, context window use, lifetime token counts, an accept command whose note names the README lines and Explorer evidence it read, then the command's result, the lead's message to the user and its next spawn](/img/agentic/lead-card.png "The lead in a separate run: its context use, and an accept call whose note names the evidence it read.")
 
 <p class="eyebrow" id="toolkit">04 · Toolkit</p>
 
@@ -164,8 +157,8 @@ I keep skills, global instructions and hooks in one repository and install them 
 <div><dt>investigate</dt><dd>Reproduce the problem, confirm its cause, then fix it with a regression test.</dd></div>
 <div><dt>triage</dt><dd>Judge each open issue on whether it is real, in scope and worth doing, and record the verdict with the repository's labels.</dd></div>
 <div><dt>pr-body</dt><dd>Write a pull request description a reviewer can assess in a minute, covering the problem, the change, the evidence and the risks.</dd></div>
-<div><dt>gcp</dt><dd>Pin the Google Cloud account and project before working, and stop before anything destructive.</dd></div>
-<div><dt>workbench</dt><dd>Confirm reachability, then use the permanent VM's own runbooks to check and maintain it.</dd></div>
+<div><dt>gcp</dt><dd>Operate Google Cloud with the gcloud, gsutil and bq CLIs: pin the account and project first, and stop before anything destructive.</dd></div>
+<div><dt>workbench</dt><dd>Reach the permanent VM locally or over ssh, then check and maintain it by its own runbook, stopping before any infrastructure change.</dd></div>
 </dl>
 
 Each skill declares whether an agent may choose it from its description or only I may invoke it. I invoke <code>triage</code> and <code>lead-team</code>; an agent can choose <code>investigate</code> and <code>pr-body</code> itself. Choosing a skill doesn't let an agent do anything a hook or I would refuse.
