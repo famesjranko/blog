@@ -8,6 +8,10 @@ import { describe, expect, it } from "vitest";
 // It must carry no presentation of its own, and it
 // owns its accessible name because the markdown alt is dropped.
 const CONTENT_DIAGRAMS = [
+	"static/img/agentic/gateway.svg",
+	"static/img/agentic/lifecycle.svg",
+	"static/img/agentic/team.svg",
+	"static/img/agentic/workbench.svg",
 	"static/img/essays/dretske-closure/euler-diagram.svg",
 	"static/img/projects/connect4-heuristic/connect4-depth1.svg",
 	"static/img/projects/connect4-heuristic/connect4-depth2.svg",

@@ -30,6 +30,10 @@ function registerMissingStylesheetTest(): void {
 			path.join(root, "styles/essay-discussion.css"),
 			".essay {}\n",
 		);
+		await writeFile(
+			path.join(root, "styles/standalone.css"),
+			".standalone {}\n",
+		);
 		await writeFile(path.join(root, "styles/project.css"), ".project {}\n");
 		await writeFile(path.join(root, "styles/diagrams.css"), ".diagram {}\n");
 		await writeFile(path.join(root, "styles/lightbox.css"), ".lightbox {}\n");
@@ -51,6 +55,7 @@ function registerEssayStylesheetTest(): void {
 			"essay.css",
 			"essay-patterns.css",
 			"essay-discussion.css",
+			"standalone.css",
 			"project.css",
 			"diagrams.css",
 			"lightbox.css",
@@ -88,6 +93,7 @@ function registerDeclarationExclusionTest(): void {
 			"essay.css",
 			"essay-patterns.css",
 			"essay-discussion.css",
+			"standalone.css",
 			"project.css",
 			"diagrams.css",
 			"lightbox.css",

@@ -2,7 +2,7 @@ import { mkdtemp, readFile, stat } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import type { Essay, Project } from "./content.js";
+import type { Essay, Page, Project } from "./content.js";
 import { generateSite } from "./routes.js";
 
 afterEach(() => {
@@ -31,10 +31,23 @@ function sampleEssay(overrides: Partial<Essay> = {}): Essay {
 async function generate(
 	essays: Essay[],
 	projects: Project[] = [],
+	pages: Page[] = [samplePage()],
 ): Promise<string> {
 	const dir = await mkdtemp(path.join(tmpdir(), "blog-routes-"));
-	await generateSite({ essays, notes: [], projects }, dir);
+	await generateSite({ essays, notes: [], projects, pages }, dir);
 	return dir;
+}
+
+function samplePage(overrides: Partial<Page> = {}): Page {
+	return {
+		title: "Agentic engineering",
+		description: "How I work with coding agents.",
+		slug: "agentic-engineering",
+		html: "<p>Body.</p>",
+		images: [],
+		sourcePath: "content/pages/agentic-engineering.md",
+		...overrides,
+	};
 }
 
 function sampleProject(overrides: Partial<Project> = {}): Project {
@@ -269,5 +282,51 @@ describe("generateSite projects", () => {
 		await expect(
 			generate([], [sampleProject({ predecessor: "missing" })]),
 		).rejects.toThrow(/unknown predecessor/);
+	});
+});
+
+describe("generateSite standalone pages", () => {
+	it("writes a page at its slug and lists it in the sitemap", async () => {
+		// Given a standalone page the header links to.
+		const page = samplePage();
+
+		// When the site is generated.
+		const dir = await generate([sampleEssay()], [], [page]);
+
+		// Then the page is served at /<slug>/ and the sitemap lists it.
+		const html = await readFile(
+			path.join(dir, "agentic-engineering/index.html"),
+			"utf8",
+		);
+		expect(html).toContain("<h1>Agentic engineering</h1>");
+		const sitemap = await readFile(path.join(dir, "sitemap.xml"), "utf8");
+		expect(sitemap).toContain("/agentic-engineering/</loc>");
+	});
+
+	it("fails when the header links to a page that is not built", async () => {
+		// Given no standalone pages, while the header links to one.
+		const pages: Page[] = [];
+
+		// When the site is generated.
+		const build = generate([sampleEssay()], [], pages);
+
+		// Then the build fails and names the missing page.
+		await expect(build).rejects.toThrow(
+			'navigation links to missing page "agentic-engineering"',
+		);
+	});
+
+	it("fails when a page would take a section's path", async () => {
+		// Given a page slugged like the essays index, beside the linked page.
+		const pages = [
+			samplePage(),
+			samplePage({ slug: "essays", sourcePath: "content/pages/essays.md" }),
+		];
+
+		// When the site is generated.
+		const build = generate([sampleEssay()], [], pages);
+
+		// Then the build fails rather than overwriting the section index.
+		await expect(build).rejects.toThrow("takes the section path /essays/");
 	});
 });

@@ -5,6 +5,7 @@ import { describe, expect, it } from "vitest";
 import {
 	loadEssay,
 	loadEssays,
+	loadPage,
 	loadProject,
 	loadProjects,
 	pickFeatured,
@@ -167,5 +168,43 @@ describe("loadProjects draft filtering", () => {
 			"in-progress",
 			"published",
 		]);
+	});
+});
+
+describe("loadPage", () => {
+	it("renders a page with its eyebrow and a slug from the file name", async () => {
+		// Given a page file with a title, an eyebrow, and a body image.
+		const dir = await mkdtemp(path.join(tmpdir(), "blog-pages-"));
+		const file = path.join(dir, "agentic-engineering.md");
+		await writeFile(
+			file,
+			'---\ntitle: "Agentic engineering"\neyebrow: "Four pieces"\n---\n\nBody with ![a diagram](/img/agentic/team.svg).\n',
+		);
+
+		// When the page is loaded.
+		const page = await loadPage(file);
+
+		// Then its metadata, slug, rendered body and image sources are present.
+		expect(page.title).toBe("Agentic engineering");
+		expect(page.eyebrow).toBe("Four pieces");
+		expect(page.slug).toBe("agentic-engineering");
+		expect(page.html).toContain("<p>Body with");
+		expect(page.images).toEqual(["/img/agentic/team.svg"]);
+	});
+
+	it("rejects a page whose frontmatter has an unknown key", async () => {
+		// Given a page file with a misspelt field.
+		const dir = await mkdtemp(path.join(tmpdir(), "blog-pages-"));
+		const file = path.join(dir, "page.md");
+		await writeFile(
+			file,
+			'---\ntitle: "Page"\neyebrows: "typo"\n---\n\nBody.\n',
+		);
+
+		// When the page is loaded.
+		const load = loadPage(file);
+
+		// Then loading fails rather than silently dropping the field.
+		await expect(load).rejects.toThrow();
 	});
 });

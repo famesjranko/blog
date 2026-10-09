@@ -1,6 +1,6 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
-import { type Essay, type Project, writingPath } from "./content.js";
+import { type Essay, type Page, type Project, writingPath } from "./content.js";
 import { essayPage } from "./html/essay.js";
 import { errorPage } from "./html/error.js";
 import { essayIndexPage, homePage } from "./html/index.js";
@@ -8,6 +8,8 @@ import { noteIndexPage } from "./html/notes.js";
 import { projectIndexPage, projectPage } from "./html/project.js";
 import { allTopics, topicPage } from "./html/topic.js";
 import { SITE_NAME, escapeHtml } from "./html/layout.js";
+import { NAV_PAGES } from "./html/nav.js";
+import { standalonePage } from "./html/standalone.js";
 import { absoluteSiteUrl } from "./site.js";
 
 const FEED_DESCRIPTION = "Essays on philosophy.";
@@ -22,6 +24,7 @@ export interface SiteContent {
 	essays: Essay[];
 	notes: Essay[];
 	projects: Project[];
+	pages: Page[];
 }
 
 /** Essays and notes together, newest first, for topics and the feed. */
@@ -35,11 +38,13 @@ export async function generateSite(
 	content: SiteContent,
 	outDir = "dist",
 ): Promise<void> {
-	const { essays, notes, projects } = content;
+	const { essays, notes, projects, pages } = content;
 	assertUniqueSlugs("essay", essays);
 	assertUniqueSlugs("note", notes);
 	assertUniqueSlugs("project", projects);
+	assertUniqueSlugs("page", pages);
 	assertPredecessorsResolve(projects);
+	assertPagesServeNav(pages);
 	const writing = allWriting(content);
 	for (const piece of writing) {
 		await write(outDir, `${writingPath(piece)}index.html`, essayPage(piece));
@@ -50,6 +55,9 @@ export async function generateSite(
 			`projects/${project.slug}/index.html`,
 			projectPage(project),
 		);
+	}
+	for (const page of pages) {
+		await write(outDir, `${page.slug}/index.html`, standalonePage(page));
 	}
 	await write(outDir, "index.html", homePage(essays, projects, notes));
 	await write(outDir, "essays/index.html", essayIndexPage(essays));
@@ -64,7 +72,7 @@ export async function generateSite(
 	}
 	await write(outDir, "404.html", errorPage(404));
 	await write(outDir, "rss.xml", rss(writing));
-	await write(outDir, "sitemap.xml", sitemap(writing, projects));
+	await write(outDir, "sitemap.xml", sitemap(writing, projects, pages));
 }
 
 interface SluggedContent {
@@ -100,6 +108,31 @@ function assertPredecessorsResolve(projects: Project[]): void {
 		if (project.predecessor !== undefined && !slugs.has(project.predecessor)) {
 			throw new Error(
 				`project ${JSON.stringify(project.slug)} has unknown predecessor ${JSON.stringify(project.predecessor)}`,
+			);
+		}
+	}
+}
+
+/** The section indexes a page slug would overwrite. */
+const SECTION_SLUGS = new Set(["essays", "notes", "projects", "topics"]);
+
+/**
+ * Every header link must land on a built page, and no page may take a
+ * section's path. Either mistake would publish a dead or hijacked link.
+ */
+function assertPagesServeNav(pages: Page[]): void {
+	const slugs = new Set(pages.map((p) => p.slug));
+	for (const { slug } of NAV_PAGES) {
+		if (!slugs.has(slug)) {
+			throw new Error(
+				`navigation links to missing page ${JSON.stringify(slug)}`,
+			);
+		}
+	}
+	for (const page of pages) {
+		if (SECTION_SLUGS.has(page.slug)) {
+			throw new Error(
+				`page ${JSON.stringify(page.sourcePath)} takes the section path /${page.slug}/`,
 			);
 		}
 	}
@@ -142,7 +175,11 @@ function rss(allEssays: Essay[]): string {
 }
 
 /** Drafts (only present under SHOW_DRAFTS) stay out of crawler surfaces. */
-function sitemap(allWriting: Essay[], allProjects: Project[]): string {
+function sitemap(
+	allWriting: Essay[],
+	allProjects: Project[],
+	pages: Page[],
+): string {
 	const writing = allWriting.filter((e) => !e.draft);
 	const projects = allProjects.filter((p) => !p.draft);
 	const urls = [
@@ -150,6 +187,7 @@ function sitemap(allWriting: Essay[], allProjects: Project[]): string {
 		"/essays/",
 		"/notes/",
 		"/projects/",
+		...pages.map((p) => `/${p.slug}/`),
 		...writing.map(writingPath),
 		...projects.map((p) => `/projects/${p.slug}/`),
 		...allTopics(writing).map((t) => `/topics/${t.slug}/`),

@@ -9,6 +9,7 @@ const STYLES = [
 	"essay.css",
 	"essay-patterns.css",
 	"essay-discussion.css",
+	"standalone.css",
 	"project.css",
 	"diagrams.css",
 	"lightbox.css",

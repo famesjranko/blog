@@ -2,7 +2,7 @@ import { mkdir, rm } from "node:fs/promises";
 import { articleImagePlans } from "./articleImages.js";
 import { copySiteAssets } from "./assets.js";
 import { cardImagePlans } from "./cardImages.js";
-import { loadEssays, loadNotes, loadProjects } from "./content.js";
+import { loadEssays, loadNotes, loadPages, loadProjects } from "./content.js";
 import { generateRenditions } from "./renditionGenerator.js";
 import { generateSite } from "./routes.js";
 
@@ -11,6 +11,7 @@ export interface BuildResult {
 	essayCount: number;
 	noteCount: number;
 	projectCount: number;
+	pageCount: number;
 }
 
 export async function buildSite(
@@ -23,18 +24,18 @@ export async function buildSite(
 	const essays = await loadEssays(undefined, includeDrafts);
 	const notes = await loadNotes(includeDrafts);
 	const projects = await loadProjects(undefined, includeDrafts);
-	await generateSite({ essays, notes, projects }, outDir);
+	const pages = await loadPages();
+	await generateSite({ essays, notes, projects, pages }, outDir);
 	await copySiteAssets(".", outDir);
 	const pieces = [...essays, ...notes, ...projects];
-	const plans = [
-		...cardImagePlans(pieces),
-		...articleImagePlans(pieces.flatMap((piece) => piece.images)),
-	];
+	const bodies = [...pieces, ...pages].flatMap((piece) => piece.images);
+	const plans = [...cardImagePlans(pieces), ...articleImagePlans(bodies)];
 	const imageCount = await generateRenditions(plans, { outDir });
 	return {
 		imageCount,
 		essayCount: essays.length,
 		noteCount: notes.length,
 		projectCount: projects.length,
+		pageCount: pages.length,
 	};
 }

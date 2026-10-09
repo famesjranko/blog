@@ -251,4 +251,69 @@ is supplied separately by figures.css. */
 	.prose .diagram-timeline .snapshot {
 		fill: var(--color-accent);
 	}
+
+	/* Architecture boxes on the agentic engineering page: 560px drawings
+	shown near full size, so type sits a little under body text. */
+	.prose .diagram-agentic text {
+		font-family: var(--font-ui);
+		font-size: 13px;
+	}
+
+	.prose .diagram-agentic .heading {
+		font-size: 17px;
+		font-weight: 600;
+	}
+
+	.prose .diagram-agentic .node {
+		fill: var(--color-surface);
+		stroke: var(--color-border);
+		stroke-width: 1.5;
+	}
+
+	.prose .diagram-agentic .primary {
+		fill: color-mix(in srgb, var(--color-accent) 12%, var(--color-surface));
+		stroke: var(--color-accent);
+		stroke-width: 1.5;
+	}
+
+	.prose .diagram-agentic .boundary,
+	.prose .diagram-agentic .gate {
+		fill: none;
+		stroke: var(--color-muted);
+		stroke-width: 1;
+		stroke-dasharray: 5 5;
+	}
+
+	.prose .diagram-agentic .gate {
+		fill: color-mix(in srgb, var(--color-text) 4%, transparent);
+	}
+
+	.prose .diagram-agentic .boundary-title {
+		fill: var(--color-muted);
+		font-weight: 600;
+		letter-spacing: 0.04em;
+	}
+
+	.prose .diagram-agentic .wire {
+		fill: none;
+		stroke: var(--color-accent);
+		stroke-width: 1.5;
+	}
+
+	.prose .diagram-agentic .secondary {
+		stroke-dasharray: 5 4;
+	}
+
+	.prose .diagram-agentic .arrowhead {
+		fill: var(--color-accent);
+	}
+
+	/* A halo in the page colour keeps a label legible where it sits on a wire. */
+	.prose .diagram-agentic .label {
+		fill: var(--color-accent);
+		paint-order: stroke;
+		stroke: var(--color-bg);
+		stroke-width: 5px;
+		stroke-linejoin: round;
+	}
 }

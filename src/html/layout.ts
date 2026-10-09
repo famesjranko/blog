@@ -7,6 +7,7 @@ import {
 import { imageSize } from "../images.js";
 import { renditionSources } from "../renditions.js";
 import { canonicalSiteUrl, siteUrl } from "../site.js";
+import { navLinks } from "./nav.js";
 
 export const SITE_NAME = "Andrew J. McDonald";
 
@@ -79,14 +80,6 @@ function picture(src: string, img: string, sizes: string): string {
 /** The image source used by cards and social previews for a piece. */
 export function coverSrc(piece: Pick<CoverPiece, "cover" | "slug">): string {
 	return cardImageSource(piece);
-}
-
-function navLinks(): string {
-	return (
-		`<a href="${siteUrl("/essays/")}">Essays</a>` +
-		`<a href="${siteUrl("/projects/")}">Projects</a>` +
-		`<a href="${siteUrl("/notes/")}">Notes</a>`
-	);
 }
 
 export function header(): string {

@@ -3,8 +3,13 @@ import { expect, test } from "@playwright/test";
 test("article images, cover, and diagrams become zoomable", async ({
 	page,
 }) => {
-	// Given a project with screenshots and a project with diagrams.
-	const pages = ["/projects/tablescan/", "/projects/connect4-heuristic/"];
+	// Given a project with screenshots, a project with diagrams, and a
+	// standalone page with both.
+	const pages = [
+		"/projects/tablescan/",
+		"/projects/connect4-heuristic/",
+		"/agentic-engineering/",
+	];
 
 	for (const path of pages) {
 		// When the article loads.

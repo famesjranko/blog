@@ -118,6 +118,21 @@ export const RawProjectFrontmatterSchema = z.object({
 
 export type RawProjectFrontmatter = z.infer<typeof RawProjectFrontmatterSchema>;
 
+/**
+ * Canonical standalone-page model: a page outside the dated sections,
+ * such as the agentic engineering page. Strict, so a misspelt key fails
+ * the build instead of silently dropping a field.
+ */
+export const PageSchema = z
+	.object({
+		title: z.string().min(1),
+		eyebrow: z.string().min(1).optional(),
+		description: z.string().optional(),
+	})
+	.strict();
+
+export type PageMeta = z.infer<typeof PageSchema>;
+
 export function normalizeProjectFrontmatter(
 	raw: z.input<typeof RawProjectFrontmatterSchema>,
 ): ProjectMeta {

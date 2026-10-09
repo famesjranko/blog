@@ -1,0 +1,37 @@
+<svg class="diagram diagram-agentic" viewBox="0 0 560 310" role="img" aria-labelledby="team-title team-desc" xmlns="http://www.w3.org/2000/svg">
+<title id="team-title">One lead, bounded tasks</title>
+<desc id="team-desc">The lead briefs, judges and merges what it accepts, and delegates everything else. Each contract passes down through the ledger and hooks to one of five roles: a Planner that breaks the goal into slices, a read-only Explorer that surveys, a Worker that changes the files it owns, a Reviewer that judges the result, and a Chore that runs the checks. Each role reports back up to the lead.</desc>
+<defs><marker id="team-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto-start-reverse"><path class="arrowhead" d="M0 0 L8 4 L0 8 Z"/></marker></defs>
+<rect class="primary" x="150" y="16" width="260" height="84" rx="10"/>
+<text class="heading" x="280" y="44" text-anchor="middle">Lead</text>
+<text class="muted" x="280" y="68" text-anchor="middle">briefs · judges · merges what it accepts</text>
+<text class="muted" x="280" y="88" text-anchor="middle">delegates everything else</text>
+<path class="wire" d="M230 100 V136" marker-end="url(#team-arrow)"/>
+<text class="label" x="222" y="123" text-anchor="end">contract</text>
+<path class="wire secondary" d="M330 136 V100" marker-end="url(#team-arrow)"/>
+<text class="label" x="338" y="123">report</text>
+<rect class="gate" x="20" y="136" width="520" height="44" rx="8"/>
+<text class="boundary-title" x="280" y="163" text-anchor="middle">LEDGER + HOOKS · every contract and report passes through here</text>
+<path class="wire" d="M230 180 V212" marker-end="url(#team-arrow)"/>
+<path class="wire secondary" d="M330 212 V180" marker-end="url(#team-arrow)"/>
+<rect class="node" x="20" y="212" width="96" height="84" rx="10"/>
+<text class="heading" x="68" y="240" text-anchor="middle">Planner</text>
+<text class="muted" x="68" y="262" text-anchor="middle">breaks the goal</text>
+<text class="muted" x="68" y="280" text-anchor="middle">into slices</text>
+<rect class="node" x="126" y="212" width="96" height="84" rx="10"/>
+<text class="heading" x="174" y="240" text-anchor="middle">Explorer</text>
+<text class="muted" x="174" y="262" text-anchor="middle">surveys,</text>
+<text class="muted" x="174" y="280" text-anchor="middle">read-only</text>
+<rect class="node" x="232" y="212" width="96" height="84" rx="10"/>
+<text class="heading" x="280" y="240" text-anchor="middle">Worker</text>
+<text class="muted" x="280" y="262" text-anchor="middle">changes the files</text>
+<text class="muted" x="280" y="280" text-anchor="middle">it owns</text>
+<rect class="node" x="338" y="212" width="96" height="84" rx="10"/>
+<text class="heading" x="386" y="240" text-anchor="middle">Reviewer</text>
+<text class="muted" x="386" y="262" text-anchor="middle">judges the</text>
+<text class="muted" x="386" y="280" text-anchor="middle">result</text>
+<rect class="node" x="444" y="212" width="96" height="84" rx="10"/>
+<text class="heading" x="492" y="240" text-anchor="middle">Chore</text>
+<text class="muted" x="492" y="262" text-anchor="middle">runs the</text>
+<text class="muted" x="492" y="280" text-anchor="middle">checks</text>
+</svg>

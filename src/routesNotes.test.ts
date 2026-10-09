@@ -2,7 +2,7 @@ import { mkdtemp, readFile, stat } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import type { Essay } from "./content.js";
+import type { Essay, Page } from "./content.js";
 import { generateSite } from "./routes.js";
 
 function sampleEssay(overrides: Partial<Essay> = {}): Essay {
@@ -34,9 +34,18 @@ function sampleNote(overrides: Partial<Essay> = {}): Essay {
 	});
 }
 
+/** The page the header links to; the build refuses a site without it. */
+const navPage: Page = {
+	title: "Agentic engineering",
+	slug: "agentic-engineering",
+	html: "<p>Body.</p>",
+	images: [],
+	sourcePath: "content/pages/agentic-engineering.md",
+};
+
 async function generate(essays: Essay[], notes: Essay[]): Promise<string> {
 	const dir = await mkdtemp(path.join(tmpdir(), "blog-notes-"));
-	await generateSite({ essays, notes, projects: [] }, dir);
+	await generateSite({ essays, notes, projects: [], pages: [navPage] }, dir);
 	return dir;
 }
 

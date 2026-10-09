@@ -1,0 +1,32 @@
+<svg class="diagram diagram-agentic" viewBox="0 0 560 360" role="img" aria-labelledby="lifecycle-title lifecycle-desc" xmlns="http://www.w3.org/2000/svg">
+<title id="lifecycle-title">One task, start to finish</title>
+<desc id="lifecycle-desc">A task moves from queued, with its contract in the ledger, to running as a fresh agent, in its own worktree when it writes, to reported in a fixed-shape final message, to accepted, which unlocks dependent tasks. A hook checks the spawn against the contract and the report against its criteria and file ownership. The lead reads the diff and the report, then accepts or sends the task back to running.</desc>
+<defs><marker id="lifecycle-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto-start-reverse"><path class="arrowhead" d="M0 0 L8 4 L0 8 Z"/></marker></defs>
+<rect class="node" x="20" y="20" width="220" height="64" rx="10"/>
+<text class="heading" x="130" y="46" text-anchor="middle">queued</text>
+<text class="muted" x="130" y="68" text-anchor="middle">contract in the ledger</text>
+<path class="wire" d="M130 84 V110" marker-end="url(#lifecycle-arrow)"/>
+<rect class="primary" x="20" y="110" width="220" height="64" rx="10"/>
+<text class="heading" x="130" y="136" text-anchor="middle">running</text>
+<text class="muted" x="130" y="158" text-anchor="middle">fresh agent · worktree if it writes</text>
+<path class="wire" d="M130 174 V200" marker-end="url(#lifecycle-arrow)"/>
+<rect class="node" x="20" y="200" width="220" height="64" rx="10"/>
+<text class="heading" x="130" y="226" text-anchor="middle">reported</text>
+<text class="muted" x="130" y="248" text-anchor="middle">final message, fixed shape</text>
+<path class="wire" d="M130 264 V290" marker-end="url(#lifecycle-arrow)"/>
+<rect class="node" x="20" y="290" width="220" height="64" rx="10"/>
+<text class="heading" x="130" y="316" text-anchor="middle">accepted</text>
+<text class="muted" x="130" y="338" text-anchor="middle">dependent tasks unlock</text>
+<path class="wire secondary" d="M240 232 H268 V142 H240" marker-end="url(#lifecycle-arrow)"/>
+<text class="label" x="254" y="191" text-anchor="middle">sent back</text>
+<text class="heading" x="290" y="90">Spawn</text>
+<text class="muted" x="290" y="109">Hook: a contract exists; model, effort,</text>
+<text class="muted" x="290" y="127">dependencies and parent match it.</text>
+<text class="heading" x="290" y="180">Stop</text>
+<text class="muted" x="290" y="199">Hook: status line, evidence for every</text>
+<text class="muted" x="290" y="217">criterion, diff within its owned files.</text>
+<text class="heading" x="290" y="270">Accept or send back</text>
+<text class="muted" x="290" y="289">The lead reads the diff and the report.</text>
+<text class="muted" x="290" y="307">It accepts, noting what it read, or</text>
+<text class="muted" x="290" y="325">sends the task back.</text>
+</svg>

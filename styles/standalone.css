@@ -1,0 +1,186 @@
+/* Standalone pages: numbered sections, catalogue grids and architecture
+figures on top of the essay prose styles. Loaded after essay.css so the
+section rule moves from the heading to its eyebrow. */
+@layer prose {
+	.prose.standalone .page-nav {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.6rem 1.4rem;
+		margin: 2rem 0 0;
+		padding: 1rem 0;
+		border-block: 1px solid var(--color-border);
+		font-family: var(--font-ui);
+		font-size: 0.88rem;
+	}
+
+	.prose.standalone .eyebrow {
+		display: block;
+		margin: 4rem 0 0;
+		padding-top: 1.25rem;
+		border-top: 1px solid var(--color-border);
+		color: var(--color-muted);
+		font-family: var(--font-ui);
+		font-size: 0.72rem;
+		font-weight: 600;
+		letter-spacing: 0.08em;
+		line-height: 1.5;
+		text-transform: uppercase;
+	}
+
+	/* The section nav already draws the rule above the first section. */
+	.prose.standalone .page-nav + .eyebrow {
+		margin-top: 3rem;
+		padding-top: 0;
+		border-top: 0;
+	}
+
+	.prose.standalone > h2 {
+		margin-top: 0.6rem;
+		padding-top: 0;
+		border-top: 0;
+	}
+
+	/* Label and text rows, one rule between each. */
+	.prose.standalone .rows {
+		margin: 1.25rem 0;
+	}
+
+	.prose.standalone .rows > div {
+		display: grid;
+		grid-template-columns: 9rem minmax(0, 1fr);
+		gap: 1rem;
+		padding-block: 0.8rem;
+		border-top: 1px solid var(--color-border);
+	}
+
+	.prose.standalone .rows > div:last-child {
+		border-bottom: 1px solid var(--color-border);
+	}
+
+	/* Bordered catalogue grids: two columns of entries, or a strip of
+	three steps. */
+	.prose.standalone .kit-grid,
+	.prose.standalone .steps {
+		display: grid;
+		margin: 1.5rem 0;
+		border: 1px solid var(--color-border);
+		border-radius: 0.4rem;
+		overflow: hidden;
+	}
+
+	.prose.standalone .kit-grid {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	.prose.standalone .steps {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+	}
+
+	.prose.standalone .kit-grid > div,
+	.prose.standalone .steps > div {
+		min-width: 0;
+		padding: 1rem 1.15rem;
+	}
+
+	.prose.standalone .kit-grid > div {
+		border-bottom: 1px solid var(--color-border);
+	}
+
+	/* Odd cells carry the rule between the columns, and the last row has
+	no rule beneath it. Grids keep an even cell count. */
+	.prose.standalone .kit-grid > div:nth-child(odd) {
+		border-right: 1px solid var(--color-border);
+	}
+
+	.prose.standalone .kit-grid > div:nth-last-child(-n + 2) {
+		border-bottom: 0;
+	}
+
+	.prose.standalone .steps > div + div {
+		border-left: 1px solid var(--color-border);
+	}
+
+	.prose.standalone .kit-grid dt,
+	.prose.standalone .steps dt,
+	.prose.standalone .rows dt {
+		margin-bottom: 0.4rem;
+		font-family: var(--font-ui);
+		font-size: 0.9rem;
+		font-weight: 600;
+		line-height: 1.6;
+	}
+
+	.prose.standalone .rows dt {
+		margin-bottom: 0;
+	}
+
+	.prose.standalone .kit-grid dt span,
+	.prose.standalone .steps dt span {
+		display: block;
+		margin-bottom: 0.2rem;
+		color: var(--color-accent);
+		font-size: 0.72rem;
+		letter-spacing: 0.08em;
+	}
+
+	.prose.standalone .kit-grid dd,
+	.prose.standalone .steps dd,
+	.prose.standalone .rows dd {
+		margin: 0;
+		font-size: 0.94rem;
+		line-height: 1.6;
+	}
+
+	.prose.standalone .table-scroll table {
+		min-width: 0;
+	}
+
+	/* essay.css pads only paragraphs inside a fold-out; a figure needs the
+	same inset or it sits against the rule. */
+	.prose.standalone .editorial-note > figure,
+	.prose.standalone .editorial-note > pre,
+	.prose.standalone .editorial-note > .table-scroll {
+		margin: 1rem 1.25rem;
+	}
+
+	/* Screenshots of a dark observer need an edge against the dark theme;
+	diagrams are inline SVG and keep the page background. */
+	.prose.standalone figure img {
+		border: 1px solid var(--color-border);
+		border-radius: 8px;
+	}
+
+	.prose.standalone .credit {
+		margin-top: 3rem;
+		padding-top: 1rem;
+		border-top: 1px solid var(--color-border);
+		color: var(--color-muted);
+		font-family: var(--font-ui);
+		font-size: 0.85rem;
+	}
+
+	@media (max-width: 42rem) {
+		.prose.standalone .rows > div {
+			grid-template-columns: minmax(0, 1fr);
+			gap: 0.3rem;
+		}
+
+		.prose.standalone .kit-grid,
+		.prose.standalone .steps {
+			grid-template-columns: minmax(0, 1fr);
+		}
+
+		.prose.standalone .kit-grid > div:nth-child(odd) {
+			border-right: 0;
+		}
+
+		.prose.standalone .kit-grid > div:nth-last-child(2) {
+			border-bottom: 1px solid var(--color-border);
+		}
+
+		.prose.standalone .steps > div + div {
+			border-top: 1px solid var(--color-border);
+			border-left: 0;
+		}
+	}
+}

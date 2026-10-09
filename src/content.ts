@@ -6,6 +6,8 @@ import { markdownImageSources, renderMarkdown } from "./markdown.js";
 import { readingMinutes } from "./readingTime.js";
 import {
 	type EssayMeta,
+	type PageMeta,
+	PageSchema,
 	type ProjectMeta,
 	RawFrontmatterSchema,
 	RawProjectFrontmatterSchema,
@@ -125,6 +127,35 @@ export async function loadProjects(
 	return projects
 		.filter((p) => includeDrafts || !p.draft)
 		.sort((a, b) => b.date.getTime() - a.date.getTime());
+}
+
+/** A standalone page: undated, never a draft, served at `/<slug>/`. */
+export interface Page extends PageMeta {
+	slug: string;
+	html: string;
+	/** Image sources in the body, for the renditions the build generates. */
+	images: string[];
+	sourcePath: string;
+}
+
+export async function loadPage(filePath: string): Promise<Page> {
+	const source = await readFile(filePath, "utf8");
+	const { data, content } = matter(source);
+	const meta = PageSchema.parse(data);
+	return {
+		...meta,
+		slug: makeSlug(filePath),
+		html: renderMarkdown(content),
+		images: markdownImageSources(content),
+		sourcePath: filePath,
+	};
+}
+
+export async function loadPages(
+	pattern = "content/pages/**/*.md",
+): Promise<Page[]> {
+	const files = await glob(pattern);
+	return Promise.all(files.sort().map(loadPage));
 }
 
 export interface Featureable {
