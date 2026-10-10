@@ -252,14 +252,16 @@ is supplied separately by figures.css. */
 		fill: var(--color-accent);
 	}
 
-	/* State colours follow the observer; roles and machinery stay neutral. */
+	/* Teal distinguishes roles and machinery; states follow the observer. */
 	.prose .diagram-lead-team {
-		--color-team-surface: light-dark(#ffffff, #12151c);
+		--color-team-surface: light-dark(#e5f4f0, #173532);
 		--color-team-panel: light-dark(#f8fafc, #181c25);
-		--color-team-emphasis: light-dark(#eef1f5, #212633);
-		--color-team-border: light-dark(#cbd2dd, #364052);
+		--color-team-emphasis: light-dark(#bce5dc, #19504a);
+		--color-team-border: light-dark(#76a49a, #55998d);
+		--color-team-edge: light-dark(#31877e, #72d9cd);
+		--color-team-accent: light-dark(#126e6b, #6ce1d5);
 		--color-team-text: light-dark(#0f172a, #e6e9f0);
-		--color-team-muted: light-dark(#5b6576, #9aa3b5);
+		--color-team-muted: light-dark(#4c596c, #b6c3d6);
 		--color-team-queued: light-dark(#64748b, #94a3b8);
 		--color-team-queued-bg: light-dark(#f1f5f9, #1e2430);
 		--color-team-running: light-dark(#2563eb, #60a5fa);
@@ -299,13 +301,13 @@ is supplied separately by figures.css. */
 
 	.prose .diagram-lead-team .frame {
 		fill: var(--color-team-surface);
-		stroke: var(--color-team-border);
+		stroke: var(--color-team-edge);
 		stroke-width: 1.5;
 	}
 
 	.prose .diagram-lead-team .structural-frame {
 		fill: var(--color-team-emphasis);
-		stroke: var(--color-team-muted);
+		stroke: var(--color-team-accent);
 		stroke-width: 1.5;
 	}
 
