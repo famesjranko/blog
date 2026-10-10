@@ -32,9 +32,12 @@ const SECTION_ITEM_NAMES: Record<HomeSection, string> = {
 	notes: "Note",
 };
 
-/** The showcase spans the `.wrap` column, 68rem at most. */
+/**
+ * The full `.wrap` column until 52rem, then the 3fr track of the
+ * showcase's 3fr 2fr grid: (wrap width - 2.5rem gap) * 3/5.
+ */
 const SHOWCASE_IMAGE_SIZES =
-	"(min-width: 73rem) 68rem, (min-width: 62.5rem) calc(100vw - 5rem), (min-width: 25rem) 92vw, calc(100vw - 2rem)";
+	"(min-width: 73rem) 39.3rem, (min-width: 62.5rem) calc(60vw - 4.5rem), (min-width: 52rem) calc(55.2vw - 1.5rem), (min-width: 25rem) 92vw, calc(100vw - 2rem)";
 
 /**
  * A 6rem thumbnail beside the text until 52rem, then a quarter of the
