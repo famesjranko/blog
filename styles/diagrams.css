@@ -252,13 +252,13 @@ is supplied separately by figures.css. */
 		fill: var(--color-accent);
 	}
 
-	/* Teal distinguishes roles and machinery; states follow the observer. */
+	/* Selected nodes use teal; states follow the observer. */
 	.prose .diagram-lead-team {
-		--color-team-surface: light-dark(#e5f4f0, #173532);
+		--color-team-surface: light-dark(#ffffff, #181c25);
 		--color-team-panel: light-dark(#f8fafc, #181c25);
 		--color-team-emphasis: light-dark(#bce5dc, #19504a);
-		--color-team-border: light-dark(#76a49a, #55998d);
-		--color-team-edge: light-dark(#31877e, #72d9cd);
+		--color-team-border: light-dark(#a2adb9, #65748a);
+		--color-team-edge: light-dark(#8a96a7, #68788f);
 		--color-team-accent: light-dark(#126e6b, #6ce1d5);
 		--color-team-text: light-dark(#0f172a, #e6e9f0);
 		--color-team-muted: light-dark(#4c596c, #b6c3d6);
