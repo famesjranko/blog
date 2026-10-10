@@ -8,7 +8,7 @@ topics:
   - coding agents
 ---
 
-Managing a team of coding agents involves dividing work, choosing suitable models and preserving context. A lead agent coordinates delegation, assesses results and keeps the work coherent. Written instructions alone don't make that arrangement reliable, because a lead under pressure will edit code itself or accept a report on trust. I built `lead-team` around enforceable rules. It is a skill for Claude Code and Codex: a set of instructions that an agent loads to follow a working method.
+Managing a team of coding agents involves dividing work, choosing suitable models and preserving context. A lead agent coordinates delegation, assesses results and keeps the work coherent. Language models are probabilistic, so an agent given only written instructions may follow a rule on one run and skip it on the next. I built `lead-team` around enforceable rules. It is a skill for Claude Code and Codex: a set of instructions that an agent loads to follow a working method.
 
 The lead agent works with a planner agent to divide the work into tasks, assigns them to agents, and judges their results before allowing later work to depend on them.
 
