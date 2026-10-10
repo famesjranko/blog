@@ -1,19 +1,19 @@
 <svg xmlns="http://www.w3.org/2000/svg" class="diagram diagram-lead-team" viewBox="0 0 760 970" role="img" aria-labelledby="hooks-title hooks-desc">
 <title id="hooks-title">Hook checks around an agent task</title>
 <desc id="hooks-desc">The spawn hook checks admission, the start hook binds the agent, and the stop hook checks its report. The lead separately assesses evidence and accepts the task. Edit, message and shell hooks govern other lead tool calls. Terminal hand-backs report problems immediately instead of retrying.</desc>
-<defs><marker id="hooks-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowhead"/></marker></defs>
+<defs><marker id="hooks-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowhead"/></marker><marker id="hooks-return" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" class="return-arrow"/></marker></defs>
 <rect x="20" y="25" width="220" height="100" rx="12" class="frame"/>
 <text x="130.0" y="57" text-anchor="middle" class="heading">Spawn request</text>
 <text x="130.0" y="85" text-anchor="middle" class="label">Lead names task</text>
 <text x="130.0" y="110" text-anchor="middle" class="label">and model settings</text>
-<rect x="310" y="25" width="430" height="145" rx="12" class="accent-frame"/>
+<rect x="310" y="25" width="430" height="145" rx="12" class="active-frame"/>
 <text x="525.0" y="57" text-anchor="middle" class="heading">Spawn hook</text>
 <text x="525.0" y="85" text-anchor="middle" class="label">Contract + accepted prerequisites</text>
 <text x="525.0" y="110" text-anchor="middle" class="label">Parent + allowance + settings</text>
 <text x="525.0" y="135" text-anchor="middle" class="label">Refuse if a requirement fails</text>
 <path d="M 240 76 H 310" class="flow" marker-end="url(#hooks-arrow)"/>
 <path d="M 525 170 V 220" class="flow" marker-end="url(#hooks-arrow)"/>
-<rect x="310" y="220" width="430" height="110" rx="12" class="frame"/>
+<rect x="310" y="220" width="430" height="110" rx="12" class="active-frame"/>
 <text x="525.0" y="252" text-anchor="middle" class="heading">Start hook</text>
 <text x="525.0" y="280" text-anchor="middle" class="label">Bind runtime agent to task</text>
 <text x="525.0" y="305" text-anchor="middle" class="label">Task becomes running</text>
@@ -21,7 +21,7 @@
 <rect x="310" y="375" width="430" height="100" rx="12" class="frame"/>
 <text x="525.0" y="407" text-anchor="middle" class="heading">Agent works</text>
 <text x="525.0" y="435" text-anchor="middle" class="label">Uses its contract and repository</text>
-<rect x="20" y="300" width="235" height="235" rx="12" class="quiet-frame"/>
+<rect x="20" y="300" width="235" height="235" rx="12" class="active-frame"/>
 <text x="137.5" y="332" text-anchor="middle" class="heading">Other lead calls</text>
 <text x="137.5" y="360" text-anchor="middle" class="label">Edit hook</text>
 <text x="137.5" y="385" text-anchor="middle" class="label">Message hook</text>
@@ -30,18 +30,18 @@
 <text x="137.5" y="460" text-anchor="middle" class="label">when each tool is called</text>
 <path d="M 525 475 V 560" class="flow" marker-end="url(#hooks-arrow)"/>
 <text x="565" y="523" text-anchor="middle" class="muted">report</text>
-<rect x="310" y="560" width="430" height="140" rx="12" class="accent-frame"/>
+<rect x="310" y="560" width="430" height="140" rx="12" class="active-frame"/>
 <text x="525.0" y="592" text-anchor="middle" class="heading">Stop hook</text>
 <text x="525.0" y="620" text-anchor="middle" class="label">Fields + criterion IDs + commands</text>
 <text x="525.0" y="645" text-anchor="middle" class="label">Worker changed-file ownership</text>
 <text x="525.0" y="670" text-anchor="middle" class="label">Problems retained for the lead</text>
-<path d="M 310 615 H 275 V 425 H 310" class="return-flow" marker-end="url(#hooks-arrow)"/>
-<text x="160" y="585" text-anchor="middle" class="muted">First failed stop:</text>
-<text x="160" y="613" text-anchor="middle" class="muted">normally correct</text>
-<text x="160" y="641" text-anchor="middle" class="muted">and report again</text>
+<path d="M 310 615 H 275 V 425 H 310" class="return-flow" marker-end="url(#hooks-return)"/>
+<text x="160" y="585" text-anchor="middle" class="muted return-label">First failed stop:</text>
+<text x="160" y="613" text-anchor="middle" class="muted return-label">normally correct</text>
+<text x="160" y="641" text-anchor="middle" class="muted return-label">and report again</text>
 <path d="M 525 700 V 765" class="flow" marker-end="url(#hooks-arrow)"/>
 <text x="570" y="738" text-anchor="middle" class="muted">reported</text>
-<rect x="310" y="765" width="430" height="130" rx="12" class="accent-frame"/>
+<rect x="310" y="765" width="430" height="130" rx="12" class="decision-frame"/>
 <text x="525.0" y="797" text-anchor="middle" class="heading">Lead judges the result</text>
 <text x="525.0" y="825" text-anchor="middle" class="label">Reads evidence and worker diff</text>
 <text x="525.0" y="850" text-anchor="middle" class="label">Accepts, sends back or reassigns</text>

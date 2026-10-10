@@ -2,7 +2,7 @@
 <title id="observer-title">Where the observer gets its information</title>
 <desc id="observer-desc">The observer reads the team ledger and native runtime logs. Its recorder uses the shared state reducer to write an observer journal and snapshot. The snapshot feeds the live dashboard; the journal feeds an offline replay. There is no control path back from the observer into the team.</desc>
 <defs><marker id="observer-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowhead"/></marker></defs>
-<rect x="20" y="30" width="340" height="175" rx="12" class="accent-frame"/>
+<rect x="20" y="30" width="340" height="175" rx="12" class="frame"/>
 <text x="190.0" y="62" text-anchor="middle" class="heading">Team ledger</text>
 <text x="190.0" y="90" text-anchor="middle" class="label">Contracts and task dependencies</text>
 <text x="190.0" y="115" text-anchor="middle" class="label">Owners, states, decision notes</text>
@@ -14,17 +14,17 @@
 <text x="570.0" y="140" text-anchor="middle" class="label">Available context / usage data</text>
 <path d="M 190 205 V 250 H 325 V 295" class="flow" marker-end="url(#observer-arrow)"/>
 <path d="M 570 205 V 250 H 435 V 295" class="flow" marker-end="url(#observer-arrow)"/>
-<rect x="170" y="295" width="420" height="145" rx="12" class="accent-frame"/>
+<rect x="170" y="295" width="420" height="145" rx="12" class="active-frame"/>
 <text x="380.0" y="327" text-anchor="middle" class="heading">Observer recorder</text>
 <text x="380.0" y="355" text-anchor="middle" class="label">Joins recorded evidence</text>
 <text x="380.0" y="380" text-anchor="middle" class="label">Uses the shared state reducer</text>
 <text x="380.0" y="405" text-anchor="middle" class="label">Records capture gaps explicitly</text>
 <path d="M 270 440 V 490 H 190 V 535" class="flow" marker-end="url(#observer-arrow)"/>
 <path d="M 490 440 V 490 H 570 V 535" class="flow" marker-end="url(#observer-arrow)"/>
-<rect x="20" y="535" width="340" height="105" rx="12" class="frame"/>
+<rect x="20" y="535" width="340" height="105" rx="12" class="quiet-frame"/>
 <text x="190.0" y="567" text-anchor="middle" class="heading">Observer journal</text>
 <text x="190.0" y="595" text-anchor="middle" class="label">Normalised history of the run</text>
-<rect x="400" y="535" width="340" height="105" rx="12" class="frame"/>
+<rect x="400" y="535" width="340" height="105" rx="12" class="quiet-frame"/>
 <text x="570.0" y="567" text-anchor="middle" class="heading">Observer snapshot</text>
 <text x="570.0" y="595" text-anchor="middle" class="label">Current state for the viewer</text>
 <path d="M 190 640 V 658" class="flow"/>

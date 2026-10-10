@@ -254,6 +254,14 @@ is supplied separately by figures.css. */
 
 	/* Lead-team diagrams share one visual vocabulary for roles and state. */
 	.prose .diagram-lead-team {
+		--color-team-active: light-dark(#2563a6, #83b5ec);
+		--color-team-active-bg: light-dark(#eaf1fa, #1b293b);
+		--color-team-reported: light-dark(#7750a8, #bd9be7);
+		--color-team-reported-bg: light-dark(#f2edf8, #2c233b);
+		--color-team-decision: light-dark(#237354, #85baa1);
+		--color-team-decision-bg: light-dark(#eaf3ed, #203129);
+		--color-team-rework: light-dark(#9a6215, #dcad61);
+		--color-team-rework-bg: light-dark(#fbf3e7, #332a1c);
 		font-family: var(--font-ui);
 	}
 
@@ -273,16 +281,28 @@ is supplied separately by figures.css. */
 		stroke-width: 1.5;
 	}
 
-	.prose .diagram-lead-team .accent-frame {
-		fill: var(--color-wash-1);
-		stroke: var(--color-accent);
+	.prose .diagram-lead-team .active-frame {
+		fill: var(--color-team-active-bg);
+		stroke: var(--color-team-active);
+		stroke-width: 2;
+	}
+
+	.prose .diagram-lead-team .reported-frame {
+		fill: var(--color-team-reported-bg);
+		stroke: var(--color-team-reported);
+		stroke-width: 2;
+	}
+
+	.prose .diagram-lead-team .decision-frame {
+		fill: var(--color-team-decision-bg);
+		stroke: var(--color-team-decision);
 		stroke-width: 2;
 	}
 
 	.prose .diagram-lead-team .quiet-frame,
 	.prose .diagram-lead-team .group-frame {
-		fill: var(--color-wash-2);
-		stroke: var(--color-muted);
+		fill: var(--color-surface);
+		stroke: var(--color-border);
 		stroke-width: 1;
 	}
 
@@ -291,17 +311,36 @@ is supplied separately by figures.css. */
 		stroke-dasharray: 6 5;
 	}
 
+	.prose .diagram-lead-team .rework-group {
+		fill: var(--color-team-rework-bg);
+		stroke: var(--color-team-rework);
+	}
+
 	.prose .diagram-lead-team .flow {
 		fill: none;
 		stroke: var(--color-muted);
 		stroke-width: 2;
 	}
 
-	.prose .diagram-lead-team .return-flow {
+	.prose .diagram-lead-team .return-flow,
+	.prose .diagram-lead-team .decision-flow {
 		fill: none;
-		stroke: var(--color-accent);
-		stroke-width: 2;
+		stroke: var(--color-team-rework);
+		stroke-width: 2.5;
 		stroke-dasharray: 6 4;
+	}
+
+	.prose .diagram-lead-team .decision-flow {
+		stroke: var(--color-team-decision);
+	}
+
+	.prose .diagram-lead-team .return-arrow,
+	.prose .diagram-lead-team .return-label {
+		fill: var(--color-team-rework);
+	}
+
+	.prose .diagram-lead-team .decision-arrow {
+		fill: var(--color-team-decision);
 	}
 
 	.prose .diagram-lead-team .arrowhead {

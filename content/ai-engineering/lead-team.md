@@ -148,6 +148,8 @@ The ledger supplies contracts, dependencies, owners, states and decision notes. 
 
 The team view shows the reporting hierarchy. The workflow view shows dependencies, including work awaiting a lead decision. Selecting a task reveals its contract, prerequisites and decision history; selecting an agent reveals its activity and usage. Run history connects hook refusals, send-backs and acceptances to their reasons and source times.
 
+A “Needs attention” panel collects blocked reports, reports awaiting the lead and refused spawns. A blocked-report card shows why the stop hook objected, so I can inspect the problem without searching the transcript.
+
 ![Recorded workflow with 29 tasks, a reported final check and queued packaging work.](/img/ai-engineering/lead-team/team-workflow.jpg "A recorded run, separate from the reading-time example. Follow final_check into package_prs on the right; an independent task is still running on the left. [Open figure at full size](/img/ai-engineering/lead-team/team-workflow.jpg)")
 
 Here, `final_check` is purple because it has reported and awaits acceptance. Its loop records two send-backs. `package_prs` remains queued behind it. An idle agent can therefore own a task that still blocks progress. Display labels add context: “sent back” explains a `running` task, while “blocked report” records a report-check problem. Neither is the agent's `BLOCKED` report status.
