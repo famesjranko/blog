@@ -87,6 +87,11 @@
 		outline-offset: 3px;
 	}
 
+	/* Keeps a hyphenated title word on one line (see src/html/titleText.ts). */
+	.nowrap {
+		white-space: nowrap;
+	}
+
 	/* Off-canvas until a keyboard user tabs to it, then pinned top-left
 	above the header. */
 	.skip-link {

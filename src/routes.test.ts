@@ -227,9 +227,9 @@ describe("generateSite projects", () => {
 			path.join(dir, "projects/connect4-lisp-web/index.html"),
 			"utf8",
 		);
-		expect(html).toContain("Connect-4 web");
+		expect(html).toContain('<span class="nowrap">Connect-4</span> web');
 		const index = await readFile(path.join(dir, "projects/index.html"), "utf8");
-		expect(index).toContain("Connect-4 web");
+		expect(index).toContain('<span class="nowrap">Connect-4</span> web');
 	});
 
 	it("lists project URLs in the sitemap", async () => {
@@ -243,7 +243,7 @@ describe("generateSite projects", () => {
 		const dir = await generate([sampleEssay()], [sampleProject()]);
 		const home = await readFile(path.join(dir, "index.html"), "utf8");
 		expect(home).toContain("Featured projects");
-		expect(home).toContain("Connect-4 web");
+		expect(home).toContain('<span class="nowrap">Connect-4</span> web');
 	});
 
 	it("resolves predecessor links between projects", async () => {

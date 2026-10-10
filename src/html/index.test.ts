@@ -287,7 +287,7 @@ describe("homePage projects", () => {
 			[sampleProject(), sampleProject({ slug: "other", title: "Other" })],
 		);
 		expect(html).toContain("Featured projects");
-		expect(html).toContain("Connect-4 web");
+		expect(html).toContain('<span class="nowrap">Connect-4</span> web');
 		expect(html).toContain("Other");
 		expect(html).toContain("Personal project");
 		expect(html).toContain("More projects");

@@ -2,6 +2,7 @@ import { type Essay, writingPath } from "../content.js";
 import { siteUrl } from "../site.js";
 import { articleMeta } from "./articleMeta.js";
 import { coverSrc, escapeHtml, page } from "./layout.js";
+import { titleHtml } from "./titleText.js";
 
 export function essayPage(essay: Essay): string {
 	const subtitle =
@@ -42,7 +43,7 @@ export function essayPage(essay: Essay): string {
 		content: `<div class="wrap"><article class="prose essay${isNote ? " note" : ""}">
 <header>
 ${meta}
-<h1>${escapeHtml(essay.title)}</h1>
+<h1>${titleHtml(essay.title)}</h1>
 ${subtitle}
 </header>
 ${essay.html}
