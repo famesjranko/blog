@@ -195,7 +195,3 @@ Workers and reviewers do not create further teams, and a delegated lead cannot a
 The structure makes commitments and decisions inspectable. It still depends on the lead to choose useful tasks, write adequate criteria and recognise when a technically complete result misses the goal. Changes to the agreed scope, cost or risk return to me.
 
 A team is slower and uses more tokens than a single agent, so I use it where a missed defect would cost more than the extra work.
-
-## Further detail
-
-The [lead-team overview](https://github.com/famesjranko/agent-toolkit/blob/main/docs/lead-team.md) links the implementation. The [skill](https://github.com/famesjranko/agent-toolkit/blob/main/skills/lead-team/SKILL.md) and its [contract](https://github.com/famesjranko/agent-toolkit/blob/main/skills/lead-team/references/contracts.md), [report](https://github.com/famesjranko/agent-toolkit/blob/main/skills/lead-team/references/reports.md), [verification](https://github.com/famesjranko/agent-toolkit/blob/main/skills/lead-team/references/verification.md) and [observation](https://github.com/famesjranko/agent-toolkit/blob/main/skills/lead-team/references/observation.md) references hold the operational rules.
