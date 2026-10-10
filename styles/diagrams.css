@@ -252,16 +252,29 @@ is supplied separately by figures.css. */
 		fill: var(--color-accent);
 	}
 
-	/* Lead-team diagrams share one visual vocabulary for roles and state. */
+	/* State colours follow the observer; roles and machinery stay neutral. */
 	.prose .diagram-lead-team {
-		--color-team-active: light-dark(#2563a6, #83b5ec);
-		--color-team-active-bg: light-dark(#eaf1fa, #1b293b);
-		--color-team-reported: light-dark(#7750a8, #bd9be7);
-		--color-team-reported-bg: light-dark(#f2edf8, #2c233b);
-		--color-team-decision: light-dark(#237354, #85baa1);
-		--color-team-decision-bg: light-dark(#eaf3ed, #203129);
-		--color-team-rework: light-dark(#9a6215, #dcad61);
-		--color-team-rework-bg: light-dark(#fbf3e7, #332a1c);
+		--color-team-surface: light-dark(#ffffff, #12151c);
+		--color-team-panel: light-dark(#f8fafc, #181c25);
+		--color-team-emphasis: light-dark(#eef1f5, #212633);
+		--color-team-border: light-dark(#cbd2dd, #364052);
+		--color-team-text: light-dark(#0f172a, #e6e9f0);
+		--color-team-muted: light-dark(#5b6576, #9aa3b5);
+		--color-team-queued: light-dark(#64748b, #94a3b8);
+		--color-team-queued-bg: light-dark(#f1f5f9, #1e2430);
+		--color-team-running: light-dark(#2563eb, #60a5fa);
+		--color-team-running-bg: light-dark(#e0ecff, #142441);
+		--color-team-reported: light-dark(#7c3aed, #a78bfa);
+		--color-team-reported-bg: light-dark(#f1eaff, #261d42);
+		--color-team-done: light-dark(#059669, #34d399);
+		--color-team-done-bg: light-dark(#e3f7ef, #0f2b22);
+		--color-team-rework: light-dark(#d97706, #fbbf24);
+		--color-team-rework-bg: light-dark(#fff3dc, #33260e);
+		/* Darken the observer amber on light pages so thin paths stay visible. */
+		--color-team-rework-line: light-dark(
+			color-mix(in srgb, var(--color-team-rework) 88%, black),
+			var(--color-team-rework)
+		);
 		font-family: var(--font-ui);
 	}
 
@@ -270,20 +283,41 @@ is supplied separately by figures.css. */
 		font-weight: 650;
 	}
 
+	.prose .diagram-lead-team .heading,
+	.prose .diagram-lead-team .label {
+		fill: var(--color-team-text);
+	}
+
 	.prose .diagram-lead-team .label,
 	.prose .diagram-lead-team .muted {
 		font-size: 18px;
 	}
 
+	.prose .diagram-lead-team .muted {
+		fill: var(--color-team-muted);
+	}
+
 	.prose .diagram-lead-team .frame {
-		fill: var(--color-surface);
-		stroke: var(--color-muted);
+		fill: var(--color-team-surface);
+		stroke: var(--color-team-border);
 		stroke-width: 1.5;
 	}
 
-	.prose .diagram-lead-team .active-frame {
-		fill: var(--color-team-active-bg);
-		stroke: var(--color-team-active);
+	.prose .diagram-lead-team .structural-frame {
+		fill: var(--color-team-emphasis);
+		stroke: var(--color-team-muted);
+		stroke-width: 1.5;
+	}
+
+	.prose .diagram-lead-team .queued-frame {
+		fill: var(--color-team-queued-bg);
+		stroke: var(--color-team-queued);
+		stroke-width: 2;
+	}
+
+	.prose .diagram-lead-team .running-frame {
+		fill: var(--color-team-running-bg);
+		stroke: var(--color-team-running);
 		stroke-width: 2;
 	}
 
@@ -293,16 +327,16 @@ is supplied separately by figures.css. */
 		stroke-width: 2;
 	}
 
-	.prose .diagram-lead-team .decision-frame {
-		fill: var(--color-team-decision-bg);
-		stroke: var(--color-team-decision);
+	.prose .diagram-lead-team .done-frame {
+		fill: var(--color-team-done-bg);
+		stroke: var(--color-team-done);
 		stroke-width: 2;
 	}
 
 	.prose .diagram-lead-team .quiet-frame,
 	.prose .diagram-lead-team .group-frame {
-		fill: var(--color-surface);
-		stroke: var(--color-border);
+		fill: var(--color-team-panel);
+		stroke: var(--color-team-border);
 		stroke-width: 1;
 	}
 
@@ -313,37 +347,32 @@ is supplied separately by figures.css. */
 
 	.prose .diagram-lead-team .rework-group {
 		fill: var(--color-team-rework-bg);
-		stroke: var(--color-team-rework);
+		stroke: var(--color-team-rework-line);
 	}
 
-	.prose .diagram-lead-team .flow {
+	.prose .diagram-lead-team .flow,
+	.prose .diagram-lead-team .feedback-flow {
 		fill: none;
-		stroke: var(--color-muted);
+		stroke: var(--color-team-muted);
 		stroke-width: 2;
 	}
 
-	.prose .diagram-lead-team .return-flow,
-	.prose .diagram-lead-team .decision-flow {
+	.prose .diagram-lead-team .feedback-flow {
+		stroke-dasharray: 6 4;
+	}
+
+	.prose .diagram-lead-team .return-flow {
 		fill: none;
-		stroke: var(--color-team-rework);
+		stroke: var(--color-team-rework-line);
 		stroke-width: 2.5;
 		stroke-dasharray: 6 4;
 	}
 
-	.prose .diagram-lead-team .decision-flow {
-		stroke: var(--color-team-decision);
-	}
-
-	.prose .diagram-lead-team .return-arrow,
-	.prose .diagram-lead-team .return-label {
-		fill: var(--color-team-rework);
-	}
-
-	.prose .diagram-lead-team .decision-arrow {
-		fill: var(--color-team-decision);
+	.prose .diagram-lead-team .return-arrow {
+		fill: var(--color-team-rework-line);
 	}
 
 	.prose .diagram-lead-team .arrowhead {
-		fill: var(--color-muted);
+		fill: var(--color-team-muted);
 	}
 }

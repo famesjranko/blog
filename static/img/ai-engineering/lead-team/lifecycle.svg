@@ -2,11 +2,11 @@
 <title id="lifecycle-title">Task state and explicit acceptance</title>
 <desc id="lifecycle-desc">A queued task starts, runs and reports. The lead accepts it as done or sends it back. Reassignment returns running or reported work to queued. Dropping work requires dependencies to be resolved. Limited reopening of accepted work invalidates running or reported dependents.</desc>
 <defs><marker id="lifecycle-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowhead"/></marker><marker id="lifecycle-return" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" class="return-arrow"/></marker></defs>
-<rect x="20" y="100" width="150" height="145" rx="12" class="frame"/>
+<rect x="20" y="100" width="150" height="145" rx="12" class="queued-frame"/>
 <text x="95.0" y="132" text-anchor="middle" class="heading">queued</text>
 <text x="95.0" y="160" text-anchor="middle" class="label">Contract added</text>
 <text x="95.0" y="185" text-anchor="middle" class="label">No agent yet</text>
-<rect x="210" y="100" width="150" height="145" rx="12" class="active-frame"/>
+<rect x="210" y="100" width="150" height="145" rx="12" class="running-frame"/>
 <text x="285.0" y="132" text-anchor="middle" class="heading">running</text>
 <text x="285.0" y="160" text-anchor="middle" class="label">Agent bound</text>
 <text x="285.0" y="185" text-anchor="middle" class="label">Work in progress</text>
@@ -14,7 +14,7 @@
 <text x="475.0" y="132" text-anchor="middle" class="heading">reported</text>
 <text x="475.0" y="160" text-anchor="middle" class="label">Agent stopped</text>
 <text x="475.0" y="185" text-anchor="middle" class="label">Awaiting lead</text>
-<rect x="590" y="100" width="150" height="145" rx="12" class="decision-frame"/>
+<rect x="590" y="100" width="150" height="145" rx="12" class="done-frame"/>
 <text x="665.0" y="132" text-anchor="middle" class="heading">done</text>
 <text x="665.0" y="160" text-anchor="middle" class="label">Lead accepted</text>
 <text x="665.0" y="185" text-anchor="middle" class="label">Dependents</text>
@@ -26,7 +26,7 @@
 <text x="380" y="75" text-anchor="middle" class="muted">stop</text>
 <text x="570" y="75" text-anchor="middle" class="muted">accept</text>
 <path d="M 475 245 V 310 H 285 V 245" class="return-flow" marker-end="url(#lifecycle-return)"/>
-<text x="380" y="345" text-anchor="middle" class="muted return-label">Lead sends back, then resumes the agent</text>
+<text x="380" y="345" text-anchor="middle" class="muted">Lead sends back, then resumes the agent</text>
 <rect x="20" y="410" width="720" height="140" rx="12" class="quiet-frame"/>
 <text x="380.0" y="442" text-anchor="middle" class="heading">Other transitions</text>
 <text x="380.0" y="470" text-anchor="middle" class="label">Reassign: running or reported → queued, awaiting a fresh agent</text>
