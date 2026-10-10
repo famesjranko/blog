@@ -8,7 +8,7 @@ topics:
   - coding agents
 ---
 
-Managing a team of coding agents involves dividing work, choosing suitable models and preserving context. A lead agent coordinates delegation, assesses results and keeps the work coherent. Language models are probabilistic, so an agent given only written instructions may follow a rule on one run and skip it on the next. I built `lead-team` around enforceable rules. It is a skill for Claude Code and Codex: a set of instructions that an agent loads to follow a working method.
+Managing a team of coding agents involves dividing work, choosing suitable models and preserving context. A lead agent coordinates delegation, assesses results and keeps the work coherent. Language models are probabilistic, so an agent given only written instructions may follow a rule on one run and skip it on the next. So I built `lead-team` around enforceable rules. It is a skill for Claude Code and Codex: a set of instructions that an agent loads to follow a working method.
 
 The lead agent works with a planner agent to divide the work into tasks, assigns them to agents, and judges their results before allowing later work to depend on them.
 
@@ -26,7 +26,7 @@ Implementation, investigation and routine execution go to the assigned agents. T
 
 Each new task gets a fresh agent and context. An agent can be resumed to correct its own task, but it does not accumulate unrelated work. The contract and repository supply what it needs to know.
 
-Within cost limits that the contract records, stronger models normally handle planning and independent review, middle-tier models handle worker and explorer tasks, and the smallest handle routine chores.
+Stronger models normally handle planning and independent review, middle-tier models handle worker and explorer tasks, and the smallest handle routine chores, within the tier and effort caps below.
 
 <details class="team-note">
 <summary>Model tiers, effort and escalation</summary>
@@ -149,11 +149,11 @@ Finally, a chore agent runs the full repository checks on the integrated result.
 
 ## How the observer follows the run
 
-The task graph and decisions also provide the structure for observation. Unless I opt out, the lead attaches an observer to the session's verified log and ledger. It runs beside the team and has no authority to accept work or command agents.
+The task graph and decisions also provide the structure for observation. Unless I opt out, the lead attaches an observer to the session's log and ledger. It runs beside the team and has no authority to accept work or command agents.
 
 ![The team ledger and runtime logs feed an observer recorder, which writes the snapshot and journal used by the live dashboard and offline replay.](/img/ai-engineering/lead-team/observer.svg "The ledger supplies task decisions; native logs supply observed activity. The observer keeps its own snapshot and journal, separate from the team's records. [Open figure at full size](/img/ai-engineering/lead-team/observer.png)")
 
-The ledger supplies contracts, dependencies, owners, states and decision notes. Native logs supply agent identities and parents, activity, model settings and available usage counters. The observer joins these sources using the same state reducer as the ledger, the code that validates and applies state changes.
+The ledger supplies contracts, dependencies, owners, states and decision notes. Native logs supply agent identities and parents, activity, model settings and available usage counters. The observer joins these sources with the ledger's own state reducer, which validates and applies state changes.
 
 The team view shows the reporting hierarchy. The workflow view shows dependencies, including work awaiting a lead decision. Selecting a task reveals its contract, prerequisites and decision history; selecting an agent reveals its activity and usage. Run history connects hook refusals, send-backs and acceptances to their reasons and source times.
 
