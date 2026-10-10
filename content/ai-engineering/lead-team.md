@@ -2,7 +2,7 @@
 title: "How I organise a team of agents"
 description: "How I coordinate coding agents through task contracts, hooks, acceptance rules and an observer."
 date: 2026-10-10
-draft: true
+draft: false
 topics:
   - software engineering
   - coding agents
