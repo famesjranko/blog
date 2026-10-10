@@ -86,6 +86,24 @@ re-render. It is removed again once the piece gains a cover.
 
 </details>
 
+<details>
+<summary><strong>Homepage</strong></summary>
+
+<br>
+
+The homepage shows one showcase piece, four picks, and a Latest list.
+To choose the showcase, set `showcase: true` in one piece's frontmatter.
+Without it, the newest `featured: true` piece is the showcase. The build
+fails if two pieces set `showcase: true`.
+
+Each section gets one pick: its newest `featured: true` piece, or its
+newest piece when none is flagged. The showcase is never also a pick. A
+section with nothing left gives its slot to the other sections, by the
+same rule. Latest lists the newest pieces that Featured does not already
+show.
+
+</details>
+
 ## Deployment
 
 The production site is:

@@ -17,6 +17,7 @@ function sampleEssay(overrides: Partial<Essay> = {}): Essay {
 		topics: ["Philosophy of Mind"],
 		philosophers: [],
 		featured: false,
+		showcase: false,
 		draft: false,
 		section: "essays",
 		slug: "on-mind",
@@ -47,6 +48,7 @@ function sampleProject(overrides: Partial<Project> = {}): Project {
 		stack: ["lisp", "redis"],
 		predecessor: undefined,
 		featured: false,
+		showcase: false,
 		draft: false,
 		slug: "connect4-lisp-web",
 		html: "<p>Body.</p>",
@@ -239,11 +241,11 @@ describe("generateSite projects", () => {
 		expect(sitemap).toContain("projects/connect4-lisp-web/");
 	});
 
-	it("shows the featured projects on the homepage", async () => {
+	it("features a project on the homepage", async () => {
 		const dir = await generate([sampleEssay()], [sampleProject()]);
 		const home = await readFile(path.join(dir, "index.html"), "utf8");
-		expect(home).toContain("Featured projects");
-		expect(home).toContain('<span class="nowrap">Connect-4</span> web');
+		expect(home).toContain('<section id="featured"');
+		expect(home).toContain('><span class="nowrap">Connect-4</span> web</a>');
 	});
 
 	it("resolves predecessor links between projects", async () => {

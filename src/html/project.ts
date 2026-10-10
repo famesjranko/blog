@@ -1,6 +1,5 @@
 import type { Project } from "../content.js";
 import { siteUrl } from "../site.js";
-import type { CardHeading } from "./index.js";
 import { articleMeta } from "./articleMeta.js";
 import { cardClass, cardCover, coverSrc, escapeHtml, page } from "./layout.js";
 import { titleHtml } from "./titleText.js";
@@ -38,10 +37,7 @@ function repoLink(repo: string | undefined): string {
 	return `<a href="${escapeHtml(repo)}" target="_blank" rel="noopener noreferrer">Repository</a>`;
 }
 
-export function projectEntry(
-	project: Project,
-	heading: CardHeading = 2,
-): string {
+export function projectEntry(project: Project): string {
 	const url = siteUrl(`/projects/${project.slug}/`);
 	const cover = cardCover(project);
 	const description =
@@ -49,7 +45,7 @@ export function projectEntry(
 			? `<p class="entry-desc">${escapeHtml(project.description)}</p>`
 			: "";
 	return `<li><article class="${cardClass(project)}">${cover}<div class="card-body">
-<h${heading} class="card-title"><a href="${url}">${titleHtml(project.title)}</a></h${heading}>
+<h2 class="card-title"><a href="${url}">${titleHtml(project.title)}</a></h2>
 ${description}
 <p class="entry-meta">${facetList(project)}</p>
 </div></article></li>`;

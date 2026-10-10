@@ -132,16 +132,13 @@ export interface Featureable {
 	date: Date;
 }
 
-export const FEATURED_COUNT = 2;
-
 /**
  * Homepage picks: newest flagged items first, backfilled with the newest
- * unflagged items so each section always shows a full row. An empty
- * collection yields an empty row and its section is omitted.
+ * unflagged items so a pick exists whenever the collection is non-empty.
  */
 export function pickFeatured<T extends Featureable>(
 	items: T[],
-	count: number = FEATURED_COUNT,
+	count: number,
 ): T[] {
 	const newestFirst = (a: T, b: T) => b.date.getTime() - a.date.getTime();
 	const flagged = items.filter((i) => i.featured).sort(newestFirst);

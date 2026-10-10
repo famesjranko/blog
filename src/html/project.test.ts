@@ -17,6 +17,7 @@ function sampleProject(overrides: Partial<Project> = {}): Project {
 		stack: ["lisp", "redis"],
 		predecessor: undefined,
 		featured: false,
+		showcase: false,
 		draft: false,
 		slug: "connect4-lisp-web",
 		html: "<p>Body.</p>",

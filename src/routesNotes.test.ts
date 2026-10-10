@@ -13,6 +13,7 @@ function sampleEssay(overrides: Partial<Essay> = {}): Essay {
 		topics: ["Philosophy of Mind"],
 		philosophers: [],
 		featured: false,
+		showcase: false,
 		draft: false,
 		section: "essays",
 		slug: "on-mind",
