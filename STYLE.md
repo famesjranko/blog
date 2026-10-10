@@ -39,22 +39,37 @@ crowded or leave an unintended gap.
 
 ## Cover images
 
-A cover appears in two places. The article page shows the whole image at its
-own proportions. Cards crop it to 16:9 and keep the centre (`.card-media` in
-`styles/main.css`). Compose every cover so that both views work.
+A cover appears in three views. Compose every cover so that all of them work.
 
-Use the wide banner shape of the existing covers, about 2.4:1 (for example
-1512×630). The card keeps only the central 74% of that width. Put the whole
-subject inside the central 70%, and fill the outer edges with background that
-the card can cut away. A 16:9 image fits the card without loss, but its article
-hero is taller than the others.
+| View | Shape | Crop |
+| --- | --- | --- |
+| Article page | The image's own shape | None |
+| Index cards and homepage picks | 16:9 | Keeps the centre (`.card-media` in `styles/main.css`, `.home-pick-media` in `styles/home.css`) |
+| Homepage showcase | 2.4:1 | Keeps the centre (`.showcase-media` in `styles/home.css`) |
+
+Use the wide banner shape of the existing covers, 2.4:1 (for example
+1512×630). The showcase then shows the whole image, and the 16:9 views keep
+only the central 74% of its width. Put the whole subject inside the central
+70%, and fill the outer edges with background that a card can cut away.
+
+A cover with a different shape loses content in the showcase. A 16:9 cover
+loses about 13% of its height at the top and at the bottom. A cover wider than
+2.4:1 loses its sides. A 16:9 cover fits the cards without loss, but its
+article hero is taller than the others.
+
+Any `featured: true` piece can become the showcase. Without a
+`showcase: true` flag, the newest featured piece takes it. So give every
+featured or showcase piece a real 2.4:1 cover, at least 1280 pixels wide. The
+generated placeholder (640×360) is too small and the wrong shape for the
+showcase.
 
 The card-safe margins can make the subject look small on the article page. In
 that case, keep the margin version as `cover` and point the article's first
 image at a tighter crop of the same picture.
 
-Before you add a cover, check its crop on the home or projects page. Write
-`coverAlt` for the whole image.
+Before you add a cover, or set `featured` or `showcase` on a piece, check its
+crop on the homepage and on the index page. Write `coverAlt` for the whole
+image.
 
 ## Colour and interaction
 

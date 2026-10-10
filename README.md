@@ -94,7 +94,8 @@ re-render. It is removed again once the piece gains a cover.
 The homepage shows one showcase piece, four picks, and a Latest list.
 To choose the showcase, set `showcase: true` in one piece's frontmatter.
 Without it, the newest `featured: true` piece is the showcase. The build
-fails if two pieces set `showcase: true`.
+fails if two pieces set `showcase: true`. The showcase crops its cover to
+2.4:1; see the cover rules in [STYLE.md](STYLE.md#cover-images).
 
 Each section gets one pick: its newest `featured: true` piece, or its
 newest piece when none is flagged. The showcase is never also a pick. A
