@@ -75,7 +75,7 @@ describe("homePage hero copy", () => {
 	it("renders the personal-collection standfirst", () => {
 		const html = homePage([sampleEssay()]);
 		expect(html).toContain(
-			"A personal collection of essays, projects, and notes.",
+			"A personal collection of essays, projects, AI engineering, and notes.",
 		);
 	});
 });

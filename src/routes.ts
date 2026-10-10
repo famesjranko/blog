@@ -1,6 +1,7 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { type Essay, type Project, writingPath } from "./content.js";
+import { aiEngineeringIndexPage } from "./html/aiEngineering.js";
 import { essayPage } from "./html/essay.js";
 import { errorPage } from "./html/error.js";
 import { essayIndexPage, homePage } from "./html/index.js";
@@ -10,7 +11,7 @@ import { allTopics, topicPage } from "./html/topic.js";
 import { SITE_NAME, escapeHtml } from "./html/layout.js";
 import { absoluteSiteUrl } from "./site.js";
 
-const FEED_DESCRIPTION = "Essays on philosophy.";
+const FEED_DESCRIPTION = "Writing on philosophy, software and AI engineering.";
 
 async function write(outDir: string, rel: string, body: string): Promise<void> {
 	const full = path.join(outDir, rel);
@@ -22,11 +23,12 @@ export interface SiteContent {
 	essays: Essay[];
 	notes: Essay[];
 	projects: Project[];
+	aiEngineering: Essay[];
 }
 
-/** Essays and notes together, newest first, for topics and the feed. */
-function allWriting({ essays, notes }: SiteContent): Essay[] {
-	return [...essays, ...notes].sort(
+/** All writing sections, newest first, for topics and the feed. */
+function allWriting({ essays, notes, aiEngineering }: SiteContent): Essay[] {
+	return [...essays, ...notes, ...aiEngineering].sort(
 		(a, b) => b.date.getTime() - a.date.getTime(),
 	);
 }
@@ -35,9 +37,10 @@ export async function generateSite(
 	content: SiteContent,
 	outDir = "dist",
 ): Promise<void> {
-	const { essays, notes, projects } = content;
+	const { essays, notes, projects, aiEngineering } = content;
 	assertUniqueSlugs("essay", essays);
 	assertUniqueSlugs("note", notes);
+	assertUniqueSlugs("AI engineering article", aiEngineering);
 	assertUniqueSlugs("project", projects);
 	assertPredecessorsResolve(projects);
 	const writing = allWriting(content);
@@ -51,9 +54,18 @@ export async function generateSite(
 			projectPage(project),
 		);
 	}
-	await write(outDir, "index.html", homePage(essays, projects, notes));
+	await write(
+		outDir,
+		"index.html",
+		homePage(essays, projects, notes, aiEngineering),
+	);
 	await write(outDir, "essays/index.html", essayIndexPage(essays));
 	await write(outDir, "notes/index.html", noteIndexPage(notes));
+	await write(
+		outDir,
+		"ai-engineering/index.html",
+		aiEngineeringIndexPage(aiEngineering),
+	);
 	await write(outDir, "projects/index.html", projectIndexPage(projects));
 	for (const topic of allTopics(writing)) {
 		await write(
@@ -150,6 +162,7 @@ function sitemap(allWriting: Essay[], allProjects: Project[]): string {
 		"/essays/",
 		"/notes/",
 		"/projects/",
+		"/ai-engineering/",
 		...writing.map(writingPath),
 		...projects.map((p) => `/projects/${p.slug}/`),
 		...allTopics(writing).map((t) => `/topics/${t.slug}/`),

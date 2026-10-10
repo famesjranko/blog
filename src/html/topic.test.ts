@@ -73,7 +73,7 @@ describe("topicPage shell", () => {
 	it("emits a meta description naming the topic", () => {
 		const html = topicPage({ name: "Time & Space", slug: "time-space" }, []);
 		expect(html).toContain(
-			'<meta name="description" content="Essays on Time &amp; Space.">',
+			'<meta name="description" content="Writing on Time &amp; Space.">',
 		);
 	});
 
