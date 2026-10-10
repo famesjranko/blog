@@ -22,21 +22,21 @@
 <path d="M 380 330 V 342" class="flow"/>
 <path d="M 380 383 V 405" class="flow" marker-end="url(#dependencies-arrow)"/>
 <text x="380" y="370" text-anchor="middle" class="muted">Lead integrates accepted branches</text>
-<rect x="230" y="405" width="300" height="90" rx="12" class="accent-frame"/>
+<rect x="230" y="405" width="300" height="90" rx="12" class="decision-frame"/>
 <text x="380.0" y="437" text-anchor="middle" class="heading">Review</text>
 <text x="380.0" y="465" text-anchor="middle" class="label">Examines integrated result</text>
-<rect x="15" y="565" width="730" height="175" rx="16" class="group-frame"/>
+<rect x="15" y="565" width="730" height="175" rx="16" class="group-frame rework-group"/>
 <text x="380" y="598" text-anchor="middle" class="muted">New tasks for a confirmed finding</text>
 <path d="M 380 495 V 535 H 180 V 625" class="flow" marker-end="url(#dependencies-arrow)"/>
 <rect x="35" y="625" width="290" height="90" rx="12" class="frame"/>
 <text x="180.0" y="657" text-anchor="middle" class="heading">Fix</text>
 <text x="180.0" y="685" text-anchor="middle" class="label">Worker + regression test</text>
 <path d="M 325 670 H 435" class="flow" marker-end="url(#dependencies-arrow)"/>
-<rect x="435" y="625" width="290" height="90" rx="12" class="frame"/>
+<rect x="435" y="625" width="290" height="90" rx="12" class="decision-frame"/>
 <text x="580.0" y="657" text-anchor="middle" class="heading">Re-check</text>
 <text x="580.0" y="685" text-anchor="middle" class="label">Fresh task; same lens</text>
 <path d="M 580 715 V 790 H 380 V 825" class="flow" marker-end="url(#dependencies-arrow)"/>
-<rect x="230" y="825" width="300" height="95" rx="12" class="accent-frame"/>
+<rect x="230" y="825" width="300" height="95" rx="12" class="frame"/>
 <text x="380.0" y="857" text-anchor="middle" class="heading">Final verification</text>
 <text x="380.0" y="885" text-anchor="middle" class="label">Queued until re-check accepted</text>
 <text x="380" y="969" text-anchor="middle" class="muted">Each dependency requires acceptance, not just a returned report.</text>
