@@ -22,7 +22,7 @@
 <path d="M 380 330 V 342" class="flow"/>
 <path d="M 380 383 V 405" class="flow" marker-end="url(#dependencies-arrow)"/>
 <text x="380" y="370" text-anchor="middle" class="muted">Lead integrates accepted branches</text>
-<rect x="230" y="405" width="300" height="90" rx="12" class="decision-frame"/>
+<rect x="230" y="405" width="300" height="90" rx="12" class="structural-frame"/>
 <text x="380.0" y="437" text-anchor="middle" class="heading">Review</text>
 <text x="380.0" y="465" text-anchor="middle" class="label">Examines integrated result</text>
 <rect x="15" y="565" width="730" height="175" rx="16" class="group-frame rework-group"/>
@@ -32,7 +32,7 @@
 <text x="180.0" y="657" text-anchor="middle" class="heading">Fix</text>
 <text x="180.0" y="685" text-anchor="middle" class="label">Worker + regression test</text>
 <path d="M 325 670 H 435" class="flow" marker-end="url(#dependencies-arrow)"/>
-<rect x="435" y="625" width="290" height="90" rx="12" class="decision-frame"/>
+<rect x="435" y="625" width="290" height="90" rx="12" class="structural-frame"/>
 <text x="580.0" y="657" text-anchor="middle" class="heading">Re-check</text>
 <text x="580.0" y="685" text-anchor="middle" class="label">Fresh task; same lens</text>
 <path d="M 580 715 V 790 H 380 V 825" class="flow" marker-end="url(#dependencies-arrow)"/>
