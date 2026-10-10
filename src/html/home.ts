@@ -9,6 +9,7 @@ import {
 import { siteUrl } from "../site.js";
 import { hero, heroAssets } from "./hero.js";
 import { coverPicture, escapeHtml, page } from "./layout.js";
+import { titleHtml } from "./titleText.js";
 
 // Homepage hero copy. Edit freely; no logic depends on it.
 // Non-breaking spaces keep each phrase whole and the separator on the
@@ -64,7 +65,7 @@ function displayDate(date: Date): string {
 }
 
 function titleLink(entry: HomeEntry): string {
-	return `<a href="${siteUrl(entry.path)}">${escapeHtml(entry.title)}</a>`;
+	return `<a href="${siteUrl(entry.path)}">${titleHtml(entry.title)}</a>`;
 }
 
 function sectionLabel(entry: HomeEntry): string {
