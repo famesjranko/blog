@@ -3,6 +3,7 @@ import { siteUrl } from "../site.js";
 import type { CardHeading } from "./index.js";
 import { articleMeta } from "./articleMeta.js";
 import { cardClass, cardCover, coverSrc, escapeHtml, page } from "./layout.js";
+import { titleHtml } from "./titleText.js";
 
 const ORIGIN_LABELS: Record<Project["origin"], string> = {
 	university: "University project",
@@ -48,7 +49,7 @@ export function projectEntry(
 			? `<p class="entry-desc">${escapeHtml(project.description)}</p>`
 			: "";
 	return `<li><article class="${cardClass(project)}">${cover}<div class="card-body">
-<h${heading} class="card-title"><a href="${url}">${escapeHtml(project.title)}</a></h${heading}>
+<h${heading} class="card-title"><a href="${url}">${titleHtml(project.title)}</a></h${heading}>
 ${description}
 <p class="entry-meta">${facetList(project)}</p>
 </div></article></li>`;
@@ -131,7 +132,7 @@ export function projectPage(project: Project): string {
 		content: `<div class="wrap"><article class="prose project">
 <header class="project-header">
 ${meta}
-<h1>${escapeHtml(project.title)}</h1>
+<h1>${titleHtml(project.title)}</h1>
 ${lede}
 </header>
 <div class="project-grid">${side}<div class="project-main">${project.html}</div></div>

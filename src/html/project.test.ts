@@ -53,7 +53,7 @@ describe("projectEntry card", () => {
 		const html = projectEntry(sampleProject());
 		expect(html).toContain('<article class="card">');
 		expect(html).toContain('href="/projects/connect4-lisp-web/"');
-		expect(html).toContain("Connect-4 web");
+		expect(html).toContain('<span class="nowrap">Connect-4</span> web');
 	});
 
 	it("shows the origin badge and stack without a date", () => {
@@ -111,7 +111,7 @@ describe("projectEntry draft", () => {
 describe("projectEntry content", () => {
 	it("omits the description when absent", () => {
 		const html = projectEntry(sampleProject({ description: undefined }));
-		expect(html).toContain("Connect-4 web");
+		expect(html).toContain('<span class="nowrap">Connect-4</span> web');
 		expect(html).not.toContain("entry-desc");
 	});
 
@@ -125,7 +125,7 @@ describe("projectEntry content", () => {
 describe("projectEntry meta structure", () => {
 	it("keeps the facets row with the origin when the project has no stack", () => {
 		const html = projectEntry(sampleProject({ stack: [] }));
-		expect(html).toContain("Connect-4 web");
+		expect(html).toContain('<span class="nowrap">Connect-4</span> web');
 		expect(html).toContain("entry-topics");
 		expect(html).toContain("Personal project");
 		expect(html).not.toContain("<span>lisp</span>");
@@ -174,7 +174,7 @@ it("shows the estimate near the project title", () => {
 
 	// Then the shared metadata line shows the origin, year, and estimate.
 	expect(html).toContain(
-		'<p class="article-meta">Personal project <span aria-hidden="true">·</span> <time datetime="2026-03-15">2026</time> <span aria-hidden="true">·</span> 4 min read</p>\n<h1>Connect-4 web</h1>',
+		'<p class="article-meta">Personal project <span aria-hidden="true">·</span> <time datetime="2026-03-15">2026</time> <span aria-hidden="true">·</span> 4 min read</p>\n<h1><span class="nowrap">Connect-4</span> web</h1>',
 	);
 });
 
@@ -261,7 +261,7 @@ describe("projectPage sidebar", () => {
 
 	it("omits the sidebar when there are no facts", () => {
 		const html = projectPage(sampleProject({ stack: [], repo: undefined }));
-		expect(html).toContain("Connect-4 web");
+		expect(html).toContain('<span class="nowrap">Connect-4</span> web');
 		expect(html).not.toContain("project-side");
 	});
 
@@ -274,7 +274,7 @@ describe("projectPage sidebar", () => {
 
 	it("omits the repository link when absent", () => {
 		const html = projectPage(sampleProject({ repo: undefined }));
-		expect(html).toContain("Connect-4 web");
+		expect(html).toContain('<span class="nowrap">Connect-4</span> web');
 		expect(html).not.toContain("Repository");
 	});
 

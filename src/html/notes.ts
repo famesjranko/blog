@@ -1,6 +1,7 @@
 import { type Essay, writingPath } from "../content.js";
 import { siteUrl } from "../site.js";
 import { cardCover, escapeHtml, page, topicLink } from "./layout.js";
+import { titleHtml } from "./titleText.js";
 
 /** Notes on the homepage: two rows of two blocks. */
 export const RECENT_NOTES_COUNT = 4;
@@ -14,7 +15,7 @@ const NOTE_IMAGE_SIZES =
 
 function noteTitle(note: Essay, heading: 2 | 3): string {
 	const url = siteUrl(writingPath(note));
-	return `<h${heading} class="note-title"><a href="${url}">${escapeHtml(note.title)}</a></h${heading}>`;
+	return `<h${heading} class="note-title"><a href="${url}">${titleHtml(note.title)}</a></h${heading}>`;
 }
 
 function noteDescription(note: Essay): string {

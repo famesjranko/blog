@@ -9,6 +9,7 @@ import { hero, heroAssets } from "./hero.js";
 import { cardClass, cardCover, escapeHtml, page, topicLink } from "./layout.js";
 import { recentNotesSection } from "./notes.js";
 import { projectEntry } from "./project.js";
+import { titleHtml } from "./titleText.js";
 
 // Homepage hero copy. Edit freely; no logic depends on it.
 // Non-breaking spaces keep each phrase whole and the separator on the
@@ -32,7 +33,7 @@ export function essayEntry(essay: Essay, heading: CardHeading = 2): string {
 	const topics = `<span class="entry-topics">${essay.topics.map((topic) => topicLink(topic)).join("")}</span>`;
 	return `<li><article class="${cardClass(essay)}">
 ${cover}<div class="card-body">
-<h${heading} class="card-title"><a href="${url}">${escapeHtml(essay.title)}</a></h${heading}>
+<h${heading} class="card-title"><a href="${url}">${titleHtml(essay.title)}</a></h${heading}>
 ${description}
 <p class="entry-meta">${topics}</p>
 </div></article></li>`;
