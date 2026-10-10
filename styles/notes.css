@@ -1,7 +1,6 @@
 /*
  * Notes are shorter pieces, so they are not cards. The index lists them
- * as ruled rows with the cover beside the text; the homepage shows them
- * as text-only blocks between the essay and project card grids.
+ * as ruled rows with the cover beside the text.
  */
 @layer entries {
 	.note-title {
@@ -17,13 +16,6 @@
 		text-decoration: none;
 	}
 
-	/* Homepage blocks have no nested links, so the title covers the block. */
-	.note-block .note-title a::after {
-		content: "";
-		position: absolute;
-		inset: 0;
-	}
-
 	@media (hover: hover) {
 		.note-title a:hover {
 			text-decoration: underline;
@@ -31,8 +23,7 @@
 		}
 	}
 
-	.note-row:has(.note-title a:focus-visible),
-	.note-block:has(.note-title a:focus-visible) {
+	.note-row:has(.note-title a:focus-visible) {
 		outline: 2px solid var(--color-accent);
 		outline-offset: 4px;
 	}
@@ -44,14 +35,10 @@
 		line-height: 1.6;
 	}
 
-	.note-rows,
-	.note-blocks {
+	.note-rows {
 		margin: 0;
 		padding: 0;
 		list-style: none;
-	}
-
-	.note-rows {
 		border-top: 1px solid var(--color-border);
 	}
 
@@ -91,22 +78,6 @@
 		.note-cover-link:hover .card-media img {
 			transform: scale(1.03);
 		}
-	}
-
-	.note-blocks {
-		display: grid;
-		grid-template-columns: 1fr;
-		gap: 2rem 2.5rem;
-	}
-
-	.note-block {
-		position: relative;
-		padding-top: 0.9rem;
-		border-top: 2px solid var(--color-accent);
-	}
-
-	.note-block .note-title {
-		font-size: 1.2rem;
 	}
 }
 
@@ -163,10 +134,6 @@
 
 		.note-cover-link {
 			order: 0;
-		}
-
-		.note-blocks {
-			grid-template-columns: repeat(2, 1fr);
 		}
 	}
 

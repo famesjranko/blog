@@ -30,7 +30,7 @@ function item(slug: string, date: string, featured: boolean) {
 
 function slugs(
 	items: { slug: string; date: Date; featured: boolean }[],
-	count?: number,
+	count = 2,
 ): string[] {
 	return pickFeatured(items, count).map((i) => i.slug);
 }
@@ -72,7 +72,7 @@ describe("pickFeatured flagged items", () => {
 
 describe("pickFeatured fallback", () => {
 	it("returns an empty row when there is nothing to pick from", () => {
-		expect(pickFeatured([])).toEqual([]);
+		expect(pickFeatured([], 2)).toEqual([]);
 	});
 
 	it("falls back to the newest items when nothing is flagged", () => {

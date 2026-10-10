@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { Essay, Project } from "../content.js";
-import { essayEntry, essayIndexPage, homePage } from "./index.js";
+import { essayEntry, essayIndexPage } from "./index.js";
 import { projectEntry, projectIndexPage } from "./project.js";
 
 function sampleEssay(overrides: Partial<Essay> = {}): Essay {
@@ -11,6 +11,7 @@ function sampleEssay(overrides: Partial<Essay> = {}): Essay {
 		topics: ["ethics", "privacy"],
 		philosophers: ["Kant"],
 		featured: false,
+		showcase: false,
 		draft: false,
 		section: "essays",
 		slug: "on-privacy",
@@ -22,129 +23,17 @@ function sampleEssay(overrides: Partial<Essay> = {}): Essay {
 	};
 }
 
-describe("homePage hero", () => {
-	it("renders a hero visual container outside the accessibility tree", () => {
-		const html = homePage([sampleEssay()]);
-		expect(html).toContain('class="hero-visual" aria-hidden="true"');
-	});
-
-	it("links the essays index, not an about page that does not exist", () => {
-		const html = homePage([sampleEssay()]);
-		expect(html).toContain('href="/essays/"');
-		expect(html).not.toContain("About");
-	});
-
-	it("renders the thought-field canvas outside the accessibility tree", () => {
-		const html = homePage([sampleEssay()]);
-		expect(html).toContain('data-thought-field aria-hidden="true"');
-	});
-
-	it("keeps the CSS wash fallback behind the canvas", () => {
-		const html = homePage([sampleEssay()]);
-		expect(html).toContain('class="hero-visual"');
-		expect(html.indexOf("hero-visual")).toBeLessThan(
-			html.indexOf("data-thought-field"),
-		);
-	});
-
-	it("loads the hero field as a deferred-by-default module script", () => {
-		const html = homePage([sampleEssay()]);
-		expect(html).toContain('<script type="module" src="/js/hero.js"></script>');
-		expect(html).not.toContain('<script src="/js/hero.js" defer>');
-	});
-});
-
-describe("homePage hero copy", () => {
-	it("renders the eyebrow before the headline", () => {
-		// Given the home page.
-		const html = homePage([sampleEssay()]);
-
-		// Then the eyebrow can wrap only after its separator.
-		expect(html).toContain(
-			"BACKEND\u00a0&amp;\u00a0SYSTEMS\u00a0ENGINEER\u00a0· MELBOURNE",
-		);
-		// And it comes before the headline.
-		expect(html.indexOf("hero-eyebrow")).toBeLessThan(html.indexOf("<h1>"));
-	});
-
-	it("renders the hero headline across two lines", () => {
-		const html = homePage([sampleEssay()]);
-		expect(html).toContain("From philosophy<br>to software<");
-	});
-
-	it("renders the personal-collection standfirst", () => {
-		const html = homePage([sampleEssay()]);
-		expect(html).toContain(
-			"A personal collection of essays, projects, and notes.",
-		);
-	});
-});
-
-describe("homePage featured essays", () => {
-	it("lists the featured essays with descriptions and no dates", () => {
-		const html = homePage([sampleEssay()]);
-		expect(html).toContain("Featured essays");
-		expect(html).toContain("On Privacy");
-		expect(html).toContain("A short description.");
-		expect(html).not.toContain("<time");
-	});
-
-	it("shows two featured essays", () => {
-		const html = homePage([
-			sampleEssay(),
-			sampleEssay({ slug: "other", title: "Other" }),
-		]);
-		expect(html).toContain("On Privacy");
-		expect(html).toContain("Other");
-	});
-
-	it("puts the flagged essay first and backfills the second slot", () => {
-		const html = homePage([
-			sampleEssay({ slug: "new", title: "New" }),
-			sampleEssay({
-				slug: "middle",
-				title: "Middle",
-				date: new Date("2019-06-01T00:00:00Z"),
-			}),
-			sampleEssay({
-				slug: "pick",
-				title: "Pick",
-				date: new Date("2019-01-01T00:00:00Z"),
-				featured: true,
-			}),
-		]);
-		expect(html).toContain("Pick");
-		expect(html).toContain("New");
-		expect(html).not.toContain(">Middle</a>");
-	});
-
-	it("links onward to the full essays index", () => {
-		const html = homePage([sampleEssay()]);
-		expect(html).toContain("More essays");
-		expect(html).toContain('href="/essays/"');
-	});
-});
-
-describe("homePage topic links", () => {
+describe("essayEntry topic links", () => {
 	it("links entry topics to their slugified topic pages", () => {
-		const html = homePage([sampleEssay()]);
+		const html = essayEntry(sampleEssay());
 		expect(html).toContain('href="/topics/ethics/"');
 		expect(html).toContain('href="/topics/privacy/"');
 	});
 
 	it("slugifies topic links with spaces and capitals", () => {
-		const html = homePage([sampleEssay({ topics: ["Philosophy of Mind"] })]);
+		const html = essayEntry(sampleEssay({ topics: ["Philosophy of Mind"] }));
 		expect(html).toContain('href="/topics/philosophy-of-mind/"');
 		expect(html).toContain(">Philosophy of Mind</a>");
-	});
-});
-
-describe("stylesheets", () => {
-	it("links the shared and hero stylesheets on the homepage", () => {
-		const html = homePage([sampleEssay()]);
-		expect(html).toContain('<link rel="stylesheet" href="/css/main.css">');
-		expect(html).toContain('<link rel="stylesheet" href="/css/header.css">');
-		expect(html).toContain('<link rel="stylesheet" href="/css/hero.css">');
 	});
 });
 
@@ -242,17 +131,6 @@ describe("essayIndexPage", () => {
 		expect(html).toContain('<div class="wrap index-page">');
 		expect(html).toContain('<p class="index-count">');
 	});
-
-	it("renders the featured card on the homepage", () => {
-		const html = homePage([
-			sampleEssay({
-				cover: "/img/essays/jtb-knowledge/cover.jpg",
-				coverAlt: "jtb",
-			}),
-		]);
-		expect(html).toContain('<ol class="card-grid">');
-		expect(html).toContain('class="card-media"');
-	});
 });
 
 function sampleProject(overrides: Partial<Project> = {}): Project {
@@ -265,6 +143,7 @@ function sampleProject(overrides: Partial<Project> = {}): Project {
 		stack: ["lisp"],
 		predecessor: undefined,
 		featured: false,
+		showcase: false,
 		draft: false,
 		slug: "connect4-lisp-web",
 		html: "<p>Body.</p>",
@@ -275,56 +154,7 @@ function sampleProject(overrides: Partial<Project> = {}): Project {
 	};
 }
 
-describe("homePage projects", () => {
-	it("links the projects index from the hero", () => {
-		const html = homePage([sampleEssay()]);
-		expect(html).toContain('href="/projects/"');
-	});
-
-	it("lists the featured projects when present", () => {
-		const html = homePage(
-			[sampleEssay()],
-			[sampleProject(), sampleProject({ slug: "other", title: "Other" })],
-		);
-		expect(html).toContain("Featured projects");
-		expect(html).toContain('<span class="nowrap">Connect-4</span> web');
-		expect(html).toContain("Other");
-		expect(html).toContain("Personal project");
-		expect(html).toContain("More projects");
-	});
-
-	it("omits the projects section when there are none", () => {
-		const html = homePage([sampleEssay()]);
-		expect(html).not.toContain("Featured projects");
-	});
-});
-
-describe("homePage skip link", () => {
-	it("skips past the hero to the featured essays", () => {
-		const html = homePage([sampleEssay()], [sampleProject()]);
-		expect(html).toContain('<a class="skip-link" href="#featured-essays">');
-		expect(html).toContain('<section id="featured-essays"');
-	});
-
-	it("falls back to the projects section when there are no essays", () => {
-		const html = homePage([], [sampleProject()]);
-		expect(html).toContain('href="#featured-projects"');
-		expect(html).toContain('<section id="featured-projects"');
-	});
-
-	it("falls back to main when there is nothing below the hero", () => {
-		const html = homePage([], []);
-		expect(html).toContain('<a class="skip-link" href="#main">');
-	});
-});
-
 describe("card heading levels", () => {
-	it("nests cards under the section heading on the homepage", () => {
-		const html = homePage([sampleEssay()], [sampleProject()]);
-		expect(html).toContain('<h3 class="card-title">');
-		expect(html).not.toContain('<h2 class="card-title">');
-	});
-
 	it("nests cards directly under the page heading on index pages", () => {
 		for (const html of [
 			essayIndexPage([sampleEssay()]),

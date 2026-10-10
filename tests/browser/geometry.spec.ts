@@ -3,7 +3,7 @@ import { writeFile } from "node:fs/promises";
 import { expect, type Locator, type Page, test } from "@playwright/test";
 
 async function attachMeasurement(name: string, value: object) {
-	// Measurements run concurrently (see homeCards), so a counter read before
+	// Measurements run concurrently (see firstTwo), so a counter read before
 	// the await gives two calls one file; a random name cannot collide.
 	const path = test.info().outputPath(`${name}-${randomUUID()}.json`);
 	await writeFile(path, JSON.stringify(value, null, 2));
@@ -22,9 +22,10 @@ async function box(locator: Locator) {
 	return bounds;
 }
 
-function homeCards(page: Page) {
-	const cards = page.locator(".card-grid").first().locator(":scope > li");
-	return Promise.all([box(cards.nth(0)), box(cards.nth(1))]);
+/** The first two items of a list: index cards or homepage picks. */
+function firstTwo(page: Page, list: string) {
+	const items = page.locator(list).first().locator(":scope > li");
+	return Promise.all([box(items.nth(0)), box(items.nth(1))]);
 }
 
 async function expectNoHorizontalOverflow(page: Page) {
@@ -57,7 +58,7 @@ async function expectMobileGutters(page: Page, width: number) {
 	).toBeGreaterThanOrEqual(expected - 1);
 }
 
-test("home mobile hero, header, and cards fit one column", async ({
+test("home mobile hero, header, and picks fit one column", async ({
 	browser,
 }) => {
 	// Given a narrow touch viewport with reduced motion.
@@ -73,13 +74,13 @@ test("home mobile hero, header, and cards fit one column", async ({
 	// When the home page is opened.
 	await page.goto("/");
 
-	// Then the hero and cards fit within the mobile gutters.
+	// Then the hero and picks fit within the mobile gutters.
 	await expectNoHorizontalOverflow(page);
 	await expectMobileGutters(page, 390);
 	await expectHeaderSeparation(page);
 	expect((await box(page.locator(".hero h1"))).width).toBeLessThan(360);
-	const [first, second] = await homeCards(page);
-	expect(second.y, "mobile cards stack").toBeGreaterThan(
+	const [first, second] = await firstTwo(page, ".home-picks");
+	expect(second.y, "mobile picks stack").toBeGreaterThan(
 		first.y + first.height,
 	);
 	await context.close();
@@ -106,20 +107,20 @@ test("home mobile navigation opens from its toggle", async ({ browser }) => {
 	await context.close();
 });
 
-test("home desktop cards form two columns and the header stays separate", async ({
+test("essay index desktop cards form two columns and the header stays separate", async ({
 	page,
 }) => {
 	// Given a wide desktop viewport with a light theme.
 	await page.setViewportSize({ width: 1280, height: 800 });
 	await page.emulateMedia({ colorScheme: "light" });
 
-	// When the home page is opened.
-	await page.goto("/");
+	// When the essays index is opened.
+	await page.goto("/essays/");
 
 	// Then the header and cards fit their desktop layout.
 	await expectNoHorizontalOverflow(page);
 	await expectHeaderSeparation(page);
-	const [first, second] = await homeCards(page);
+	const [first, second] = await firstTwo(page, ".card-grid");
 	expect(
 		Math.abs(second.y - first.y),
 		"desktop cards share a row",
@@ -129,36 +130,43 @@ test("home desktop cards form two columns and the header stays separate", async 
 	);
 });
 
-test("home cards stack one pixel below the 42rem breakpoint", async ({
-	page,
-}) => {
-	// Given a 671 pixel viewport, one pixel narrower than 42rem.
-	await page.setViewportSize({ width: 671, height: 800 });
+for (const { name, path, list, rem } of [
+	{ name: "essay index cards", path: "/essays/", list: ".card-grid", rem: 42 },
+	{ name: "home picks", path: "/", list: ".home-picks", rem: 52 },
+]) {
+	const width = rem * 16;
 
-	// When the home page is opened.
-	await page.goto("/");
+	test(`${name} stack one pixel below the ${rem}rem breakpoint`, async ({
+		page,
+	}) => {
+		// Given a viewport one pixel narrower than the breakpoint.
+		await page.setViewportSize({ width: width - 1, height: 800 });
 
-	// Then the second card sits below the first.
-	const [first, second] = await homeCards(page);
-	expect(second.y, "cards stack below 42rem").toBeGreaterThan(
-		first.y + first.height,
-	);
-});
+		// When the page is opened.
+		await page.goto(path);
 
-test("home cards share a row at the 42rem breakpoint", async ({ page }) => {
-	// Given a 672 pixel viewport, exactly 42rem wide.
-	await page.setViewportSize({ width: 672, height: 800 });
+		// Then the second item sits below the first.
+		const [first, second] = await firstTwo(page, list);
+		expect(second.y, "items stack below the breakpoint").toBeGreaterThan(
+			first.y + first.height,
+		);
+	});
 
-	// When the home page is opened.
-	await page.goto("/");
+	test(`${name} share a row at the ${rem}rem breakpoint`, async ({ page }) => {
+		// Given a viewport exactly as wide as the breakpoint.
+		await page.setViewportSize({ width, height: 800 });
 
-	// Then the first two cards share a row.
-	const [first, second] = await homeCards(page);
-	expect(
-		Math.abs(second.y - first.y),
-		"cards share a row at 42rem",
-	).toBeLessThan(2);
-});
+		// When the page is opened.
+		await page.goto(path);
+
+		// Then the first two items share a row.
+		const [first, second] = await firstTwo(page, list);
+		expect(
+			Math.abs(second.y - first.y),
+			"items share a row at the breakpoint",
+		).toBeLessThan(2);
+	});
+}
 
 test("project card topics sit at the bottom of every card", async ({
 	page,

@@ -3,7 +3,8 @@ import path from "node:path";
 import { type Essay, type Project, writingPath } from "./content.js";
 import { essayPage } from "./html/essay.js";
 import { errorPage } from "./html/error.js";
-import { essayIndexPage, homePage } from "./html/index.js";
+import { homePage } from "./html/home.js";
+import { essayIndexPage } from "./html/index.js";
 import { noteIndexPage } from "./html/notes.js";
 import { projectIndexPage, projectPage } from "./html/project.js";
 import { allTopics, topicPage } from "./html/topic.js";
@@ -51,7 +52,7 @@ export async function generateSite(
 			projectPage(project),
 		);
 	}
-	await write(outDir, "index.html", homePage(essays, projects, notes));
+	await write(outDir, "index.html", homePage(content));
 	await write(outDir, "essays/index.html", essayIndexPage(essays));
 	await write(outDir, "notes/index.html", noteIndexPage(notes));
 	await write(outDir, "projects/index.html", projectIndexPage(projects));

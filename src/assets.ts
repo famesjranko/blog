@@ -13,6 +13,7 @@ const STYLES = [
 	"diagrams.css",
 	"lightbox.css",
 	"hero.css",
+	"home.css",
 	"header.css",
 	"notes.css",
 	"fonts.css",

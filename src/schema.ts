@@ -10,6 +10,7 @@ export const EssaySchema = z.object({
 	cover: z.string().min(1).optional(),
 	coverAlt: z.string().optional(),
 	featured: z.boolean().default(false),
+	showcase: z.boolean().default(false),
 	draft: z.boolean().default(false),
 });
 
@@ -24,6 +25,7 @@ export const RawFrontmatterSchema = z.object({
 	date: z.unknown(),
 	description: z.string().optional(),
 	featured: z.boolean().default(false),
+	showcase: z.boolean().default(false),
 	draft: z.boolean().default(false),
 	// Hugo legacy taxonomy: topics wins over tags, which wins over categories.
 	tags: z.array(z.string()).optional(),
@@ -55,6 +57,7 @@ export function normalizeFrontmatter(
 		cover: raw.cover,
 		coverAlt: raw.coverAlt,
 		featured: raw.featured ?? false,
+		showcase: raw.showcase ?? false,
 		draft: raw.draft ?? false,
 	});
 }
@@ -84,6 +87,7 @@ export const ProjectSchema = z.object({
 	cover: z.string().min(1).optional(),
 	coverAlt: z.string().optional(),
 	featured: z.boolean().default(false),
+	showcase: z.boolean().default(false),
 	draft: z.boolean().default(false),
 });
 
@@ -98,6 +102,7 @@ export const RawProjectFrontmatterSchema = z.object({
 	date: z.unknown(),
 	description: z.string().optional(),
 	featured: z.boolean().default(false),
+	showcase: z.boolean().default(false),
 	draft: z.boolean().default(false),
 	origin: z.string().optional(),
 	repo: z.string().optional(),
@@ -132,6 +137,7 @@ export function normalizeProjectFrontmatter(
 		cover: raw.cover,
 		coverAlt: raw.coverAlt,
 		featured: raw.featured ?? false,
+		showcase: raw.showcase ?? false,
 		draft: raw.draft ?? false,
 	});
 }

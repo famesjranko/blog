@@ -97,14 +97,29 @@ test("essay heading and first image", async ({ page }) => {
 	await expectRegionScreenshot(article, "essay-heading-image.png", 2);
 });
 
-test("featured essay card grid", async ({ page }) => {
-	// Given the desktop home page with featured essay cards.
-	await openStillPage(page, "/");
-	const cards = page.locator("#featured-essays .card-grid");
+test("essay index card row", async ({ page }) => {
+	// Given the desktop essays index with only its first row of cards.
+	await openStillPage(page, "/essays/");
+	await page.addStyleTag({
+		content: ".card-grid > li:nth-child(n + 3) { display: none; }",
+	});
+	const cards = page.locator(".card-grid");
 
-	// When the card grid is captured.
+	// When the card row is captured.
 	await cards.scrollIntoViewIfNeeded();
 
 	// Then both cards match the baseline.
-	await expectRegionScreenshot(cards, "card-grid.png", 74);
+	await expectRegionScreenshot(cards, "essay-card-row.png", 74);
+});
+
+test("homepage featured section", async ({ page }) => {
+	// Given the desktop home page with its showcase and section picks.
+	await openStillPage(page, "/");
+	const featured = page.locator("#featured");
+
+	// When the Featured section is captured.
+	await featured.scrollIntoViewIfNeeded();
+
+	// Then the banner and the pick row match the baseline.
+	await expectRegionScreenshot(featured, "home-featured.png");
 });

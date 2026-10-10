@@ -10,6 +10,7 @@ function sampleEssay(): Essay {
 		topics: ["ethics", "privacy"],
 		philosophers: ["Kant"],
 		featured: false,
+		showcase: false,
 		draft: false,
 		section: "essays",
 		slug: "on-privacy",

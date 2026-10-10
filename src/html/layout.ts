@@ -5,7 +5,7 @@ import {
 	cardImageSource,
 } from "../cardImages.js";
 import { imageSize } from "../images.js";
-import { renditionSources } from "../renditions.js";
+import { type RenditionPlan, renditionSources } from "../renditions.js";
 import { canonicalSiteUrl, siteUrl } from "../site.js";
 
 export const SITE_NAME = "Andrew J. McDonald";
@@ -50,6 +50,16 @@ export function cardCover(
 	piece: CoverPiece,
 	sizes: string = CARD_IMAGE_SIZES,
 ): string {
+	const badge = piece.draft ? DRAFT_BADGE : "";
+	return `<div class="card-media">${coverPicture(piece, sizes)}${badge}</div>`;
+}
+
+/** A cover's image, served from card crops unless another plan is given. */
+export function coverPicture(
+	piece: CoverPiece,
+	sizes: string,
+	planFor: (src: string) => RenditionPlan | undefined = cardImagePlan,
+): string {
 	const { cover, coverAlt } = piece;
 	const src = coverSrc(piece);
 	const alt = cover === undefined ? "" : (coverAlt ?? "");
@@ -58,22 +68,12 @@ export function cardCover(
 	const dimensions =
 		size === undefined ? "" : ` width="${size.width}" height="${size.height}"`;
 	const img = `<img src="${escapeHtml(url)}" alt="${escapeHtml(alt)}"${dimensions} loading="lazy" decoding="async">`;
-	const art = picture(src, img, sizes);
-	const badge = piece.draft ? DRAFT_BADGE : "";
-	return `<div class="card-media">${art}${badge}</div>`;
-}
-
-function picture(src: string, img: string, sizes: string): string {
-	const plan = cardImagePlan(src);
-	if (plan !== undefined) {
-		const sources = renditionSources(plan, {
-			sizes,
-			url: siteUrl,
-			escapeHtml,
-		});
-		return `<picture>${sources}${img}</picture>`;
+	const plan = planFor(src);
+	if (plan === undefined) {
+		return img;
 	}
-	return img;
+	const sources = renditionSources(plan, { sizes, url: siteUrl, escapeHtml });
+	return `<picture>${sources}${img}</picture>`;
 }
 
 /** The image source used by cards and social previews for a piece. */
