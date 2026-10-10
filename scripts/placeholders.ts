@@ -1,7 +1,12 @@
 import { existsSync } from "node:fs";
 import { mkdir, readdir, rm } from "node:fs/promises";
 import path from "node:path";
-import { loadEssays, loadNotes, loadProjects } from "../src/content.js";
+import {
+	loadAiEngineering,
+	loadEssays,
+	loadNotes,
+	loadProjects,
+} from "../src/content.js";
 import { isInternalJpeg } from "../src/images.js";
 import {
 	PLACEHOLDER_DIR,
@@ -31,12 +36,13 @@ const CLUSTERS = 6;
 const JPEG_QUALITY = 86;
 
 async function allPieces(): Promise<Piece[]> {
-	const [essays, notes, projects] = await Promise.all([
+	const [essays, notes, projects, aiEngineering] = await Promise.all([
 		loadEssays(undefined, true),
 		loadNotes(true),
 		loadProjects(undefined, true),
+		loadAiEngineering(true),
 	]);
-	return [...essays, ...notes, ...projects];
+	return [...essays, ...notes, ...projects, ...aiEngineering];
 }
 
 async function presentPlaceholders(): Promise<string[]> {

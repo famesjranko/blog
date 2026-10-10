@@ -251,4 +251,60 @@ is supplied separately by figures.css. */
 	.prose .diagram-timeline .snapshot {
 		fill: var(--color-accent);
 	}
+
+	/* Lead-team diagrams share one visual vocabulary for roles and state. */
+	.prose .diagram-lead-team {
+		font-family: var(--font-ui);
+	}
+
+	.prose .diagram-lead-team .heading {
+		font-size: 22px;
+		font-weight: 650;
+	}
+
+	.prose .diagram-lead-team .label,
+	.prose .diagram-lead-team .muted {
+		font-size: 18px;
+	}
+
+	.prose .diagram-lead-team .frame {
+		fill: var(--color-surface);
+		stroke: var(--color-muted);
+		stroke-width: 1.5;
+	}
+
+	.prose .diagram-lead-team .accent-frame {
+		fill: var(--color-wash-1);
+		stroke: var(--color-accent);
+		stroke-width: 2;
+	}
+
+	.prose .diagram-lead-team .quiet-frame,
+	.prose .diagram-lead-team .group-frame {
+		fill: var(--color-wash-2);
+		stroke: var(--color-muted);
+		stroke-width: 1;
+	}
+
+	.prose .diagram-lead-team .group-frame {
+		stroke-width: 1.5;
+		stroke-dasharray: 6 5;
+	}
+
+	.prose .diagram-lead-team .flow {
+		fill: none;
+		stroke: var(--color-muted);
+		stroke-width: 2;
+	}
+
+	.prose .diagram-lead-team .return-flow {
+		fill: none;
+		stroke: var(--color-accent);
+		stroke-width: 2;
+		stroke-dasharray: 6 4;
+	}
+
+	.prose .diagram-lead-team .arrowhead {
+		fill: var(--color-muted);
+	}
 }

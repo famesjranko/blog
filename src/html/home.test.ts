@@ -54,9 +54,20 @@ function sampleNote(overrides: Partial<Essay> = {}): Essay {
 }
 
 function content(
-	overrides: { essays?: Essay[]; notes?: Essay[]; projects?: Project[] } = {},
+	overrides: {
+		essays?: Essay[];
+		notes?: Essay[];
+		projects?: Project[];
+		aiEngineering?: Essay[];
+	} = {},
 ) {
-	return { essays: [sampleEssay()], notes: [], projects: [], ...overrides };
+	return {
+		essays: [sampleEssay()],
+		notes: [],
+		projects: [],
+		aiEngineering: [],
+		...overrides,
+	};
 }
 
 /** The markup of one homepage section, by id. */
@@ -120,7 +131,7 @@ describe("homePage hero copy", () => {
 	it("renders the personal-collection standfirst", () => {
 		const html = homePage(content());
 		expect(html).toContain(
-			"A personal collection of essays, projects, and notes.",
+			"A personal collection of essays, projects, AI engineering, and notes.",
 		);
 	});
 });

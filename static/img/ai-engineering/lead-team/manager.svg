@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="diagram diagram-lead-team" viewBox="0 0 760 740" role="img" aria-labelledby="manager-title manager-desc">
+<title id="manager-title">Delegated leads under one manager</title>
+<desc id="manager-desc">A manager assigns two outcome contracts to leads, with allowances of two and three children. Each lead owns local planning, acceptance and integration. The manager accepts their outcomes. The entire run shares one ledger and observer; ordinary agents do not add more management layers.</desc>
+<defs><marker id="manager-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowhead"/></marker></defs>
+<rect x="190" y="25" width="380" height="120" rx="12" class="accent-frame"/>
+<text x="380.0" y="57" text-anchor="middle" class="heading">Manager</text>
+<text x="380.0" y="85" text-anchor="middle" class="label">Assigns outcomes and capacity</text>
+<text x="380.0" y="110" text-anchor="middle" class="label">Judges each lead&#x27;s final result</text>
+<path d="M 380 145 V 195 H 180" class="flow"/>
+<path d="M 380 195 H 580" class="flow"/>
+<path d="M 180 195 V 235" class="flow" marker-end="url(#manager-arrow)"/>
+<path d="M 580 195 V 235" class="flow" marker-end="url(#manager-arrow)"/>
+<rect x="20" y="235" width="330" height="130" rx="12" class="accent-frame"/>
+<text x="185.0" y="267" text-anchor="middle" class="heading">Lead A</text>
+<text x="185.0" y="295" text-anchor="middle" class="label">Owns outcome A</text>
+<text x="185.0" y="320" text-anchor="middle" class="label">Plans and accepts its children</text>
+<text x="185.0" y="345" text-anchor="middle" class="label">Allowance: 2</text>
+<rect x="410" y="235" width="330" height="130" rx="12" class="accent-frame"/>
+<text x="575.0" y="267" text-anchor="middle" class="heading">Lead B</text>
+<text x="575.0" y="295" text-anchor="middle" class="label">Owns outcome B</text>
+<text x="575.0" y="320" text-anchor="middle" class="label">Plans and accepts its children</text>
+<text x="575.0" y="345" text-anchor="middle" class="label">Allowance: 3</text>
+<path d="M 185 365 V 425" class="flow" marker-end="url(#manager-arrow)"/>
+<path d="M 575 365 V 425" class="flow" marker-end="url(#manager-arrow)"/>
+<rect x="20" y="425" width="330" height="120" rx="12" class="frame"/>
+<text x="185.0" y="457" text-anchor="middle" class="heading">A&#x27;s assigned agents</text>
+<text x="185.0" y="485" text-anchor="middle" class="label">Only A spawns its children</text>
+<text x="185.0" y="510" text-anchor="middle" class="label">No further management layer</text>
+<rect x="410" y="425" width="330" height="120" rx="12" class="frame"/>
+<text x="575.0" y="457" text-anchor="middle" class="heading">B&#x27;s assigned agents</text>
+<text x="575.0" y="485" text-anchor="middle" class="label">Only B spawns its children</text>
+<text x="575.0" y="510" text-anchor="middle" class="label">No further management layer</text>
+<rect x="20" y="605" width="720" height="105" rx="12" class="quiet-frame"/>
+<text x="380.0" y="637" text-anchor="middle" class="heading">One root ledger and one shared observer</text>
+<text x="380.0" y="665" text-anchor="middle" class="label">Running and reported children count against each allowance.</text>
+</svg>

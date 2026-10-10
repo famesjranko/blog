@@ -220,7 +220,7 @@ describe("selectHome latest", () => {
 
 describe("homeEntries", () => {
 	it("gives each section's pieces its own URL path", () => {
-		// Given one essay, one note, and one project.
+		// Given one essay, one note, one project, and one AI engineering article.
 		const base = { featured: false, showcase: false, draft: false };
 		const piece = { html: "", readingMinutes: 1, images: [], sourcePath: "" };
 		const writing = { topics: [], philosophers: [], ...base, ...piece };
@@ -254,6 +254,15 @@ describe("homeEntries", () => {
 					stack: [],
 				},
 			] satisfies Project[],
+			aiEngineering: [
+				{
+					...writing,
+					section: "ai-engineering",
+					slug: "a",
+					title: "A",
+					date: new Date(),
+				},
+			] satisfies Essay[],
 		};
 
 		// When they become homepage entries.
@@ -263,6 +272,7 @@ describe("homeEntries", () => {
 		expect(entries.map((e) => [e.section, e.path])).toEqual([
 			["essays", "/essays/e/"],
 			["projects", "/projects/p/"],
+			["ai-engineering", "/ai-engineering/a/"],
 			["notes", "/notes/n/"],
 		]);
 	});
