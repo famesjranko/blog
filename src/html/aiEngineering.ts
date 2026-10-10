@@ -16,6 +16,6 @@ export function aiEngineeringIndexPage(articles: Essay[]): string {
 		title: "AI Engineering",
 		canonicalPath: "/ai-engineering/",
 		description,
-		content: `<div class="wrap index-page"><h1>AI Engineering</h1><p>${description}</p><p class="index-count">${count}</p>${body}</div>`,
+		content: `<div class="wrap index-page"><h1>AI Engineering</h1><p class="index-count">${count}</p>${body}</div>`,
 	});
 }
