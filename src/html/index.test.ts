@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import type { Essay, Project } from "../content.js";
 import { essayEntry, essayIndexPage, homePage } from "./index.js";
+import { aiEngineeringIndexPage } from "./aiEngineering.js";
+import { noteIndexPage } from "./notes.js";
 import { projectEntry, projectIndexPage } from "./project.js";
 
 function sampleEssay(overrides: Partial<Essay> = {}): Essay {
@@ -347,6 +349,24 @@ describe("index page parity", () => {
 			expect(html).toContain('<p class="index-count">');
 			expect(html).toContain('<ol class="card-grid">');
 		}
+	});
+
+	it("puts the count straight after the heading on every section index", () => {
+		// Given the index page of every section.
+		const pages = {
+			Essays: essayIndexPage([sampleEssay()]),
+			Projects: projectIndexPage([sampleProject()]),
+			Notes: noteIndexPage([sampleEssay({ section: "notes" })]),
+			"AI Engineering": aiEngineeringIndexPage([sampleEssay()]),
+		};
+
+		// When each page's heading is read with what follows it.
+		const openings = Object.entries(pages).map(([name, html]) =>
+			html.includes(`<h1>${name}</h1><p class="index-count">`),
+		);
+
+		// Then no section has an intro between its heading and its count.
+		expect(openings).toEqual([true, true, true, true]);
 	});
 
 	it("orders card hooks identically in essay and project entries", () => {
