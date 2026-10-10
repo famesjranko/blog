@@ -61,7 +61,7 @@ The ledger checks each contract against a schema of required fields, value types
 <details class="team-note">
 <summary>Ledger files and validation</summary>
 
-`team.py` manages one ledger directory per root session. `state.json` stores the contracts and current task states. `journal.jsonl` records commands and hook decisions as one JSON object per line. Python validation code enforces the contract schema. File locks and atomic replacement of `state.json` protect concurrent updates.
+`team.py` manages one ledger directory per session. `state.json` stores the contracts and current task states. `journal.jsonl` records commands and hook decisions as one JSON object per line. Python validation code enforces the contract schema. File locks and atomic replacement of `state.json` protect concurrent updates.
 
 </details>
 
@@ -74,7 +74,7 @@ A hook is a program the runtime calls around an event, such as an agent spawn or
 | Event | Rule applied |
 |---|---|
 | Spawn | Refuses requests without a queued contract, accepted prerequisites, authorised parent, available delegated allowance or compatible model settings. On Codex, the spawn must also start with fresh context. |
-| Start | Binds the runtime agent to its task and marks it running. Contract delivery happens through the runtime adapter at spawn or start. |
+| Start | Binds the runtime agent to its task and marks it running. |
 | Stop | Checks report fields, criterion IDs, required verification commands and the worker's changed-file ownership. Normally allows one correction attempt, then records remaining problems for the lead. |
 | Edit | Refuses a lead's edit-tool changes to repository files that Git does not ignore. |
 | Message | Requires a running task before resuming its agent. New work needs a new task. |
@@ -149,11 +149,11 @@ Finally, a chore agent runs the full repository checks on the integrated result.
 
 ## How the observer follows the run
 
-The task graph and decisions also provide the structure for observation. Unless I opt out, the lead attaches an observer to the verified root session log and ledger. It runs beside the team and has no authority to accept work or command agents.
+The task graph and decisions also provide the structure for observation. Unless I opt out, the lead attaches an observer to the session's verified log and ledger. It runs beside the team and has no authority to accept work or command agents.
 
 ![The team ledger and runtime logs feed an observer recorder, which writes the snapshot and journal used by the live dashboard and offline replay.](/img/ai-engineering/lead-team/observer.svg "The ledger supplies task decisions; native logs supply observed activity. The observer keeps its own snapshot and journal, separate from the team's records. [Open figure at full size](/img/ai-engineering/lead-team/observer.png)")
 
-The ledger supplies contracts, dependencies, owners, states and decision notes. Native logs supply agent identities and parents, activity, model settings and available usage counters. The observer joins these sources using the same state reducer as the ledger—the code that validates and applies state changes.
+The ledger supplies contracts, dependencies, owners, states and decision notes. Native logs supply agent identities and parents, activity, model settings and available usage counters. The observer joins these sources using the same state reducer as the ledger, the code that validates and applies state changes.
 
 The team view shows the reporting hierarchy. The workflow view shows dependencies, including work awaiting a lead decision. Selecting a task reveals its contract, prerequisites and decision history; selecting an agent reveals its activity and usage. Run history connects hook refusals, send-backs and acceptances to their reasons and source times.
 
@@ -182,11 +182,11 @@ Current context occupancy, last-request counters and cumulative thread usage are
 
 ## When there is more than one lead agent
 
-When a brief has several outcomes, `manage-team` adds a manager agent above the lead agents. It assigns each lead an outcome contract, boundaries and an allowance of child agents. Each lead handles local planning, acceptance and integration; the manager resolves cross-team decisions and judges the completed outcomes.
+When a brief has several outcomes, a second skill, `manage-team`, adds a manager agent above the lead agents. It assigns each lead an outcome contract, boundaries and an allowance of child agents. Each lead handles local planning, acceptance and integration; the manager resolves cross-team decisions and judges the completed outcomes.
 
 ![A manager agent assigns outcomes to two delegated lead agents, each with a child allowance, sharing one ledger and observer.](/img/ai-engineering/lead-team/manager.svg "The manager agent reserves capacity for each lead and its children. Local acceptance and the manager's acceptance of the outcome remain separate decisions. [Open figure at full size](/img/ai-engineering/lead-team/manager.png)")
 
-A delegated lead shares the root ledger and observer. Its children name its lead task as their parent. The spawn hook checks that ownership and the allowance, counting both running children and reported children awaiting acceptance. Runtime capacity can impose a tighter limit.
+A delegated lead shares the session's ledger and observer. Its children name its lead task as their parent. The spawn hook checks that ownership and the allowance, counting both running children and reported children awaiting acceptance. Runtime capacity can impose a tighter limit.
 
 Workers and reviewers do not create further teams, and a delegated lead cannot add another management layer. Scope conflicts and requests for capacity return to the manager. Before handing back an outcome, the lead collects its children's results and accounts for any unfinished descendants.
 
