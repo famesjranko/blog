@@ -193,5 +193,3 @@ Workers and reviewers do not create further teams, and a delegated lead cannot a
 ## Where judgement remains
 
 The structure makes commitments and decisions inspectable. It still depends on the lead to choose useful tasks, write adequate criteria and recognise when a technically complete result misses the goal. Changes to the agreed scope, cost or risk return to me.
-
-A team is slower and uses more tokens than a single agent, so I use it where a missed defect would cost more than the extra work.
