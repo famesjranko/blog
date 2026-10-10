@@ -1,7 +1,13 @@
-import { type Essay, writingPath } from "../content.js";
+import { type Essay, type WritingSection, writingPath } from "../content.js";
 import { siteUrl } from "../site.js";
 import { articleMeta } from "./articleMeta.js";
 import { coverSrc, escapeHtml, page } from "./layout.js";
+
+const SECTION_LABELS: Record<WritingSection, string> = {
+	essays: "Essay",
+	notes: "Note",
+	"ai-engineering": "AI Engineering",
+};
 
 export function essayPage(essay: Essay): string {
 	const subtitle =
@@ -10,7 +16,7 @@ export function essayPage(essay: Essay): string {
 			: "";
 	const isNote = essay.section === "notes";
 	const meta = articleMeta({
-		label: isNote ? "Note" : "Essay",
+		label: SECTION_LABELS[essay.section],
 		date: essay.date,
 		readingMinutes: essay.readingMinutes,
 		draft: essay.draft,

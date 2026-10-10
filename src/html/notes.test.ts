@@ -160,12 +160,12 @@ describe("homePage notes", () => {
 });
 
 describe("header notes link", () => {
-	it("lists essays, projects, then notes in both menus", () => {
+	it("lists all four sections in both menus", () => {
 		// Given the site header.
 		const html = header();
 
 		// When the navigation links are read in order.
-		const links = [...html.matchAll(/<a href="([^"]+)">(\w+)<\/a>/g)].map(
+		const links = [...html.matchAll(/<a href="([^"]+)">([^<]+)<\/a>/g)].map(
 			(match) => match[2],
 		);
 
@@ -173,9 +173,11 @@ describe("header notes link", () => {
 		expect(links).toEqual([
 			"Essays",
 			"Projects",
+			"AI Engineering",
 			"Notes",
 			"Essays",
 			"Projects",
+			"AI Engineering",
 			"Notes",
 		]);
 	});

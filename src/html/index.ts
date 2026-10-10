@@ -17,7 +17,8 @@ const HERO_EYEBROW = ["BACKEND & SYSTEMS ENGINEER", "MELBOURNE"]
 	.map((phrase) => phrase.replaceAll(" ", "\u00a0"))
 	.join("\u00a0· ");
 const HERO_TITLE_LINES = ["From philosophy", "to software"];
-const HERO_STANDFIRST = "A personal collection of essays, projects, and notes.";
+const HERO_STANDFIRST =
+	"A personal collection of essays, projects, AI engineering, and notes.";
 
 /** Card title level: h2 straight under a page h1, h3 inside a homepage section. */
 export type CardHeading = 2 | 3;
@@ -56,6 +57,9 @@ function featuredSection(options: {
 	indexLabel: string;
 	entry: string;
 }): string {
+	if (options.entry === "") {
+		return "";
+	}
 	const headingId = `${options.id}-heading`;
 	return `<section id="${options.id}" class="wrap recent" aria-labelledby="${headingId}">
 <h2 id="${headingId}">${options.heading}</h2>
@@ -69,6 +73,7 @@ function skipTarget(counts: {
 	essays: number;
 	notes: number;
 	projects: number;
+	aiEngineering: number;
 }): string {
 	if (counts.essays > 0) {
 		return "featured-essays";
@@ -76,45 +81,64 @@ function skipTarget(counts: {
 	if (counts.projects > 0) {
 		return "featured-projects";
 	}
+	if (counts.aiEngineering > 0) {
+		return "featured-ai-engineering";
+	}
 	return counts.notes > 0 ? "recent-notes" : "main";
+}
+
+function homeSections(
+	essays: Essay[],
+	projects: Project[],
+	aiEngineering: Essay[],
+): string {
+	return (
+		featuredSection({
+			id: "featured-essays",
+			heading: "Featured essays",
+			indexUrl: siteUrl("/essays/"),
+			indexLabel: "More essays",
+			entry: pickFeatured(essays)
+				.map((e) => essayEntry(e, 3))
+				.join("\n"),
+		}) +
+		featuredSection({
+			id: "featured-projects",
+			heading: "Featured projects",
+			indexUrl: siteUrl("/projects/"),
+			indexLabel: "More projects",
+			entry: pickFeatured(projects)
+				.map((p) => projectEntry(p, 3))
+				.join("\n"),
+		}) +
+		featuredSection({
+			id: "featured-ai-engineering",
+			heading: "AI Engineering",
+			indexUrl: siteUrl("/ai-engineering/"),
+			indexLabel: "More AI engineering",
+			entry: pickFeatured(aiEngineering)
+				.map((e) => essayEntry(e, 3))
+				.join("\n"),
+		})
+	);
 }
 
 export function homePage(
 	essays: Essay[],
 	projects: Project[] = [],
 	notes: Essay[] = [],
+	aiEngineering: Essay[] = [],
 ): string {
-	const featuredEssays = pickFeatured(essays);
-	const featuredProjects = pickFeatured(projects);
-	const essaySection =
-		featuredEssays.length === 0
-			? ""
-			: featuredSection({
-					id: "featured-essays",
-					heading: "Featured essays",
-					indexUrl: siteUrl("/essays/"),
-					indexLabel: "More essays",
-					entry: featuredEssays.map((e) => essayEntry(e, 3)).join("\n"),
-				});
-	const projectsSection =
-		featuredProjects.length === 0
-			? ""
-			: featuredSection({
-					id: "featured-projects",
-					heading: "Featured projects",
-					indexUrl: siteUrl("/projects/"),
-					indexLabel: "More projects",
-					entry: featuredProjects.map((p) => projectEntry(p, 3)).join("\n"),
-				});
 	const assets = heroAssets();
 	return page({
 		title: "Andrew J. McDonald",
 		canonicalPath: "/",
 		description: HERO_STANDFIRST,
 		skipTo: skipTarget({
-			essays: featuredEssays.length,
+			essays: essays.length,
 			notes: notes.length,
-			projects: featuredProjects.length,
+			projects: projects.length,
+			aiEngineering: aiEngineering.length,
 		}),
 		scripts: assets.scripts,
 		styles: [...assets.styles, siteUrl("/css/notes.css")],
@@ -123,6 +147,6 @@ export function homePage(
 			titleLines: HERO_TITLE_LINES,
 			standfirst: HERO_STANDFIRST,
 		})}
-${essaySection}${projectsSection}${recentNotesSection(notes)}`,
+${homeSections(essays, projects, aiEngineering)}${recentNotesSection(notes)}`,
 	});
 }

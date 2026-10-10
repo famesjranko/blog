@@ -36,7 +36,7 @@ function sampleNote(overrides: Partial<Essay> = {}): Essay {
 
 async function generate(essays: Essay[], notes: Essay[]): Promise<string> {
 	const dir = await mkdtemp(path.join(tmpdir(), "blog-notes-"));
-	await generateSite({ essays, notes, projects: [] }, dir);
+	await generateSite({ essays, notes, projects: [], aiEngineering: [] }, dir);
 	return dir;
 }
 

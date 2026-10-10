@@ -85,6 +85,7 @@ function navLinks(): string {
 	return (
 		`<a href="${siteUrl("/essays/")}">Essays</a>` +
 		`<a href="${siteUrl("/projects/")}">Projects</a>` +
+		`<a href="${siteUrl("/ai-engineering/")}">AI Engineering</a>` +
 		`<a href="${siteUrl("/notes/")}">Notes</a>`
 	);
 }

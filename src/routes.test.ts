@@ -33,7 +33,7 @@ async function generate(
 	projects: Project[] = [],
 ): Promise<string> {
 	const dir = await mkdtemp(path.join(tmpdir(), "blog-routes-"));
-	await generateSite({ essays, notes: [], projects }, dir);
+	await generateSite({ aiEngineering: [], essays, notes: [], projects }, dir);
 	return dir;
 }
 

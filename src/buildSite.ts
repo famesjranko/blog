@@ -2,7 +2,12 @@ import { mkdir, rm } from "node:fs/promises";
 import { articleImagePlans } from "./articleImages.js";
 import { copySiteAssets } from "./assets.js";
 import { cardImagePlans } from "./cardImages.js";
-import { loadEssays, loadNotes, loadProjects } from "./content.js";
+import {
+	loadAiEngineering,
+	loadEssays,
+	loadNotes,
+	loadProjects,
+} from "./content.js";
 import { generateRenditions } from "./renditionGenerator.js";
 import { generateSite } from "./routes.js";
 
@@ -11,6 +16,7 @@ export interface BuildResult {
 	essayCount: number;
 	noteCount: number;
 	projectCount: number;
+	aiEngineeringCount: number;
 }
 
 export async function buildSite(
@@ -23,9 +29,10 @@ export async function buildSite(
 	const essays = await loadEssays(undefined, includeDrafts);
 	const notes = await loadNotes(includeDrafts);
 	const projects = await loadProjects(undefined, includeDrafts);
-	await generateSite({ essays, notes, projects }, outDir);
+	const aiEngineering = await loadAiEngineering(includeDrafts);
+	await generateSite({ essays, notes, projects, aiEngineering }, outDir);
 	await copySiteAssets(".", outDir);
-	const pieces = [...essays, ...notes, ...projects];
+	const pieces = [...essays, ...notes, ...projects, ...aiEngineering];
 	const plans = [
 		...cardImagePlans(pieces),
 		...articleImagePlans(pieces.flatMap((piece) => piece.images)),
@@ -36,5 +43,6 @@ export async function buildSite(
 		essayCount: essays.length,
 		noteCount: notes.length,
 		projectCount: projects.length,
+		aiEngineeringCount: aiEngineering.length,
 	};
 }
