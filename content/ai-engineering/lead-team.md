@@ -12,7 +12,7 @@ Managing a team of coding agents involves dividing work, choosing suitable model
 
 The lead agent works with a planner agent to divide the work into tasks, assigns them to agents, and judges their results before allowing later work to depend on them.
 
-Each task has a contract describing its goal, boundaries and acceptance criteria. A ledger holds those contracts and the task states. Hooks let the coding runtime check actions against that record. An observer program combines the ledger with the agents' native logs so I can inspect decisions and follow the run.
+Each task has a contract: a structured JSON record defining its goal, boundaries and acceptance criteria. A ledger stored on disk holds those contracts and tracks each task's state. Hooks let the coding runtime check actions against that record. An observer program combines the ledger with the agents' native logs so I can inspect decisions and follow the run.
 
 The skill supplies the working method; the ledger and hooks give parts of it mechanical support. The lead still has to decide whether the work is correct.
 
@@ -56,7 +56,14 @@ As a hypothetical example, take a worker tasked with excluding image alt text fr
 
 A second worker changing the displayed badge would own different files. Independent workers use separate worktrees; tasks needing the same file run in sequence. This keeps concurrent edits apart and limits the code each worker must understand.
 
-The ledger validates contracts before adding them. Dependencies must name valid tasks and contain no cycles. A contract can be revised while queued; an agent that has started keeps the brief it received. The ledger stores current state and a command journal, with locked writes and atomic state replacement to protect concurrent updates.
+The ledger checks each contract against a schema of required fields, value types and rules for its role before adding it. Dependencies must name valid tasks and contain no cycles. A contract can be revised while queued; an agent that has started keeps the brief it received.
+
+<details class="team-note">
+<summary>Ledger files and validation</summary>
+
+`team.py` manages one ledger directory per root session. `state.json` stores the contracts and current task states. `journal.jsonl` records commands and hook decisions as one JSON object per line. Python validation code enforces the contract schema. File locks and atomic replacement of `state.json` protect concurrent updates.
+
+</details>
 
 ## How hooks apply the rules
 
