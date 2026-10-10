@@ -10,19 +10,19 @@ topics:
 
 Managing a team of coding agents involves dividing work, choosing suitable models and preserving context. A lead agent coordinates delegation, assesses results and keeps the work coherent. Testing showed me that instructions alone didn’t make that arrangement reliable, so I built `lead-team` around enforceable rules.
 
-The lead works with a planner to divide the work into tasks, assigns them to agents, and judges their results before allowing later work to depend on them.
+The lead agent works with a planner agent to divide the work into tasks, assigns them to agents, and judges their results before allowing later work to depend on them.
 
-Each task has a contract describing its goal, boundaries and acceptance criteria. A ledger holds those contracts and the task states. Hooks let the coding runtime check actions against that record. An observer combines the ledger with the agents' native logs so I can inspect decisions and follow the run.
+Each task has a contract describing its goal, boundaries and acceptance criteria. A ledger holds those contracts and the task states. Hooks let the coding runtime check actions against that record. An observer program combines the ledger with the agents' native logs so I can inspect decisions and follow the run.
 
 The skill supplies the working method; the ledger and hooks give parts of it mechanical support. The lead still has to decide whether the work is correct.
 
-## The lead and its team
+## The lead agent and its team
 
 The lead gives each agent the context it needs, reads its results and decides what happens next. I set the scope, permitted actions and review depth, and resolve decisions that would materially change the agreed cost or risk.
 
-![The user briefs a lead, which assigns work to planners, explorers, workers, reviewers and chore agents.](/img/ai-engineering/lead-team/team.svg "Available roles and their reporting relationships. The lead selects the roles the job needs; it does not start a fixed team of five. [Open figure at full size](/img/ai-engineering/lead-team/team.png)")
+![The user briefs a lead agent, which assigns work to agents in planner, explorer, worker, reviewer and chore roles.](/img/ai-engineering/lead-team/team.svg "Agent roles and their reporting relationships. The lead selects the roles the job needs; it does not start a fixed team of five. [Open figure at full size](/img/ai-engineering/lead-team/team.png)")
 
-Implementation, investigation and routine execution go to the assigned agents. The lead keeps its context for judgement, integrates accepted branches and publishes when the brief permits it. If delegation stalls, it follows the recovery process rather than taking over a worker's code change.
+Implementation, investigation and routine execution go to the assigned agents. The lead keeps its context for judgement, integrates accepted branches and publishes when the brief permits it. If delegation stalls, it follows the recovery process rather than taking over code changes assigned to a worker agent.
 
 Each new task gets a fresh agent and context. An agent can be resumed to correct its own task, but it does not accumulate unrelated work. The contract and repository supply what it needs to know.
 
@@ -33,21 +33,21 @@ Stronger models normally handle planning and independent review, middle-tier mod
 
 Model tier and reasoning effort are separate choices. Effort defaults to medium; high needs a reason in the contract. Nothing runs above high, and no member may exceed the lead's tier or effort.
 
-A worker starts on the middle tier. Each reassignment to a replacement agent permits a one-tier increase. Going further requires the user's approval, recorded in the contract, and still cannot exceed the lead's tier. An unavailable model alias does not authorise a more expensive substitute.
+A worker agent starts on the middle tier. Each reassignment to a replacement agent permits a one-tier increase. Going further requires the user's approval, recorded in the contract, and still cannot exceed the lead's tier. An unavailable model alias does not authorise a more expensive substitute.
 
 </details>
 
 ## Turning the brief into contracts
 
-Before assigning work, the lead registers a ledger for the root runtime session. A planner receives the first contract, reads the repository and proposes tasks that one agent can finish and another can judge. The lead checks their scope, file ownership and dependencies before adding them. A sufficiently detailed plan supplied with the brief can replace this planning step.
+Before assigning work, the lead registers a ledger for the root runtime session. A planner agent receives the first contract, reads the repository and proposes tasks that one agent can finish and another can judge. The lead checks their scope, file ownership and dependencies before adding them. A sufficiently detailed plan supplied with the brief can replace this planning step.
 
-A contract identifies the task and its parent, goal, numbered acceptance criteria, model, effort and prerequisites. A worker also receives its worktree, base commit, permitted and forbidden files, verification commands and repository instructions. It does not inherit the lead's conversation.
+A contract identifies the task and its parent, goal, numbered acceptance criteria, model, effort and prerequisites. A worker agent also receives its worktree, base commit, permitted and forbidden files, verification commands and repository instructions. It does not inherit the lead's conversation.
 
 As a hypothetical example, take a worker tasked with excluding image alt text from this blog's reading-time calculation. Its contract could look like this:
 
 | Contract part | Example |
 |---|---|
-| Identity and goal | `count_prose`, a Worker reporting to the lead; exclude image alt text from the word count |
+| Identity and goal | `count_prose`, a Worker agent reporting to the lead; exclude image alt text from the word count |
 | Acceptance | `A1`: alt text adds no words; `A2`: normal prose still counts; `A3`: new tests fail when the relevant behaviour is removed |
 | Ownership | `src/readingTime.ts` and its tests; configuration files forbidden |
 | Context and starting point | Repository instructions, an isolated worktree and a fixed base commit |
@@ -116,7 +116,7 @@ Work that is no longer needed can be dropped once its dependents have been revis
 
 The reporting hierarchy describes who assigns and judges work. The dependency graph describes which accepted results a task needs. Two workers reporting to the same lead may be independent or may have to run in sequence.
 
-Our calculation and badge workers can proceed independently if their file ownership and interfaces allow it. The lead accepts and integrates their branches before review examines the combined result. Acceptance alone does not merge Git branches.
+Our calculation and badge workers can proceed independently if their file ownership and interfaces allow it. The lead accepts and integrates their branches before a reviewer agent examines the combined result. Acceptance alone does not merge Git branches.
 
 ![Independent calculation and badge tasks join at review, followed by a new fix and re-check before final verification.](/img/ai-engineering/lead-team/dependencies.svg "Arrows represent acceptance dependencies. When review finds a defect, the queued final check gains a dependency on the new fix and re-check. [Open figure at full size](/img/ai-engineering/lead-team/dependencies.png)")
 
@@ -128,7 +128,7 @@ A graph can consequently show many finished tasks while a new fix still blocks c
 
 ## Review and completion
 
-Review depth is agreed during planning. A lighter review uses the lead's diff inspection and a Reviewer where independent judgement helps. The default team process adds Explorer passes with distinct lenses after integration. Each lens focuses on a class of failure to investigate.
+Review depth is agreed during planning. A lighter review uses the lead's diff inspection and a Reviewer agent where independent judgement helps. The default team process adds passes by Explorer agents with distinct lenses after integration. Each lens focuses on a class of failure to investigate.
 
 The starting lenses cover encoding, size limits, parsing, configuration and platform differences. The lead selects those relevant to the change and adds domain concerns such as authorisation or concurrency. Each pass gets a fixed integration commit, requirements and a budget. Resource-intensive probes need effective limits and a timeout; none should perform real publishing, deletion or other live side effects.
 
@@ -136,9 +136,9 @@ A finding must include its reproduction, expected and actual behaviour, and the 
 
 Workers changing a guard, parser or other trust boundary also receive design criteria before implementation. These cover failures of required checks, bounded data, supported input forms, skipped content and alternate paths. They give the later review concrete behaviours to challenge.
 
-A confirmed defect receives a Worker fix and regression test, followed by a fresh re-check using the lens that found it. If the problem remains, the run stops for my decision. More review rounds require a deliberate choice.
+A confirmed defect goes to a Worker agent for a fix and regression test, followed by a fresh re-check using the lens that found it. If the problem remains, the run stops for my decision. More review rounds require a deliberate choice.
 
-Finally, a Chore runs the full repository checks on the integrated result. Workers have already run their focused checks. The lead inspects the page, document or program where I will judge it, then publishes only what the brief permits. Pull-request merging remains a separate human decision. A failure found after publication becomes new work with its own review and verification.
+Finally, a Chore agent runs the full repository checks on the integrated result. Workers have already run their focused checks. The lead inspects the page, document or program where I will judge it, then publishes only what the brief permits. Pull-request merging remains a separate human decision. A failure found after publication becomes new work with its own review and verification.
 
 ## How the observer follows the run
 
@@ -173,11 +173,11 @@ Current context occupancy, last-request counters and cumulative thread usage are
 
 </details>
 
-## When there is more than one lead
+## When there is more than one lead agent
 
-For several outcomes, `manage-team` adds a manager above the leads. It assigns each lead an outcome contract, boundaries and an allowance of child agents. Each lead handles local planning, acceptance and integration; the manager resolves cross-team decisions and judges the completed outcomes.
+For several outcomes, `manage-team` adds a manager agent above the lead agents. It assigns each lead an outcome contract, boundaries and an allowance of child agents. Each lead handles local planning, acceptance and integration; the manager resolves cross-team decisions and judges the completed outcomes.
 
-![A manager assigns outcomes to two delegated leads, each with a child allowance, sharing one ledger and observer.](/img/ai-engineering/lead-team/manager.svg "The manager reserves capacity for each lead and its children. Local acceptance and the manager's acceptance of the outcome remain separate decisions. [Open figure at full size](/img/ai-engineering/lead-team/manager.png)")
+![A manager agent assigns outcomes to two delegated lead agents, each with a child allowance, sharing one ledger and observer.](/img/ai-engineering/lead-team/manager.svg "The manager agent reserves capacity for each lead and its children. Local acceptance and the manager's acceptance of the outcome remain separate decisions. [Open figure at full size](/img/ai-engineering/lead-team/manager.png)")
 
 A delegated lead shares the root ledger and observer. Its children name its Lead task as their parent. The spawn hook checks that ownership and the allowance, counting both running children and reported children awaiting acceptance. Runtime capacity can impose a tighter limit.
 
