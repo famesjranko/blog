@@ -8,7 +8,9 @@ topics:
   - coding agents
 ---
 
-I use `lead-team` to put a lead agent in charge of coordinating a larger piece of work. I give it an outcome, a repository and the limits of what it may do. The lead works with a planner to divide that outcome into tasks, assigns them to agents, and judges their results before allowing later work to depend on them.
+Managing a team of coding agents involves dividing work, choosing suitable models and preserving context. A lead agent coordinates delegation, assesses results and keeps the work coherent. Testing showed me that instructions alone didn’t make that arrangement reliable, so I built `lead-team` around enforceable rules.
+
+The lead works with a planner to divide the work into tasks, assigns them to agents, and judges their results before allowing later work to depend on them.
 
 Each task has a contract describing its goal, boundaries and acceptance criteria. A ledger holds those contracts and the task states. Hooks let the coding runtime check actions against that record. An observer combines the ledger with the agents' native logs so I can inspect decisions and follow the run.
 
