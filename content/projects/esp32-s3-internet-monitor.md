@@ -17,7 +17,7 @@ stack:
 
 ![An ESP32-S3-Matrix board on a wooden desk, powered by a USB-C cable, its 8x8 LEDs glowing in rows from red through yellow to green in front of a painted wall](/img/projects/esp32-s3-internet-monitor/cover.jpg)
 
-The internet at my property drops out intermittently, and when it does, it is not always clear where the fault lies. It may be something in my own network, such as DNS, or the uplink itself. I wanted a quick visual indication of the connection without testing it by hand each time. I bought a Waveshare ESP32-S3-Matrix for this purpose: a small board with a microcontroller and an 8x8 grid of RGB LEDs, which I could turn into a monitor I could read at a glance.
+The internet at my property drops out intermittently, and when it does, it is not always clear where the fault lies. It may be something in my own network, such as DNS, or the uplink itself. I wanted a quick visual indication of the connection without testing it by hand each time. I bought a Waveshare ESP32-S3-Matrix for this purpose: a small board with a microcontroller and an 8x8 grid of RGB LEDs, which I could turn into a monitor to read at a glance.
 
 I wrote the firmware in Arduino C++. While connected to WiFi, it normally starts an HTTP check about every ten seconds and uses the result to change the display. The board also serves a browser dashboard for setup and controls, and can report its state over MQTT. The project is MIT licensed.
 
@@ -77,9 +77,11 @@ ArduinoOTA supports firmware updates over the local WiFi network. Holding BOOT f
 
 MQTT is disabled by default. When enabled and connected to a broker, it publishes retained JSON status at a configurable interval, thirty seconds by default. It can also publish after state changes. A separate availability topic has a last-will message so the broker can mark the device offline when its connection is lost.
 
-Optional discovery can announce seven sensors and one binary sensor to Home Assistant, which needs an MQTT integration with discovery enabled. The dashboard requires a successful Test before it enables Save for changed broker connection settings.
+Optional discovery can announce seven sensors and one binary sensor to Home Assistant, which needs an MQTT integration with discovery enabled.
 
 ![The MQTT card: status Connected, broker settings, a 30-second interval, Home Assistant discovery switched off, and Test, Save and Reset buttons](/img/projects/esp32-s3-internet-monitor/mqtt.jpg "The MQTT configuration preview.")
+
+## Board notes
 
 The firmware is specific to this Waveshare board. It configures RGB colour order and maps pixels in plain rows. The dashboard limits brightness to 50 out of 255. For another matrix, its colour order and layout would need to match or the configuration would need to change.
 
