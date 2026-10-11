@@ -3,10 +3,16 @@ title: "How I organise a team of agents"
 description: "Coordinating coding agents through task contracts, hooks, acceptance rules and an observer."
 date: 2026-10-10
 draft: false
+cover: /img/ai-engineering/lead-team/cover.jpg
+coverAlt: "Pixel-art ironworkers raise a steel girder on an unfinished skyscraper frame at sunset while others rest on a beam above the city"
+featured: true
+showcase: true
 topics:
   - software engineering
   - coding agents
 ---
+
+![Pixel-art ironworkers raise a steel girder on an unfinished skyscraper frame at sunset while others rest on a beam above the city](/img/ai-engineering/lead-team/cover.jpg)
 
 Managing a team of coding agents involves dividing work, choosing suitable models and preserving context. A lead agent coordinates delegation, assesses results and keeps the work coherent. Language models are probabilistic, so an agent given only written instructions may follow a rule on one run and skip it on the next. That is why I built `lead-team` around enforceable rules. It is a skill for Claude Code and Codex: a set of instructions that an agent loads to follow a working method.
 

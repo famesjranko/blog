@@ -1,4 +1,8 @@
 {
+	"/img/ai-engineering/lead-team/cover.jpg": {
+		"width": 1600,
+		"height": 667
+	},
 	"/img/ai-engineering/lead-team/dependencies.png": {
 		"width": 1520,
 		"height": 1990
@@ -128,10 +132,6 @@
 		"height": 900
 	},
 	"/img/placeholders/esp32-s3-internet-monitor.jpg": {
-		"width": 640,
-		"height": 360
-	},
-	"/img/placeholders/lead-team.jpg": {
 		"width": 640,
 		"height": 360
 	},
