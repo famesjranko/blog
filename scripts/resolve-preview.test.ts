@@ -207,7 +207,9 @@ describe("check-runs response parsing", () => {
 		// Then it reports a fixed diagnostic without response content or token.
 		try {
 			expect(result.status).toBe(1);
-			expect(result.stderr).toBe("GitHub check-runs API returned invalid JSON\n");
+			expect(result.stderr).toBe(
+				"GitHub check-runs API returned invalid JSON\n",
+			);
 			expect(result.stderr).not.toContain("tok7");
 		} finally {
 			rmSync(directory, { recursive: true, force: true });
