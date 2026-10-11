@@ -14,9 +14,9 @@ topics:
 
 ![Pixel-art ironworkers raise a steel girder on an unfinished skyscraper frame at sunset while others rest on a beam above the city](/img/ai-engineering/lead-team/cover.jpg)
 
-Language models are becoming more capable, but their probabilistic nature means that clear instructions still do not guarantee consistent behaviour. A coding agent may solve a difficult problem yet skip a required check or act outside its assigned scope. Prose alone is not enough to make a workflow reliable.
+Language models are becoming more capable, but greater capability does not guarantee that an agent follows a workflow reliably. A coding agent may solve a difficult problem yet skip a required check or act outside its assigned scope. Prose alone is not enough to make a workflow reliable.
 
-I built `lead-team` to give a team of coding agents a working method backed by enforceable rules. A lead agent coordinates planning, delegates tasks and assesses the results. Delegation keeps each agent's context focused while leaving the lead with the wider picture.
+I built `lead-team` to organise coding agents around explicit tasks and checks. It combines a skill—a set of instructions an agent loads—with programs that track tasks and enforce selected workflow rules. A lead agent coordinates planning, delegates tasks and assesses the results. Delegation keeps each agent's context focused while leaving the lead with the wider picture.
 
 Each task has a contract defining its goal, boundaries and acceptance criteria. Automated checks enforce parts of that contract, and dependent work waits for the lead to examine the evidence and accept the result. This gives the workflow a structure I can inspect, while leaving judgement about the quality of the work with the lead.
 
@@ -86,16 +86,16 @@ A hook is a program the runtime calls around an event, such as an agent spawn or
 | Message | Requires a running task before resuming its agent. New work needs a new task. |
 | Shell | Refuses the lead's polling sleep loops or sleeps longer than five seconds. Long external waits go to a chore agent. |
 
-These checks support the workflow but are not a security boundary. Internal errors or timeouts can let an action through. The edit hook does not catch shell-based file changes. A well-formed report can also contain false claims, which is why the lead reads the evidence itself.
+These checks enforce selected workflow rules. They do not guarantee compliance or correctness, and they are not a security boundary. Internal errors or timeouts can let an action through. The edit hook does not catch shell-based file changes. A well-formed report can also contain false claims, which is why the lead reads the evidence itself.
 
 <details class="team-note">
 <summary>Hook registration and runtime exceptions</summary>
 
-`init` checks that spawn, start and stop hooks are registered with suitable matchers. It rejects missing or malformed registration. This does not establish runtime trust or check all six event paths. An explicitly unenforced run requires my choice and is labelled in the ledger. A session without a ledger is not treated as a team.
+`init` checks that spawn, start and stop hooks are registered with suitable matchers. It rejects missing or malformed registration. It cannot check whether I have approved the hook definitions in Codex, which Codex requires before it runs them. It also does not check all six event paths. An explicitly unenforced run requires my choice and is labelled in the ledger. A session without a ledger is not treated as a team.
 
 Verification matching checks a command's program and script or subcommand, not its arguments or working directory. Ownership covers the worker's own commits since its fork point and uncommitted or untracked changes, excluding changes merely merged from another branch.
 
-A terminal hand-back cannot receive a correction turn, so its report problems are recorded immediately. The Codex message hook also refuses calls that only queue text for a team child; the lead must use the call that resumes work.
+When the runtime does not allow a correction turn after an agent hands back its work, problems in the report are recorded immediately. The Codex message hook also refuses calls that only queue text for a team child; the lead must use the call that resumes work.
 
 </details>
 
@@ -145,7 +145,7 @@ Review depth is agreed during planning. A lighter review uses the lead's diff in
 
 The starting lenses cover encoding, size limits, parsing, configuration and platform differences. The lead selects those relevant to the change and adds domain concerns such as authorisation or concurrency. Each pass gets a fixed integration commit, requirements and a budget. Resource-intensive probes need effective limits and a timeout; none should perform real publishing, deletion or other live side effects.
 
-Workers changing a guard, parser or other trust boundary also receive design criteria before implementation. These cover failures of required checks, bounded data, supported input forms, skipped content and alternate paths. They give the later review concrete behaviours to challenge.
+Workers changing a guard, parser or other trust boundary also receive design criteria before implementation. These cover what happens when a required check fails, limits on input size, which input forms are supported, content that is skipped, and alternate paths around the check. They give the later review concrete behaviours to challenge.
 
 A finding must include its reproduction, expected and actual behaviour, and the requirement it violates. Suspicions stay separate. The lead checks the finding before assigning a fix, since a reproduced behaviour outside the requirements is not automatically a defect.
 
@@ -173,14 +173,16 @@ In the agent detail below, the lead's acceptance command cites README lines and 
 
 ![A recorded lead card showing usage and an acceptance command with its evidence note.](/img/ai-engineering/lead-team/lead-card.png "A separate recorded run. The activity view shows the acceptance command; the ledger holds the resulting task decision. [Open figure at full size](/img/ai-engineering/lead-team/lead-card.png)")
 
-The dashboard refreshes its snapshot about every two seconds during live following. A failed refresh leaves the last valid state visible with a warning. Capture status and observation time matter: a quiet or stale log does not establish that an agent is stalled. If observation fails, the team can continue and the gap is reported.
-
-Closing capture saves a standalone `replay.html` with the recorded history and viewer. It opens offline and preserves any capture gaps. The live server has no login, and transcripts can contain repository content and tool output, so its network reachability determines who can read the run.
+Closing capture saves a standalone `replay.html` with the recorded history and viewer, which opens offline.
 
 <details class="team-note">
-<summary>Reading transcripts and usage counters</summary>
+<summary>Live capture, transcripts and usage counters</summary>
 
-The activity view contains clipped text and tool entries, retaining a window of recent activity. Opaque content stays opaque; the native log remains the full source. Transcript prose does not determine task completion.
+The dashboard refreshes its snapshot about every two seconds during live following. A failed refresh leaves the last valid state visible with a warning. Capture status and observation time matter: a quiet or stale log does not establish that an agent is stalled. If observation fails, the team can continue and the gap is reported.
+
+The replay preserves any capture gaps. The live server has no login, and transcripts can contain repository content and tool output, so its network reachability determines who can read the run.
+
+The activity view contains clipped text and tool entries, retaining a window of recent activity. Content that the log stores in an unreadable form is shown as unreadable, not reconstructed. The native log remains the full source. Transcript prose does not determine task completion.
 
 Current context occupancy, last-request counters and cumulative thread usage are different quantities. Counters from different runtimes are not automatically comparable team costs. Some context windows are derived from model and configuration information and labelled accordingly. Missing readings and unknown parents are shown as missing, not estimated.
 
