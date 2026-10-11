@@ -1,6 +1,6 @@
 ---
 title: "How I organise a team of agents"
-description: "Coordinating coding agents through task contracts, hooks, acceptance rules and an observer."
+description: "Coordinating coding agents through contracts, hooks and acceptance rules."
 date: 2026-10-10
 draft: false
 cover: /img/ai-engineering/lead-team/cover.jpg
