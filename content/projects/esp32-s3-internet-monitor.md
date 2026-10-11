@@ -1,6 +1,6 @@
 ---
 title: "ESP32-S3 Internet Monitor"
-description: "Firmware for a Waveshare ESP32-S3-Matrix that checks the internet connection every ten seconds and shows the result on an 8x8 LED matrix."
+description: "Arduino firmware that uses HTTP checks to drive an animated 8x8 LED matrix, with a browser dashboard and optional MQTT reporting."
 date: 2025-12-02
 draft: false
 cover: /img/projects/esp32-s3-internet-monitor/cover.jpg
@@ -17,60 +17,70 @@ stack:
 
 ![An ESP32-S3-Matrix board on a wooden desk, powered by a USB-C cable, its 8x8 LEDs glowing in rows from red through yellow to green in front of a painted wall](/img/projects/esp32-s3-internet-monitor/cover.jpg)
 
-ESP32-S3 Internet Monitor is firmware for the Waveshare ESP32-S3-Matrix, a small board with an ESP32-S3 microcontroller and an 8x8 grid of WS2812B RGB LEDs. It checks the internet connection every ten seconds and shows the result on the matrix as an animated colour: green when the connection is up, yellow after a failed check, and red when it is down.
+The internet at my property drops out intermittently, and when it does, it is not always clear where the fault lies. It may be something in my own network, such as DNS, or the uplink itself. I wanted a quick visual indication of the connection without testing it by hand each time. I bought a Waveshare ESP32-S3-Matrix for this purpose: a small board with a microcontroller and an 8x8 grid of RGB LEDs, which I could turn into a monitor I could read at a glance.
 
-The firmware is written in Arduino C++ and is MIT licensed. It also serves a web dashboard and can publish its state over MQTT.
+I wrote the firmware in Arduino C++. While connected to WiFi, it normally starts an HTTP check about every ten seconds and uses the result to change the display. The board also serves a browser dashboard for setup and controls, and can report its state over MQTT. The project is MIT licensed.
 
-## Why I built it
+## Reading the matrix
 
-The internet at my property drops out intermittently, and when it does, it is not always clear where the fault lies. It may be my own local network, a DNS problem for instance, or it may be the uplink itself. I wanted a quick visual way to tell, without testing the connection by hand each time: in effect, an uptime monitor I could read at a glance. So I bought the Waveshare board for this purpose and built the firmware as a side project.
+The check has a small set of states, each with a colour. Solid mode fills the matrix with that colour, while the animated modes use it in different ways. The table describes the status palette; some effects have colours of their own.
 
-## How a check works
-
-Each check is an HTTP request to a connectivity-check URL, the kind phones and laptops use to detect captive portals. The first is Google's `generate_204`, which answers with an empty 204 response; if that fails, the check tries Cloudflare's equivalent. A request gives up if it cannot connect within two seconds, or if the reply stalls for three. Unlike a ping, an HTTP check needs the hostname to resolve and a server on the internet to answer, so it tests what a browser would need.
-
-The result drives a small state machine:
-
-| State | Colour | Meaning |
+| State | Status colour | Meaning |
 |---|---|---|
-| Online | Green | The last check succeeded |
+| Online | Green | Normally, an HTTP check succeeded |
 | Degraded | Yellow | One check failed |
-| Down | Red-orange | Two checks in a row failed |
-| WiFi lost | Red | The board lost its WiFi connection; checks pause until it reconnects |
-| Setup | Purple | No WiFi configured; the setup portal is open |
+| Down | Red-orange | Two or more checks in a row failed |
+| WiFi lost | Red | The board lost its WiFi connection; HTTP checks pause |
+| Setup | Purple | The setup portal is open |
 
-One success returns the state to online. Losing WiFi is a separate state from losing the internet, which separates a fault in the local network from a fault upstream. However, the check resolves hostnames through the network's own DNS server, so a local DNS fault still shows as down.
+A successful HTTP check clears the failure count and returns the state to Online. Joining or recovering WiFi also sets Online, so green can appear before a successful HTTP result. Reconnecting WiFi leaves the failure count in place; only a successful check clears it.
 
-## The display
+## Following a check
 
-The state colour is shown through one of eighteen effects, chosen from the dashboard. They range from a solid fill and ripple to rain, fire, plasma, Pong and Conway's Game of Life. Most effects draw in the current state colour. Five of them, including the plasma, switch to the state colour when the connection is down; Rainbow blends its own colours with the state colour. Either way, the colour fades over half a second when the state changes. Effects that need a sine or a distance for every pixel use a lookup table and the fast inverse square root from *Quake III*, which keeps each frame cheap.
+The [check](https://github.com/famesjranko/esp32-s3-internet-monitor/blob/321e6899dff131b0c1befb545291d6ccc27b886c/InternetMonitor/network/connectivity.h) first requests Google's `generate_204` endpoint, then tries Cloudflare's equivalent if that fails. Either an HTTP 200 or 204 counts as success. A successful first request ends the check there.
 
-![The dashboard effects card: eighteen effect buttons with Rain selected, then sliders for brightness at 18 of 50 and speed at 36%, and rotation buttons with 180° selected](/img/projects/esp32-s3-internet-monitor/effects.jpg "The effects card, with Rain selected. All screenshots here come from a host preview of the firmware's web code, with sample data.")
+The request needs the hostname to resolve and an HTTP response to come back. DNS is therefore part of the check, and a DNS failure can look the same as an unavailable uplink. The separate WiFi lost state tells you when the board has lost its wireless connection. Beyond that, a failed request does not locate the fault.
 
-## Two cores
+A response with status 200 counts even if its body is a captive portal login page. Reaching either endpoint also does not establish that every website works. The request has a two-second TCP connect timeout and a three-second read inactivity timeout, though neither bounds the whole check. Slow requests can push checks beyond their usual ten-second spacing.
 
-The effects draw a new frame every 16 milliseconds, about 60 a second, but a connectivity check can wait several seconds on a dead connection. If both ran on one core, the animation would stutter during each slow check. The ESP32-S3 has two cores, and the firmware gives the display one of them. The LED task is pinned to core 0, while the connectivity check, the web server and the MQTT client all run on core 1, so a slow check cannot stall the animation. State changes use a critical section, while the display and network tasks read shared state outside it. A 60-second watchdog reboots the board if a task stops responding.
+## Choosing how it looks
 
-## Setup and the dashboard
+There are eighteen display modes, including Off. Rain, Fire and Pong use the shared state colour, sometimes with highlights. Plasma and several other effects use their own palettes while Online, then use the state colour in other states. Rainbow keeps its own colours while Online and blends them with the state colour otherwise. There is also a modified Game of Life effect, with colour families of its own.
 
-The board is set up and controlled from a browser. WiFi credentials are not compiled in. On first boot, the board opens an open access point named `InternetMonitor-Setup` and serves a portal that scans for networks and takes the password.
+The shared state colour fades over half a second, softening transitions in effects that draw from it. An effect that switches palettes can still change abruptly, and Off leaves the matrix dark. The choice of effect changes how you read the status as well as what moves on the display.
 
-![The setup portal: a list of five nearby WiFi networks with signal bars, a Scan Again button, a dashboard password field and a Connect button](/img/projects/esp32-s3-internet-monitor/portal.jpg "The setup portal, served from the board's own access point.")
+All four interface screenshots below are host previews of the firmware's web code using sample data, rather than captures from the board.
 
-Once the board joins its network, it serves a password-protected dashboard that sets the effect, brightness, speed and rotation, and shows the uptime, success rate, downtime, WiFi signal and chip temperature. The password is stored as a SHA-256 hash, and five failed logins lock the form for a minute.
+![The dashboard effects card: eighteen effect buttons with Rain selected, then sliders for brightness at 18 of 50 and speed at 36%, and rotation buttons with 180° selected](/img/projects/esp32-s3-internet-monitor/effects.jpg "The effects card, with Rain selected.")
 
-![The full dashboard: an ONLINE status banner, the effects card, statistics, network details for HomeNetwork at 192.168.1.50, collapsed MQTT, System and Diagnostics sections, and a Factory Reset button](/img/projects/esp32-s3-internet-monitor/dashboard.jpg "The dashboard as it first loads.")
+## Giving the display its own task
 
-Settings are saved to flash and survive a reboot. Firmware updates go over WiFi, and holding the BOOT button for five seconds resets the board to the setup portal.
+Drawing an animation and waiting for an HTTP reply have different timing needs. The LED task is pinned to core 0 of the ESP32-S3, and the network task to core 1. MQTT also has a task on core 1, while the main loop handles web requests. This separates the frame loop from the synchronous connectivity check.
 
-## MQTT and Home Assistant
+The display task requests a 16-millisecond cadence, roughly sixty frames a second. The actual rate depends on the work each frame takes and on scheduling. Several effects use a sine lookup table and a square-root approximation to reduce the maths repeated for each pixel.
 
-The board can also report its state to other systems over MQTT. When a broker is configured, the board publishes its state as a retained JSON message every thirty seconds, with a last-will message that marks it offline if it drops off. An optional Home Assistant discovery setting registers eight sensors without any configuration on the Home Assistant side.
+## Setting it up
 
-![The MQTT card: status Connected, broker settings, a 30-second interval, Home Assistant discovery switched off, and Test, Save and Reset buttons](/img/projects/esp32-s3-internet-monitor/mqtt.jpg "The MQTT card. A change to the connection settings must pass a test before it can be saved.")
+With the default empty WiFi credentials, first boot opens an access point named `InternetMonitor-Setup`. Its portal scans for nearby networks and takes the network password. Credentials can instead be compiled into the firmware, and the portal also opens if the initial WiFi connection fails.
 
-## Board notes
+![The setup portal: a list of five nearby WiFi networks with signal bars, a Scan Again button, a dashboard password field and a Connect button](/img/projects/esp32-s3-internet-monitor/portal.jpg "The setup portal preview.")
 
-The firmware is written for this board only. Its LEDs take colour data in RGB order, not the GRB order most WS2812B code assumes, and the matrix is wired in plain rows, not the zigzag layout many LED matrices use. Brightness is capped at 50 of 255, because more can damage the board.
+After joining the network, the board serves a password-protected dashboard. It lets you change the effect, brightness, speed and rotation, and shows check statistics alongside WiFi signal and chip temperature. Display settings are saved to flash after three seconds without another change, then restored at boot; restarting before that save can lose the latest adjustment.
+
+![The full dashboard: an ONLINE status banner, the effects card, statistics, network details for HomeNetwork at 192.168.1.50, collapsed MQTT, System and Diagnostics sections, and a Factory Reset button](/img/projects/esp32-s3-internet-monitor/dashboard.jpg "The dashboard preview as it first loads.")
+
+The statistics describe checks during the current run. Downtime accumulates from entering Down until returning to Online, and the displayed total excludes an interval still in progress. Losing WiFi alone does not start that counter. These figures reset on reboot, so the dashboard needs to be read with the same limits as the check itself.
+
+ArduinoOTA supports firmware updates over the local WiFi network. Holding BOOT for five seconds while the firmware is running clears saved settings and restarts the board; with the default compiled credentials, that returns it to setup.
+
+## Reporting over MQTT
+
+MQTT is disabled by default. When enabled and connected to a broker, it publishes retained JSON status at a configurable interval, thirty seconds by default. It can also publish after state changes. A separate availability topic has a last-will message so the broker can mark the device offline when its connection is lost.
+
+Optional discovery can announce seven sensors and one binary sensor to Home Assistant, which needs an MQTT integration with discovery enabled. The dashboard requires a successful Test before it enables Save for changed broker connection settings.
+
+![The MQTT card: status Connected, broker settings, a 30-second interval, Home Assistant discovery switched off, and Test, Save and Reset buttons](/img/projects/esp32-s3-internet-monitor/mqtt.jpg "The MQTT configuration preview.")
+
+The firmware is specific to this Waveshare board. It configures RGB colour order and maps pixels in plain rows. The dashboard limits brightness to 50 out of 255. For another matrix, its colour order and layout would need to match or the configuration would need to change.
 
 [View esp32-s3-internet-monitor on GitHub →](https://github.com/famesjranko/esp32-s3-internet-monitor)
