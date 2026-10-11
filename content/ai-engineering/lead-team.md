@@ -43,7 +43,9 @@ A worker agent starts on the middle tier. Each reassignment to a replacement age
 
 ## Turning the brief into contracts
 
-Before assigning work, the lead registers a ledger for the session I started, which all its agents share. A planner agent receives the first contract, reads the repository and proposes tasks that one agent can finish and another can judge. The lead checks their scope, file ownership and dependencies before adding them. A sufficiently detailed plan supplied with the brief can replace this planning step.
+Before assigning work, the lead registers a ledger for the session I started. The ledger is a record on disk that all agents in the session share. It holds every contract and tracks each task's state.
+
+A planner agent receives the first contract, reads the repository and proposes tasks that one agent can finish and another can judge. The lead checks their scope, file ownership and dependencies before adding them. A sufficiently detailed plan supplied with the brief can replace this planning step.
 
 A contract identifies the task and its parent, goal, numbered acceptance criteria, model, effort and prerequisites. A worker agent starts without the lead's conversation and receives its worktree, base commit, permitted and forbidden files, verification commands and repository instructions.
 
@@ -77,7 +79,7 @@ A hook is a program the runtime calls around an event, such as an agent spawn or
 
 | Event | Rule applied |
 |---|---|
-| Spawn | Refuses requests without a queued contract, accepted prerequisites, authorised parent, available delegated allowance or compatible model settings. On Codex, the spawn must also start with fresh context. |
+| Spawn | Refuses requests without a queued contract, accepted prerequisites, authorised parent, room within the parent's limit on child agents or compatible model settings. On Codex, the spawn must also start with fresh context. |
 | Start | Binds the runtime agent to its task and marks it running. |
 | Stop | Checks report fields, criterion IDs, required verification commands and the worker's changed-file ownership. Normally allows one correction attempt, then records remaining problems for the lead. |
 | Edit | Refuses a lead's edit-tool changes to repository files that Git does not ignore. |
@@ -135,7 +137,7 @@ Suppose review finds a boundary case in the calculation. Accepting that report a
 
 The ledger permits limited reopening: an accepted task can be sent back while no accepted dependent relies on it. Running or reported dependents then return to queued, transitively, because their results are stale. Once dependent work is accepted, reopening is refused. New tasks are the normal route for rework after acceptance.
 
-A graph can consequently show many finished tasks while a new fix still blocks completion. Its columns express dependency depth, not time slots. Independent work may proceed further right while an earlier-column task is still running.
+A graph can consequently show many finished tasks while a new fix still blocks completion. In the dependency diagram, columns express dependency depth, not time slots. Independent work may proceed further right while an earlier-column task is still running.
 
 ## Review and completion
 
@@ -143,9 +145,9 @@ Review depth is agreed during planning. A lighter review uses the lead's diff in
 
 The starting lenses cover encoding, size limits, parsing, configuration and platform differences. The lead selects those relevant to the change and adds domain concerns such as authorisation or concurrency. Each pass gets a fixed integration commit, requirements and a budget. Resource-intensive probes need effective limits and a timeout; none should perform real publishing, deletion or other live side effects.
 
-A finding must include its reproduction, expected and actual behaviour, and the requirement it violates. Suspicions stay separate. The lead checks the finding before assigning a fix, since a reproduced behaviour outside the requirements is not automatically a defect.
-
 Workers changing a guard, parser or other trust boundary also receive design criteria before implementation. These cover failures of required checks, bounded data, supported input forms, skipped content and alternate paths. They give the later review concrete behaviours to challenge.
+
+A finding must include its reproduction, expected and actual behaviour, and the requirement it violates. Suspicions stay separate. The lead checks the finding before assigning a fix, since a reproduced behaviour outside the requirements is not automatically a defect.
 
 A confirmed defect goes to a worker agent for a fix and regression test, followed by a fresh re-check using the lens that found it. If the problem remains, the run stops for my decision. More review rounds require a deliberate choice.
 
@@ -161,11 +163,11 @@ The ledger supplies contracts, dependencies, owners, states and decision notes. 
 
 The team view shows the reporting hierarchy. The workflow view shows dependencies, including work awaiting a lead decision. Selecting a task reveals its contract, prerequisites and decision history; selecting an agent reveals its activity and usage. Run history connects hook refusals, send-backs and acceptances to their reasons and source times.
 
-A "Needs attention" panel collects blocked reports, reports awaiting the lead and refused spawns. A blocked-report card shows why the stop hook objected, so I can inspect the problem without searching the transcript.
+A "Needs attention" panel collects blocked reports, reports awaiting the lead and refused spawns. A blocked report is one the stop hook objected to, which differs from an agent's `BLOCKED` status. Its card shows why the hook objected, so I can inspect the problem without searching the transcript.
 
 ![Recorded workflow with 29 tasks, a reported final check and queued packaging work.](/img/ai-engineering/lead-team/team-workflow.jpg "A recorded run, separate from the reading-time example. Follow final_check into package_prs on the right; an independent task is still running on the left. [Open figure at full size](/img/ai-engineering/lead-team/team-workflow.jpg)")
 
-Here, `final_check` is purple because it has reported and awaits acceptance. Its loop records two send-backs. `package_prs` remains queued behind it. An idle agent can therefore own a task that still blocks progress. Display labels add context: "sent back" explains a `running` task, while "blocked report" records a report-check problem (distinct from the agent's `BLOCKED` report status).
+Here, `final_check` is purple because it has reported and awaits acceptance. Its loop records two send-backs. `package_prs` remains queued behind it. An idle agent can therefore own a task that still blocks progress. Display labels add context, such as "sent back" on a `running` task.
 
 In the agent detail below, the lead's acceptance command cites README lines and explorer evidence. The activity then shows the command result, the lead's explanation and its next spawn.
 
@@ -184,9 +186,9 @@ Current context occupancy, last-request counters and cumulative thread usage are
 
 </details>
 
-## When there is more than one lead agent
+## Leading several teams
 
-When a brief has several outcomes, a second skill, `manage-team`, adds a manager agent above the lead agents. It assigns each lead an outcome contract, boundaries and an allowance of child agents. Each lead handles local planning, acceptance and integration; the manager resolves cross-team decisions and judges the completed outcomes.
+I can also run several teams at once using `manage-team`, a companion to `lead-team` that applies the same contracts and enforcement across teams. The manager agent gives each lead an outcome contract, boundaries and an allowance of child agents. Each lead plans, accepts and integrates its own team's work. The manager resolves decisions that cross teams and judges each completed outcome.
 
 ![A manager agent assigns outcomes to two delegated lead agents, each with a child allowance, sharing one ledger and observer.](/img/ai-engineering/lead-team/manager.svg "The manager agent reserves capacity for each lead and its children. Local acceptance and the manager's acceptance of the outcome remain separate decisions. [Open figure at full size](/img/ai-engineering/lead-team/manager.png)")
 
