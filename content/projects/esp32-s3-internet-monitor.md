@@ -43,13 +43,13 @@ One success returns the state to online. Losing WiFi is a separate state from lo
 
 ## The display
 
-The state colour is shown through one of eighteen effects, chosen from the dashboard. They range from a solid fill and a slow pulse to rain, fire, plasma, Pong and Conway's Game of Life. Most effects draw in the current state colour. Six of them, such as the rainbow and the plasma, show their own colours while the connection is up and switch to the state colour when it is not. Either way, the colour fades over half a second when the state changes. Effects that need a sine or a distance for every pixel use a lookup table and the fast inverse square root from *Quake III*, which keeps each frame cheap.
+The state colour is shown through one of eighteen effects, chosen from the dashboard. They range from a solid fill and ripple to rain, fire, plasma, Pong and Conway's Game of Life. Most effects draw in the current state colour. Six of them, such as the rainbow and the plasma, show their own colours while the connection is up and switch to the state colour when it is not. Either way, the colour fades over half a second when the state changes. Effects that need a sine or a distance for every pixel use a lookup table and the fast inverse square root from *Quake III*, which keeps each frame cheap.
 
 ![The dashboard effects card: eighteen effect buttons with Rain selected, then sliders for brightness at 18 of 50 and speed at 36%, and rotation buttons with 180° selected](/img/projects/esp32-s3-internet-monitor/effects.jpg "The effects card, with Rain selected. All screenshots here come from a host preview of the firmware's web code, with sample data.")
 
 ## Two cores
 
-The effects draw a new frame every 16 milliseconds, about 60 a second, but a connectivity check can wait several seconds on a dead connection. If both ran on one core, the animation would stutter during each slow check. The ESP32-S3 has two cores, and the firmware gives the display one of them. The LED task is pinned to core 0, while the connectivity check, the web server and the MQTT client all run on core 1, so a slow check cannot stall the animation. Changes to the shared state are made inside a critical section, so neither core reads it half-written. A 60-second watchdog reboots the board if a task stops responding.
+The effects draw a new frame every 16 milliseconds, about 60 a second, but a connectivity check can wait several seconds on a dead connection. If both ran on one core, the animation would stutter during each slow check. The ESP32-S3 has two cores, and the firmware gives the display one of them. The LED task is pinned to core 0, while the connectivity check, the web server and the MQTT client all run on core 1, so a slow check cannot stall the animation. State changes use a critical section, while the display and network tasks read shared state outside it. A 60-second watchdog reboots the board if a task stops responding.
 
 ## Setup and the dashboard
 
