@@ -131,7 +131,11 @@ async function fetchChecks({
 	} catch {
 		throw new Error("GitHub check-runs API returned invalid JSON");
 	}
-	return checkRunsSchema.parse(body).check_runs;
+	const parsed = checkRunsSchema.safeParse(body);
+	if (!parsed.success) {
+		throw new Error("GitHub check-runs API returned invalid response");
+	}
+	return parsed.data.check_runs;
 }
 
 // Thin I/O around decide(): every wait, grace, and deadline choice is there.
