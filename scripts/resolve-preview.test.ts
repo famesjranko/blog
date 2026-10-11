@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { spawnSync } from "node:child_process";
-import { mkdtempSync, rmSync } from "node:fs";
+import { existsSync, mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { type CheckRun, decide, parsePreview } from "./resolve-preview.js";
@@ -32,6 +32,50 @@ const pending = check({
 	conclusion: null,
 	output: { summary: null },
 });
+
+function childEnvironment(outputPath: string): NodeJS.ProcessEnv {
+	const childEnv: NodeJS.ProcessEnv = {
+		...process.env,
+		GH_REPOSITORY: "andy/blog",
+		GH_TOKEN: "tok7",
+		PR_HEAD_SHA: sha,
+		GITHUB_OUTPUT: outputPath,
+	};
+	// Proxy setup warnings would contaminate exact stderr assertions.
+	Reflect.deleteProperty(childEnv, "NODE_USE_ENV_PROXY");
+	return childEnv;
+}
+
+function runMockedResponse(
+	sourcePath: string,
+	body: unknown,
+	env: NodeJS.ProcessEnv,
+) {
+	const responseJson = JSON.stringify(JSON.stringify(body));
+	const script = [
+		`globalThis.fetch = async () => new Response(${responseJson}, { status: 200 });`,
+		`process.argv[1] = ${JSON.stringify(sourcePath)};`,
+		'await import("./scripts/resolve-preview.ts");',
+	].join(" ");
+	return spawnSync(process.execPath, ["--import", "tsx", "--eval", script], {
+		encoding: "utf8",
+		env,
+		timeout: 10_000,
+	});
+}
+
+function expectSafeSchemaFailure(
+	result: ReturnType<typeof runMockedResponse>,
+	canary: string,
+): void {
+	expect(result.status).toBe(1);
+	expect(result.stdout).toBe("");
+	expect(result.stderr).toBe(
+		"GitHub check-runs API returned invalid response\n",
+	);
+	expect(result.stderr).not.toContain(canary);
+	expect(result.stderr).not.toContain("tok7");
+}
 
 describe("decide on a completed check", () => {
 	it("selects the immutable preview for the exact PR head", () => {
@@ -176,7 +220,42 @@ describe("parsePreview", () => {
 	});
 });
 
-describe("check-runs response parsing", () => {
+describe("wrong-schema check-runs responses", () => {
+	it("bounds wrong-schema diagnostics and fails without writing a preview", () => {
+		// Given wrong-schema JSON responses with multiple invalid records.
+		const sourcePath = resolve("scripts/resolve-preview.ts");
+		const directory = mkdtempSync(join(tmpdir(), "resolve-preview-test-"));
+		const outputPath = join(directory, "github-output");
+		const canary = "CANARY-🧪-\u0000";
+		const responses = [
+			{ check_runs: [{ id: canary }, { id: "SECOND_CANARY" }] },
+			{
+				check_runs: Array.from({ length: 100 }, (_, index) => ({
+					id: index === 0 ? canary : `INVALID_${index}`,
+				})),
+			},
+		];
+		const childEnv = childEnvironment(outputPath);
+
+		// When each mocked response is handled by a fresh CLI process.
+		const results = responses.map((body) =>
+			runMockedResponse(sourcePath, body, childEnv),
+		);
+
+		// Then the fixed error is bounded and no output marker or URL is written.
+		try {
+			for (const result of results) {
+				expectSafeSchemaFailure(result, canary);
+			}
+			expect(results[1]?.stderr.length).toBe(results[0]?.stderr.length);
+			expect(existsSync(outputPath)).toBe(false);
+		} finally {
+			rmSync(directory, { recursive: true, force: true });
+		}
+	});
+});
+
+describe("malformed check-runs JSON", () => {
 	it("does not disclose malformed response bodies or the API token", () => {
 		// Given a successful API response containing the same value as the token.
 		const sourcePath = resolve("scripts/resolve-preview.ts");
@@ -187,15 +266,7 @@ describe("check-runs response parsing", () => {
 			`process.argv[1] = ${JSON.stringify(sourcePath)};`,
 			'await import("./scripts/resolve-preview.ts");',
 		].join(" ");
-		const childEnv: NodeJS.ProcessEnv = {
-			...process.env,
-			GH_REPOSITORY: "andy/blog",
-			GH_TOKEN: "tok7",
-			PR_HEAD_SHA: sha,
-			GITHUB_OUTPUT: outputPath,
-		};
-		// Proxy setup warnings would contaminate this exact stderr assertion.
-		Reflect.deleteProperty(childEnv, "NODE_USE_ENV_PROXY");
+		const childEnv = childEnvironment(outputPath);
 
 		// When the child resolver handles the malformed mocked response.
 		const result = spawnSync(
