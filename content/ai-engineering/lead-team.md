@@ -14,13 +14,11 @@ topics:
 
 ![Pixel-art ironworkers raise a steel girder on an unfinished skyscraper frame at sunset while others rest on a beam above the city](/img/ai-engineering/lead-team/cover.jpg)
 
-Managing a team of coding agents involves dividing work, choosing suitable models and preserving context. A lead agent coordinates delegation, assesses results and keeps the work coherent. Language models are probabilistic, so an agent given only written instructions may follow a rule on one run and skip it on the next. That is why I built `lead-team` around enforceable rules. It is a skill for Claude Code and Codex: a set of instructions that an agent loads to follow a working method.
+Language models are becoming more capable, but their probabilistic nature means that clear instructions still do not guarantee consistent behaviour. A coding agent may solve a difficult problem yet skip a required check or act outside its assigned scope. Prose alone is not enough to make a workflow reliable.
 
-The lead agent works with a planner agent to divide the work into tasks, assigns them to agents, and judges their results before allowing later work to depend on them.
+I built `lead-team` to give a team of coding agents a working method backed by enforceable rules. A lead agent coordinates planning, delegates tasks and assesses the results. Delegation keeps each agent's context focused while leaving the lead with the wider picture.
 
-Each task has a contract: a structured JSON record defining its goal, boundaries and acceptance criteria. A ledger stored on disk holds those contracts and tracks each task's state. Hooks let the coding runtime check actions against that record. An observer program combines the ledger with the agents' native logs so I can inspect decisions and follow the run.
-
-The skill supplies the working method; the ledger and hooks give parts of it mechanical support. The lead still has to decide whether the work is correct.
+Each task has a contract defining its goal, boundaries and acceptance criteria. Automated checks enforce parts of that contract, and dependent work waits for the lead to examine the evidence and accept the result. This gives the workflow a structure I can inspect, while leaving judgement about the quality of the work with the lead.
 
 ## The lead agent and its team
 
