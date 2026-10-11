@@ -3,7 +3,6 @@ title: "A Connect-4 Web Interface in Common Lisp"
 description: "My university Connect-4 heuristic taken out of the REPL and put behind a Common Lisp web service, with a per-column view of its scores."
 date: 2026-03-15
 draft: false
-featured: true
 origin: personal
 predecessor: connect4-heuristic
 repo: https://github.com/famesjranko/Connect4-Lisp-Web
