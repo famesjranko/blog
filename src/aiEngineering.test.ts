@@ -2,7 +2,7 @@ import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { afterEach, expect, it, vi } from "vitest";
-import { type Essay, loadEssays } from "./content.js";
+import { type Essay, loadEssays, type WritingSection } from "./content.js";
 import { generateSite } from "./routes.js";
 
 const temporaryDirectories: string[] = [];
@@ -21,21 +21,24 @@ async function temporaryDirectory(): Promise<string> {
 	return dir;
 }
 
-async function fixture(draft = false): Promise<Essay[]> {
+async function fixture(
+	draft = false,
+	section: WritingSection = "ai-engineering",
+): Promise<Essay[]> {
 	const dir = await temporaryDirectory();
 	await writeFile(
 		path.join(dir, "workbench.md"),
 		`---\ntitle: Workbench\ndate: 2026-10-10\ndraft: ${draft}\ntopics: [infrastructure]\n---\n\nA local workbench.\n`,
 	);
-	return loadEssays(`${dir}/*.md`, true, "ai-engineering");
+	return loadEssays(`${dir}/*.md`, true, section);
 }
 
-async function generate(aiEngineering: Essay[]): Promise<string> {
+async function generate(
+	aiEngineering: Essay[],
+	essays: Essay[] = [],
+): Promise<string> {
 	const dir = await temporaryDirectory();
-	await generateSite(
-		{ essays: [], projects: [], notes: [], aiEngineering },
-		dir,
-	);
+	await generateSite({ essays, projects: [], notes: [], aiEngineering }, dir);
 	return dir;
 }
 
@@ -114,18 +117,21 @@ it("keeps an AI draft out of published content while allowing preview discovery"
 	);
 });
 
-it("gives the empty AI section an index without an empty homepage section", async () => {
-	// Given no published AI articles.
-	const articles: Essay[] = [];
+it("gives the empty AI section an index and no homepage entry", async () => {
+	// Given no published AI articles and one published essay.
+	const essays = await fixture(false, "essays");
 
 	// When the site is generated.
-	const dir = await generate(articles);
+	const dir = await generate([], essays);
+	const home = await read(dir, "index.html");
 
-	// Then the index explains its state and the homepage omits its Featured section.
+	// Then the index explains its state.
 	expect(await read(dir, "ai-engineering/index.html")).toContain(
 		"Articles are in progress.",
 	);
-	expect(await read(dir, "index.html")).not.toContain('id="featured"');
+	// And the homepage features the essay with no AI Engineering entry.
+	expect(home).toContain('<p class="home-label">Essays</p>');
+	expect(home).not.toContain('<p class="home-label">AI Engineering</p>');
 });
 
 it("rejects duplicate AI article slugs before overwriting a page", async () => {
