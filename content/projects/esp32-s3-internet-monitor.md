@@ -43,7 +43,7 @@ One success returns the state to online. Losing WiFi is a separate state from lo
 
 ## The display
 
-The state colour is shown through one of eighteen effects, chosen from the dashboard. They range from a solid fill and ripple to rain, fire, plasma, Pong and Conway's Game of Life. Most effects draw in the current state colour. Six of them, such as the rainbow and the plasma, show their own colours while the connection is up and switch to the state colour when it is not. Either way, the colour fades over half a second when the state changes. Effects that need a sine or a distance for every pixel use a lookup table and the fast inverse square root from *Quake III*, which keeps each frame cheap.
+The state colour is shown through one of eighteen effects, chosen from the dashboard. They range from a solid fill and ripple to rain, fire, plasma, Pong and Conway's Game of Life. Most effects draw in the current state colour. Five of them, including the plasma, switch to the state colour when the connection is down; Rainbow blends its own colours with the state colour. Either way, the colour fades over half a second when the state changes. Effects that need a sine or a distance for every pixel use a lookup table and the fast inverse square root from *Quake III*, which keeps each frame cheap.
 
 ![The dashboard effects card: eighteen effect buttons with Rain selected, then sliders for brightness at 18 of 50 and speed at 36%, and rotation buttons with 180° selected](/img/projects/esp32-s3-internet-monitor/effects.jpg "The effects card, with Rain selected. All screenshots here come from a host preview of the firmware's web code, with sample data.")
 
