@@ -251,4 +251,130 @@ is supplied separately by figures.css. */
 	.prose .diagram-timeline .snapshot {
 		fill: var(--color-accent);
 	}
+
+	/* Selected nodes use teal; states follow the observer. */
+	.prose .diagram-lead-team {
+		--color-team-surface: light-dark(#ffffff, #181c25);
+		--color-team-panel: light-dark(#f8fafc, #181c25);
+		--color-team-emphasis: light-dark(#bce5dc, #19504a);
+		--color-team-border: light-dark(#a2adb9, #65748a);
+		--color-team-edge: light-dark(#8a96a7, #68788f);
+		--color-team-accent: light-dark(#126e6b, #6ce1d5);
+		--color-team-text: light-dark(#0f172a, #e6e9f0);
+		--color-team-muted: light-dark(#4c596c, #b6c3d6);
+		--color-team-queued: light-dark(#64748b, #94a3b8);
+		--color-team-queued-bg: light-dark(#f1f5f9, #1e2430);
+		--color-team-running: light-dark(#2563eb, #60a5fa);
+		--color-team-running-bg: light-dark(#e0ecff, #142441);
+		--color-team-reported: light-dark(#7c3aed, #a78bfa);
+		--color-team-reported-bg: light-dark(#f1eaff, #261d42);
+		--color-team-done: light-dark(#059669, #34d399);
+		--color-team-done-bg: light-dark(#e3f7ef, #0f2b22);
+		--color-team-rework: light-dark(#d97706, #fbbf24);
+		--color-team-rework-bg: light-dark(#fff3dc, #33260e);
+		/* Darken the observer amber on light pages so thin paths stay visible. */
+		--color-team-rework-line: light-dark(
+			color-mix(in srgb, var(--color-team-rework) 88%, black),
+			var(--color-team-rework)
+		);
+		font-family: var(--font-ui);
+	}
+
+	.prose .diagram-lead-team .heading {
+		font-size: 22px;
+		font-weight: 650;
+	}
+
+	.prose .diagram-lead-team .heading,
+	.prose .diagram-lead-team .label {
+		fill: var(--color-team-text);
+	}
+
+	.prose .diagram-lead-team .label,
+	.prose .diagram-lead-team .muted {
+		font-size: 18px;
+	}
+
+	.prose .diagram-lead-team .muted {
+		fill: var(--color-team-muted);
+	}
+
+	.prose .diagram-lead-team .frame {
+		fill: var(--color-team-surface);
+		stroke: var(--color-team-edge);
+		stroke-width: 1.5;
+	}
+
+	.prose .diagram-lead-team .structural-frame {
+		fill: var(--color-team-emphasis);
+		stroke: var(--color-team-accent);
+		stroke-width: 1.5;
+	}
+
+	.prose .diagram-lead-team .queued-frame {
+		fill: var(--color-team-queued-bg);
+		stroke: var(--color-team-queued);
+		stroke-width: 2;
+	}
+
+	.prose .diagram-lead-team .running-frame {
+		fill: var(--color-team-running-bg);
+		stroke: var(--color-team-running);
+		stroke-width: 2;
+	}
+
+	.prose .diagram-lead-team .reported-frame {
+		fill: var(--color-team-reported-bg);
+		stroke: var(--color-team-reported);
+		stroke-width: 2;
+	}
+
+	.prose .diagram-lead-team .done-frame {
+		fill: var(--color-team-done-bg);
+		stroke: var(--color-team-done);
+		stroke-width: 2;
+	}
+
+	.prose .diagram-lead-team .quiet-frame,
+	.prose .diagram-lead-team .group-frame {
+		fill: var(--color-team-panel);
+		stroke: var(--color-team-border);
+		stroke-width: 1;
+	}
+
+	.prose .diagram-lead-team .group-frame {
+		stroke-width: 1.5;
+		stroke-dasharray: 6 5;
+	}
+
+	.prose .diagram-lead-team .rework-group {
+		fill: var(--color-team-rework-bg);
+		stroke: var(--color-team-rework-line);
+	}
+
+	.prose .diagram-lead-team .flow,
+	.prose .diagram-lead-team .feedback-flow {
+		fill: none;
+		stroke: var(--color-team-muted);
+		stroke-width: 2;
+	}
+
+	.prose .diagram-lead-team .feedback-flow {
+		stroke-dasharray: 6 4;
+	}
+
+	.prose .diagram-lead-team .return-flow {
+		fill: none;
+		stroke: var(--color-team-rework-line);
+		stroke-width: 2.5;
+		stroke-dasharray: 6 4;
+	}
+
+	.prose .diagram-lead-team .return-arrow {
+		fill: var(--color-team-rework-line);
+	}
+
+	.prose .diagram-lead-team .arrowhead {
+		fill: var(--color-team-muted);
+	}
 }

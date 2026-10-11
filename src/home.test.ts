@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { Essay, Project } from "./content.js";
+import type { Essay, Project, WritingSection } from "./content.js";
 import {
 	type HomeEntry,
 	LATEST_COUNT,
@@ -218,42 +218,39 @@ describe("selectHome latest", () => {
 	});
 });
 
+const BASE = { featured: false, showcase: false, draft: false };
+const PIECE = { html: "", readingMinutes: 1, images: [], sourcePath: "" };
+
+function writing(section: WritingSection, slug: string): Essay {
+	return {
+		...BASE,
+		...PIECE,
+		topics: [],
+		philosophers: [],
+		section,
+		slug,
+		title: slug,
+		date: new Date(),
+	};
+}
+
 describe("homeEntries", () => {
 	it("gives each section's pieces its own URL path", () => {
-		// Given one essay, one note, and one project.
-		const base = { featured: false, showcase: false, draft: false };
-		const piece = { html: "", readingMinutes: 1, images: [], sourcePath: "" };
-		const writing = { topics: [], philosophers: [], ...base, ...piece };
+		// Given one essay, one note, one project, and one AI engineering article.
+		const project: Project = {
+			...BASE,
+			...PIECE,
+			slug: "p",
+			title: "P",
+			date: new Date(),
+			origin: "personal",
+			stack: [],
+		};
 		const content = {
-			essays: [
-				{
-					...writing,
-					section: "essays",
-					slug: "e",
-					title: "E",
-					date: new Date(),
-				},
-			] satisfies Essay[],
-			notes: [
-				{
-					...writing,
-					section: "notes",
-					slug: "n",
-					title: "N",
-					date: new Date(),
-				},
-			] satisfies Essay[],
-			projects: [
-				{
-					...base,
-					...piece,
-					slug: "p",
-					title: "P",
-					date: new Date(),
-					origin: "personal",
-					stack: [],
-				},
-			] satisfies Project[],
+			essays: [writing("essays", "e")],
+			notes: [writing("notes", "n")],
+			projects: [project],
+			aiEngineering: [writing("ai-engineering", "a")],
 		};
 
 		// When they become homepage entries.
@@ -263,6 +260,7 @@ describe("homeEntries", () => {
 		expect(entries.map((e) => [e.section, e.path])).toEqual([
 			["essays", "/essays/e/"],
 			["projects", "/projects/p/"],
+			["ai-engineering", "/ai-engineering/a/"],
 			["notes", "/notes/n/"],
 		]);
 	});

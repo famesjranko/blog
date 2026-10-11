@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="diagram diagram-lead-team" viewBox="0 0 760 865" role="img" aria-labelledby="team-title team-desc">
+<title id="team-title">The lead agent and available team roles</title>
+<desc id="team-desc">The human user briefs the lead agent. The lead assigns work to agents in planner, explorer, worker, reviewer and chore roles. Each reports to the lead. The diagram shows roles, not a fixed staffing requirement.</desc>
+<defs><marker id="team-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowhead"/></marker></defs>
+<rect x="25" y="25" width="270" height="105" rx="12" class="frame"/>
+<text x="160.0" y="57" text-anchor="middle" class="heading">User</text>
+<text x="160.0" y="85" text-anchor="middle" class="label">Outcome, boundaries</text>
+<text x="160.0" y="110" text-anchor="middle" class="label">and review depth</text>
+<rect x="445" y="25" width="290" height="105" rx="12" class="structural-frame"/>
+<text x="590.0" y="57" text-anchor="middle" class="heading">Lead</text>
+<text x="590.0" y="85" text-anchor="middle" class="label">Briefs, judges, integrates</text>
+<text x="590.0" y="110" text-anchor="middle" class="label">and publishes if allowed</text>
+<path d="M 295 65 H 445" class="flow" marker-end="url(#team-arrow)"/>
+<text x="370" y="51" text-anchor="middle" class="muted">brief</text>
+<path d="M 445 110 H 295" class="feedback-flow" marker-end="url(#team-arrow)"/>
+<text x="370" y="145" text-anchor="middle" class="muted">decisions</text>
+<path d="M 590 130 V 190 H 70 V 732" class="flow"/>
+<rect x="125" y="210" width="610" height="90" rx="12" class="frame"/>
+<text x="430.0" y="242" text-anchor="middle" class="heading">Planner</text>
+<text x="430.0" y="270" text-anchor="middle" class="label">Proposes sized tasks; writes no implementation</text>
+<path d="M 70 252 H 125" class="flow" marker-end="url(#team-arrow)"/>
+<rect x="125" y="330" width="610" height="90" rx="12" class="frame"/>
+<text x="430.0" y="362" text-anchor="middle" class="heading">Explorer</text>
+<text x="430.0" y="390" text-anchor="middle" class="label">Investigates claims or probes a review lens</text>
+<path d="M 70 372 H 125" class="flow" marker-end="url(#team-arrow)"/>
+<rect x="125" y="450" width="610" height="90" rx="12" class="frame"/>
+<text x="430.0" y="482" text-anchor="middle" class="heading">Worker</text>
+<text x="430.0" y="510" text-anchor="middle" class="label">Changes assigned files in an isolated worktree</text>
+<path d="M 70 492 H 125" class="flow" marker-end="url(#team-arrow)"/>
+<rect x="125" y="570" width="610" height="90" rx="12" class="frame"/>
+<text x="430.0" y="602" text-anchor="middle" class="heading">Reviewer</text>
+<text x="430.0" y="630" text-anchor="middle" class="label">Independently judges the integrated result</text>
+<path d="M 70 612 H 125" class="flow" marker-end="url(#team-arrow)"/>
+<rect x="125" y="690" width="610" height="90" rx="12" class="frame"/>
+<text x="430.0" y="722" text-anchor="middle" class="heading">Chore</text>
+<text x="430.0" y="750" text-anchor="middle" class="label">Runs routine commands and waits for checks</text>
+<path d="M 70 732 H 125" class="flow" marker-end="url(#team-arrow)"/>
+<text x="380" y="835" text-anchor="middle" class="muted">Assignments go down; reports return to the same parent.</text>
+</svg>

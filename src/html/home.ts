@@ -18,17 +18,20 @@ const HERO_EYEBROW = ["BACKEND & SYSTEMS ENGINEER", "MELBOURNE"]
 	.map((phrase) => phrase.replaceAll(" ", " "))
 	.join(" · ");
 const HERO_TITLE_LINES = ["From philosophy", "to software"];
-const HERO_STANDFIRST = "A personal collection of essays, projects, and notes.";
+const HERO_STANDFIRST =
+	"A personal collection of essays, projects, AI engineering, and notes.";
 
 const SECTION_NAMES: Record<HomeSection, string> = {
 	essays: "Essays",
 	projects: "Projects",
+	"ai-engineering": "AI Engineering",
 	notes: "Notes",
 };
 
 const SECTION_ITEM_NAMES: Record<HomeSection, string> = {
 	essays: "Essay",
 	projects: "Project",
+	"ai-engineering": "AI engineering",
 	notes: "Note",
 };
 
@@ -134,6 +137,7 @@ export function homePage(content: {
 	essays: Essay[];
 	notes: Essay[];
 	projects: Project[];
+	aiEngineering: Essay[];
 }): string {
 	const { showcase, picks, latest } = selectHome(homeEntries(content));
 	const sections =

@@ -6,6 +6,7 @@ draft: false
 origin: professional
 cover: /img/projects/ar-telehealth/cover.jpg
 coverAlt: "Painted collage of a nurse in a mixed reality headset holding a stethoscope to an elderly patient in bed, while floating panels show a remote doctor and the patient's vital signs"
+featured: true
 stack:
   - hololens-2
   - jitsi

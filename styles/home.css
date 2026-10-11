@@ -87,7 +87,8 @@
 		max-width: 46ch;
 		color: var(--color-muted);
 		line-height: 1.55;
-		text-wrap: balance;
+		/* Balance would split a just-over-two-line description into three short lines. */
+		text-wrap: pretty;
 	}
 
 	.home-picks,

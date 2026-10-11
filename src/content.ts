@@ -14,10 +14,9 @@ import {
 } from "./schema.js";
 
 /**
- * The writing sections. Notes are shorter pieces that share the essay
- * model; the section alone decides where a piece lives.
+ * Writing shares one content model; the section decides its URL and label.
  */
-export type WritingSection = "essays" | "notes";
+export type WritingSection = "essays" | "notes" | "ai-engineering";
 
 export interface Essay extends EssayMeta {
 	section: WritingSection;
@@ -99,6 +98,14 @@ export async function loadEssays(
 
 export function loadNotes(includeDrafts = false): Promise<Essay[]> {
 	return loadEssays("content/notes/**/*.md", includeDrafts, "notes");
+}
+
+export function loadAiEngineering(includeDrafts = false): Promise<Essay[]> {
+	return loadEssays(
+		"content/ai-engineering/**/*.md",
+		includeDrafts,
+		"ai-engineering",
+	);
 }
 
 export async function loadProject(filePath: string): Promise<Project> {

@@ -6,11 +6,12 @@ import {
 } from "./content.js";
 
 /** Homepage sections in display order. */
-export type HomeSection = "essays" | "projects" | "notes";
+export type HomeSection = "essays" | "projects" | "ai-engineering" | "notes";
 
 export const HOME_SECTIONS: readonly HomeSection[] = [
 	"essays",
 	"projects",
+	"ai-engineering",
 	"notes",
 ];
 
@@ -67,11 +68,15 @@ export function homeEntries(content: {
 	essays: Essay[];
 	notes: Essay[];
 	projects: Project[];
+	aiEngineering: Essay[];
 }): HomeEntry[] {
 	return [
 		...content.essays.map((e) => entry(e, "essays", writingPath(e))),
 		...content.projects.map((p) =>
 			entry(p, "projects", `/projects/${p.slug}/`),
+		),
+		...content.aiEngineering.map((a) =>
+			entry(a, "ai-engineering", writingPath(a)),
 		),
 		...content.notes.map((n) => entry(n, "notes", writingPath(n))),
 	];
