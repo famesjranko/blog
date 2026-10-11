@@ -68,7 +68,7 @@ it("makes a published AI article discoverable under its own section and deployme
 	]) {
 		expect(html).toContain('href="/blog/ai-engineering/workbench/"');
 	}
-	expect(home).toContain('href="#featured-ai-engineering"');
+	expect(home).toContain('<p class="home-label">AI Engineering</p>');
 	expect(
 		home.match(/href="\/blog\/ai-engineering\/">AI Engineering<\/a>/g),
 	).toHaveLength(2);
@@ -121,13 +121,11 @@ it("gives the empty AI section an index without an empty homepage section", asyn
 	// When the site is generated.
 	const dir = await generate(articles);
 
-	// Then the index explains its state and the homepage omits its card section.
+	// Then the index explains its state and the homepage omits its Featured section.
 	expect(await read(dir, "ai-engineering/index.html")).toContain(
 		"Articles are in progress.",
 	);
-	expect(await read(dir, "index.html")).not.toContain(
-		'id="featured-ai-engineering"',
-	);
+	expect(await read(dir, "index.html")).not.toContain('id="featured"');
 });
 
 it("rejects duplicate AI article slugs before overwriting a page", async () => {
