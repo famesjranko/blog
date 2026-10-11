@@ -24,7 +24,7 @@ Each task has a contract defining its goal, boundaries and acceptance criteria. 
 
 The lead gives each agent the context it needs, reads its results and decides what happens next. I set the scope, permitted actions and review depth, and resolve decisions that would materially change the agreed cost or risk.
 
-![The user briefs a lead agent, which assigns work to agents in planner, explorer, worker, reviewer and chore roles.](/img/ai-engineering/lead-team/team.svg "Agent roles and their reporting relationships. The lead selects the roles the job needs; it does not start a fixed team of five. [Open figure at full size](/img/ai-engineering/lead-team/team.png)")
+![The user briefs a lead agent, which assigns work to agents in planner, explorer, worker, reviewer and chore roles.](/img/ai-engineering/lead-team/team.svg "Agent roles and their reporting relationships. The lead selects the roles the job needs; it does not start a fixed team of five.")
 
 Implementation, investigation and routine execution go to the assigned agents. The lead keeps its context for judgement, integrates accepted branches and publishes when the brief permits it. If delegation stalls, it waits or retries rather than taking over code changes assigned to a worker agent.
 
@@ -75,7 +75,7 @@ The ledger checks each contract against a schema of required fields, value types
 
 A hook is a program the runtime calls around an event, such as an agent spawn or tool invocation. A small shell wrapper passes the event to `team.py`, which also manages the ledger. The hook can therefore check the proposed action against the contract and current task state.
 
-![Spawn, start and stop hooks surround an agent's work; the lead separately judges the result.](/img/ai-engineering/lead-team/hooks.svg "Hooks check admission, task binding and reports. Edit, message and shell hooks govern other lead actions. Acceptance remains a separate decision. [Open figure at full size](/img/ai-engineering/lead-team/hooks.png)")
+![Spawn, start and stop hooks surround an agent's work; the lead separately judges the result.](/img/ai-engineering/lead-team/hooks.svg "Hooks check admission, task binding and reports. Edit, message and shell hooks govern other lead actions. Acceptance remains a separate decision.")
 
 | Event | Rule applied |
 |---|---|
@@ -119,7 +119,7 @@ The report status describes the agent's result. `DONE` means its brief is comple
 
 The ledger records a separate task state. When the agent stops, the task becomes `reported`. The lead's acceptance makes it `done` and releases dependent work. Neither a report headed `DONE` nor a passing stop-hook check performs that acceptance.
 
-![A queued task runs, reports and awaits acceptance; the lead can accept it or send it back.](/img/ai-engineering/lead-team/lifecycle.svg "The main task cycle, with alternative transitions below. The lead records why work is accepted, returned or dropped. [Open figure at full size](/img/ai-engineering/lead-team/lifecycle.png)")
+![A queued task runs, reports and awaits acceptance; the lead can accept it or send it back.](/img/ai-engineering/lead-team/lifecycle.svg "The main task cycle, with alternative transitions below. The lead records why work is accepted, returned or dropped.")
 
 A send-back records the required correction and returns the task to `running`; the lead then resumes its agent. If a new completion repeats the failure, reassignment clears the owner and queues the task for a fresh agent.
 
@@ -131,7 +131,7 @@ The reporting hierarchy describes who assigns and judges work. The dependency gr
 
 The calculation and badge workers can proceed independently if their file ownership and interfaces allow it. The lead accepts each branch and then merges it as a separate step, before a reviewer agent examines the combined result.
 
-![Independent calculation and badge tasks join at review, followed by a new fix and re-check before final verification.](/img/ai-engineering/lead-team/dependencies.svg "Arrows represent acceptance dependencies. When review finds a defect, the queued final check gains a dependency on the new fix and re-check. [Open figure at full size](/img/ai-engineering/lead-team/dependencies.png)")
+![Independent calculation and badge tasks join at review, followed by a new fix and re-check before final verification.](/img/ai-engineering/lead-team/dependencies.svg "Arrows represent acceptance dependencies. When review finds a defect, the queued final check gains a dependency on the new fix and re-check.")
 
 Suppose review finds a boundary case in the calculation. Accepting that report accepts its findings; it does not approve the faulty implementation for publication. The lead adds a fix task and re-check, then revises final verification to wait for them. The earlier acceptance remains in the record alongside the later finding.
 
@@ -157,7 +157,7 @@ Finally, a chore agent runs the full repository checks on the integrated result.
 
 The task graph and decisions also provide the structure for observation. Unless I opt out, the lead attaches an observer to the session's log and ledger. It runs beside the team and has no authority to accept work or command agents.
 
-![The team ledger and runtime logs feed an observer recorder, which writes the snapshot and journal used by the live dashboard and offline replay.](/img/ai-engineering/lead-team/observer.svg "The ledger supplies task decisions; native logs supply observed activity. The observer keeps its own snapshot and journal, separate from the team's records. [Open figure at full size](/img/ai-engineering/lead-team/observer.png)")
+![The team ledger and runtime logs feed an observer recorder, which writes the snapshot and journal used by the live dashboard and offline replay.](/img/ai-engineering/lead-team/observer.svg "The ledger supplies task decisions; native logs supply observed activity. The observer keeps its own snapshot and journal, separate from the team's records.")
 
 The ledger supplies contracts, dependencies, owners, states and decision notes. Native logs supply agent identities and parents, activity, model settings and available usage counters. The observer joins these sources with the ledger's own state reducer, which validates and applies state changes.
 
@@ -165,13 +165,13 @@ The team view shows the reporting hierarchy. The workflow view shows dependencie
 
 A "Needs attention" panel collects blocked reports, reports awaiting the lead and refused spawns. A blocked report is one the stop hook objected to, which differs from an agent's `BLOCKED` status. Its card shows why the hook objected, so I can inspect the problem without searching the transcript.
 
-![Recorded workflow with 29 tasks, a reported final check and queued packaging work.](/img/ai-engineering/lead-team/team-workflow.jpg "A recorded run, separate from the reading-time example. Follow final_check into package_prs on the right; an independent task is still running on the left. [Open figure at full size](/img/ai-engineering/lead-team/team-workflow.jpg)")
+![Recorded workflow with 29 tasks, a reported final check and queued packaging work.](/img/ai-engineering/lead-team/team-workflow.jpg "A recorded run, separate from the reading-time example. Follow final_check into package_prs on the right; an independent task is still running on the left.")
 
 Here, `final_check` is purple because it has reported and awaits acceptance. Its loop records two send-backs. `package_prs` remains queued behind it. An idle agent can therefore own a task that still blocks progress. Display labels add context, such as "sent back" on a `running` task.
 
 In the agent detail below, the lead's acceptance command cites README lines and explorer evidence. The activity then shows the command result, the lead's explanation and its next spawn.
 
-![A recorded lead card showing usage and an acceptance command with its evidence note.](/img/ai-engineering/lead-team/lead-card.png "A separate recorded run. The activity view shows the acceptance command; the ledger holds the resulting task decision. [Open figure at full size](/img/ai-engineering/lead-team/lead-card.png)")
+![A recorded lead card showing usage and an acceptance command with its evidence note.](/img/ai-engineering/lead-team/lead-card.png "A separate recorded run. The activity view shows the acceptance command; the ledger holds the resulting task decision.")
 
 Closing capture saves a standalone `replay.html` with the recorded history and viewer, which opens offline.
 
@@ -192,7 +192,7 @@ Current context occupancy, last-request counters and cumulative thread usage are
 
 I can also run several teams at once using `manage-team`, a companion to `lead-team` that applies the same contracts and enforcement across teams. The manager agent gives each lead an outcome contract, boundaries and an allowance of child agents. Each lead plans, accepts and integrates its own team's work. The manager resolves decisions that cross teams and judges each completed outcome.
 
-![A manager agent assigns outcomes to two delegated lead agents, each with a child allowance, sharing one ledger and observer.](/img/ai-engineering/lead-team/manager.svg "The manager agent reserves capacity for each lead and its children. Local acceptance and the manager's acceptance of the outcome remain separate decisions. [Open figure at full size](/img/ai-engineering/lead-team/manager.png)")
+![A manager agent assigns outcomes to two delegated lead agents, each with a child allowance, sharing one ledger and observer.](/img/ai-engineering/lead-team/manager.svg "The manager agent reserves capacity for each lead and its children. Local acceptance and the manager's acceptance of the outcome remain separate decisions.")
 
 A delegated lead shares the session's ledger and observer. Its children name its lead task as their parent. The spawn hook checks that ownership and the allowance, counting both running children and reported children awaiting acceptance. Runtime capacity can impose a tighter limit.
 
