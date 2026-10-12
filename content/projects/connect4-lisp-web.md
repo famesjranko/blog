@@ -53,4 +53,6 @@ The application runs in an SBCL container as a non-root user, with Redis as a se
 
 Lastly, the heuristic did not get any better here, and I did not set out to make it better. What I have now is a game someone can run from the linked repository, with the numbers behind each of its moves on screen while they play.
 
+Related project: [Connect Four heuristic&nbsp;→](/projects/connect4-heuristic/)
+
 [View on GitHub&nbsp;→](https://github.com/famesjranko/Connect4-Lisp-Web)

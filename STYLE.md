@@ -84,6 +84,12 @@ Use `&nbsp;` before the arrow to keep it with “GitHub”:
 Review the article at a narrow screen width and check that the arrow stays
 with “GitHub”.
 
+For paired projects, add reciprocal links in standalone paragraphs immediately
+above the GitHub link. Use the plain prefix “Related project:” and a short,
+descriptive linked title with the existing prose link styling. Put `&nbsp;`
+before the arrow. Review both articles at a narrow screen width and check that
+the arrow stays with the title’s last word.
+
 ## Colour and interaction
 
 Light and dark themes must keep text, links, controls, borders, and diagrams
