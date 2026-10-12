@@ -206,6 +206,17 @@ describe("projectPage header", () => {
 		expect(html).toContain('<meta name="description"');
 	});
 
+	it("shares as an article", () => {
+		// Given a project.
+		const project = sampleProject();
+
+		// When its page is rendered.
+		const html = projectPage(project);
+
+		// Then link previews treat it as an article.
+		expect(html).toContain('<meta property="og:type" content="article">');
+	});
+
 	it("links shared, figure, project, and diagram styles", () => {
 		const html = projectPage(sampleProject());
 		expect(html).toContain('<link rel="stylesheet" href="/css/main.css">');

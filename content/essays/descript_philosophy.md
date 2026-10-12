@@ -5,7 +5,7 @@ author:
   name: "Andrew McDonald"
 date: 2016-07-22
 cover: /img/essays/descript-philosophy/cover.jpg
-coverAlt: "rocks"
+coverAlt: "Smooth grey river stones packed together, with one rust-red stone among them"
 draft: false
 images:
 type:

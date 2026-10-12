@@ -5,7 +5,7 @@ author:
   name: "Andrew McDonald"
 date: 2016-08-06
 cover: /img/essays/knowledge-thatandhow/cover.jpg
-coverAlt: "watch"
+coverAlt: "An aeroplane flies between two dark skyscrapers, seen from below"
 draft: false
 toc: false
 type:

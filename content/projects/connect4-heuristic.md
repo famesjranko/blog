@@ -6,6 +6,7 @@ draft: false
 origin: university
 repo: https://github.com/famesjranko/Connect4-Heuristic-Player
 cover: /img/projects/connect4-heuristic/cover.jpg
+coverAlt: "A wooden Connect-4 board on a stone terrace above the sea at sunset, with a temple on the far headland"
 stack:
   - common-lisp
   - minimax

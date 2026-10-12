@@ -1,7 +1,8 @@
 import type { Project } from "../content.js";
 import { siteUrl } from "../site.js";
 import { articleMeta } from "./articleMeta.js";
-import { cardClass, cardCover, coverSrc, escapeHtml, page } from "./layout.js";
+import { cardClass, cardCover, coverSrc } from "./cover.js";
+import { escapeHtml, page } from "./layout.js";
 import { titleHtml } from "./titleText.js";
 
 const ORIGIN_LABELS: Record<Project["origin"], string> = {
@@ -109,6 +110,7 @@ export function projectPage(project: Project): string {
 		title: project.title,
 		canonicalPath: `/projects/${project.slug}/`,
 		socialImage: coverSrc(project),
+		socialType: "article",
 		...(project.cover === undefined || project.coverAlt === undefined
 			? {}
 			: { socialImageAlt: project.coverAlt }),

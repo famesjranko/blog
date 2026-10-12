@@ -5,7 +5,7 @@ author:
   name: "Andrew McDonald"
 date: 2016-07-22
 cover: /img/essays/whatis-philosophy/cover.jpg
-coverAlt: "city"
+coverAlt: "A barren red-brown plain under a deep blue sky, with mountains in the distance"
 draft: false
 toc: false
 type:

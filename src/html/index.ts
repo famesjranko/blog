@@ -1,6 +1,7 @@
 import { type Essay, writingPath } from "../content.js";
 import { siteUrl } from "../site.js";
-import { cardClass, cardCover, escapeHtml, page, topicLink } from "./layout.js";
+import { cardClass, cardCover } from "./cover.js";
+import { escapeHtml, page, topicLink } from "./layout.js";
 import { titleHtml } from "./titleText.js";
 
 export function essayEntry(essay: Essay): string {

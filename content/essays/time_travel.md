@@ -5,7 +5,7 @@ author:
   name: "Andrew McDonald"
 date: 2016-07-29
 cover: /img/essays/time-travel/cover.jpg
-coverAlt: "watch"
+coverAlt: "A hand holds an open stopwatch"
 draft: true
 toc: false
 type:

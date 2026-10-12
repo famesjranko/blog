@@ -5,7 +5,7 @@ author:
   name: "Andrew McDonald"
 date: 2016-08-03
 cover: /img/essays/jtb-knowledge/cover.jpg
-coverAlt: "jtb"
+coverAlt: "A black-and-white sculpture of figures who cover each other's eyes with their hands"
 draft: false
 toc: false
 type:
