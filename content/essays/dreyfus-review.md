@@ -3,7 +3,7 @@ title: "On Dreyfus and Everyday Intelligibility"
 description: "Dreyfus on skill, mastery, and world transformation, and where his Heidegger falls short."
 date: 2020-10-10T17:39:34+11:00
 cover: /img/essays/dreyfus-review/cover.jpg
-coverAlt: "transformations"
+coverAlt: "Thick strokes of blue, orange, and black paint on canvas"
 draft: false
 featured: true
 toc: false

@@ -34,16 +34,15 @@ const pending = check({
 });
 
 function childEnvironment(outputPath: string): NodeJS.ProcessEnv {
-	const childEnv: NodeJS.ProcessEnv = {
-		...process.env,
+	const { PATH } = process.env;
+	// Allow only resolver inputs so inherited Node flags cannot affect stderr.
+	return {
+		PATH,
 		GH_REPOSITORY: "andy/blog",
 		GH_TOKEN: "tok7",
 		PR_HEAD_SHA: sha,
 		GITHUB_OUTPUT: outputPath,
 	};
-	// Proxy setup warnings would contaminate exact stderr assertions.
-	Reflect.deleteProperty(childEnv, "NODE_USE_ENV_PROXY");
-	return childEnv;
 }
 
 function runMockedResponse(

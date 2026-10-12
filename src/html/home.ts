@@ -7,8 +7,9 @@ import {
 	selectHome,
 } from "../home.js";
 import { siteUrl } from "../site.js";
+import { coverPicture } from "./cover.js";
 import { hero, heroAssets } from "./hero.js";
-import { coverPicture, escapeHtml, page } from "./layout.js";
+import { escapeHtml, page } from "./layout.js";
 import { titleHtml } from "./titleText.js";
 
 // Homepage hero copy. Edit freely; no logic depends on it.

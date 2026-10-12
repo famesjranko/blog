@@ -3,7 +3,7 @@ title: "The Ethics of Google’s Use of User Data During COVID-19"
 description: "A 2020 ethics essay applying Kantian and utilitarian analysis to Google’s COVID-19 Community Mobility Report."
 date: 2020-08-12T14:18:23+11:00
 cover: /img/essays/ethics-google/cover.jpg
-coverAlt: "google"
+coverAlt: "A phone screen showing a Google search for analytics"
 draft: false
 toc: false
 type:

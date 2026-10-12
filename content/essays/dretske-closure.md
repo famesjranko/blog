@@ -5,7 +5,7 @@ author:
   name = "Andrew McDonald"
 date: 2020-03-09T03:54:16+11:00
 cover: /img/essays/dretske-closure/cover.jpg
-coverAlt: "rope"
+coverAlt: "A teal rope coiled into a spiral on weathered white planks"
 draft: false
 toc: false
 type:

@@ -4,7 +4,7 @@ description: "A 2021 university project that finds tables in PDF annual reports 
 date: 2021-10-25
 draft: false
 cover: /img/projects/extracting-pdf-tables/cover.jpg
-coverAlt: "Close-up of a printed financial table with share prices and dividend figures"
+coverAlt: "A pencil and ink sketch of bar charts, a pie chart, a line graph, and a table of figures in blue and orange"
 origin: university
 repo: https://github.com/famesjranko/automated-PDF-tabulated-data-extractor-api
 stack:

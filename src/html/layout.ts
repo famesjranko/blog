@@ -1,11 +1,5 @@
-import { type Essay, type Project, topicSlug } from "../content.js";
-import {
-	CARD_IMAGE_SIZES,
-	cardImagePlan,
-	cardImageSource,
-} from "../cardImages.js";
+import { topicSlug } from "../content.js";
 import { imageSize } from "../images.js";
-import { type RenditionPlan, renditionSources } from "../renditions.js";
 import { canonicalSiteUrl, siteUrl } from "../site.js";
 
 export const SITE_NAME = "Andrew J. McDonald";
@@ -19,66 +13,8 @@ export function escapeHtml(value: string): string {
 		.replaceAll("'", "&#39;");
 }
 
-/**
- * Card cover: the explicit image when set, otherwise the rendered
- * placeholder art for the slug, which is decorative and so carries an
- * empty alt. Root-relative sources are prefixed with the site base
- * path, mirroring the markdown image rule, so covers keep working
- * under BASE_PATH. An internal JPEG cover listed in the size table
- * renders as `<picture>` with responsive AVIF and WebP sources, and the
- * original file remains the fallback `<img>`. Any other cover, including
- * an internal JPEG the size table does not list, renders as a bare `<img>`.
- * A draft (only ever built under SHOW_DRAFTS) gets a badge over the art.
- */
-export type CoverPiece = Pick<
-	Essay | Project,
-	"cover" | "coverAlt" | "slug" | "draft"
->;
-
 export function topicLink(topic: string): string {
 	return `<a href="${siteUrl(`/topics/${topicSlug(topic)}/`)}">${escapeHtml(topic)}</a>`;
-}
-
-export const DRAFT_BADGE = `<span class="draft-badge">Draft</span>`;
-
-/** Card class list; drafts get a modifier so the whole card reads as one. */
-export function cardClass(piece: Pick<CoverPiece, "draft">): string {
-	return piece.draft ? "card card-draft" : "card";
-}
-
-export function cardCover(
-	piece: CoverPiece,
-	sizes: string = CARD_IMAGE_SIZES,
-): string {
-	const badge = piece.draft ? DRAFT_BADGE : "";
-	return `<div class="card-media">${coverPicture(piece, sizes)}${badge}</div>`;
-}
-
-/** A cover's image, served from card crops unless another plan is given. */
-export function coverPicture(
-	piece: CoverPiece,
-	sizes: string,
-	planFor: (src: string) => RenditionPlan | undefined = cardImagePlan,
-): string {
-	const { cover, coverAlt } = piece;
-	const src = coverSrc(piece);
-	const alt = cover === undefined ? "" : (coverAlt ?? "");
-	const url = src.startsWith("/") && !src.startsWith("//") ? siteUrl(src) : src;
-	const size = imageSize(src);
-	const dimensions =
-		size === undefined ? "" : ` width="${size.width}" height="${size.height}"`;
-	const img = `<img src="${escapeHtml(url)}" alt="${escapeHtml(alt)}"${dimensions} loading="lazy" decoding="async">`;
-	const plan = planFor(src);
-	if (plan === undefined) {
-		return img;
-	}
-	const sources = renditionSources(plan, { sizes, url: siteUrl, escapeHtml });
-	return `<picture>${sources}${img}</picture>`;
-}
-
-/** The image source used by cards and social previews for a piece. */
-export function coverSrc(piece: Pick<CoverPiece, "cover" | "slug">): string {
-	return cardImageSource(piece);
 }
 
 function navLinks(): string {
@@ -170,8 +106,30 @@ function renderScript(script: string | PageScript): string {
 const THEME_BOOT_SCRIPT =
 	'<script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark"){document.documentElement.dataset.theme=t;var m=document.createElement("meta");m.name="color-scheme";m.content=t;document.head.appendChild(m)}}catch(e){}</script>';
 
-function socialImageUrl(src: string): string {
-	return src.startsWith("/") ? canonicalSiteUrl(src) : src;
+/**
+ * Share card for a page without its own image: a still of the homepage
+ * hero. Without it, link previews fall back to the small favicon.
+ */
+const DEFAULT_SOCIAL_IMAGE = "/img/share.jpg";
+const DEFAULT_SOCIAL_IMAGE_ALT =
+	"From philosophy to software: essays, projects, AI engineering, and notes by Andrew J. McDonald";
+
+/**
+ * Image tags for link previews. The size lets a scraper lay out the card
+ * on the first share, before it has fetched the image.
+ */
+function socialImageTags(src: string, alt: string | undefined): string {
+	const url = escapeHtml(src.startsWith("/") ? canonicalSiteUrl(src) : src);
+	const size = imageSize(src);
+	const dimensions =
+		size === undefined
+			? ""
+			: `<meta property="og:image:width" content="${size.width}">\n<meta property="og:image:height" content="${size.height}">\n`;
+	const altTags =
+		alt === undefined
+			? ""
+			: `<meta property="og:image:alt" content="${escapeHtml(alt)}">\n<meta name="twitter:image:alt" content="${escapeHtml(alt)}">\n`;
+	return `<meta property="og:image" content="${url}">\n<meta name="twitter:image" content="${url}">\n${dimensions}${altTags}`;
 }
 
 function socialMetadata(options: SocialMetadataOptions): string {
@@ -185,16 +143,14 @@ function socialMetadata(options: SocialMetadataOptions): string {
 			: `<meta property="og:description" content="${escapeHtml(options.description)}">\n<meta name="twitter:description" content="${escapeHtml(options.description)}">\n`;
 	const image =
 		options.socialImage === undefined
-			? ""
-			: `<meta property="og:image" content="${escapeHtml(socialImageUrl(options.socialImage))}">\n<meta name="twitter:image" content="${escapeHtml(socialImageUrl(options.socialImage))}">\n${options.socialImageAlt === undefined ? "" : `<meta property="og:image:alt" content="${escapeHtml(options.socialImageAlt)}">\n`}`;
-	const card =
-		options.socialImage === undefined ? "summary" : "summary_large_image";
+			? socialImageTags(DEFAULT_SOCIAL_IMAGE, DEFAULT_SOCIAL_IMAGE_ALT)
+			: socialImageTags(options.socialImage, options.socialImageAlt);
 	return `<link rel="canonical" href="${escapeHtml(url)}">
 <meta property="og:type" content="${options.socialType ?? "website"}">
 <meta property="og:site_name" content="${SITE_NAME}">
 <meta property="og:url" content="${escapeHtml(url)}">
 <meta property="og:title" content="${escapeHtml(options.title)}">
-<meta name="twitter:card" content="${card}">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="${escapeHtml(options.title)}">
 ${description}${image}`;
 }
