@@ -183,22 +183,22 @@ describe("check-runs response parsing", () => {
 			`process.argv[1] = ${JSON.stringify(sourcePath)};`,
 			'await import("./scripts/resolve-preview.ts");',
 		].join(" ");
+		// And a child environment of only PATH and the resolver's inputs, so
+		// shell flags such as NODE_USE_ENV_PROXY cannot add Node warnings.
+		const env = {
+			PATH: process.env["PATH"],
+			GH_REPOSITORY: "andy/blog",
+			GH_TOKEN: "tok7",
+			PR_HEAD_SHA: sha,
+			GITHUB_OUTPUT: "/tmp/resolve-preview-test-output",
+		};
+
+		// When the resolver handles the mocked response.
 		const result = spawnSync(
 			process.execPath,
 			["--import", "tsx", "--eval", script],
-			{
-				encoding: "utf8",
-				env: {
-					...process.env,
-					GH_REPOSITORY: "andy/blog",
-					GH_TOKEN: "tok7",
-					PR_HEAD_SHA: sha,
-					GITHUB_OUTPUT: "/tmp/resolve-preview-test-output",
-				},
-			},
+			{ encoding: "utf8", env },
 		);
-
-		// When the resolver handles the mocked response.
 
 		// Then it reports a fixed diagnostic without response content or token.
 		expect(result.status).toBe(1);
