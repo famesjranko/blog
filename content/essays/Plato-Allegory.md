@@ -5,7 +5,7 @@ author:
   name: "Andrew McDonald"
 date: 2016-07-22
 cover: /img/essays/plato-allegory/cover.jpg
-coverAlt: "cave"
+coverAlt: "The view from inside a sea cave, out to bright water and sky"
 draft: false
 toc: false
 images:

@@ -234,5 +234,9 @@
 	"/img/projects/tablescan/upload.jpg": {
 		"width": 720,
 		"height": 850
+	},
+	"/img/share.jpg": {
+		"width": 1200,
+		"height": 630
 	}
 }

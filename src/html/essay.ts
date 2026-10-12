@@ -1,7 +1,8 @@
 import { type Essay, type WritingSection, writingPath } from "../content.js";
 import { siteUrl } from "../site.js";
 import { articleMeta } from "./articleMeta.js";
-import { coverSrc, escapeHtml, page } from "./layout.js";
+import { coverSrc } from "./cover.js";
+import { escapeHtml, page } from "./layout.js";
 import { titleHtml } from "./titleText.js";
 
 const SECTION_LABELS: Record<WritingSection, string> = {

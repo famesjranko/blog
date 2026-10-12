@@ -1,6 +1,7 @@
 import { type Essay, writingPath } from "../content.js";
 import { siteUrl } from "../site.js";
-import { cardCover, escapeHtml, page, topicLink } from "./layout.js";
+import { cardCover } from "./cover.js";
+import { escapeHtml, page, topicLink } from "./layout.js";
 import { titleHtml } from "./titleText.js";
 
 /**

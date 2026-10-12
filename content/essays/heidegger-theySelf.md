@@ -5,7 +5,7 @@ author:
   name: "Andrew McDonald"
 date: 2020-09-19T16:51:27+11:00
 cover: /img/essays/heidegger-theyself/cover.jpg
-coverAlt: "they-self"
+coverAlt: "A person holds a round mirror in front of their face in a field of yellow flowers, and the mirror reflects the plants"
 draft: false
 toc: false
 type:

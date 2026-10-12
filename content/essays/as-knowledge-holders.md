@@ -3,7 +3,7 @@ title: "Who are we as knowledge holders?"
 description: "Intuitively foundationalists, operationally coherentists, bound by observation and test."
 date: 2016-10-30
 cover: /img/essays/as-knowledge-holders/cover.jpg
-coverAlt: "we as knowers"
+coverAlt: "Silhouetted people sit at a window that looks out on St Paul's Cathedral in London"
 tags:
   - epistemology
   - knowledge

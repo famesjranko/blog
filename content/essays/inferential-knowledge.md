@@ -5,7 +5,7 @@ author:
   name: "Andrew McDonald"
 date: 2016-07-20
 cover: /img/essays/inferential-knowledge/cover.jpg
-coverAlt: "city"
+coverAlt: "A white space helmet with a dark visor against a black background"
 draft: false
 featured: true
 toc: false
