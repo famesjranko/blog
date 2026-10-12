@@ -85,4 +85,4 @@ Optional discovery can announce seven sensors and one binary sensor to Home Assi
 
 The firmware is specific to this Waveshare board. It configures RGB colour order and maps pixels in plain rows. The dashboard limits brightness to 50 out of 255. For another matrix, its colour order and layout would need to match or the configuration would need to change.
 
-[View esp32-s3-internet-monitor on GitHub →](https://github.com/famesjranko/esp32-s3-internet-monitor)
+[View on GitHub&nbsp;→](https://github.com/famesjranko/esp32-s3-internet-monitor)

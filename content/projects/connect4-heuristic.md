@@ -209,4 +209,4 @@ Finally, a caveat. While I am not the most accomplished Connect-4 player, I did 
 
 [See this heuristic extended as a web interface →](/projects/connect4-lisp-web/)
 
-[View Connect4-Heuristic-Player on GitHub →](https://github.com/famesjranko/Connect4-Heuristic-Player)
+[View on GitHub&nbsp;→](https://github.com/famesjranko/Connect4-Heuristic-Player)

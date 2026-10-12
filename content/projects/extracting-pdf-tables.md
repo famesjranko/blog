@@ -69,7 +69,7 @@ The approach held up: where the detector placed a table correctly, Camelot usual
 
 [See this engine extended as Tablescan →](/projects/tablescan/)
 
-[View automated-PDF-tabulated-data-extractor-api on GitHub →](https://github.com/famesjranko/automated-PDF-tabulated-data-extractor-api)
+[View on GitHub&nbsp;→](https://github.com/famesjranko/automated-PDF-tabulated-data-extractor-api)
 
 ---
 
