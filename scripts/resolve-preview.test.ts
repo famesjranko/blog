@@ -185,8 +185,9 @@ describe("check-runs response parsing", () => {
 		].join(" ");
 		// And a child environment of only PATH and the resolver's inputs, so
 		// shell flags such as NODE_USE_ENV_PROXY cannot add Node warnings.
+		const { PATH } = process.env;
 		const env = {
-			PATH: process.env["PATH"],
+			PATH,
 			GH_REPOSITORY: "andy/blog",
 			GH_TOKEN: "tok7",
 			PR_HEAD_SHA: sha,
