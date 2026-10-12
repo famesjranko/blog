@@ -20,4 +20,4 @@ Both shapes share nearly everything except which side owns the truth. The server
 
 Each player gets one 5x5 bomb move that unlocks only while trailing by four or more mines, for a way back into a losing game. Room chat and match state survive reconnects and rematches, backed by an optional Redis layer for rooms, match state, chat history and reconnect sessions; a public deployment requires that Redis backend, along with an explicit allowed-origins list and trust-proxy configuration, while local development just keeps state in memory.
 
-[View minesweeper-flags on GitHub →](https://github.com/famesjranko/minesweeper-flags)
+[View on GitHub&nbsp;→](https://github.com/famesjranko/minesweeper-flags)

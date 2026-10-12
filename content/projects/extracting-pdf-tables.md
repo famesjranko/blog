@@ -67,9 +67,9 @@ By the end of the project the system did what the brief asked. A user could uplo
 
 The approach held up: where the detector placed a table correctly, Camelot usually read it well. The weaknesses were in detection, which missed more than one table in five on the weakest report and sometimes took infographics for tables, and in the output, since CSV flattens cells that span columns. Nothing in the system could flag these failures, and the user had no way to correct them. We had many ideas for improving the engine, but ultimately ran out of time for further refinement.
 
-[See this engine extended as Tablescan →](/projects/tablescan/)
+Related project: [Tablescan&nbsp;→](/projects/tablescan/)
 
-[View automated-PDF-tabulated-data-extractor-api on GitHub →](https://github.com/famesjranko/automated-PDF-tabulated-data-extractor-api)
+[View on GitHub&nbsp;→](https://github.com/famesjranko/automated-PDF-tabulated-data-extractor-api)
 
 ---
 

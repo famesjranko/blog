@@ -105,4 +105,4 @@ The demo is a small web app in the same repository. It builds against the librar
 
 [Try the live demo →](https://musicmeta-demo-354377080055.us-central1.run.app)
 
-[View Musicmeta on GitHub →](https://github.com/famesjranko/musicmeta)
+[View on GitHub&nbsp;→](https://github.com/famesjranko/musicmeta)

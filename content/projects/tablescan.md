@@ -88,4 +88,6 @@ make docker-dev
 
 The Compose setup is for local use. It runs Django's development server with debug mode on.
 
-[View Tablescan on GitHub →](https://github.com/famesjranko/tablescan)
+Related project: [PDF table extraction&nbsp;→](/projects/extracting-pdf-tables/)
+
+[View on GitHub&nbsp;→](https://github.com/famesjranko/tablescan)

@@ -19,4 +19,4 @@ Detection runs per class with independent confidence thresholds, so a person can
 
 The pipeline runs on CPU or GPU, with the CUDA build of PyTorch as an optional install for GPU inference. `app.py` wraps the same detection and tracking pipeline in the Streamlit dashboard, for a click-through demo separate from the command-line script's zone and blur flags.
 
-[View object-tracking-demo on GitHub →](https://github.com/famesjranko/object-tracking-demo)
+[View on GitHub&nbsp;→](https://github.com/famesjranko/object-tracking-demo)

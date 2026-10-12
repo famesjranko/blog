@@ -71,6 +71,25 @@ Before you add a cover, or set `featured` or `showcase` on a piece, check its
 crop on the homepage and on the index page. Write `coverAlt` for the whole
 image.
 
+## Closing project links
+
+When a project article closes with a repository link, prefer a standalone
+paragraph labelled “View on GitHub →” with the existing prose link styling.
+Use `&nbsp;` before the arrow to keep it with “GitHub”:
+
+```markdown
+[View on GitHub&nbsp;→](https://github.com/famesjranko/project)
+```
+
+Review the article at a narrow screen width and check that the arrow stays
+with “GitHub”.
+
+For paired projects, add reciprocal links in standalone paragraphs immediately
+above the GitHub link. Use the plain prefix “Related project:” and a short,
+descriptive linked title with the existing prose link styling. Put `&nbsp;`
+before the arrow. Review both articles at a narrow screen width and check that
+the arrow stays with the title’s last word.
+
 ## Colour and interaction
 
 Light and dark themes must keep text, links, controls, borders, and diagrams

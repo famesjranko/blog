@@ -22,4 +22,4 @@ The stack itself is nineteen containers behind Docker Compose: Jellyfin, Seerr, 
 
 `./mediastack` doesn't stop being useful once the stack is running. The same entry point becomes a day-2 menu: service status and logs, per-service updates with a revert to the previously installed image, fail2ban's ban list and jail stats, TLS and DNS drift checks, and hardware transcoding setup. Everything the installer changed on the host is tracked, so uninstalling removes those changes while leaving `data/` and `config/` in place.
 
-[View MediaStack on GitHub →](https://github.com/famesjranko/MediaStack)
+[View on GitHub&nbsp;→](https://github.com/famesjranko/MediaStack)

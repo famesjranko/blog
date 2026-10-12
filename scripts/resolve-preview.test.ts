@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { spawnSync } from "node:child_process";
-import { resolve } from "node:path";
+import { existsSync, mkdtempSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join, resolve } from "node:path";
 import { type CheckRun, decide, parsePreview } from "./resolve-preview.js";
 
 const sha = "b0a91e364b529ce41ec93cf5bd98f17b15ff1d2f";
@@ -30,6 +32,49 @@ const pending = check({
 	conclusion: null,
 	output: { summary: null },
 });
+
+function childEnvironment(outputPath: string): NodeJS.ProcessEnv {
+	const { PATH } = process.env;
+	// Allow only resolver inputs so inherited Node flags cannot affect stderr.
+	return {
+		PATH,
+		GH_REPOSITORY: "andy/blog",
+		GH_TOKEN: "tok7",
+		PR_HEAD_SHA: sha,
+		GITHUB_OUTPUT: outputPath,
+	};
+}
+
+function runMockedResponse(
+	sourcePath: string,
+	body: unknown,
+	env: NodeJS.ProcessEnv,
+) {
+	const responseJson = JSON.stringify(JSON.stringify(body));
+	const script = [
+		`globalThis.fetch = async () => new Response(${responseJson}, { status: 200 });`,
+		`process.argv[1] = ${JSON.stringify(sourcePath)};`,
+		'await import("./scripts/resolve-preview.ts");',
+	].join(" ");
+	return spawnSync(process.execPath, ["--import", "tsx", "--eval", script], {
+		encoding: "utf8",
+		env,
+		timeout: 10_000,
+	});
+}
+
+function expectSafeSchemaFailure(
+	result: ReturnType<typeof runMockedResponse>,
+	canary: string,
+): void {
+	expect(result.status).toBe(1);
+	expect(result.stdout).toBe("");
+	expect(result.stderr).toBe(
+		"GitHub check-runs API returned invalid response\n",
+	);
+	expect(result.stderr).not.toContain(canary);
+	expect(result.stderr).not.toContain("tok7");
+}
 
 describe("decide on a completed check", () => {
 	it("selects the immutable preview for the exact PR head", () => {
@@ -174,36 +219,70 @@ describe("parsePreview", () => {
 	});
 });
 
-describe("check-runs response parsing", () => {
+describe("wrong-schema check-runs responses", () => {
+	it("bounds wrong-schema diagnostics and fails without writing a preview", () => {
+		// Given wrong-schema JSON responses with multiple invalid records.
+		const sourcePath = resolve("scripts/resolve-preview.ts");
+		const directory = mkdtempSync(join(tmpdir(), "resolve-preview-test-"));
+		const outputPath = join(directory, "github-output");
+		const canary = "CANARY-🧪-\u0000";
+		const responses = [
+			{ check_runs: [{ id: canary }, { id: "SECOND_CANARY" }] },
+			{
+				check_runs: Array.from({ length: 100 }, (_, index) => ({
+					id: index === 0 ? canary : `INVALID_${index}`,
+				})),
+			},
+		];
+		const childEnv = childEnvironment(outputPath);
+
+		// When each mocked response is handled by a fresh CLI process.
+		const results = responses.map((body) =>
+			runMockedResponse(sourcePath, body, childEnv),
+		);
+
+		// Then the fixed error is bounded and no output marker or URL is written.
+		try {
+			for (const result of results) {
+				expectSafeSchemaFailure(result, canary);
+			}
+			expect(results[1]?.stderr.length).toBe(results[0]?.stderr.length);
+			expect(existsSync(outputPath)).toBe(false);
+		} finally {
+			rmSync(directory, { recursive: true, force: true });
+		}
+	});
+});
+
+describe("malformed check-runs JSON", () => {
 	it("does not disclose malformed response bodies or the API token", () => {
 		// Given a successful API response containing the same value as the token.
 		const sourcePath = resolve("scripts/resolve-preview.ts");
+		const directory = mkdtempSync(join(tmpdir(), "resolve-preview-test-"));
+		const outputPath = join(directory, "github-output");
 		const script = [
 			'globalThis.fetch = async () => new Response("tok7", { status: 200 });',
 			`process.argv[1] = ${JSON.stringify(sourcePath)};`,
 			'await import("./scripts/resolve-preview.ts");',
 		].join(" ");
-		// And a child environment of only PATH and the resolver's inputs, so
-		// shell flags such as NODE_USE_ENV_PROXY cannot add Node warnings.
-		const { PATH } = process.env;
-		const env = {
-			PATH,
-			GH_REPOSITORY: "andy/blog",
-			GH_TOKEN: "tok7",
-			PR_HEAD_SHA: sha,
-			GITHUB_OUTPUT: "/tmp/resolve-preview-test-output",
-		};
+		const childEnv = childEnvironment(outputPath);
 
-		// When the resolver handles the mocked response.
+		// When the child resolver handles the malformed mocked response.
 		const result = spawnSync(
 			process.execPath,
 			["--import", "tsx", "--eval", script],
-			{ encoding: "utf8", env },
+			{ encoding: "utf8", env: childEnv },
 		);
 
 		// Then it reports a fixed diagnostic without response content or token.
-		expect(result.status).toBe(1);
-		expect(result.stderr).toBe("GitHub check-runs API returned invalid JSON\n");
-		expect(result.stderr).not.toContain("tok7");
+		try {
+			expect(result.status).toBe(1);
+			expect(result.stderr).toBe(
+				"GitHub check-runs API returned invalid JSON\n",
+			);
+			expect(result.stderr).not.toContain("tok7");
+		} finally {
+			rmSync(directory, { recursive: true, force: true });
+		}
 	});
 });
