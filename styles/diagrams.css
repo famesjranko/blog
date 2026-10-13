@@ -347,6 +347,10 @@ is supplied separately by figures.css. */
 		stroke-dasharray: 6 5;
 	}
 
+	.prose .diagram-infrastructure .group-frame {
+		fill: none;
+	}
+
 	.prose .diagram-lead-team .rework-group {
 		fill: var(--color-team-rework-bg);
 		stroke: var(--color-team-rework-line);

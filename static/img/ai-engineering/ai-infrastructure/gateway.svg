@@ -1,0 +1,27 @@
+<svg class="diagram diagram-lead-team diagram-infrastructure" viewBox="0 0 560 310" role="img" aria-labelledby="gateway-title gateway-desc" xmlns="http://www.w3.org/2000/svg">
+<title id="gateway-title">Inside the lab-control gateway</title>
+<desc id="gateway-desc">An agent's MCP request passes through policy checks and a lease record before the credentialed Proxmox and TrueNAS adapters create or release a guest or a dataset. Appliance credentials stay in the gateway.</desc>
+<defs><marker id="gateway-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto-start-reverse"><path class="arrowhead" d="M0 0 L8 4 L0 8 Z"/></marker></defs>
+<rect class="frame" x="180" y="16" width="200" height="56" rx="10"/>
+<text class="heading" x="280" y="38" text-anchor="middle">Agent</text>
+<text class="muted" x="280" y="63" text-anchor="middle">MCP request</text>
+<path class="flow" d="M280 72 V100 H155 V150" marker-end="url(#gateway-arrow)"/>
+<rect class="group-frame" x="20" y="110" width="520" height="174" rx="14"/>
+<text class="heading" x="280" y="134" text-anchor="middle">Lab-control gateway</text>
+<rect class="frame" x="40" y="150" width="230" height="60" rx="10"/>
+<text class="heading" x="155" y="172" text-anchor="middle">Policy checks</text>
+<text class="muted" x="155" y="196" text-anchor="middle">Policy · lease expiry</text>
+<rect class="frame" x="290" y="150" width="230" height="60" rx="10"/>
+<text class="heading" x="405" y="172" text-anchor="middle">Lease record</text>
+<text class="muted" x="405" y="196" text-anchor="middle">Recorded ownership</text>
+<path class="flow" d="M270 180 H290" marker-end="url(#gateway-arrow)"/>
+<rect class="structural-frame" x="40" y="222" width="230" height="56" rx="10"/>
+<text class="heading" x="155" y="242" text-anchor="middle">Proxmox adapter</text>
+<text class="muted" x="155" y="267" text-anchor="middle">create · release guest</text>
+<rect class="structural-frame" x="290" y="222" width="230" height="56" rx="10"/>
+<text class="heading" x="405" y="242" text-anchor="middle">TrueNAS adapter</text>
+<text class="muted" x="405" y="267" text-anchor="middle">dataset · NFS lease</text>
+<path class="flow" d="M405 210 V222" marker-end="url(#gateway-arrow)"/>
+<path class="flow" d="M405 210 V216 H155 V222" marker-end="url(#gateway-arrow)"/>
+<text class="muted" x="280" y="302" text-anchor="middle">Credentials stay in the gateway.</text>
+</svg>

@@ -1,0 +1,41 @@
+<svg class="diagram diagram-lead-team diagram-infrastructure" viewBox="0 0 560 480" role="img" aria-labelledby="workbench-title workbench-desc" xmlns="http://www.w3.org/2000/svg">
+<title id="workbench-title">Where the work happens</title>
+<desc id="workbench-desc">A browser reaches the permanent AI workbench VM through Tailscale. Proxmox hosts the workbench and a separate disposable lab guest. The workbench runs T3 Code and coding runtimes with Git worktrees, rootless Docker and a local request proxy. External services include GitHub, hosted models and cloud tools. The lab guest can use NFS storage from TrueNAS on a separate physical machine. Lab-control represents guest access and management; the gateway controls provisioning through Proxmox.</desc>
+<defs><marker id="workbench-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto-start-reverse"><path class="arrowhead" d="M0 0 L8 4 L0 8 Z"/></marker></defs>
+<rect class="frame" x="20" y="16" width="200" height="64" rx="10"/>
+<text class="heading" x="120" y="42" text-anchor="middle">Laptop or phone</text>
+<text class="muted" x="120" y="66" text-anchor="middle">Browser</text>
+<path class="flow" d="M120 80 V108 H290 V208" marker-end="url(#workbench-arrow)"/>
+<text class="label" x="298" y="140">Tailscale</text>
+<rect class="group-frame" x="20" y="150" width="330" height="300" rx="14"/>
+<text class="heading" x="36" y="172">Proxmox host</text>
+<text class="muted" x="36" y="196">Always on</text>
+<rect class="structural-frame" x="40" y="208" width="290" height="118" rx="10"/>
+<text class="heading" x="185" y="237" text-anchor="middle">AI workbench VM</text>
+<text class="muted" x="185" y="261" text-anchor="middle">T3 Code · coding runtimes</text>
+<text class="muted" x="185" y="283" text-anchor="middle">Git worktrees</text>
+<text class="muted" x="185" y="305" text-anchor="middle">llmtrim · rootless Docker</text>
+<path class="flow" d="M185 326 V360" marker-end="url(#workbench-arrow)"/>
+<text class="label" x="195" y="348">lab-control</text>
+<rect class="frame" x="40" y="360" width="290" height="64" rx="10"/>
+<text class="heading" x="185" y="385" text-anchor="middle">Lab guest</text>
+<text class="muted" x="185" y="409" text-anchor="middle">Disposable · lab network</text>
+<rect class="frame" x="380" y="196" width="160" height="56" rx="10"/>
+<text class="heading" x="460" y="217" text-anchor="middle">GitHub</text>
+<text class="muted" x="460" y="242" text-anchor="middle">Repositories</text>
+<rect class="frame" x="380" y="268" width="160" height="56" rx="10"/>
+<text class="heading" x="460" y="289" text-anchor="middle">Models</text>
+<text class="muted" x="460" y="314" text-anchor="middle">Hosted providers</text>
+<rect class="frame" x="380" y="340" width="160" height="56" rx="10"/>
+<text class="heading" x="460" y="361" text-anchor="middle">Cloud tools</text>
+<text class="muted" x="460" y="386" text-anchor="middle">APIs / services</text>
+<rect class="frame" x="380" y="412" width="160" height="56" rx="10"/>
+<text class="heading" x="460" y="433" text-anchor="middle">TrueNAS</text>
+<text class="muted" x="460" y="458" text-anchor="middle">Physical machine</text>
+<path class="flow" d="M330 224 H380" marker-end="url(#workbench-arrow)"/>
+<text class="label" x="355" y="216" text-anchor="middle">git</text>
+<path class="flow" d="M330 296 H380" marker-end="url(#workbench-arrow)"/>
+<path class="flow" d="M330 316 H355 V368 H380" marker-end="url(#workbench-arrow)"/>
+<path class="flow" d="M330 400 H355 V440 H380" marker-end="url(#workbench-arrow)"/>
+<text class="label" x="355" y="464" text-anchor="middle">NFS</text>
+</svg>
