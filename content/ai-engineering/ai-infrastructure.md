@@ -26,7 +26,7 @@ I also use [llmtrim](https://github.com/fkiene/llmtrim), an optional proxy for c
 
 ## Giving experiments a lifetime
 
-The permanent workbench holds the tools and context I use across projects. Work that needs a separate machine can use a disposable Debian guest. The `lab-control` skill lets an agent request one, with optional NVIDIA Quadro GPU passthrough or storage from a separate physical TrueNAS machine. A gateway service on the workbench manages the guest and optional storage allocations requested through `lab-control`. Files can stay on the guest's disk or in its optional NAS workspace.
+The permanent workbench holds the tools and context I use across projects. Work that needs a separate machine can use a disposable Debian guest. The `lab-control` skill lets an agent request one, with optional NVIDIA Quadro GPU passthrough or storage from a separate physical TrueNAS machine. A gateway service on the workbench manages the guest and optional storage allocations requested through `lab-control`. Files can be stored on the guest's disk or in its optional NAS workspace.
 
 A separate lab network keeps those guests' connections under explicit control. Firewall rules permit the access needed for tools, workbench SSH and optional NAS storage, while restricting access to management and other private networks. The workbench retains its normal home-network connection; its lab interface does not provide a competing default route.
 
@@ -66,4 +66,4 @@ The toolkit's `workbench` skill guides agents maintaining the permanent VM, usin
 
 Bringing projects onto the workbench still means preparing their dependencies and giving agents accurate context about where they run. That context also helps them provide previews I can reach. I want to develop a workflow where I can set work going while away and return to changes ready for review. The separate environment gives me somewhere to try it while deciding what data and access each task needs.
 
-Related project: [How I organise a team of agents&nbsp;→](/ai-engineering/lead-team/)
+Related article: [How I organise a team of agents&nbsp;→](/ai-engineering/lead-team/)
