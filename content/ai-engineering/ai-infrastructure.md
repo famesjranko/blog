@@ -2,7 +2,7 @@
 title: "How I set up my AI coding environment"
 description: "A permanent workbench for native coding sessions, reached from a browser, with disposable machines for tasks that need their own."
 date: 2026-10-13
-draft: true
+draft: false
 topics:
   - software engineering
   - coding agents
