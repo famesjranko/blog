@@ -28,7 +28,7 @@ I run a dedicated Debian workbench VM on my existing Proxmox development server.
 
 Keeping the workbench separate also makes it available independently of my laptop or desktop. [T3 Code](https://t3.codes/) gives me a browser interface I can reach through Tailscale from different devices. I can leave the work on the workbench and change where I interact with it.
 
-T3 steers the native Codex and Claude Code harnesses installed there: the programs that let a model edit files and run tools. I use each harness's login with my existing subscriptions. The interface brings those sessions together while each harness retains its own runtime integration.
+T3 controls the native Codex and Claude Code harnesses installed there: the programs that let a model edit files and run tools. I use each harness's login with my existing subscriptions. The interface brings those sessions together while each harness retains its own runtime integration.
 
 <figure class="infra-responsive">
 
@@ -80,6 +80,6 @@ The toolkit's `workbench` skill guides agents maintaining the permanent VM, usin
   <li><span class="infra-step-name">Change and recheck</span> <small>Make authorised changes and verify the result.</small></li>
 </ol>
 
-Bringing projects onto the workbench still means preparing their dependencies and giving agents accurate context about where they run. That context also helps them provide previews I can reach. I want to develop a workflow where I can set work going while away and return to changes ready for review. The separate environment gives me somewhere to try it while deciding what data and access each task needs.
+Bringing projects onto the workbench still means preparing their dependencies and giving agents accurate context about where they run. That context also helps them provide previews I can reach. I want to develop a workflow where I can start tasks while away and return to changes ready for review. The separate environment lets me test that workflow and decide what data and access each task needs.
 
 Related article: [How I organise a team of agents&nbsp;→](/ai-engineering/lead-team/)
