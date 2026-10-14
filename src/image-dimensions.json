@@ -1,4 +1,28 @@
 {
+	"/img/ai-engineering/ai-infrastructure/coding-narrow.svg": {
+		"width": 358,
+		"height": 844
+	},
+	"/img/ai-engineering/ai-infrastructure/coding.svg": {
+		"width": 715,
+		"height": 520
+	},
+	"/img/ai-engineering/ai-infrastructure/cover.jpg": {
+		"width": 1600,
+		"height": 667
+	},
+	"/img/ai-engineering/ai-infrastructure/gateway.svg": {
+		"width": 560,
+		"height": 310
+	},
+	"/img/ai-engineering/ai-infrastructure/workbench-narrow.svg": {
+		"width": 358,
+		"height": 664
+	},
+	"/img/ai-engineering/ai-infrastructure/workbench.svg": {
+		"width": 715,
+		"height": 420
+	},
 	"/img/ai-engineering/lead-team/cover.jpg": {
 		"width": 1600,
 		"height": 667

@@ -43,6 +43,7 @@ export function essayPage(essay: Essay): string {
 			siteUrl("/css/essay-patterns.css"),
 			siteUrl("/css/essay-discussion.css"),
 			siteUrl("/css/diagrams.css"),
+			siteUrl("/css/infrastructure-diagrams.css"),
 			...(isNote ? [siteUrl("/css/notes.css")] : []),
 			siteUrl("/css/lightbox.css"),
 		],

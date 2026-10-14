@@ -1,0 +1,159 @@
+/* Infrastructure figures stay within the prose column and follow the theme.
+SVG geometry lives in the artwork; step grids use the site's interface type. */
+@layer prose {
+	.prose .infra-steps {
+		display: grid;
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+		gap: 0.75rem;
+		margin: 0.5rem 0 1.25rem;
+		padding: 0;
+		list-style: none;
+	}
+
+	.prose .infra-steps--3 {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+	}
+
+	.prose .infra-steps li {
+		min-width: 0;
+		margin: 0;
+		font-family: var(--font-ui);
+		font-size: 1rem;
+		line-height: 1.4;
+		overflow-wrap: anywhere;
+	}
+
+	.prose .infra-steps li + li .infra-step-name::before {
+		content: "→ ";
+		color: var(--color-muted);
+	}
+
+	.prose .infra-steps small {
+		display: block;
+		font-size: 0.875rem;
+		color: var(--color-muted);
+	}
+
+	@media (max-width: 48rem) {
+		.prose .infra-steps {
+			grid-template-columns: 1fr;
+		}
+
+		.prose .infra-steps li + li .infra-step-name::before {
+			content: "↓ ";
+		}
+	}
+
+	.prose .infra-responsive {
+		container-type: inline-size;
+	}
+
+	.prose .infra-responsive > p {
+		margin: 0;
+	}
+
+	.prose .diagram-infra {
+		font-family: var(--font-ui);
+		width: 100%;
+	}
+
+	.prose .infra-narrow {
+		max-width: 360px;
+	}
+
+	.prose .infra-responsive > p > .infra-wide {
+		display: none;
+	}
+
+	@container (min-width: 600px) {
+		.prose .infra-responsive > p > .infra-wide {
+			display: block;
+		}
+
+		.prose .infra-responsive > p > .infra-narrow {
+			display: none;
+		}
+	}
+
+	/* Type is set on the 715-unit wide and 358-unit narrow canvases so the
+	smallest label stays at or above 14px: 14.3px when the wide drawing
+	appears at the 600px container threshold, 14.5px for the narrow one at a
+	320px viewport. */
+	.prose .diagram-infra text {
+		font-size: 17px;
+	}
+
+	.prose .diagram-infra .heading {
+		font-size: 20px;
+		font-weight: 600;
+	}
+
+	.prose .infra-narrow text {
+		font-size: 18px;
+	}
+
+	.prose .infra-narrow .heading {
+		font-size: 20px;
+	}
+
+	/* Hues group entities by kind, not by network or trust: teal for
+	physical hardware, the site accent for software and VMs on the workbench
+	and for the control flow, muted ink for things outside the lab. Text
+	stays neutral. The dark teal sits below --color-diagram-x so 2.5px
+	strokes do not glow on the dark page. */
+	.prose .diagram-infra {
+		--color-infra-hardware: light-dark(var(--color-diagram-x), #5fc3d6);
+	}
+
+	.prose .diagram-infra .device {
+		fill: var(--color-surface);
+		stroke: var(--color-text);
+	}
+
+	.prose .diagram-infra .device .screen {
+		fill: none;
+	}
+
+	.prose .diagram-infra .device-external {
+		stroke: var(--color-muted);
+	}
+
+	.prose .diagram-infra .device-hardware {
+		stroke: var(--color-infra-hardware);
+	}
+
+	.prose .diagram-infra .device-virtual,
+	.prose .diagram-infra .device-software {
+		stroke: var(--color-accent);
+	}
+
+	.prose .diagram-infra .boundary {
+		fill: none;
+	}
+
+	.prose .diagram-infra .boundary-hardware {
+		stroke: var(--color-infra-hardware);
+	}
+
+	.prose .diagram-infra .boundary-virtual {
+		stroke: var(--color-accent);
+	}
+
+	.prose .diagram-infra .band-hardware {
+		fill: var(--color-wash-3);
+	}
+
+	.prose .diagram-infra .band-external {
+		fill: var(--color-wash-2);
+	}
+
+	.prose .diagram-infra .flow {
+		fill: none;
+		stroke: var(--color-accent);
+	}
+
+	.prose .diagram-infra .arrowhead,
+	.prose .diagram-infra .junction {
+		fill: var(--color-accent);
+	}
+}

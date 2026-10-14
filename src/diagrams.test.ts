@@ -8,6 +8,11 @@ import { describe, expect, it } from "vitest";
 // It must carry no presentation of its own, and it
 // owns its accessible name because the markdown alt is dropped.
 const CONTENT_DIAGRAMS = [
+	"static/img/ai-engineering/ai-infrastructure/workbench.svg",
+	"static/img/ai-engineering/ai-infrastructure/workbench-narrow.svg",
+	"static/img/ai-engineering/ai-infrastructure/coding.svg",
+	"static/img/ai-engineering/ai-infrastructure/coding-narrow.svg",
+
 	"static/img/essays/dretske-closure/euler-diagram.svg",
 	"static/img/projects/connect4-heuristic/connect4-depth1.svg",
 	"static/img/projects/connect4-heuristic/connect4-depth2.svg",

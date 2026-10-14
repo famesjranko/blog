@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 358 664" role="img" aria-labelledby="homelab-phone-title homelab-phone-desc" class="diagram diagram-infra infra-narrow">
+<title id="homelab-phone-title">Homelab — phone</title>
+<desc id="homelab-phone-desc">A browser opens T3 over Tailscale on the permanent Workbench VM inside the physical Proxmox host. The workbench reaches guest VMs over SSH on the lab network. Resources available when needed: guest VMs; the host GPU, which can pass through to one VM; and TrueNAS, a separate physical machine both VMs reach over the LAN with optional NFS.</desc>
+<defs>
+<marker id="homelab-phone-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
+<path class="arrowhead" d="M1 1L9 5L1 9Z" />
+</marker>
+</defs>
+<g class="device device-external" transform="translate(16 0) scale(0.8)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+<rect x="14" y="4" width="52" height="38" rx="4" />
+<rect class="screen" x="20" y="10" width="40" height="26" rx="2" />
+<path d="M4 48h72v4a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4z" />
+<path d="M34 51h12" />
+</g>
+<text x="100" y="22" class="heading">Browser</text>
+<text x="100" y="46" class="muted">any device</text>
+<path class="flow" d="M48 56V118" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#homelab-phone-arrow)" />
+<text x="62" y="92" class="muted">open T3 · Tailscale</text>
+<rect class="boundary boundary-hardware" x="8" y="118" width="342" height="254" rx="14" stroke-width="1.5" stroke-dasharray="7 5" />
+<g class="device device-small device-hardware" transform="translate(22 130) scale(0.4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<rect x="12" y="6" width="56" height="52" rx="4" />
+<path d="M12 24h56M12 42h56M22 15h.1M22 33h.1M22 51h.1M48 15h10M48 33h10M48 51h10" />
+</g>
+<text x="64" y="149" class="heading">VMs on Proxmox</text>
+<g class="device device-virtual" transform="translate(16 170) scale(0.8)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+<rect x="8" y="2" width="64" height="44" rx="4" />
+<rect class="screen ghost" x="15" y="9" width="50" height="30" rx="2" stroke-dasharray="5 4" />
+<path d="M40 46v10M26 58h28" />
+</g>
+<text x="100" y="192" class="heading">Workbench VM</text>
+<text x="100" y="216" class="muted">permanent · T3 · harnesses</text>
+<text x="100" y="240" class="muted">lab-control gateway</text>
+<path class="flow" d="M48 226V298" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#homelab-phone-arrow)" />
+<text x="62" y="268" class="muted">SSH · lab network</text>
+<g class="device ghost device-virtual" transform="translate(16 302) scale(0.8)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="6 4">
+<rect x="8" y="2" width="64" height="44" rx="4" />
+<rect class="screen ghost" x="15" y="9" width="50" height="30" rx="2" stroke-dasharray="5 4" />
+<path d="M40 46v10M26 58h28" />
+</g>
+<text x="100" y="324" class="heading">Guest VM</text>
+<text x="100" y="348" class="muted">available when needed</text>
+<rect class="band band-hardware" x="0" y="396" width="358" height="268" rx="14" />
+<text x="16" y="424" class="muted">Resources the VMs can use</text>
+<g class="device device-hardware" transform="translate(16 446) scale(0.8)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+<rect x="12" y="12" width="64" height="36" rx="3" />
+<circle class="screen" cx="50" cy="30" r="12" />
+<circle class="screen" cx="50" cy="30" r="4" />
+<path d="M50 18v4M50 38v4M38 30h4M58 30h4M20 22v16M27 22v16" />
+<rect x="2" y="6" width="6" height="52" rx="1" />
+<path d="M18 48v8M24 48v8M30 48v8M36 48v8M42 48v8M48 48v8M54 48v8" />
+</g>
+<text x="100" y="468" class="heading">Host GPU</text>
+<text x="100" y="492" class="muted">Proxmox hardware</text>
+<text x="100" y="516" class="muted">passthrough to one VM</text>
+<text x="100" y="540" class="muted">when needed</text>
+<g class="device device-hardware" transform="translate(16 558) scale(0.8)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+<rect x="22" y="2" width="36" height="60" rx="4" />
+<rect class="screen" x="28" y="8" width="24" height="12" rx="1.5" />
+<rect class="screen" x="28" y="24" width="24" height="12" rx="1.5" />
+<rect class="screen" x="28" y="40" width="24" height="12" rx="1.5" />
+<path d="M47 14h.1M47 30h.1M47 46h.1M34 57h12" />
+</g>
+<text x="100" y="580" class="heading">TrueNAS</text>
+<text x="100" y="604" class="muted">separate physical machine</text>
+<text x="100" y="628" class="muted">LAN from both VMs</text>
+<text x="100" y="652" class="muted">NFS optional</text>
+</svg>
