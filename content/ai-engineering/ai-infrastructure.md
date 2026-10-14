@@ -24,7 +24,7 @@ I run a dedicated Debian workbench VM on my existing Proxmox development server.
 <figcaption>The permanent workbench controls guest VMs over SSH. GPU passthrough and shared storage are available when needed.</figcaption>
 </figure>
 
-## A workbench I can reach
+## Remote access and coding tools
 
 Keeping the workbench separate also makes it available independently of my laptop or desktop. [T3 Code](https://t3.codes/) gives me a browser interface I can reach through Tailscale from different devices. I can leave the work on the workbench and change where I interact with it.
 
@@ -40,7 +40,7 @@ T3 steers the native Codex and Claude Code harnesses installed there: the progra
 
 I also use [llmtrim](https://github.com/fkiene/llmtrim), an optional proxy for configured model requests. Its `safe` preset reduces input tokens through lossless compression.
 
-## Giving experiments a lifetime
+## Disposable VMs and lab resources
 
 The permanent workbench holds the tools and context I use across projects. Work that needs a separate machine can use a disposable Debian guest. The `lab-control` skill lets an agent request one, with optional NVIDIA Quadro GPU passthrough or storage from a separate physical TrueNAS machine. A gateway service on the workbench manages the guest and optional storage allocations requested through `lab-control`. Files can be stored on the guest's disk or in its optional NAS workspace.
 
@@ -48,7 +48,7 @@ A separate lab network keeps those guests' connections under explicit control. F
 
 Each guest and optional NAS workspace belong to a temporary lease. Results I want to keep must be saved outside that lease. Manual release or automated cleanup after expiry or prolonged inactivity removes both allocations.
 
-## Making the setup repeatable
+## Setup and verification
 
 I keep machine configuration and installers in `workbench-infra`. Its runbook connects the manual platform setup to the automated installation, so I can see which parts need my decisions and which can be repeated.
 
@@ -61,7 +61,7 @@ I keep machine configuration and installers in `workbench-infra`. Its runbook co
 
 Provider login and initial T3 pairing remain interactive. The acceptance checks matter because an installed service alone does not establish that an agent can use the environment.
 
-## Keeping guidance portable
+## Shared agent instructions and tools
 
 I keep shared instructions, skills and hooks in `agent-toolkit`. Its installer puts managed copies where each runtime expects them. Registering MCP tools is a separate step from copying guidance: instructions describe how to work, while registration makes tools available to the runtime. Machine-specific lab integration belongs to `workbench-infra`.
 
