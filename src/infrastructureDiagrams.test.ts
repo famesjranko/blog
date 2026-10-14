@@ -64,18 +64,17 @@ describe("responsive infrastructure figures", () => {
 });
 
 describe("infrastructure figure facts", () => {
-	it("states the homelab access and hardware facts in every reading", () => {
+	it("keeps homelab resource facts accessible", () => {
 		// Given the homelab figure from the actual article renderer.
 		const figure = renderedFigures()[0] ?? "";
 
-		// When a reader uses either layout's description or the caption.
+		// When a reader uses an accessible description and its shared caption.
 		const descriptions = descriptionsOf(figure);
-		const readings = [...descriptions, captionOf(figure)];
+		const caption = captionOf(figure);
 
-		// Then each states SSH on the lab network, guests on demand, the GPU
-		// passing to one VM, and both VMs reaching the separate TrueNAS machine.
+		// Then descriptions retain the hardware facts and the caption qualifies resource availability.
 		expect(descriptions).toHaveLength(2);
-		for (const reading of readings) {
+		for (const reading of descriptions) {
 			expect(reading).toMatch(/SSH on the lab network/);
 			expect(reading).toMatch(/available when needed/);
 			expect(reading).toMatch(/pass through to one VM/);
@@ -83,25 +82,28 @@ describe("infrastructure figure facts", () => {
 			expect(reading).toMatch(/separate (physical|TrueNAS) machine/);
 			expect(reading).toMatch(/optional NFS/);
 		}
+		expect(caption).toMatch(/available when needed/);
 	});
 
 	it("keeps llmtrim optional and on the model-request path only", () => {
 		// Given the coding figure from the actual article renderer.
 		const figure = renderedFigures()[1] ?? "";
 
-		// When a reader uses either layout's description or the caption.
+		// When a reader uses an accessible description and its shared caption.
 		const descriptions = descriptionsOf(figure);
-		const readings = [...descriptions, captionOf(figure)];
+		const caption = captionOf(figure);
 
-		// Then each names llmtrim as an optional proxy within the model-request
-		// clause, keeps a direct route, and gives each harness its own login.
+		// Then descriptions retain model access facts and the concise caption qualifies the diagram.
 		expect(descriptions).toHaveLength(2);
-		for (const reading of readings) {
+		for (const reading of descriptions) {
 			expect(reading).toMatch(
 				/model requests[^.]*directly[^.]*through llmtrim/i,
 			);
 			expect(reading).toMatch(/llmtrim, an optional proxy/);
 			expect(reading).toMatch(/own provider login/);
+			expect(reading).toMatch(/proxy on the workbench/);
 		}
+		expect(caption).toMatch(/optional local llmtrim proxy/);
+		expect(caption).toMatch(/Response paths are omitted\./);
 	});
 });

@@ -21,7 +21,7 @@
 <rect x="12" y="6" width="56" height="52" rx="4" />
 <path d="M12 24h56M12 42h56M22 15h.1M22 33h.1M22 51h.1M48 15h10M48 33h10M48 51h10" />
 </g>
-<text x="64" y="149" class="heading">Proxmox · physical host</text>
+<text x="64" y="149" class="heading">VMs on Proxmox</text>
 <g class="device device-virtual" transform="translate(16 170) scale(0.8)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
 <rect x="8" y="2" width="64" height="44" rx="4" />
 <rect class="screen ghost" x="15" y="9" width="50" height="30" rx="2" stroke-dasharray="5 4" />

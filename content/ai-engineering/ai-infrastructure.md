@@ -21,7 +21,7 @@ I run a dedicated Debian workbench VM on my existing Proxmox development server.
 ![Homelab diagram, desktop layout](/img/ai-engineering/ai-infrastructure/workbench.svg)
 ![Homelab diagram, phone layout](/img/ai-engineering/ai-infrastructure/workbench-narrow.svg)
 
-<figcaption>The permanent workbench runs T3, the native harnesses and the lab-control gateway, and reaches guest VMs over SSH on the lab network. Guest VMs, the host GPU and TrueNAS are resources available when needed: the GPU can pass through to one VM, and both VMs reach the separate TrueNAS machine over the LAN with optional NFS mounts.</figcaption>
+<figcaption>The permanent workbench controls guest VMs over SSH. GPU passthrough and shared storage are available when needed.</figcaption>
 </figure>
 
 ## A workbench I can reach
@@ -35,7 +35,7 @@ T3 steers the native Codex and Claude Code harnesses installed there: the progra
 ![Coding layer diagram, desktop layout](/img/ai-engineering/ai-infrastructure/coding.svg)
 ![Coding layer diagram, phone layout](/img/ai-engineering/ai-infrastructure/coding-narrow.svg)
 
-<figcaption>T3 Code controls native Codex and Claude Code sessions, each with its own provider login. The harnesses edit and run repositories and tools locally. Model requests go directly to external providers, or through llmtrim, an optional proxy on the workbench, when configured. Response paths are omitted.</figcaption>
+<figcaption>Native harnesses work on local repositories and send model requests directly or through an optional local llmtrim proxy. Response paths are omitted.</figcaption>
 </figure>
 
 I also use [llmtrim](https://github.com/fkiene/llmtrim), an optional proxy for configured model requests. Its `safe` preset reduces input tokens through lossless compression.
