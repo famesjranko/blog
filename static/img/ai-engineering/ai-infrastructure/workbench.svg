@@ -39,20 +39,20 @@
 <text class="label" x="82" y="454">mount a workspace</text>
 <text class="muted" x="82" y="470">NFS, optional</text>
 
-<use href="#d-laptop" transform="translate(20 16) scale(0.6)"/>
+<use class="device" href="#d-laptop" transform="translate(20 16) scale(0.6)"/>
 <text class="heading" x="104" y="44">Browser</text>
 
-<use href="#d-vm" transform="translate(36 174) scale(0.6)"/>
+<use class="device" href="#d-vm" transform="translate(36 174) scale(0.6)"/>
 <text class="heading" x="120" y="194">Workbench VM</text>
 <text class="muted" x="120" y="212">T3 and harnesses</text>
 <text class="muted" x="120" y="230">lab-control gateway</text>
 
-<use href="#d-vm" transform="translate(36 344) scale(0.6)"/>
+<use class="device" href="#d-vm" transform="translate(36 344) scale(0.6)"/>
 <text class="heading" x="120" y="364">Guest VM</text>
 <text class="muted" x="120" y="382">disposable</text>
 <text class="muted" x="120" y="400">one per task</text>
 
-<use href="#d-nas" transform="translate(274 392) scale(0.6)"/>
+<use class="device" href="#d-nas" transform="translate(274 392) scale(0.6)"/>
 <text class="heading" x="310" y="474" text-anchor="middle">TrueNAS</text>
 <text class="muted" x="310" y="492" text-anchor="middle">separate</text>
 <text class="muted" x="310" y="510" text-anchor="middle">physical machine</text>
