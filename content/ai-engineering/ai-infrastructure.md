@@ -3,10 +3,14 @@ title: "How I run my AI coding environment"
 description: "Choosing what coding agents can access, where they work and how long their environment lasts."
 date: 2026-10-13
 draft: false
+cover: /img/ai-engineering/ai-infrastructure/cover.jpg
+coverAlt: "Pixel-art laptop connected to an orange server enclosure and a separate storage tower on a stone plinth"
 topics:
   - software engineering
   - coding agents
 ---
+
+![Pixel-art laptop connected to an orange server enclosure and a separate storage tower on a stone plinth](/img/ai-engineering/ai-infrastructure/cover.jpg)
 
 Coding agents need access to files and tools to do useful work. I want to choose which data and systems they can reach. Keeping their work in a separate place lets me make those choices deliberately and limit the consequences of mistakes for the personal systems I depend on.
 

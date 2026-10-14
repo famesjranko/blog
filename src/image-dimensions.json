@@ -3,6 +3,10 @@
 		"width": 360,
 		"height": 384
 	},
+	"/img/ai-engineering/ai-infrastructure/cover.jpg": {
+		"width": 1600,
+		"height": 667
+	},
 	"/img/ai-engineering/ai-infrastructure/gateway.svg": {
 		"width": 560,
 		"height": 310
@@ -118,10 +122,6 @@
 	"/img/notes/peep-show/cover.jpg": {
 		"width": 1600,
 		"height": 900
-	},
-	"/img/placeholders/ai-infrastructure.jpg": {
-		"width": 640,
-		"height": 360
 	},
 	"/img/placeholders/mediastack.jpg": {
 		"width": 640,
