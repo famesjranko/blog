@@ -34,10 +34,12 @@ The session reaches the guest directly over SSH across the lab network. Optional
 
 I follow the `workbench-infra` runbook. That repository holds machine configuration, systemd units and shell installers. My setup follows these steps:
 
-1. Read the runbook before creating anything.
-2. Set up the host, lab network, guest template and workbench VM manually.
-3. Review and run the shell installers for the gateway and toolkit profile.
-4. Check that each service answers and that a fresh session can use it.
+<ol class="infra-steps" role="list">
+  <li><span class="infra-step-name">Runbook</span> <small>Read <code>workbench-infra</code> before creating anything.</small></li>
+  <li><span class="infra-step-name">Machine setup</span> <small>Set up the host, lab network, guest template and workbench VM by hand.</small></li>
+  <li><span class="infra-step-name">Installers</span> <small>Review and run the shell installers for the gateway and toolkit profile.</small></li>
+  <li><span class="infra-step-name">Acceptance</span> <small>Check each service answers and a fresh session can use it.</small></li>
+</ol>
 
 I also start T3 and pair it through Tailscale by hand before making it a user service. Provider login remains interactive.
 
@@ -56,7 +58,11 @@ I keep portable guidance in `agent-toolkit`. Its installer makes managed copies 
 
 The toolkit's `workbench` skill guides agents maintaining my permanent VM. I keep that responsibility separate from disposable lab guests.
 
-The skill first proves local or SSH access to the workbench. It reads the machine's own documents, runs its health checks and reports the results. For an authorised change, portable tooling belongs in `agent-toolkit` and machine integration belongs in `workbench-infra`. The affected checks run again afterwards.
+<ol class="infra-steps infra-steps--3" role="list">
+  <li><span class="infra-step-name">Reach</span> <small>Prove local or SSH access to the workbench.</small></li>
+  <li><span class="infra-step-name">Read and check</span> <small>Read the machine's own documents, run its health checks and report the results.</small></li>
+  <li><span class="infra-step-name">Change and recheck</span> <small>Make authorised changes: portable tooling in <code>agent-toolkit</code>, machine integration in <code>workbench-infra</code>. Run the affected checks again.</small></li>
+</ol>
 
 The machine's `AGENTS.md`, `ARCHITECTURE.md` and `RUNBOOK.md` files own its facts; the skill owns access and conduct. It stops if access or documents are missing. I use `lab-control` only for disposable guests.
 

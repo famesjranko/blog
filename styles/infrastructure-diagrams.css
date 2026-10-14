@@ -1,6 +1,49 @@
-/* Compact infrastructure figures keep their native size inside the prose
-column. Geometry lives in the SVG; colours follow the site's theme toggle. */
+/* Infrastructure figures stay within the prose column and follow the theme.
+SVG geometry lives in the artwork; step grids use the site's interface type. */
 @layer prose {
+	.prose .infra-steps {
+		display: grid;
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+		gap: 0.75rem;
+		margin: 0.5rem 0 1.25rem;
+		padding: 0;
+		list-style: none;
+	}
+
+	.prose .infra-steps--3 {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+	}
+
+	.prose .infra-steps li {
+		min-width: 0;
+		margin: 0;
+		font-family: var(--font-ui);
+		font-size: 1rem;
+		line-height: 1.4;
+		overflow-wrap: anywhere;
+	}
+
+	.prose .infra-steps li + li .infra-step-name::before {
+		content: "→ ";
+		color: var(--color-muted);
+	}
+
+	.prose .infra-steps small {
+		display: block;
+		font-size: 0.875rem;
+		color: var(--color-muted);
+	}
+
+	@media (max-width: 48rem) {
+		.prose .infra-steps {
+			grid-template-columns: 1fr;
+		}
+
+		.prose .infra-steps li + li .infra-step-name::before {
+			content: "↓ ";
+		}
+	}
+
 	.prose .diagram-infra {
 		font-family: var(--font-ui);
 	}
