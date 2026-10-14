@@ -1,7 +1,11 @@
 {
+	"/img/ai-engineering/ai-infrastructure/coding-narrow.svg": {
+		"width": 358,
+		"height": 844
+	},
 	"/img/ai-engineering/ai-infrastructure/coding.svg": {
-		"width": 360,
-		"height": 384
+		"width": 715,
+		"height": 520
 	},
 	"/img/ai-engineering/ai-infrastructure/cover.jpg": {
 		"width": 1600,
@@ -11,9 +15,13 @@
 		"width": 560,
 		"height": 310
 	},
+	"/img/ai-engineering/ai-infrastructure/workbench-narrow.svg": {
+		"width": 358,
+		"height": 664
+	},
 	"/img/ai-engineering/ai-infrastructure/workbench.svg": {
-		"width": 370,
-		"height": 522
+		"width": 715,
+		"height": 420
 	},
 	"/img/ai-engineering/lead-team/cover.jpg": {
 		"width": 1600,

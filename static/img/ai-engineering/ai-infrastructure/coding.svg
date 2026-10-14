@@ -1,52 +1,90 @@
-<svg xmlns="http://www.w3.org/2000/svg" class="diagram diagram-infra" viewBox="0 0 360 384" role="img" aria-labelledby="coding-title coding-desc">
-<title id="coding-title">My coding sessions</title>
-<desc id="coding-desc">A browser reaches T3 over Tailscale. T3 controls the native Codex and Claude Code harnesses on the workbench. The harnesses edit local repositories, run tools and send model requests using my existing provider logins. Only configured requests pass through llmtrim.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 715 520" role="img" aria-labelledby="coding-desktop-title coding-desktop-desc" class="diagram diagram-infra infra-wide">
+<title id="coding-desktop-title">Coding layer — desktop</title>
+<desc id="coding-desktop-desc">A browser opens T3 Code over Tailscale on the Workbench VM. T3 controls native Codex and Claude Code sessions. The harnesses edit and run local repositories and tools, and separately send model requests to external providers, directly or through llmtrim, an optional proxy on the workbench. Each harness uses its own provider login.</desc>
 <defs>
-<symbol id="i-browser" viewBox="0 0 20 20"><rect x="2" y="3.5" width="16" height="13" rx="2"/><path d="M2 7.5h16M5 5.5h.01M7.5 5.5h.01"/></symbol>
-<symbol id="i-window" viewBox="0 0 20 20"><rect x="2.5" y="3.5" width="15" height="13" rx="1.5"/><path d="M2.5 7h15M6 11l2 2-2 2M10 15h4"/></symbol>
-<symbol id="i-terminal" viewBox="0 0 20 20"><rect x="2.5" y="3.5" width="15" height="13" rx="1.5"/><path d="M6 8l3 2.5L6 13M10.5 13h4"/></symbol>
-<symbol id="i-folder" viewBox="0 0 20 20"><path d="M2.5 5.5a1.5 1.5 0 0 1 1.5-1.5h4l2 2h6a1.5 1.5 0 0 1 1.5 1.5v7.5a1.5 1.5 0 0 1-1.5 1.5H4a1.5 1.5 0 0 1-1.5-1.5z"/></symbol>
-<symbol id="i-filter" viewBox="0 0 20 20"><path d="M3 4h14l-5.5 6.5V16l-3-1.5V10.5z"/></symbol>
-<symbol id="i-cloud" viewBox="0 0 20 20"><path d="M6 15.5h8.5a3 3 0 0 0 .4-6 4.5 4.5 0 0 0-8.7-1A3.5 3.5 0 0 0 6 15.5z"/></symbol>
-<marker id="arr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path class="arrow" d="M0 0.5 L8 4 L0 7.5 Z"/></marker>
-<marker id="arr-access" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path class="arrow arrow--access" d="M0 0.5 L8 4 L0 7.5 Z"/></marker>
+<marker id="coding-desktop-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
+<path class="arrowhead" d="M1 1L9 5L1 9Z" />
+</marker>
 </defs>
-<rect class="box" x="60" y="16" width="240" height="36" rx="6"/>
-<use href="#i-browser" class="icon" x="72" y="25" width="18" height="18"/>
-<text class="label" x="98" y="39">Browser · any device</text>
-<path class="link link--access" d="M180 52 V94" marker-end="url(#arr-access)"/>
-<text class="label" x="188" y="78">Tailscale</text>
-
-<rect class="box box--accent" x="60" y="96" width="240" height="44" rx="6"/>
-<use href="#i-window" class="icon" x="72" y="108" width="20" height="20"/>
-<text class="heading" x="100" y="114">T3</text>
-<text class="muted" x="100" y="132">browser UI · session server</text>
-<path class="link" d="M110 140 V168" marker-end="url(#arr)"/>
-<text class="label" x="118" y="160">controls native sessions</text>
-
-<rect class="group" x="12" y="170" width="188" height="112" rx="8"/>
-<rect class="box" x="24" y="180" width="164" height="38" rx="6"/>
-<use href="#i-terminal" class="icon" x="34" y="190" width="18" height="18"/>
-<text class="label" x="60" y="204">Codex</text>
-<rect class="box" x="24" y="232" width="164" height="38" rx="6"/>
-<use href="#i-terminal" class="icon" x="34" y="242" width="18" height="18"/>
-<text class="label" x="60" y="256">Claude Code</text>
-
-<path class="link" d="M200 226 H232" marker-start="url(#arr)" marker-end="url(#arr)"/>
-<rect class="box" x="232" y="186" width="116" height="86" rx="6"/>
-<use href="#i-folder" class="icon" x="244" y="196" width="18" height="18"/>
-<text class="label" x="244" y="236">local repos</text>
-<text class="label" x="244" y="254">and tools</text>
-<text class="muted" x="270" y="211">edit · run</text>
-
-<path class="link" d="M100 282 V318" marker-end="url(#arr)"/>
-<text class="label" x="108" y="305">model requests</text>
-<rect class="box" x="24" y="320" width="164" height="42" rx="6"/>
-<use href="#i-cloud" class="icon" x="34" y="331" width="20" height="20"/>
-<text class="label" x="60" y="337">Model providers</text>
-<text class="muted" x="60" y="355">my existing logins</text>
-<use href="#i-filter" class="icon" x="208" y="326" width="16" height="16"/>
-<text class="muted" x="230" y="338">llmtrim</text>
-<text class="muted" x="230" y="356">on configured</text>
-<text class="muted" x="230" y="374">requests only</text>
+<g class="device device-external" transform="translate(24 0) scale(1)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+<rect x="14" y="4" width="52" height="38" rx="4" />
+<rect class="screen" x="20" y="10" width="40" height="26" rx="2" />
+<path d="M4 48h72v4a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4z" />
+<path d="M34 51h12" />
+</g>
+<text x="124" y="28" class="heading">Browser</text>
+<text x="124" y="52" class="muted">any device</text>
+<path class="flow" d="M64 70V130" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#coding-desktop-arrow)" />
+<text x="80" y="104" class="muted">open T3 · Tailscale</text>
+<rect class="boundary boundary-virtual" x="8" y="130" width="412" height="384" rx="14" stroke-width="1.5" stroke-dasharray="7 5" />
+<g class="device device-small device-virtual" transform="translate(24 144) scale(0.45)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<rect x="8" y="2" width="64" height="44" rx="4" />
+<rect class="screen ghost" x="15" y="9" width="50" height="30" rx="2" stroke-dasharray="5 4" />
+<path d="M40 46v10M26 58h28" />
+</g>
+<text x="70" y="165" class="heading">Workbench VM · permanent</text>
+<g class="device device-software" transform="translate(24 190) scale(1)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+<rect x="6" y="4" width="68" height="56" rx="4" />
+<path d="M6 18h68M14 11h.1M20 11h.1M26 11h.1M28 18v42M38 30h28M38 40h20M38 50h24" />
+</g>
+<text x="124" y="218" class="heading">T3 Code</text>
+<text x="124" y="242" class="muted">UI · session server</text>
+<path class="flow" d="M64 258V330" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#coding-desktop-arrow)" />
+<text x="80" y="298" class="muted">controls native sessions</text>
+<g class="device device-software" transform="translate(24 334) scale(1)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+<path d="M20 10V6a4 4 0 0 1 4-4h46a4 4 0 0 1 4 4v38a4 4 0 0 1-4 4h-4" />
+<rect x="6" y="12" width="60" height="50" rx="4" />
+<path d="M6 25h60M13 18.5h.1M19 18.5h.1M18 37l9 7-9 7M33 51h18" />
+</g>
+<text x="124" y="362" class="heading">Codex · Claude Code</text>
+<text x="124" y="386" class="muted">native harnesses</text>
+<path class="flow" d="M64 400V422" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<circle class="junction" cx="64" cy="422" r="3.5" />
+<path class="flow" d="M64 422V446" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#coding-desktop-arrow)" />
+<text x="80" y="440" class="muted">edit · run</text>
+<g class="device device-software" transform="translate(24 450) scale(1)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+<path d="M4 14a4 4 0 0 1 4-4h18l8 8h34a4 4 0 0 1 4 4v32a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4z" />
+<circle class="screen" cx="30" cy="32" r="3.5" />
+<circle class="screen" cx="30" cy="50" r="3.5" />
+<circle class="screen" cx="48" cy="36" r="3.5" />
+<path d="M30 35.5v11M48 39.5c0 7-18 3-18 7" />
+</g>
+<text x="124" y="478" class="heading">Local repos</text>
+<text x="124" y="502" class="muted">and tools</text>
+<path class="flow" d="M64 422H450" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#coding-desktop-arrow)" />
+<text x="258" y="414" class="muted" text-anchor="middle">model requests</text>
+<rect class="band band-external" x="450" y="130" width="265" height="384" rx="14" />
+<text x="582" y="160" class="muted" text-anchor="middle">Model access</text>
+<g class="device device-external" transform="translate(542 182) scale(1)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+<path d="M24 56h34a12 12 0 0 0 2-23.8A18 18 0 0 0 25.5 25 15.5 15.5 0 0 0 24 56z" />
+</g>
+<text x="582" y="272" class="heading" text-anchor="middle">External providers</text>
+<text x="582" y="296" class="muted" text-anchor="middle">separate login</text>
+<text x="582" y="320" class="muted" text-anchor="middle">per harness</text>
+<text x="466" y="362" class="muted">Model requests go direct</text>
+<g class="device device-small device-software" transform="translate(466 376) scale(0.42)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<path d="M20 10V6a4 4 0 0 1 4-4h46a4 4 0 0 1 4 4v38a4 4 0 0 1-4 4h-4" />
+<rect x="6" y="12" width="60" height="50" rx="4" />
+<path d="M6 25h60M13 18.5h.1M19 18.5h.1M18 37l9 7-9 7M33 51h18" />
+</g>
+<path class="flow" d="M503.6 389h34" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#coding-desktop-arrow)" />
+<g class="device device-small device-external" transform="translate(543.6 376) scale(0.42)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<path d="M24 56h34a12 12 0 0 0 2-23.8A18 18 0 0 0 25.5 25 15.5 15.5 0 0 0 24 56z" />
+</g>
+<text x="466" y="434" class="muted">or through llmtrim, an</text>
+<text x="466" y="458" class="muted">optional local proxy</text>
+<g class="device device-small device-software" transform="translate(466 472) scale(0.42)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<path d="M20 10V6a4 4 0 0 1 4-4h46a4 4 0 0 1 4 4v38a4 4 0 0 1-4 4h-4" />
+<rect x="6" y="12" width="60" height="50" rx="4" />
+<path d="M6 25h60M13 18.5h.1M19 18.5h.1M18 37l9 7-9 7M33 51h18" />
+</g>
+<path class="flow" d="M503.6 485h34" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#coding-desktop-arrow)" />
+<g class="device device-small ghost device-software" transform="translate(543.6 472) scale(0.42)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="6 4">
+<path d="M10 8h60L46 34v20l-12 6V34z" />
+<path d="M24 17h32" />
+</g>
+<path class="flow" d="M581.2 485h34" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#coding-desktop-arrow)" />
+<g class="device device-small device-external" transform="translate(621.2 472) scale(0.42)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<path d="M24 56h34a12 12 0 0 0 2-23.8A18 18 0 0 0 25.5 25 15.5 15.5 0 0 0 24 56z" />
+</g>
 </svg>

@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 358 844" role="img" aria-labelledby="coding-phone-title coding-phone-desc" class="diagram diagram-infra infra-narrow">
+<title id="coding-phone-title">Coding layer — phone</title>
+<desc id="coding-phone-desc">A browser opens T3 Code over Tailscale on the Workbench VM. T3 controls native Codex and Claude Code sessions. The harnesses edit and run local repositories and tools, and separately send model requests to external providers, directly or through llmtrim, an optional proxy on the workbench. Each harness uses its own provider login.</desc>
+<defs>
+<marker id="coding-phone-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
+<path class="arrowhead" d="M1 1L9 5L1 9Z" />
+</marker>
+</defs>
+<g class="device device-external" transform="translate(16 0) scale(0.8)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+<rect x="14" y="4" width="52" height="38" rx="4" />
+<rect class="screen" x="20" y="10" width="40" height="26" rx="2" />
+<path d="M4 48h72v4a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4z" />
+<path d="M34 51h12" />
+</g>
+<text x="100" y="22" class="heading">Browser</text>
+<text x="100" y="46" class="muted">any device</text>
+<path class="flow" d="M48 56V118" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#coding-phone-arrow)" />
+<text x="62" y="92" class="muted">open T3 · Tailscale</text>
+<rect class="boundary boundary-virtual" x="8" y="118" width="342" height="396" rx="14" stroke-width="1.5" stroke-dasharray="7 5" />
+<g class="device device-small device-virtual" transform="translate(22 130) scale(0.4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<rect x="8" y="2" width="64" height="44" rx="4" />
+<rect class="screen ghost" x="15" y="9" width="50" height="30" rx="2" stroke-dasharray="5 4" />
+<path d="M40 46v10M26 58h28" />
+</g>
+<text x="64" y="149" class="heading">Workbench VM · permanent</text>
+<g class="device device-software" transform="translate(16 170) scale(0.8)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+<rect x="6" y="4" width="68" height="56" rx="4" />
+<path d="M6 18h68M14 11h.1M20 11h.1M26 11h.1M28 18v42M38 30h28M38 40h20M38 50h24" />
+</g>
+<text x="100" y="192" class="heading">T3 Code</text>
+<text x="100" y="216" class="muted">UI · session server</text>
+<path class="flow" d="M48 226V290" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#coding-phone-arrow)" />
+<text x="62" y="262" class="muted">controls native sessions</text>
+<g class="device device-software" transform="translate(16 294) scale(0.8)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+<path d="M20 10V6a4 4 0 0 1 4-4h46a4 4 0 0 1 4 4v38a4 4 0 0 1-4 4h-4" />
+<rect x="6" y="12" width="60" height="50" rx="4" />
+<path d="M6 25h60M13 18.5h.1M19 18.5h.1M18 37l9 7-9 7M33 51h18" />
+</g>
+<text x="100" y="316" class="heading">Codex · Claude Code</text>
+<text x="100" y="340" class="muted">native harnesses</text>
+<path class="flow" d="M48 348V386" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<circle class="junction" cx="48" cy="386" r="3.5" />
+<path class="flow" d="M48 386V432" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#coding-phone-arrow)" />
+<text x="62" y="416" class="muted">edit · run</text>
+<g class="device device-software" transform="translate(16 436) scale(0.8)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+<path d="M4 14a4 4 0 0 1 4-4h18l8 8h34a4 4 0 0 1 4 4v32a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4z" />
+<circle class="screen" cx="30" cy="32" r="3.5" />
+<circle class="screen" cx="30" cy="50" r="3.5" />
+<circle class="screen" cx="48" cy="36" r="3.5" />
+<path d="M30 35.5v11M48 39.5c0 7-18 3-18 7" />
+</g>
+<text x="100" y="458" class="heading">Local repos</text>
+<text x="100" y="482" class="muted">and tools</text>
+<path class="flow" d="M48 386H350" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#coding-phone-arrow)" />
+<text x="200" y="378" class="muted" text-anchor="middle">model requests</text>
+<rect class="band band-external" x="0" y="538" width="358" height="300" rx="14" />
+<text x="16" y="566" class="muted">Model access</text>
+<g class="device device-external" transform="translate(16 586) scale(0.8)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+<path d="M24 56h34a12 12 0 0 0 2-23.8A18 18 0 0 0 25.5 25 15.5 15.5 0 0 0 24 56z" />
+</g>
+<text x="100" y="608" class="heading">External providers</text>
+<text x="100" y="632" class="muted">separate login per harness</text>
+<text x="16" y="676" class="muted">Model requests go direct</text>
+<g class="device device-small device-software" transform="translate(16 690) scale(0.42)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<path d="M20 10V6a4 4 0 0 1 4-4h46a4 4 0 0 1 4 4v38a4 4 0 0 1-4 4h-4" />
+<rect x="6" y="12" width="60" height="50" rx="4" />
+<path d="M6 25h60M13 18.5h.1M19 18.5h.1M18 37l9 7-9 7M33 51h18" />
+</g>
+<path class="flow" d="M53.6 703h34" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#coding-phone-arrow)" />
+<g class="device device-small device-external" transform="translate(93.6 690) scale(0.42)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<path d="M24 56h34a12 12 0 0 0 2-23.8A18 18 0 0 0 25.5 25 15.5 15.5 0 0 0 24 56z" />
+</g>
+<text x="16" y="752" class="muted">or through llmtrim, an</text>
+<text x="16" y="776" class="muted">optional local proxy</text>
+<g class="device device-small device-software" transform="translate(16 790) scale(0.42)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<path d="M20 10V6a4 4 0 0 1 4-4h46a4 4 0 0 1 4 4v38a4 4 0 0 1-4 4h-4" />
+<rect x="6" y="12" width="60" height="50" rx="4" />
+<path d="M6 25h60M13 18.5h.1M19 18.5h.1M18 37l9 7-9 7M33 51h18" />
+</g>
+<path class="flow" d="M53.6 803h34" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#coding-phone-arrow)" />
+<g class="device device-small ghost device-software" transform="translate(93.6 790) scale(0.42)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="6 4">
+<path d="M10 8h60L46 34v20l-12 6V34z" />
+<path d="M24 17h32" />
+</g>
+<path class="flow" d="M131.2 803h34" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#coding-phone-arrow)" />
+<g class="device device-small device-external" transform="translate(171.2 790) scale(0.42)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<path d="M24 56h34a12 12 0 0 0 2-23.8A18 18 0 0 0 25.5 25 15.5 15.5 0 0 0 24 56z" />
+</g>
+</svg>

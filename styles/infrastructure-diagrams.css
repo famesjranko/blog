@@ -44,99 +44,116 @@ SVG geometry lives in the artwork; step grids use the site's interface type. */
 		}
 	}
 
+	.prose .infra-responsive {
+		container-type: inline-size;
+	}
+
+	.prose .infra-responsive > p {
+		margin: 0;
+	}
+
 	.prose .diagram-infra {
 		font-family: var(--font-ui);
+		width: 100%;
+	}
+
+	.prose .infra-narrow {
+		max-width: 360px;
+	}
+
+	.prose .infra-responsive > p > .infra-wide {
+		display: none;
+	}
+
+	@container (min-width: 600px) {
+		.prose .infra-responsive > p > .infra-wide {
+			display: block;
+		}
+
+		.prose .infra-responsive > p > .infra-narrow {
+			display: none;
+		}
+	}
+
+	/* Type is set on the 715-unit wide and 358-unit narrow canvases so the
+	smallest label stays at or above 14px: 14.3px when the wide drawing
+	appears at the 600px container threshold, 14.5px for the narrow one at a
+	320px viewport. */
+	.prose .diagram-infra text {
+		font-size: 17px;
 	}
 
 	.prose .diagram-infra .heading {
-		font-size: 15px;
+		font-size: 20px;
 		font-weight: 600;
 	}
 
-	.prose .diagram-infra .label,
-	.prose .diagram-infra .muted {
-		font-size: 14px;
+	.prose .infra-narrow text {
+		font-size: 18px;
 	}
 
-	.prose .diagram-infra .box {
-		fill: var(--color-surface);
-		stroke: var(--color-border);
-		stroke-width: 1.2;
+	.prose .infra-narrow .heading {
+		font-size: 20px;
 	}
 
-	.prose .diagram-infra .box--accent {
-		stroke: var(--color-accent);
-	}
-
-	.prose .diagram-infra .group,
-	.prose .diagram-infra .boundary {
-		fill: none;
-		stroke: var(--color-muted);
-		stroke-width: 1.2;
-		stroke-dasharray: 6 5;
+	/* Hues group entities by kind, not by network or trust: teal for
+	physical hardware, the site accent for software and VMs on the workbench
+	and for the control flow, muted ink for things outside the lab. Text
+	stays neutral. The dark teal sits below --color-diagram-x so 2.5px
+	strokes do not glow on the dark page. */
+	.prose .diagram-infra {
+		--color-infra-hardware: light-dark(var(--color-diagram-x), #5fc3d6);
 	}
 
 	.prose .diagram-infra .device {
 		fill: var(--color-surface);
 		stroke: var(--color-text);
-		stroke-width: 2;
-		stroke-linecap: round;
-		stroke-linejoin: round;
 	}
 
-	.prose .diagram-infra .device .inner,
-	.prose .diagram-infra .device .virtual {
-		stroke-width: 1.6;
-	}
-
-	.prose .diagram-infra .device .virtual {
-		stroke-dasharray: 5 4;
-	}
-
-	.prose .diagram-infra .icon {
+	.prose .diagram-infra .device .screen {
 		fill: none;
-		stroke: var(--color-text);
-		stroke-width: 1.4;
-		stroke-linecap: round;
-		stroke-linejoin: round;
 	}
 
-	.prose .diagram-infra .link {
+	.prose .diagram-infra .device-external {
+		stroke: var(--color-muted);
+	}
+
+	.prose .diagram-infra .device-hardware {
+		stroke: var(--color-infra-hardware);
+	}
+
+	.prose .diagram-infra .device-virtual,
+	.prose .diagram-infra .device-software {
+		stroke: var(--color-accent);
+	}
+
+	.prose .diagram-infra .boundary {
 		fill: none;
-		stroke: var(--color-text);
-		stroke-width: 1.6;
 	}
 
-	.prose .diagram-infra .link--access {
-		stroke: var(--color-muted);
-		stroke-width: 1.4;
-		stroke-dasharray: 2 4;
-		stroke-linecap: round;
+	.prose .diagram-infra .boundary-hardware {
+		stroke: var(--color-infra-hardware);
 	}
 
-	.prose .diagram-infra .link--nfs {
-		stroke: var(--color-muted);
-		stroke-dasharray: 7 4;
+	.prose .diagram-infra .boundary-virtual {
+		stroke: var(--color-accent);
 	}
 
-	.prose .diagram-infra .rail,
-	.prose .diagram-infra .stub {
+	.prose .diagram-infra .band-hardware {
+		fill: var(--color-wash-3);
+	}
+
+	.prose .diagram-infra .band-external {
+		fill: var(--color-wash-2);
+	}
+
+	.prose .diagram-infra .flow {
 		fill: none;
-		stroke: var(--color-muted);
-		stroke-width: 2;
+		stroke: var(--color-accent);
 	}
 
-	.prose .diagram-infra .rail {
-		stroke-width: 5;
-		stroke-linecap: round;
-	}
-
-	.prose .diagram-infra .arrow {
-		fill: var(--color-text);
-	}
-
-	.prose .diagram-infra .arrow--access,
-	.prose .diagram-infra .arrow--nfs {
-		fill: var(--color-muted);
+	.prose .diagram-infra .arrowhead,
+	.prose .diagram-infra .junction {
+		fill: var(--color-accent);
 	}
 }

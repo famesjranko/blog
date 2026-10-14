@@ -16,7 +16,13 @@ Coding agents need access to files and tools to do useful work. I want to choose
 
 I run a dedicated Debian workbench VM on my existing Proxmox development server. I choose the data, accounts and connections available to it. Its local state can be rolled back or the environment rebuilt, which also gives me room to experiment with different configurations. I was already comfortable with Proxmox from other projects, so it provided a familiar way to manage that separation.
 
-![A browser reaches the workbench over Tailscale; the workbench reaches a disposable guest over SSH, and the guest can mount optional storage from a separate TrueNAS machine.](/img/ai-engineering/ai-infrastructure/workbench.svg "My workbench and temporary guests share a Proxmox host and lab network; TrueNAS is a separate physical machine. SSH and optional NFS connect directly to their endpoints.")
+<figure class="infra-responsive">
+
+![Homelab diagram, desktop layout](/img/ai-engineering/ai-infrastructure/workbench.svg)
+![Homelab diagram, phone layout](/img/ai-engineering/ai-infrastructure/workbench-narrow.svg)
+
+<figcaption>The permanent workbench runs T3, the native harnesses and the lab-control gateway, and reaches guest VMs over SSH on the lab network. Guest VMs, the host GPU and TrueNAS are resources available when needed: the GPU can pass through to one VM, and both VMs reach the separate TrueNAS machine over the LAN with optional NFS mounts.</figcaption>
+</figure>
 
 ## A workbench I can reach
 
@@ -24,7 +30,13 @@ Keeping the workbench separate also makes it available independently of my lapto
 
 T3 steers the native Codex and Claude Code harnesses installed there: the programs that let a model edit files and run tools. I use each harness's login with my existing subscriptions. The interface brings those sessions together while each harness retains its own runtime integration.
 
-![T3 controls the native Codex and Claude Code harnesses, which edit local repositories, run tools and send requests to model providers.](/img/ai-engineering/ai-infrastructure/coding.svg "The harnesses edit local repositories and run tools. Only configured model requests pass through the llmtrim proxy.")
+<figure class="infra-responsive">
+
+![Coding layer diagram, desktop layout](/img/ai-engineering/ai-infrastructure/coding.svg)
+![Coding layer diagram, phone layout](/img/ai-engineering/ai-infrastructure/coding-narrow.svg)
+
+<figcaption>T3 Code controls native Codex and Claude Code sessions, each with its own provider login. The harnesses edit and run repositories and tools locally. Model requests go directly to external providers, or through llmtrim, an optional proxy on the workbench, when configured. Response paths are omitted.</figcaption>
+</figure>
 
 I also use [llmtrim](https://github.com/fkiene/llmtrim), an optional proxy for configured model requests. Its `safe` preset reduces input tokens through lossless compression.
 
