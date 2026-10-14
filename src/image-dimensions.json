@@ -1,11 +1,15 @@
 {
+	"/img/ai-engineering/ai-infrastructure/coding.svg": {
+		"width": 360,
+		"height": 384
+	},
 	"/img/ai-engineering/ai-infrastructure/gateway.svg": {
 		"width": 560,
 		"height": 310
 	},
 	"/img/ai-engineering/ai-infrastructure/workbench.svg": {
-		"width": 560,
-		"height": 480
+		"width": 370,
+		"height": 522
 	},
 	"/img/ai-engineering/lead-team/cover.jpg": {
 		"width": 1600,

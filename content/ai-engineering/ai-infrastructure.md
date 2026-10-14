@@ -1,6 +1,6 @@
 ---
-title: "A workbench that stays running"
-description: "The coding environment behind my browser: T3 Code, Git worktrees, build tools, disposable test guests and shared agent skills."
+title: "How I set up my AI coding environment"
+description: "A permanent workbench for native coding sessions, reached from a browser, with disposable machines for tasks that need their own."
 date: 2026-10-13
 draft: true
 topics:
@@ -8,40 +8,56 @@ topics:
   - coding agents
 ---
 
-I put my coding environment on a permanent virtual machine on an always-on Proxmox host. The agents work there while I direct them from a laptop or phone. When I switch devices, the repositories and tools are still in the same place.
+I wanted a permanent home for my coding sessions, reachable from a browser, with Codex, Claude Code, my repositories and tools together. When a task needs a clean machine, I give it a temporary one.
 
-I built the setup around T3 Code, Claude Code and Codex on Debian, with disposable guests for jobs that need a separate test machine. This is the working environment I intend those parts to provide.
+One physical Proxmox host runs my permanent Debian workbench VM and disposable guests on a separate lab network. I open T3 over Tailscale to work there. TrueNAS runs on a second physical machine and can supply a guest workspace.
 
-![The permanent workbench and its connections](/img/ai-engineering/ai-infrastructure/workbench.svg "Proxmox hosts the workbench and disposable guests. TrueNAS runs on a separate physical machine. The lab-control arrow summarises guest access and management; the gateway below handles provisioning.")
+![A browser reaches the workbench over Tailscale; the workbench reaches a disposable guest over SSH, and the guest can mount optional storage from a separate TrueNAS machine.](/img/ai-engineering/ai-infrastructure/workbench.svg "My workbench and temporary guests share a Proxmox host and lab network; TrueNAS is a separate physical machine. SSH and optional NFS connect directly to their endpoints.")
 
-## Working through the browser
+## Where my coding sessions run
 
-I reach T3 Code through Tailscale. T3 gives me the interface for conversations with the coding runtimes, which read files and run commands on the workbench. The browser is where I give a task, follow its progress and review what comes back.
+T3 gives me a browser interface and a session server on the workbench. It starts and steers the installed native Codex and Claude Code harnesses. Each harness owns its runtime integration and provider login. I sign in interactively and use my existing subscriptions under each provider's rules.
 
-I use Git worktrees to give parallel tasks separate working copies of a repository. An agent can edit its assigned files without another task editing the same copy. Worktrees still share repository metadata and services on the VM, so I need to account for those when dividing work.
+![T3 controls the native Codex and Claude Code harnesses, which edit local repositories, run tools and send requests to model providers.](/img/ai-engineering/ai-infrastructure/coding.svg "The harnesses edit local repositories and run tools. Only configured model requests pass through the llmtrim proxy.")
 
-The working files stay close to the tools that use them. An agent can inspect a failure, change the code and run it again in the same environment.
+## The machines behind the browser
 
-The VM supplies the development tools I use, including language toolchains and command-line utilities. Rootless Docker provides a container environment when a task needs one. Ordinary file editing and shell work can run directly on the workbench.
+I use a VM so I can snapshot the workbench. One network interface connects to my LAN for home access and Tailscale. The other connects to a Proxmox lab SDN with no gateway configured on that interface. Proxmox supplies DHCP, SNAT and firewall rules; disposable guests have only the lab connection.
 
-## Requests to hosted models
+I allocate a guest when a task needs a clean image or its own machine. Separate TrueNAS storage can outlive the guest using it.
 
-The models run with external providers. llmtrim is a local HTTPS request proxy on the workbench, configured to reduce the content sent to them using its lossless preset. Provider processes configured to use it send their model requests through the proxy. Other tools and services use their own connections.
+From a coding session, I use the `lab-control` skill to request a lease from the workbench gateway. The gateway creates a Proxmox guest, prepares a TrueNAS workspace if requested, records the allocations and releases them when the lease ends.
 
-## Disposable test environments
+The session reaches the guest directly over SSH across the lab network. Optional NFS mounts connect straight to TrueNAS. My working copies live on the workbench's local disk.
 
-Some tasks need their own operating system environment. A disposable Debian guest gives an agent somewhere to install software and test behaviour away from the permanent workbench. Proxmox hosts it as a separate VM on a lab network. Firewall rules restrict access from the guest to management services and unrelated LAN devices.
+## How I install the environment
 
-![Requests inside the lab-control gateway](/img/ai-engineering/ai-infrastructure/gateway.svg "The agent requests lab operations over MCP. The gateway applies policy and records a lease before its adapters control Proxmox and TrueNAS. Appliance credentials stay inside the gateway.")
+I follow the `workbench-infra` runbook. That repository holds machine configuration, systemd units and shell installers. My setup follows these steps:
 
-An agent can request a guest, inspect or extend its lease, and release it when the job is finished. The workbench reaches the guest over the lab network to do the work. When a task needs temporary storage, the gateway arranges an NFS workspace on TrueNAS for the guest to mount.
+1. Read the runbook before creating anything.
+2. Set up the host, lab network, guest template and workbench VM manually.
+3. Review and run the shell installers for the gateway and toolkit profile.
+4. Check that each service answers and that a fresh session can use it.
 
-The lab-control skill explains how an agent should use these operations. The gateway implements them and manages their leases. I can improve the instructions for a test job without changing how the underlying appliances are controlled.
+I also start T3 and pair it through Tailscale by hand before making it a user service. Provider login remains interactive.
 
-## What carries between projects
+## The guidance I carry between runtimes
 
-I keep portable agent tooling in a separate toolkit repository. Shared instructions and skills describe how I want agents to work. Hooks and MCP client setup support those workflows, with adapters for differences between Claude and Codex. Selected tool services provide browser automation, cloud access and library documentation.
+I keep portable guidance in `agent-toolkit`. Its installer makes managed copies where each runtime expects them, with adapters for different hook formats and runtime capabilities. Keeping these files together gives me one place to update shared guidance before installing the appropriate copies into each runtime on the workbench. MCP registration is separate. `workbench-infra` adds the machine-only `lab-control` skill through an explicit manifest.
 
-The installer copies managed versions of the toolkit into the supported runtimes. Updating its source therefore needs an installation step before those copies change. Runtime-specific features stay explicit in their adapters.
+| Owner | Responsibility |
+|---|---|
+| `agent-toolkit` | Shared instructions, skills, hooks, runtime adapters, MCP registration and the `workbench` skill |
+| `workbench-infra` | The gateway, `lab-control` skill, runbook, installers and services on the machine |
+| Each harness | Its runtime integration and provider login |
+| T3 | The interface and session orchestration |
 
-The infrastructure repository owns the machine packages, service configuration and lab gateway. A shared investigation procedure belongs in the toolkit; guest provisioning belongs with the machine infrastructure. I describe how I divide and coordinate the agents' work in [How I organise a team of agents](/ai-engineering/lead-team/).
+## How I maintain the permanent workbench
+
+The toolkit's `workbench` skill guides agents maintaining my permanent VM. I keep that responsibility separate from disposable lab guests.
+
+The skill first proves local or SSH access to the workbench. It reads the machine's own documents, runs its health checks and reports the results. For an authorised change, portable tooling belongs in `agent-toolkit` and machine integration belongs in `workbench-infra`. The affected checks run again afterwards.
+
+The machine's `AGENTS.md`, `ARCHITECTURE.md` and `RUNBOOK.md` files own its facts; the skill owns access and conduct. It stops if access or documents are missing. I use `lab-control` only for disposable guests.
+
+Related project: [How I organise a team of agents&nbsp;→](/ai-engineering/lead-team/)

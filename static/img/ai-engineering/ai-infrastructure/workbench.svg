@@ -1,41 +1,59 @@
-<svg class="diagram diagram-lead-team diagram-infrastructure" viewBox="0 0 560 480" role="img" aria-labelledby="workbench-title workbench-desc" xmlns="http://www.w3.org/2000/svg">
-<title id="workbench-title">Where the work happens</title>
-<desc id="workbench-desc">A browser reaches the permanent AI workbench VM through Tailscale. Proxmox hosts the workbench and a separate disposable lab guest. The workbench runs T3 Code and coding runtimes with Git worktrees, rootless Docker and a local request proxy. External services include GitHub, hosted models and cloud tools. The lab guest can use NFS storage from TrueNAS on a separate physical machine. Lab-control represents guest access and management; the gateway controls provisioning through Proxmox.</desc>
-<defs><marker id="workbench-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto-start-reverse"><path class="arrowhead" d="M0 0 L8 4 L0 8 Z"/></marker></defs>
-<rect class="frame" x="20" y="16" width="200" height="64" rx="10"/>
-<text class="heading" x="120" y="42" text-anchor="middle">Laptop or phone</text>
-<text class="muted" x="120" y="66" text-anchor="middle">Browser</text>
-<path class="flow" d="M120 80 V108 H290 V208" marker-end="url(#workbench-arrow)"/>
-<text class="label" x="298" y="140">Tailscale</text>
-<rect class="group-frame" x="20" y="150" width="330" height="300" rx="14"/>
-<text class="heading" x="36" y="172">Proxmox host</text>
-<text class="muted" x="36" y="196">Always on</text>
-<rect class="structural-frame" x="40" y="208" width="290" height="118" rx="10"/>
-<text class="heading" x="185" y="237" text-anchor="middle">AI workbench VM</text>
-<text class="muted" x="185" y="261" text-anchor="middle">T3 Code · coding runtimes</text>
-<text class="muted" x="185" y="283" text-anchor="middle">Git worktrees</text>
-<text class="muted" x="185" y="305" text-anchor="middle">llmtrim · rootless Docker</text>
-<path class="flow" d="M185 326 V360" marker-end="url(#workbench-arrow)"/>
-<text class="label" x="195" y="348">lab-control</text>
-<rect class="frame" x="40" y="360" width="290" height="64" rx="10"/>
-<text class="heading" x="185" y="385" text-anchor="middle">Lab guest</text>
-<text class="muted" x="185" y="409" text-anchor="middle">Disposable · lab network</text>
-<rect class="frame" x="380" y="196" width="160" height="56" rx="10"/>
-<text class="heading" x="460" y="217" text-anchor="middle">GitHub</text>
-<text class="muted" x="460" y="242" text-anchor="middle">Repositories</text>
-<rect class="frame" x="380" y="268" width="160" height="56" rx="10"/>
-<text class="heading" x="460" y="289" text-anchor="middle">Models</text>
-<text class="muted" x="460" y="314" text-anchor="middle">Hosted providers</text>
-<rect class="frame" x="380" y="340" width="160" height="56" rx="10"/>
-<text class="heading" x="460" y="361" text-anchor="middle">Cloud tools</text>
-<text class="muted" x="460" y="386" text-anchor="middle">APIs / services</text>
-<rect class="frame" x="380" y="412" width="160" height="56" rx="10"/>
-<text class="heading" x="460" y="433" text-anchor="middle">TrueNAS</text>
-<text class="muted" x="460" y="458" text-anchor="middle">Physical machine</text>
-<path class="flow" d="M330 224 H380" marker-end="url(#workbench-arrow)"/>
-<text class="label" x="355" y="216" text-anchor="middle">git</text>
-<path class="flow" d="M330 296 H380" marker-end="url(#workbench-arrow)"/>
-<path class="flow" d="M330 316 H355 V368 H380" marker-end="url(#workbench-arrow)"/>
-<path class="flow" d="M330 400 H355 V440 H380" marker-end="url(#workbench-arrow)"/>
-<text class="label" x="355" y="464" text-anchor="middle">NFS</text>
+<svg xmlns="http://www.w3.org/2000/svg" class="diagram diagram-infra" viewBox="0 0 370 522" role="img" aria-labelledby="workbench-title workbench-desc">
+<title id="workbench-title">My homelab</title>
+<desc id="workbench-desc">A browser opens T3 over Tailscale on the permanent workbench VM. The workbench and a disposable guest VM share the Proxmox lab network inside one physical Proxmox host. The workbench runs tasks on the guest over SSH. The guest can mount an optional NFS workspace from TrueNAS, a separate physical machine.</desc>
+<defs>
+<marker id="arr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path class="arrow" d="M0 0.5 L8 4 L0 7.5 Z"/></marker>
+<marker id="arr-access" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path class="arrow arrow--access" d="M0 0.5 L8 4 L0 7.5 Z"/></marker>
+<marker id="arr-nfs" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path class="arrow arrow--nfs" d="M0 0.5 L8 4 L0 7.5 Z"/></marker>
+<g id="d-laptop" class="device">
+<rect x="10" y="0" width="100" height="66" rx="6"/>
+<rect class="inner" x="18" y="8" width="84" height="50" rx="3"/>
+<path class="inner" d="M0 76 H120 M8 70 H112 M50 70 H70"/>
+</g>
+<g id="d-vm" class="device">
+<rect x="0" y="0" width="120" height="90" rx="10"/>
+<rect class="virtual" x="12" y="12" width="96" height="48" rx="4"/>
+<path class="inner" d="M18 74 H60 M98 74 h.01"/>
+</g>
+<g id="d-nas" class="device">
+<rect x="20" y="0" width="80" height="100" rx="8"/>
+<rect class="inner" x="30" y="12" width="60" height="18" rx="3"/>
+<rect class="inner" x="30" y="40" width="60" height="18" rx="3"/>
+<rect class="inner" x="30" y="68" width="60" height="18" rx="3"/>
+<path class="inner" d="M82 21 h.01 M82 49 h.01 M82 77 h.01"/>
+</g>
+</defs>
+<rect class="boundary" x="12" y="124" width="250" height="378" rx="10"/>
+<text class="muted" x="250" y="148" text-anchor="end">Proxmox host</text>
+<path class="rail" d="M22 192 V462"/>
+<path class="stub" d="M22 201 H36 M22 371 H36"/>
+<text class="muted" x="30" y="490">Proxmox lab network</text>
+
+<path class="link link--access" d="M72 70 V172" marker-end="url(#arr-access)"/>
+<text class="label" x="82" y="100">open T3</text>
+<text class="muted" x="82" y="118">Tailscale</text>
+<path class="link" d="M72 234 V342" marker-end="url(#arr)"/>
+<text class="label" x="82" y="282">run a task</text>
+<text class="muted" x="82" y="300">SSH</text>
+<path class="link link--nfs" d="M72 404 V434 H284" marker-end="url(#arr-nfs)"/>
+<text class="label" x="82" y="454">mount a workspace</text>
+<text class="muted" x="82" y="470">NFS, optional</text>
+
+<use href="#d-laptop" transform="translate(20 16) scale(0.6)"/>
+<text class="heading" x="104" y="44">Browser</text>
+
+<use href="#d-vm" transform="translate(36 174) scale(0.6)"/>
+<text class="heading" x="120" y="194">Workbench VM</text>
+<text class="muted" x="120" y="212">T3 and harnesses</text>
+<text class="muted" x="120" y="230">lab-control gateway</text>
+
+<use href="#d-vm" transform="translate(36 344) scale(0.6)"/>
+<text class="heading" x="120" y="364">Guest VM</text>
+<text class="muted" x="120" y="382">disposable</text>
+<text class="muted" x="120" y="400">one per task</text>
+
+<use href="#d-nas" transform="translate(274 392) scale(0.6)"/>
+<text class="heading" x="310" y="474" text-anchor="middle">TrueNAS</text>
+<text class="muted" x="310" y="492" text-anchor="middle">separate</text>
+<text class="muted" x="310" y="510" text-anchor="middle">physical machine</text>
 </svg>

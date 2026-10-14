@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="diagram diagram-infra" viewBox="0 0 360 384" role="img" aria-labelledby="coding-title coding-desc">
+<title id="coding-title">My coding sessions</title>
+<desc id="coding-desc">A browser reaches T3 over Tailscale. T3 controls the native Codex and Claude Code harnesses on the workbench. The harnesses edit local repositories, run tools and send model requests using my existing provider logins. Only configured requests pass through llmtrim.</desc>
+<defs>
+<symbol id="i-browser" viewBox="0 0 20 20"><rect x="2" y="3.5" width="16" height="13" rx="2"/><path d="M2 7.5h16M5 5.5h.01M7.5 5.5h.01"/></symbol>
+<symbol id="i-window" viewBox="0 0 20 20"><rect x="2.5" y="3.5" width="15" height="13" rx="1.5"/><path d="M2.5 7h15M6 11l2 2-2 2M10 15h4"/></symbol>
+<symbol id="i-terminal" viewBox="0 0 20 20"><rect x="2.5" y="3.5" width="15" height="13" rx="1.5"/><path d="M6 8l3 2.5L6 13M10.5 13h4"/></symbol>
+<symbol id="i-folder" viewBox="0 0 20 20"><path d="M2.5 5.5a1.5 1.5 0 0 1 1.5-1.5h4l2 2h6a1.5 1.5 0 0 1 1.5 1.5v7.5a1.5 1.5 0 0 1-1.5 1.5H4a1.5 1.5 0 0 1-1.5-1.5z"/></symbol>
+<symbol id="i-filter" viewBox="0 0 20 20"><path d="M3 4h14l-5.5 6.5V16l-3-1.5V10.5z"/></symbol>
+<symbol id="i-cloud" viewBox="0 0 20 20"><path d="M6 15.5h8.5a3 3 0 0 0 .4-6 4.5 4.5 0 0 0-8.7-1A3.5 3.5 0 0 0 6 15.5z"/></symbol>
+<marker id="arr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path class="arrow" d="M0 0.5 L8 4 L0 7.5 Z"/></marker>
+<marker id="arr-access" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path class="arrow arrow--access" d="M0 0.5 L8 4 L0 7.5 Z"/></marker>
+</defs>
+<rect class="box" x="60" y="16" width="240" height="36" rx="6"/>
+<use href="#i-browser" class="icon" x="72" y="25" width="18" height="18"/>
+<text class="label" x="98" y="39">Browser · any device</text>
+<path class="link link--access" d="M180 52 V94" marker-end="url(#arr-access)"/>
+<text class="label" x="188" y="78">Tailscale</text>
+
+<rect class="box box--accent" x="60" y="96" width="240" height="44" rx="6"/>
+<use href="#i-window" class="icon" x="72" y="108" width="20" height="20"/>
+<text class="heading" x="100" y="114">T3</text>
+<text class="muted" x="100" y="132">browser UI · session server</text>
+<path class="link" d="M110 140 V168" marker-end="url(#arr)"/>
+<text class="label" x="118" y="160">controls native sessions</text>
+
+<rect class="group" x="12" y="170" width="188" height="112" rx="8"/>
+<rect class="box" x="24" y="180" width="164" height="38" rx="6"/>
+<use href="#i-terminal" class="icon" x="34" y="190" width="18" height="18"/>
+<text class="label" x="60" y="204">Codex</text>
+<rect class="box" x="24" y="232" width="164" height="38" rx="6"/>
+<use href="#i-terminal" class="icon" x="34" y="242" width="18" height="18"/>
+<text class="label" x="60" y="256">Claude Code</text>
+
+<path class="link" d="M200 226 H232" marker-start="url(#arr)" marker-end="url(#arr)"/>
+<rect class="box" x="232" y="186" width="116" height="86" rx="6"/>
+<use href="#i-folder" class="icon" x="244" y="196" width="18" height="18"/>
+<text class="label" x="244" y="236">local repos</text>
+<text class="label" x="244" y="254">and tools</text>
+<text class="muted" x="270" y="211">edit · run</text>
+
+<path class="link" d="M100 282 V318" marker-end="url(#arr)"/>
+<text class="label" x="108" y="305">model requests</text>
+<rect class="box" x="24" y="320" width="164" height="42" rx="6"/>
+<use href="#i-cloud" class="icon" x="34" y="331" width="20" height="20"/>
+<text class="label" x="60" y="337">Model providers</text>
+<text class="muted" x="60" y="355">my existing logins</text>
+<use href="#i-filter" class="icon" x="208" y="326" width="16" height="16"/>
+<text class="muted" x="230" y="338">llmtrim</text>
+<text class="muted" x="230" y="356">on configured</text>
+<text class="muted" x="230" y="374">requests only</text>
+</svg>
