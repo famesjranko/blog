@@ -22,11 +22,11 @@ T3 steers the native Codex and Claude Code harnesses installed there: the progra
 
 ![T3 controls the native Codex and Claude Code harnesses, which edit local repositories, run tools and send requests to model providers.](/img/ai-engineering/ai-infrastructure/coding.svg "The harnesses edit local repositories and run tools. Only configured model requests pass through the llmtrim proxy.")
 
-I also use [llmtrim](https://github.com/fkiene/llmtrim), an optional proxy for configured model requests, with its lossless preset to improve token efficiency and manage cost.
+I also use [llmtrim](https://github.com/fkiene/llmtrim), an optional proxy for configured model requests. Its `safe` preset reduces input tokens through lossless compression.
 
 ## Giving experiments a lifetime
 
-The permanent workbench holds the tools and context I use across projects. Work that needs a separate machine can use a disposable Debian guest. The `lab-control` skill lets an agent request one, with optional NVIDIA Quadro GPU passthrough or storage from a separate physical TrueNAS machine. Files can stay on the guest's disk or in its optional NAS workspace.
+The permanent workbench holds the tools and context I use across projects. Work that needs a separate machine can use a disposable Debian guest. The `lab-control` skill lets an agent request one, with optional NVIDIA Quadro GPU passthrough or storage from a separate physical TrueNAS machine. A gateway service on the workbench manages the guest and optional storage allocations requested through `lab-control`. Files can stay on the guest's disk or in its optional NAS workspace.
 
 A separate lab network keeps those guests' connections under explicit control. Firewall rules permit the access needed for tools, workbench SSH and optional NAS storage, while restricting access to management and other private networks. The workbench retains its normal home-network connection; its lab interface does not provide a competing default route.
 
@@ -56,7 +56,7 @@ I keep shared instructions, skills and hooks in `agent-toolkit`. Its installer p
 | Each harness | Runtime integration and provider login |
 | T3 | Interface and session orchestration |
 
-The toolkit's `workbench` skill maintains the permanent VM, using its machine documents as the authority for configuration and procedures. `lab-control` handles disposable guests.
+The toolkit's `workbench` skill guides agents maintaining the permanent VM, using its machine documents as the authority for configuration and procedures. `lab-control` handles disposable guests.
 
 <ol class="infra-steps infra-steps--3" role="list">
   <li><span class="infra-step-name">Reach</span> <small>Establish access to the workbench.</small></li>
