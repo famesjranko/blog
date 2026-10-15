@@ -16,7 +16,7 @@ These instructions apply to the entire repository.
 
 This is a custom TypeScript static-site generator:
 
-Markdown → TypeScript build pipeline → `dist/` → GitHub Pages.
+Markdown → TypeScript build pipeline → `dist/` → Cloudflare Pages.
 
 Do not introduce a frontend framework, template engine, alternate static-site generator, or overlapping build/lint toolchain unless explicitly requested.
 

@@ -21,7 +21,7 @@ export function basePath(): string {
  * Whether draft content should be included in the build.
  * Set via the `SHOW_DRAFTS` environment variable; used by `make preview`
  * and `make preview-wsl` so drafts are visible locally but never in the
- * CI build that ships to GitHub Pages.
+ * production build.
  */
 export function showDrafts(): boolean {
 	return (readEnv("SHOW_DRAFTS") ?? "").trim().toLowerCase() === "true";

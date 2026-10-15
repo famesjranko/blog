@@ -33,7 +33,7 @@ export type ErrorStatus = keyof typeof ERROR_COPY;
 /**
  * One error page per HTTP status, rendered as a hero so it matches the
  * homepage. Which statuses get written is the build's decision, not this
- * module's: GitHub Pages only serves 404.html.
+ * module's.
  */
 export function errorPage(status: ErrorStatus): string {
 	const copy = ERROR_COPY[status];

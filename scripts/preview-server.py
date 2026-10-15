@@ -1,4 +1,4 @@
-"""Serve dist/ the way GitHub Pages does: unknown paths get 404.html with a 404 status.
+"""Serve dist/ with custom 404.html responses for unknown paths.
 
 Usage: python3 scripts/preview-server.py PORT [BIND]
 
