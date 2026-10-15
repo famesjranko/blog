@@ -11,7 +11,6 @@ Personal website for essays and projects.
 [![Biome](https://img.shields.io/badge/Biome-2.x-60A5FA?style=flat-square&logo=biome&logoColor=white)](https://biomejs.dev)
 [![CI](https://img.shields.io/github/actions/workflow/status/famesjranko/blog/ci.yml?style=flat-square&label=CI)](https://github.com/famesjranko/blog/actions/workflows/ci.yml)
 [![Cloudflare Pages](https://img.shields.io/github/check-runs/famesjranko/blog/main?nameFilter=Cloudflare%20Pages&style=flat-square&label=Cloudflare%20Pages&logo=cloudflare&logoColor=white)](https://github.com/famesjranko/blog/commits/main)
-[![GitHub Pages](https://img.shields.io/badge/GitHub_Pages-manual-222?style=flat-square&logo=github&logoColor=white)](https://github.com/famesjranko/blog/actions/workflows/pages.yml)
 
 </div>
 
@@ -44,7 +43,6 @@ Custom static site built with TypeScript and Markdown.
 * Vitest
 * GitHub Actions
 * Cloudflare Pages
-* GitHub Pages
 
 ## Structure
 
@@ -63,10 +61,8 @@ dist/       Generated site output
 <br>
 
 The production site is served from `https://andrewjmcdonald.com/` with an
-empty `BASE_PATH`. Internal URLs use `BASE_PATH`, so the manual GitHub Pages
-fallback can still build under `/blog/`. RSS and sitemap URLs use
-`SITE_ORIGIN`; it defaults to the production domain and the fallback workflow
-sets its GitHub Pages origin explicitly.
+empty `BASE_PATH`. Internal URLs use `BASE_PATH`. RSS and sitemap URLs use
+`SITE_ORIGIN`, which defaults to the production domain.
 
 </details>
 
@@ -119,10 +115,3 @@ For applicable `main` commits, its native GitHub integration reports the
 `Cloudflare Pages` check shown in the badge above.
 GitHub CI and pull-request checks are the quality gate before merging to
 `main`.
-
-The GitHub Pages copy at `https://famesjranko.github.io/blog/` remains a
-manual fallback. Run the **Deploy blog to shared GitHub Pages** workflow and
-type `deploy` to refresh it. That workflow builds with `BASE_PATH=/blog`, then
-synchronizes only generated files to `blog/` in the public
-`famesjranko.github.io` repository. It requires the `PAGES_DEPLOY_KEY` secret;
-the root site and `ipcamera/` are left untouched.
