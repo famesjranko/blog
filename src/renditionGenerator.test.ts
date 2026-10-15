@@ -47,17 +47,24 @@ async function writeSource(
 		.toFile(path.join(root, "static/img/source.jpg"));
 }
 
-function planFor(widths: readonly number[]): RenditionPlan {
+interface Size {
+	width: number;
+	height: number;
+}
+
+function planFor(sizes: readonly Size[]): RenditionPlan {
 	return {
 		source: "/img/source.jpg",
-		candidates: widths.map((width) => ({
+		candidates: sizes.map(({ width, height }) => ({
 			width,
-			height: (width / 16) * 9,
-			avifSrc: `/img/source.${width}w.avif`,
-			webpSrc: `/img/source.${width}w.webp`,
+			height,
+			avifSrc: `/img/source.${width}x${height}.avif`,
+			webpSrc: `/img/source.${width}x${height}.webp`,
 		})),
 	};
 }
+
+const SMALL = { width: 32, height: 18 };
 
 async function generate(root: string, plan: RenditionPlan, outDir: string) {
 	return generateRenditions([plan], {
@@ -83,22 +90,23 @@ describe("generateRenditions", () => {
 	});
 
 	it("keeps a separate encoding for each candidate size", async () => {
-		// Given one source planned at two widths.
+		// Given one source planned at two widths, and at two heights for one width.
 		const root = await temporaryRoot();
 		await writeSource(root, RED);
+		const sizes = [SMALL, { width: 32, height: 32 }, { width: 48, height: 27 }];
 
 		// When the plan is generated.
-		await generate(root, planFor([32, 48]), "dist");
+		await generate(root, planFor(sizes), "dist");
 
 		// Then each rendition has its own planned dimensions.
-		const small = await sharp(
-			path.join(root, "dist/img/source.32w.avif"),
-		).metadata();
-		const large = await sharp(
-			path.join(root, "dist/img/source.48w.webp"),
-		).metadata();
-		expect([small.width, small.height]).toEqual([32, 18]);
-		expect([large.width, large.height]).toEqual([48, 27]);
+		const actual = await Promise.all(
+			sizes.map(async ({ width, height }) => {
+				const file = `dist/img/source.${width}x${height}.avif`;
+				const metadata = await sharp(path.join(root, file)).metadata();
+				return { width: metadata.width, height: metadata.height };
+			}),
+		);
+		expect(actual).toEqual(sizes);
 	});
 });
 
@@ -107,7 +115,7 @@ describe("rendition cache", () => {
 		// Given a rendition generated once.
 		const root = await temporaryRoot();
 		await writeSource(root, RED);
-		await generate(root, planFor([32]), "first");
+		await generate(root, planFor([SMALL]), "first");
 		// And every cache entry replaced with marker bytes.
 		const cacheDir = path.join(root, "cache");
 		const entries = await readdir(cacheDir);
@@ -116,11 +124,11 @@ describe("rendition cache", () => {
 		);
 
 		// When the same plan is generated into a fresh output directory.
-		await generate(root, planFor([32]), "second");
+		await generate(root, planFor([SMALL]), "second");
 
 		// Then the output is the cached entry, not a new encoding.
 		const output = await readFile(
-			path.join(root, "second/img/source.32w.avif"),
+			path.join(root, "second/img/source.32x18.avif"),
 		);
 		expect(output.toString()).toBe("cached");
 	});
@@ -129,16 +137,16 @@ describe("rendition cache", () => {
 		// Given a rendition generated from a red source.
 		const root = await temporaryRoot();
 		await writeSource(root, RED);
-		await generate(root, planFor([32]), "first");
+		await generate(root, planFor([SMALL]), "first");
 		// And the source replaced by a blue image at the same path.
 		await writeSource(root, BLUE);
 
 		// When the same plan is generated again.
-		await generate(root, planFor([32]), "second");
+		await generate(root, planFor([SMALL]), "second");
 
 		// Then the rendition shows the blue source, not the stale red one.
 		const { dominant } = await sharp(
-			path.join(root, "second/img/source.32w.webp"),
+			path.join(root, "second/img/source.32x18.webp"),
 		).stats();
 		expect(dominant.b).toBeGreaterThan(200);
 		expect(dominant.r).toBeLessThan(50);
