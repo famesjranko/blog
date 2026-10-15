@@ -135,7 +135,9 @@ make lint
 make guard
 make typecheck
 make test
+make images-check
 make build
+make browser
 ```
 
 The final quality gate is:
