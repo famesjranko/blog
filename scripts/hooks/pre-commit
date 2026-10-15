@@ -1,6 +1,7 @@
 #!/bin/sh
-# Fast checks on the staged snapshot before each commit (~3s), so a broken
-# commit fails here and not in CI. Wired up by `npm ci` via core.hooksPath.
+# Fast checks on the staged snapshot before each commit (a few seconds), so a
+# broken commit fails here and not in CI. Wired up by `npm ci` via
+# core.hooksPath.
 set -e
 
 # Whitespace errors and leftover conflict markers in the staged diff.

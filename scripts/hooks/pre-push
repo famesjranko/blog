@@ -1,7 +1,7 @@
 #!/bin/sh
-# The static half of make check, on each pushed commit (~10s). Tests, the
-# build, and the browser checks take minutes, so they stay in make check
-# and CI. Wired up by `npm ci` via core.hooksPath.
+# The static half of make check, on the tip of each pushed ref (~10s).
+# Tests, the build, and the browser checks take minutes, so they stay in
+# make check and CI. Wired up by `npm ci` via core.hooksPath.
 set -e
 
 # Git passes one "<local ref> <local sha> <remote ref> <remote sha>" line

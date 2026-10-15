@@ -9,8 +9,18 @@ set -e
 tree=$1
 shift
 
+# core.hooksPath is shared by every worktree, including ones never installed.
+if [ ! -d node_modules ]; then
+	echo "check-tree: no node_modules in $PWD; run npm ci in this worktree" >&2
+	exit 1
+fi
+
 snapshot=$(mktemp -d)
+# dash skips the EXIT trap on a signal, so turn signals into exits.
 trap 'rm -rf "$snapshot"' EXIT
+trap 'exit 129' HUP
+trap 'exit 130' INT
+trap 'exit 143' TERM
 git archive "$tree" | tar -x -C "$snapshot"
 ln -s "$PWD/node_modules" "$snapshot/node_modules"
 make --no-print-directory -C "$snapshot" "$@"

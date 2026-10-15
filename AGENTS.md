@@ -175,7 +175,7 @@ When reporting completion, state the actual result of the final `make check` run
 
 * `pre-commit` runs `git diff --cached --check`, `format-check`, `lint`, and `guard`.
 * `commit-msg` requires a Conventional Commits subject (`<type>: <summary>`) and rejects AI attribution.
-* `pre-push` runs `format-check`, `lint`, `guard`, `typecheck`, and `images-check` on each pushed commit.
+* `pre-push` runs `format-check`, `lint`, `guard`, `typecheck`, and `images-check` on the tip of each pushed ref.
 
 The hooks are early warnings. They do not replace `make check`.
 
