@@ -6,6 +6,10 @@ updates:
       interval: weekly
     commit-message:
       prefix: build
+    # Types track the Node major in .nvmrc. Bump both together.
+    ignore:
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
     groups:
       npm:
         patterns:
