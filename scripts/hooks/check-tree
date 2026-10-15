@@ -1,0 +1,26 @@
+#!/bin/sh
+# Usage: check-tree <tree-ish> <make target>...
+#
+# Runs make targets against a clean copy of one tree, so a hook checks
+# exactly what is being committed or pushed. The working tree can differ
+# from it: partly staged files, unstaged edits, or a push of another
+# branch. The copy borrows the checkout's node_modules.
+set -e
+tree=$1
+shift
+
+# core.hooksPath is shared by every worktree, including ones never installed.
+if [ ! -d node_modules ]; then
+	echo "check-tree: no node_modules in $PWD; run npm ci in this worktree" >&2
+	exit 1
+fi
+
+snapshot=$(mktemp -d)
+# dash skips the EXIT trap on a signal, so turn signals into exits.
+trap 'rm -rf "$snapshot"' EXIT
+trap 'exit 129' HUP
+trap 'exit 130' INT
+trap 'exit 143' TERM
+git archive "$tree" | tar -x -C "$snapshot"
+ln -s "$PWD/node_modules" "$snapshot/node_modules"
+make --no-print-directory -C "$snapshot" "$@"

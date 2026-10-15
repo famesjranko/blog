@@ -19,7 +19,8 @@
 		"test:browser": "playwright test",
 		"images": "tsx scripts/optimize-images.ts",
 		"images:check": "tsx scripts/optimize-images.ts --check",
-		"check": "make check"
+		"check": "make check",
+		"prepare": "git config core.hooksPath scripts/hooks"
 	},
 	"dependencies": {
 		"gray-matter": "^4.0.3",

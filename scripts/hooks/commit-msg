@@ -1,11 +1,12 @@
 #!/bin/sh
 # Reject commit messages that credit an AI assistant. Nothing leaving this
 # repository names the assistant or its vendor, trailers included. Wired
-# up by `make install` via core.hooksPath.
+# up by `npm ci` via core.hooksPath.
 #
 # The patterns are the actual tells plus the bare words. A genuine
 # non-assistant reference (Claude Shannon, the anthropic principle) is
-# rare; for one, commit with --no-verify deliberately.
+# rare; for one, Andy commits with --no-verify deliberately. Agents never
+# bypass it (AGENTS.md).
 #
 # Keep in sync with ~/.claude/hooks/publish-guard.sh, which applies the
 # same check to gh pr/issue bodies that git never sees.
@@ -14,9 +15,23 @@ PATTERN='co-authored-by:.*(claude|anthropic)|noreply@anthropic\.com|anthropic\.c
 # The config filename is a legitimate reference and is erased before matching.
 EXEMPT='CLAUDE\.md|\.claude/'
 
-# Ignore the commented-out template lines git appends below the message.
-if sed -E "/^#/d; s#${EXEMPT}##g" "$1" | grep -Eiq "$PATTERN"; then
+# The message as git will record it: without comment lines, and without the
+# diff `commit -v` appends below the scissors line.
+MESSAGE=$(sed -E '/^# -+ >8 -+$/,$d; /^#/d' "$1")
+
+if printf '%s\n' "$MESSAGE" | sed -E "s#${EXEMPT}##g" | grep -Eiq "$PATTERN"; then
 	echo "commit-msg: message names the assistant or its vendor; remove it (CLAUDE.md rule)" >&2
-	sed -E "/^#/d; s#${EXEMPT}##g" "$1" | grep -Ein "$PATTERN" >&2
+	printf '%s\n' "$MESSAGE" | sed -E "s#${EXEMPT}##g" | grep -Ein "$PATTERN" >&2
+	exit 1
+fi
+
+# The subject follows Conventional Commits with this repository's types.
+# Subjects git writes itself (merge, revert, reapply, fixup) also pass.
+TYPES='feat|fix|perf|refactor|test|docs|content|style|build|ci|chore|revert'
+SUBJECT=$(printf '%s\n' "$MESSAGE" | sed '/^[[:space:]]*$/d' | head -n 1)
+if ! printf '%s\n' "$SUBJECT" | grep -Eq "^(($TYPES)(\([^()]+\))?!?: [^ ]|Merge |Revert \"|Reapply \"|fixup! |squash! |amend! )"; then
+	echo "commit-msg: subject must be '<type>: <summary>' (Conventional Commits)" >&2
+	echo "  types: $(echo "$TYPES" | tr '|' ' ')" >&2
+	echo "  got:   $SUBJECT" >&2
 	exit 1
 fi

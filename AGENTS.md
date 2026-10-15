@@ -168,3 +168,16 @@ If any check fails:
 4. do not weaken tests, lint rules, compiler settings, structural limits, or validation commands merely to obtain a green result.
 
 When reporting completion, state the actual result of the final `make check` run. Do not claim checks passed if they were not run against the final worktree.
+
+### Git hooks
+
+`npm ci` points `core.hooksPath` at `scripts/hooks`. The hooks check the committed or pushed snapshot, not the working tree:
+
+* `pre-commit` runs `git diff --cached --check`, `format-check`, `lint`, and `guard`.
+* `commit-msg` requires a Conventional Commits subject (`<type>: <summary>`) and rejects AI attribution.
+* `pre-push` runs `format-check`, `lint`, `guard`, `typecheck`, and `images-check` on the tip of each pushed ref.
+
+The hooks are early warnings. They do not replace `make check`.
+
+* Never bypass a hook with `--no-verify`. Fix the cause and commit again.
+* Do not edit or disable the hooks to make a commit or push pass.

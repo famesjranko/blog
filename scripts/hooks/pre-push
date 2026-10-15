@@ -1,0 +1,16 @@
+#!/bin/sh
+# The static half of make check, on the tip of each pushed ref (~10s).
+# Tests, the build, and the browser checks take minutes, so they stay in
+# make check and CI. Wired up by `npm ci` via core.hooksPath.
+set -e
+
+# Git passes one "<local ref> <local sha> <remote ref> <remote sha>" line
+# per pushed ref. A deletion has an all-zero sha and nothing to check. The
+# checks read /dev/null so they cannot consume the remaining ref lines.
+while read -r _ local_sha _ _; do
+	case $local_sha in
+	*[!0]*) ;;
+	*) continue ;;
+	esac
+	scripts/hooks/check-tree "$local_sha" format-check lint guard typecheck images-check </dev/null
+done
