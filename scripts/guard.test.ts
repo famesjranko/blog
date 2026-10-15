@@ -5,9 +5,9 @@ import { dirname, join, resolve } from "node:path";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 // The guard scans fixed relative roots from its cwd. The suite seeds every
-// fixture at its own path in one temp tree, runs the real script once over
-// it (the shared "When"; each test restates it), and each test reads one fixture's outcome from
-// that run. A second tree of only passing fixtures proves a clean exit.
+// fixture at its own path in one temp tree and runs the real script once
+// over it. That run is the shared "When". Each test reads the outcome of one
+// fixture from it. A second tree of only passing fixtures proves a clean exit.
 
 const loader = resolve("node_modules/tsx/dist/loader.mjs");
 const guard = resolve("scripts/guard.ts");
@@ -334,8 +334,9 @@ describe("guard run over passing fixtures only", () => {
 		// When the guard has run over that tree.
 
 		// Then the exit status is 0.
-		// And nothing is reported.
 		expect(passing.status).toBe(0);
+
+		// And nothing is reported.
 		expect(passing.stderr).not.toContain("violation");
 	});
 });
