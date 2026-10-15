@@ -34,6 +34,7 @@ jobs:
           path: .cache/renditions
           key: renditions-${{ runner.os }}-${{ hashFiles('static/img/**', 'content/**', 'src/**', 'package-lock.json') }}
           restore-keys: renditions-${{ runner.os }}-
+      - run: npx playwright install --with-deps chromium
       - run: make check
       - run: npm run build
         env:
