@@ -25,8 +25,12 @@ async function openPosterPage(page: Page): Promise<string[]> {
 	return providerRequests;
 }
 
-/** Resolve true if a new tab opens within a short window, false otherwise. */
-function opensTab(page: Page): Promise<boolean> {
+/**
+ * Resolve true if a new tab opens within a short window, false otherwise.
+ * Only for proving no tab opens: absence needs a fixed window, but a slow
+ * runner can miss a tab that does open.
+ */
+function tabOpensSoon(page: Page): Promise<boolean> {
 	return page
 		.context()
 		.waitForEvent("page", { timeout: 1500 })
@@ -58,7 +62,7 @@ test("a video poster loads nothing from the provider before a click", async ({
 test("a click swaps the poster for the provider's player", async ({ page }) => {
 	// Given an article with a video poster.
 	const providerRequests = await openPosterPage(page);
-	const newTab = opensTab(page);
+	const newTab = tabOpensSoon(page);
 
 	// When the reader clicks the poster.
 	await page.locator(".video-poster").click();
@@ -79,13 +83,19 @@ test("a modifier click opens the provider's page and keeps the poster", async ({
 }) => {
 	// Given an article with a video poster.
 	const providerRequests = await openPosterPage(page);
-	const newTab = opensTab(page);
+	const newTab = page.context().waitForEvent("page");
+	// Playwright never reports the URL of a background tab opened with
+	// noopener, so the tab's request for the page is what shows it opened.
+	const watchPage = page
+		.context()
+		.waitForEvent("request", (request) => request.url() === WATCH_PAGE);
 
 	// When the reader Ctrl- or Cmd-clicks the poster.
 	await page.locator(".video-poster").click({ modifiers: ["ControlOrMeta"] });
 
-	// Then the provider's page opens in a new tab.
-	expect(await newTab).toBe(true);
+	// Then the provider's page loads in a new tab.
+	const tab = await newTab;
+	expect((await watchPage).frame().page()).toBe(tab);
 	// And the poster stays, with no player and no request to the player.
 	await expect(page.locator(".video-poster")).toHaveCount(1);
 	await expect(page.locator("iframe")).toHaveCount(0);
