@@ -1,0 +1,16 @@
+#!/bin/sh
+# Usage: check-tree <tree-ish> <make target>...
+#
+# Runs make targets against a clean copy of one tree, so a hook checks
+# exactly what is being committed or pushed. The working tree can differ
+# from it: partly staged files, unstaged edits, or a push of another
+# branch. The copy borrows the checkout's node_modules.
+set -e
+tree=$1
+shift
+
+snapshot=$(mktemp -d)
+trap 'rm -rf "$snapshot"' EXIT
+git archive "$tree" | tar -x -C "$snapshot"
+ln -s "$PWD/node_modules" "$snapshot/node_modules"
+make --no-print-directory -C "$snapshot" "$@"

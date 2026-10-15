@@ -1,7 +1,7 @@
 #!/bin/sh
 # Reject commit messages that credit an AI assistant. Nothing leaving this
 # repository names the assistant or its vendor, trailers included. Wired
-# up by `make install` via core.hooksPath.
+# up by `npm ci` via core.hooksPath.
 #
 # The patterns are the actual tells plus the bare words. A genuine
 # non-assistant reference (Claude Shannon, the anthropic principle) is
@@ -18,5 +18,16 @@ EXEMPT='CLAUDE\.md|\.claude/'
 if sed -E "/^#/d; s#${EXEMPT}##g" "$1" | grep -Eiq "$PATTERN"; then
 	echo "commit-msg: message names the assistant or its vendor; remove it (CLAUDE.md rule)" >&2
 	sed -E "/^#/d; s#${EXEMPT}##g" "$1" | grep -Ein "$PATTERN" >&2
+	exit 1
+fi
+
+# The subject follows Conventional Commits with this repository's types.
+# Git's own merge, revert, fixup, and squash subjects pass unchanged.
+TYPES='feat|fix|perf|refactor|test|docs|content|style|build|ci|chore|revert'
+SUBJECT=$(sed '/^#/d; /^[[:space:]]*$/d' "$1" | head -n 1)
+if ! printf '%s\n' "$SUBJECT" | grep -Eq "^(($TYPES)(\([a-z0-9-]+\))?!?: [^ ]|Merge |Revert \"|fixup! |squash! |amend! )"; then
+	echo "commit-msg: subject must be '<type>: <summary>' (Conventional Commits)" >&2
+	echo "  types: $(echo "$TYPES" | tr '|' ' ')" >&2
+	echo "  got:   $SUBJECT" >&2
 	exit 1
 fi

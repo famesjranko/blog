@@ -7,10 +7,9 @@ DRAFTS ?= true
 help: ## Show targets
 	@grep -E '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | sed 's/: [^#]*## /: ## /' | sort | awk 'BEGIN {FS=": ## "} {printf "%-12s %s\n", $$1, $$2}'
 
-install: ## Install dependencies and the repo git hooks
+install: ## Install dependencies and the repo git hooks (npm prepare sets core.hooksPath)
 	npm ci
 	npx playwright install chromium
-	git config core.hooksPath scripts/hooks
 
 check: ## Canonical gate (same as CI): format-check + lint + guard + typecheck + test + images-check + build + browser
 	$(MAKE) --no-print-directory format-check

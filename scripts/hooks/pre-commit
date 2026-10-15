@@ -1,0 +1,10 @@
+#!/bin/sh
+# Fast checks on the staged snapshot before each commit (~3s), so a broken
+# commit fails here and not in CI. Wired up by `npm ci` via core.hooksPath.
+set -e
+
+# Whitespace errors and leftover conflict markers in the staged diff.
+git diff --cached --check
+
+# write-tree records the index, including the temporary one `commit -a` uses.
+scripts/hooks/check-tree "$(git write-tree)" format-check lint guard
