@@ -18,6 +18,14 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci
+      - name: Restore encoded image renditions
+        # Entries are keyed by their own inputs, so restoring an older cache
+        # can only skip work, never serve a stale image.
+        uses: actions/cache@v6
+        with:
+          path: .cache/renditions
+          key: renditions-${{ runner.os }}-${{ hashFiles('static/img/**', 'src/renditionGenerator.ts', 'package-lock.json') }}
+          restore-keys: renditions-${{ runner.os }}-
       - run: npx playwright install --with-deps chromium
       - name: Check
         id: check
@@ -40,6 +48,12 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci
+      - name: Restore encoded image renditions
+        uses: actions/cache@v6
+        with:
+          path: .cache/renditions
+          key: renditions-${{ runner.os }}-${{ hashFiles('static/img/**', 'src/renditionGenerator.ts', 'package-lock.json') }}
+          restore-keys: renditions-${{ runner.os }}-
       - run: npx playwright install chromium
       - run: npm run build
       - run: npm run test:browser
