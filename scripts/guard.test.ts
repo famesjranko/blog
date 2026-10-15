@@ -6,7 +6,7 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 // The guard scans fixed relative roots from its cwd. The suite seeds every
 // fixture at its own path in one temp tree, runs the real script once over
-// it (the shared "When"), and each test reads one fixture's outcome from
+// it (the shared "When"; each test restates it), and each test reads one fixture's outcome from
 // that run. A second tree of only passing fixtures proves a clean exit.
 
 const loader = resolve("node_modules/tsx/dist/loader.mjs");
@@ -34,6 +34,11 @@ const rules = (count: number) => lines(count, (i) => `.c${i} { color: red; }`);
 
 function body(count: number): string {
 	return `export function f(): void {\n${lines(count, (i) => `\tconst v${i} = ${i};`)}}\n`;
+}
+
+// A body of `count` lines (51 by default) opened by `head` and closed by `tail`.
+function member(head: string, tail: string, count = 51): string {
+	return `${head}\n${lines(count, (i) => `\t\tconst v${i} = ${i};`)}${tail}`;
 }
 
 function params(count: number): string {
@@ -101,6 +106,71 @@ const budgetFixtures: Fixture[] = [
 	},
 ];
 
+function longBody(name: string, text: string, line: number, kind: string) {
+	return {
+		path: `src/kind_${name}.ts`,
+		content: text,
+		violation: {
+			line,
+			message: `${kind} body has 51 lines (max 50)`,
+		},
+	};
+}
+
+// Each function-like kind the guard budgets, so dropping one is caught.
+const kindFixtures: Fixture[] = [
+	longBody(
+		"method",
+		member("export class A {\n\tm(): void {", "\t}\n}\n"),
+		2,
+		'function "m"',
+	),
+	longBody(
+		"constructor",
+		member("export class A {\n\tconstructor() {", "\t}\n}\n"),
+		2,
+		"constructor",
+	),
+	longBody(
+		"getter",
+		member(
+			"export class A {\n\tget v(): number {",
+			"\t\treturn 1;\n\t}\n}\n",
+			50,
+		),
+		2,
+		"accessor",
+	),
+	longBody(
+		"setter",
+		member("export class A {\n\tset v(x: number) {", "\t}\n}\n"),
+		2,
+		"accessor",
+	),
+	longBody(
+		"arrow",
+		member("export const f = (): void => {", "};\n"),
+		1,
+		"arrow/function expression",
+	),
+	longBody(
+		"funcexpr",
+		member("export const f = function (): void {", "};\n"),
+		1,
+		"arrow/function expression",
+	),
+	{
+		path: "src/mut_method.ts",
+		content:
+			"export class A {\n\tm(o: { x: number }): void {\n\t\to.x = 1;\n\t}\n}\n",
+		violation: {
+			line: 3,
+			message:
+				"mutation of function parameter property is banned (copy it first)",
+		},
+	},
+];
+
 const mutationFixtures = [
 	mutation("assign", ["o.x = 1;"]),
 	mutation("compound", ["o.x += 1;"]),
@@ -149,6 +219,10 @@ const suppressionFixtures: Fixture[] = [
 		violation: banned("biome-ignore", 1),
 	},
 	{
+		path: "src/ok_escaped_quote.ts",
+		content: "export const a = '\\' // @ts-ignore';\n",
+	},
+	{
 		path: "src/ok_strings.ts",
 		content:
 			"export const a = ['// @ts-ignore', \"/* eslint-disable */\", `// biome-ignore`];\n",
@@ -180,6 +254,7 @@ const rootFixtures: Fixture[] = [
 const fixtures: Fixture[] = [
 	...lengthFixtures,
 	...budgetFixtures,
+	...kindFixtures,
 	...mutationFixtures,
 	...suppressionFixtures,
 	...rootFixtures,
@@ -206,7 +281,9 @@ let main: Run;
 let passing: Run;
 
 beforeAll(() => {
-	// Given every fixture is seeded at its own path, the guard runs once (When)
+	// Given every fixture is seeded at its own path in a temp tree.
+
+	// When the guard runs once over that tree.
 	main = runGuardOver(fixtures);
 	passing = runGuardOver(fixtures.filter((f) => f.violation === undefined));
 });
@@ -222,30 +299,42 @@ const clean = fixtures.filter((f) => f.violation === undefined);
 
 describe("guard run over all fixtures", () => {
 	it("exits non-zero when any fixture violates a rule", () => {
-		// Given the seeded fixtures include violations, and the guard ran once (When)
-		// Then the exit status is 1
+		// Given the seeded fixtures include violations.
+
+		// When the guard has run once over them.
+
+		// Then the exit status is 1.
 		expect(main.status).toBe(1);
 	});
 
 	it.each(failing)("reports $path with its exact message", (fixture) => {
-		// Given the fixture was seeded in the shared tree, and the guard ran once (When)
+		// Given the fixture was seeded in the shared tree with a known violation.
 		const { line, message } = fixture.violation ?? { line: 0, message: "" };
 
-		// Then the guard printed that file, line and message
+		// When the guard has run once over the tree.
+
+		// Then the guard printed that file, line and message.
 		expect(main.stderr).toContain(`${fixture.path}:${line}: ${message}\n`);
 	});
 
 	it.each(clean)("does not report $path", (fixture) => {
-		// Given the fixture sits at or inside its limit, and the guard ran once (When)
-		// Then no violation line names its path
+		// Given the fixture sits at or inside its limit.
+
+		// When the guard has run once over the tree.
+
+		// Then no violation line names its path.
 		expect(main.stderr).not.toContain(`${fixture.path}:`);
 	});
 });
 
 describe("guard run over passing fixtures only", () => {
 	it("exits zero when no fixture violates a rule", () => {
-		// Given a tree seeded with only the fixtures at their limits, and the guard ran (When)
-		// Then the exit status is 0 and nothing is reported
+		// Given a tree seeded with only the fixtures at their limits.
+
+		// When the guard has run over that tree.
+
+		// Then the exit status is 0.
+		// And nothing is reported.
 		expect(passing.status).toBe(0);
 		expect(passing.stderr).not.toContain("violation");
 	});
