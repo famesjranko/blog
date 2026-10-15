@@ -155,11 +155,34 @@ const suppressionFixtures: Fixture[] = [
 	},
 ];
 
+const tooManyParams = {
+	line: 1,
+	message: 'function "f" has 5 parameters (max 4)',
+};
+
+// One violating file per scan root and per script extension, so dropping
+// any of them from the guard's lists leaves a fixture unreported.
+const rootFixtures: Fixture[] = [
+	...[
+		"scripts/root_scripts.ts",
+		"static/root_static.ts",
+		"playwright.config.ts",
+		"playwright.preview.config.ts",
+		"vitest.config.ts",
+	].map((path) => ({ path, content: params(5), violation: tooManyParams })),
+	...["src/ext_js.js", "src/ext_mjs.mjs"].map((path) => ({
+		path,
+		content: "export function f(a, b, c, d, e) {}\n",
+		violation: tooManyParams,
+	})),
+];
+
 const fixtures: Fixture[] = [
 	...lengthFixtures,
 	...budgetFixtures,
 	...mutationFixtures,
 	...suppressionFixtures,
+	...rootFixtures,
 ];
 
 const dirs: string[] = [];
