@@ -71,13 +71,13 @@ The email body is laid out for a phone. The same report is attached as an HTML f
 
 <div class="fade-figure theme-light-only">
 
-![A sample morning health report in light mode, laid out for a desktop screen: an all-good verdict, host figures, hourly memory and CPU charts, event counts, usage limits for each coding harness, and llmtrim's trimmed share per day.](/img/ai-engineering/ai-infrastructure/health-report-light.png "The attached desktop report, rendered from sample data.")
+![A sample morning health report in light mode, laid out for a desktop screen: an all-good verdict, host figures, hourly memory and CPU charts, event counts, usage limits for each coding harness, and llmtrim's trimmed share per day.](/img/ai-engineering/ai-infrastructure/health-report-light.jpg "The attached desktop report, rendered from sample data.")
 
 </div>
 
 <div class="fade-figure theme-dark-only">
 
-![A sample morning health report in dark mode, laid out for a desktop screen: an all-good verdict, host figures, hourly memory and CPU charts, event counts, usage limits for each coding harness, and llmtrim's trimmed share per day.](/img/ai-engineering/ai-infrastructure/health-report.png "The attached desktop report, rendered from sample data.")
+![A sample morning health report in dark mode, laid out for a desktop screen: an all-good verdict, host figures, hourly memory and CPU charts, event counts, usage limits for each coding harness, and llmtrim's trimmed share per day.](/img/ai-engineering/ai-infrastructure/health-report.jpg "The attached desktop report, rendered from sample data.")
 
 </div>
 

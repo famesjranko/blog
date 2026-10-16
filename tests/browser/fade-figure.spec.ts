@@ -39,7 +39,7 @@ test("the health report is cropped with a fade and opens whole in the lightbox",
 			mask: style.maskImage || style.webkitMaskImage,
 		};
 	});
-	expect(Math.abs(box.ratio / (2360 / 2374) - 1)).toBeLessThan(0.01);
+	expect(Math.abs(box.ratio / (1600 / 1609) - 1)).toBeLessThan(0.01);
 	// And the lightbox image has no mask.
 	expect(box.mask).toBe("none");
 });

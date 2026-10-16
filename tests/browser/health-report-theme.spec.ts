@@ -1,8 +1,8 @@
 import { expect, test } from "@playwright/test";
 
 const PAGE = "/ai-engineering/ai-infrastructure/";
-const LIGHT = "/img/ai-engineering/ai-infrastructure/health-report-light.png";
-const DARK = "/img/ai-engineering/ai-infrastructure/health-report.png";
+const LIGHT = "/img/ai-engineering/ai-infrastructure/health-report-light.jpg";
+const DARK = "/img/ai-engineering/ai-infrastructure/health-report.jpg";
 
 const cases = [
 	{
