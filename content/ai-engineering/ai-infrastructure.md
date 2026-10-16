@@ -65,7 +65,7 @@ Provider login and initial T3 pairing remain interactive. The acceptance checks 
 
 The workbench sends me a health report by email at 07:00 each morning. I can check the machine's state from my phone without opening a session.
 
-The subject line and a banner at the top name anything that needs attention. The report then shows memory, disk, CPU and uptime, hourly peak memory use over the previous 24 hours, and any resets, out-of-memory kills, failed services or pending updates. A section for each coding harness shows how much of its usage limits I have used and its activity over the same period. A last section reports how much input llmtrim trimmed.
+The subject line and a banner at the top name anything that needs attention. The rest of the report covers the machine's health, failures in the previous 24 hours, each coding harness's usage limits and activity, and how much input llmtrim trimmed.
 
 The email body is laid out for a phone. The same report is attached as an HTML file for a desktop screen, with charts of memory and CPU over the 24 hours and a switch between light and dark themes.
 
@@ -81,7 +81,7 @@ The email body is laid out for a phone. The same report is attached as an HTML f
 
 </div>
 
-A user timer on the workbench runs the report, and `workbench-infra` installs it with the other machine services. Each section reads its own source, such as the system journal or a harness's usage data. If one source cannot be read, its section shows a warning and the rest of the report is still sent.
+A systemd user timer on the workbench runs the report, and `workbench-infra` installs it with the other machine services. Each section reads its own source, such as the system journal or a harness's usage data. If one source cannot be read, its section shows a warning and the rest of the report is still sent.
 
 ## Shared agent instructions and tools
 
