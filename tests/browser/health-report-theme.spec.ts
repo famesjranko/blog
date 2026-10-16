@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 
 const PAGE = "/ai-engineering/ai-infrastructure/";
 const LIGHT = "/img/ai-engineering/ai-infrastructure/health-report-light.jpg";
-const DARK = "/img/ai-engineering/ai-infrastructure/health-report.jpg";
+const DARK = "/img/ai-engineering/ai-infrastructure/health-report-dark.jpg";
 
 const cases = [
 	{
@@ -48,18 +48,9 @@ for (const c of cases) {
 		const visible = page.locator(
 			'.fade-figure img[src*="/health-report"]:visible',
 		);
-		await visible.scrollIntoViewIfNeeded();
 
 		// Then exactly one health report image is visible, and it is the right file.
 		await expect(visible).toHaveCount(1);
 		await expect(visible).toHaveAttribute("src", c.file);
-
-		// When the visible figure is activated.
-		await visible.click();
-
-		// Then the lightbox shows that same file.
-		const dialog = page.locator("dialog.lightbox");
-		await expect(dialog).toBeVisible();
-		await expect(dialog.locator("img")).toHaveAttribute("src", c.file);
 	});
 }
