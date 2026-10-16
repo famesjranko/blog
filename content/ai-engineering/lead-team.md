@@ -171,7 +171,7 @@ Here, `final_check` is purple because it has reported and awaits acceptance. Its
 
 In the agent detail below, the lead's acceptance command cites README lines and explorer evidence. The activity then shows the command result, the lead's explanation and its next spawn.
 
-![A recorded lead card showing usage and an acceptance command with its evidence note.](/img/ai-engineering/lead-team/lead-card.png "A separate recorded run. The activity view shows the acceptance command; the ledger holds the resulting task decision.")
+![A recorded lead card showing usage and an acceptance command with its evidence note.](/img/ai-engineering/lead-team/lead-card.jpg "A separate recorded run. The activity view shows the acceptance command; the ledger holds the resulting task decision.")
 
 Closing capture saves a standalone `replay.html` with the recorded history and viewer, which opens offline.
 
