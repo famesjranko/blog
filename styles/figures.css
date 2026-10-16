@@ -29,10 +29,12 @@
 		margin-inline: auto;
 	}
 
-	/* The health report is taller than the other figures; the fade shows
-	there is more and the lightbox shows it whole. */
+	/* The health report is taller than the other figures (740:440, cropped at
+	   the bottom at any width); the fade shows there is more and the
+	   lightbox shows it whole. */
 	.prose .fade-figure figure img {
-		height: 440px;
+		height: auto;
+		aspect-ratio: 740 / 440;
 		object-fit: cover;
 		object-position: top;
 		-webkit-mask-image: linear-gradient(to bottom, #000 72%, transparent);
