@@ -63,21 +63,19 @@ Provider login and initial T3 pairing remain interactive. The acceptance checks 
 
 ## Daily health report
 
-The workbench sends me a health report by email at 07:00 each morning. I can check the machine's state from my phone without opening a session.
+The workbench sends me a health report by email at 07:00 each morning. I can check the machine's state without opening a session.
 
 The subject line and a banner at the top name anything that needs attention. The rest of the report covers the machine's health, failures in the previous 24 hours, each coding harness's usage limits and activity, and how much input llmtrim trimmed.
 
-The email body is laid out for a phone. The same report is attached as an HTML file for a desktop screen, with charts of memory and CPU over the 24 hours and a switch between light and dark themes.
-
 <div class="fade-figure theme-light-only">
 
-![A sample morning health report in light mode, laid out for a desktop screen: an all-good verdict, host figures, hourly memory and CPU charts, event counts, usage limits for each coding harness, and llmtrim's trimmed share per day.](/img/ai-engineering/ai-infrastructure/health-report-light.jpg "The attached desktop report, rendered from sample data.")
+![A sample morning health report in light mode: an all-good verdict, host figures, hourly memory and CPU charts, event counts, usage limits for each coding harness, and llmtrim's trimmed share per day.](/img/ai-engineering/ai-infrastructure/health-report-light.jpg "A report rendered from sample data.")
 
 </div>
 
 <div class="fade-figure theme-dark-only">
 
-![A sample morning health report in dark mode, laid out for a desktop screen: an all-good verdict, host figures, hourly memory and CPU charts, event counts, usage limits for each coding harness, and llmtrim's trimmed share per day.](/img/ai-engineering/ai-infrastructure/health-report-dark.jpg "The attached desktop report, rendered from sample data.")
+![A sample morning health report in dark mode: an all-good verdict, host figures, hourly memory and CPU charts, event counts, usage limits for each coding harness, and llmtrim's trimmed share per day.](/img/ai-engineering/ai-infrastructure/health-report-dark.jpg "A report rendered from sample data.")
 
 </div>
 
