@@ -19,8 +19,7 @@ const HERO_EYEBROW = ["BACKEND & SYSTEMS ENGINEER", "MELBOURNE"]
 	.map((phrase) => phrase.replaceAll(" ", " "))
 	.join(" · ");
 const HERO_TITLE_LINES = ["From philosophy", "to software"];
-const HERO_STANDFIRST =
-	"A personal collection of essays, projects, AI engineering, and notes.";
+const HERO_STANDFIRST = "A personal collection of essays, projects, and notes.";
 
 const SECTION_NAMES: Record<HomeSection, string> = {
 	essays: "Essays",
