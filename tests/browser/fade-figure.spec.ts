@@ -44,7 +44,7 @@ test("the health report is cropped with a fade and opens whole in the lightbox",
 	expect(box.mask).toBe("none");
 });
 
-test("on a phone the health report keeps its full width and is cropped only at the bottom", async ({
+test("on a phone the health report shows its full width and its top", async ({
 	page,
 }) => {
 	// Given the article on a 390x844 phone viewport.
@@ -54,13 +54,16 @@ test("on a phone the health report keeps its full width and is cropped only at t
 	await figure.scrollIntoViewIfNeeded();
 
 	// When the figure renders inline.
-	const { width, height } = await figure.evaluate((img) => {
+	const inline = await figure.evaluate((img) => {
 		const rect = img.getBoundingClientRect();
-		return { width: rect.width, height: rect.height };
+		return {
+			ratio: rect.width / rect.height,
+			position: getComputedStyle(img).objectPosition,
+		};
 	});
 
-	// Then its shape is 740 by 440 within 1 percent.
-	expect(Math.abs(width / height / (740 / 440) - 1)).toBeLessThan(0.01);
-	// And it is narrower than 400px, so cover shows the whole image width.
-	expect(width).toBeLessThan(400);
+	// Then its shape is 740 by 440 within 1 percent, so cover keeps the whole width.
+	expect(Math.abs(inline.ratio / (740 / 440) - 1)).toBeLessThan(0.01);
+	// And the crop is anchored to the top, so only the bottom is cut.
+	expect(inline.position).toBe("50% 0%");
 });
