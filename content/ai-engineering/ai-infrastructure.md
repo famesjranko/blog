@@ -38,7 +38,7 @@ T3 controls the native Codex and Claude Code harnesses installed there: the prog
 <figcaption>Native harnesses work on local repositories and send model requests directly or through an optional local llmtrim proxy. Response paths are omitted.</figcaption>
 </figure>
 
-I also use [llmtrim](https://github.com/fkiene/llmtrim), an optional proxy for configured model requests. Its `agent` preset shortens tool output and large JSON arrays in agent requests and keeps cached prompt prefixes stable.
+I also use [llmtrim](https://github.com/fkiene/llmtrim), an optional proxy for configured model requests. I run its `agent` preset, which is built for tool-calling loops. It compresses tool output such as logs, diffs and search results, and it samples very large JSON arrays. It trims the tool definitions on the first turn only, so later turns reuse the cached prompt prefix. It also asks the model to batch its tool calls and to commit to an answer.
 
 ## Disposable VMs and lab resources
 
@@ -77,11 +77,11 @@ The email body is laid out for a phone. The same report is attached as an HTML f
 
 <div class="fade-figure theme-dark-only">
 
-![A sample morning health report in dark mode, laid out for a desktop screen: an all-good verdict, host figures, hourly memory and CPU charts, event counts, usage limits for each coding harness, and llmtrim's trimmed share per day.](/img/ai-engineering/ai-infrastructure/health-report.jpg "The attached desktop report, rendered from sample data.")
+![A sample morning health report in dark mode, laid out for a desktop screen: an all-good verdict, host figures, hourly memory and CPU charts, event counts, usage limits for each coding harness, and llmtrim's trimmed share per day.](/img/ai-engineering/ai-infrastructure/health-report-dark.jpg "The attached desktop report, rendered from sample data.")
 
 </div>
 
-A systemd user timer on the workbench runs the report, and `workbench-infra` installs it with the other machine services. Each section reads its own source, such as the system journal or a harness's usage data. If one source cannot be read, its section shows a warning and the rest of the report is still sent.
+A systemd user timer on the workbench runs the report script, and `workbench-infra` installs both with the other machine services. Each section reads its own source, such as the system journal or a harness's usage data. If one source cannot be read, its section shows a warning and the rest of the report is still sent.
 
 ## Shared agent instructions and tools
 
