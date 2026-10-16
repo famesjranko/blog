@@ -1,4 +1,37 @@
 @layer prose {
+	/* Light and dark versions of one image sit side by side in the markup.
+	Like main.css, the OS preference applies by default and a stored
+	data-theme overrides it. */
+	.prose .theme-dark-only {
+		display: none;
+	}
+
+	@media (prefers-color-scheme: dark) {
+		.prose .theme-light-only {
+			display: none;
+		}
+
+		.prose .theme-dark-only {
+			display: block;
+		}
+	}
+
+	:root[data-theme="light"] .prose .theme-light-only {
+		display: block;
+	}
+
+	:root[data-theme="light"] .prose .theme-dark-only {
+		display: none;
+	}
+
+	:root[data-theme="dark"] .prose .theme-light-only {
+		display: none;
+	}
+
+	:root[data-theme="dark"] .prose .theme-dark-only {
+		display: block;
+	}
+
 	.prose img {
 		max-width: 100%;
 		height: auto;
@@ -27,6 +60,17 @@
 		max-width: 100%;
 		height: auto;
 		margin-inline: auto;
+	}
+
+	/* A tall screenshot keeps the 740:440 shape of the other figures at any
+	width, cropped at the bottom. The fade shows there is more; the
+	lightbox shows it whole. */
+	.prose .fade-figure figure img {
+		aspect-ratio: 740 / 440;
+		object-fit: cover;
+		object-position: top;
+		-webkit-mask-image: linear-gradient(to bottom, #000 72%, transparent);
+		mask-image: linear-gradient(to bottom, #000 72%, transparent);
 	}
 
 	/* Project figures are mostly screenshots with white backgrounds; an
