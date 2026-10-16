@@ -63,9 +63,7 @@ Provider login and initial T3 pairing remain interactive. The acceptance checks 
 
 ## Daily health report
 
-The workbench sends me a health report by email at 07:00 each morning. I can check the machine's state without opening a session.
-
-The subject line and a banner at the top name anything that needs attention. The rest of the report covers the machine's health, failures in the previous 24 hours, each coding harness's usage limits and activity, and how much input llmtrim trimmed.
+Each morning at 07:00 the workbench emails me a summary of the previous 24 hours. The subject line and a banner name anything that needs attention, such as a stopped service, an out-of-memory kill, a pending reboot or a coding harness near its weekly limit. The rest covers the machine's health, failures, each coding harness's usage limits and activity, and how much input llmtrim trimmed.
 
 <div class="fade-figure theme-light-only">
 
