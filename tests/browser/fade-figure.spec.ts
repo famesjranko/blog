@@ -7,7 +7,7 @@ test("the health report is cropped with a fade and opens whole in the lightbox",
 }) => {
 	// Given the article with the tall health report figure.
 	await page.goto(PAGE);
-	const figure = page.locator(".fade-figure img");
+	const figure = page.locator(".fade-figure img:visible");
 	const dialog = page.locator("dialog.lightbox");
 	await figure.scrollIntoViewIfNeeded();
 
@@ -50,7 +50,7 @@ test("on a phone the health report keeps its full width and is cropped only at t
 	// Given the article on a 390x844 phone viewport.
 	await page.setViewportSize({ width: 390, height: 844 });
 	await page.goto(PAGE);
-	const figure = page.locator(".fade-figure img");
+	const figure = page.locator(".fade-figure img:visible");
 	await figure.scrollIntoViewIfNeeded();
 
 	// When the figure renders inline.
