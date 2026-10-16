@@ -112,7 +112,7 @@ const THEME_BOOT_SCRIPT =
  */
 const DEFAULT_SOCIAL_IMAGE = "/img/share.jpg";
 const DEFAULT_SOCIAL_IMAGE_ALT =
-	"From philosophy to software: essays, projects, AI engineering, and notes by Andrew J. McDonald";
+	"From philosophy to software: essays, projects, and notes by Andrew J. McDonald";
 
 /**
  * Image tags for link previews. The size lets a scraper lay out the card
