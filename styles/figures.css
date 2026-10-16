@@ -29,6 +29,16 @@
 		margin-inline: auto;
 	}
 
+	/* The health report is taller than the other figures; the fade shows
+	there is more and the lightbox shows it whole. */
+	.prose .fade-figure figure img {
+		height: 440px;
+		object-fit: cover;
+		object-position: top;
+		-webkit-mask-image: linear-gradient(to bottom, #000 72%, transparent);
+		mask-image: linear-gradient(to bottom, #000 72%, transparent);
+	}
+
 	/* Project figures are mostly screenshots with white backgrounds; an
 	edge and a soft shadow keep them from merging into a light page. */
 	.prose.project figure img {
