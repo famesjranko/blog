@@ -14,7 +14,6 @@ type:
 tags:
   - epistemology
   - dretske
-  - closure
 ---
 
 ![rope](/img/essays/dretske-closure/cover.jpg)

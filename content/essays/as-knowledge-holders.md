@@ -6,7 +6,6 @@ cover: /img/essays/as-knowledge-holders/cover.jpg
 coverAlt: "Silhouetted people sit at a window that looks out on St Paul's Cathedral in London"
 tags:
   - epistemology
-  - knowledge
 draft: true
 ---
 

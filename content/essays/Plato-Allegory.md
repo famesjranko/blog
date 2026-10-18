@@ -14,8 +14,8 @@ type:
   - essay
 tags:
   - plato
-  - forms
-  - education
+  - epistemology
+  - metaphysics
 ---
 
 ![cave](/img/essays/plato-allegory/cover.jpg)

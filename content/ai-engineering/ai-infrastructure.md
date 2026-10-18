@@ -8,6 +8,7 @@ coverAlt: "Pixel-art laptop connected to an orange server enclosure and a separa
 topics:
   - software engineering
   - coding agents
+  - ai
 ---
 
 ![Pixel-art laptop connected to an orange server enclosure and a separate storage tower on a stone plinth](/img/ai-engineering/ai-infrastructure/cover.jpg)

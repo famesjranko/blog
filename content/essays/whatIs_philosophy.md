@@ -12,8 +12,8 @@ type:
   - essays
   - essay
 tags:
+  - metaphilosophy
   - metaphysics
-  - epistemology
   - ethics
 ---
 

@@ -13,8 +13,6 @@ type:
   - essay
 tags:
   - epistemology
-  - knowledge
-  - counterfactuals
 ---
 
 ![watch](/img/essays/knowledge-thatandhow/cover.jpg)
