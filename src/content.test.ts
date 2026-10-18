@@ -169,3 +169,37 @@ describe("loadProjects draft filtering", () => {
 		]);
 	});
 });
+
+describe("loadEssay topic cap", () => {
+	async function writeTopicsFixture(topics: string[]): Promise<string> {
+		const dir = await mkdtemp(path.join(tmpdir(), "topics-"));
+		const file = path.join(dir, "piece.md");
+		await writeFile(
+			file,
+			`---\ntitle: "Piece"\ndate: 2024-01-01\ntopics: [${topics.join(", ")}]\n---\n\nBody.\n`,
+		);
+		return file;
+	}
+
+	it("fails the build naming the file when a piece has four topics", async () => {
+		// Given a piece with four topics
+		const file = await writeTopicsFixture(["a", "b", "c", "d"]);
+
+		// When it is loaded
+		const load = loadEssay(file);
+
+		// Then loading rejects with a message that names the file
+		await expect(load).rejects.toThrow(file);
+	});
+
+	it("loads a piece with exactly three topics", async () => {
+		// Given a piece with three topics
+		const file = await writeTopicsFixture(["a", "b", "c"]);
+
+		// When it is loaded
+		const essay = await loadEssay(file);
+
+		// Then all three topics are kept
+		expect(essay.topics).toEqual(["a", "b", "c"]);
+	});
+});

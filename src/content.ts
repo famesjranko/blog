@@ -48,6 +48,9 @@ export function makeSlug(filePath: string): string {
 	return slugify(path.basename(filePath, path.extname(filePath)));
 }
 
+/** Most topics a piece may carry; more dilutes the topic pages. */
+export const MAX_TOPICS = 3;
+
 /**
  * URL slug for a frontmatter topic. Throws on empty results so a
  * garbage topic fails the build loudly instead of producing /topics//.
@@ -73,6 +76,11 @@ export async function loadEssay(
 	const { data, content } = matter(source);
 	const raw = RawFrontmatterSchema.parse(data);
 	const meta = normalizeFrontmatter(raw);
+	if (meta.topics.length > MAX_TOPICS) {
+		throw new Error(
+			`${filePath}: ${meta.topics.length} topics exceeds the limit of ${MAX_TOPICS}`,
+		);
+	}
 	return {
 		...meta,
 		section,

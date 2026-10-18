@@ -303,3 +303,35 @@ describe("projectPage sidebar", () => {
 		expect(html).not.toContain("project-predecessor");
 	});
 });
+
+describe("project stack cap", () => {
+	const stack = ["one", "two", "three", "four", "five"];
+
+	it("shows only the first three stack items after the origin pill on a card", () => {
+		// Given a project with five stack items
+		const project = sampleProject({ stack });
+
+		// When its card is rendered
+		const html = projectEntry(project);
+
+		// Then the origin pill is followed by exactly the first three items
+		expect(html).toContain(
+			"Personal project</span><span>one</span><span>two</span><span>three</span></span>",
+		);
+		expect(html).not.toContain("four");
+		expect(html).not.toContain("five");
+	});
+
+	it("lists every stack item on the project page", () => {
+		// Given a project with five stack items
+		const project = sampleProject({ stack });
+
+		// When its page is rendered
+		const html = projectPage(project);
+
+		// Then all five items appear in the Stack fact
+		for (const item of stack) {
+			expect(html).toContain(`<span>${item}</span>`);
+		}
+	});
+});
