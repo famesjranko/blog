@@ -67,11 +67,16 @@
 		}
 	}
 
-	/* The whole card opens the note, as an essay card does. */
+	/*
+	 * The whole card opens the note, as an essay card does. The positioned
+	 * cover would otherwise sit above the overlay and take its taps without
+	 * the card's feedback; topics stay on top as later z-index: 1 siblings.
+	 */
 	.note-title a::after {
 		content: "";
 		position: absolute;
 		inset: 0;
+		z-index: 1;
 	}
 
 	.note-desc {
@@ -271,6 +276,10 @@
 			.note-row:hover,
 			.note-cover-link:hover .card-media img {
 				transform: none;
+			}
+
+			.note-row:hover {
+				box-shadow: none;
 			}
 		}
 	}

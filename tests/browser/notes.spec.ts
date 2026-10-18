@@ -89,3 +89,26 @@ test("only the footer rule closes the desktop notes list", async ({ page }) => {
 	expect(rules.slice(0, -1).every((width) => width === "1px")).toBe(true);
 	expect(rules.at(-1), "last row has no rule above the footer").toBe("0px");
 });
+
+test("the cover of a note card on a phone belongs to the card's one link", async ({
+	page,
+}) => {
+	// Given the notes index on a phone-width viewport.
+	await page.setViewportSize({ width: 390, height: 844 });
+	await page.goto("/notes/");
+	const note = page.locator(".note-row").first();
+	const cover = await note.locator(".card-media").boundingBox();
+	if (cover === null) {
+		throw new Error("expected the first note to show its cover");
+	}
+
+	// When the element under the middle of the cover is found.
+	const target = await page.evaluate(
+		({ x, y }) =>
+			document.elementFromPoint(x, y)?.closest("a")?.parentElement?.className,
+		{ x: cover.x + cover.width / 2, y: cover.y + cover.height / 2 },
+	);
+
+	// Then it is the title link, as on an essay card.
+	expect(target).toBe("note-title");
+});
