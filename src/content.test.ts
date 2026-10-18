@@ -1,7 +1,7 @@
-import { mkdtemp, writeFile } from "node:fs/promises";
+import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
 import {
 	loadEssay,
 	loadEssays,
@@ -171,8 +171,17 @@ describe("loadProjects draft filtering", () => {
 });
 
 describe("loadEssay topic cap", () => {
+	const topicDirs: string[] = [];
+
+	afterEach(async () => {
+		for (const dir of topicDirs.splice(0)) {
+			await rm(dir, { recursive: true, force: true });
+		}
+	});
+
 	async function writeTopicsFixture(topics: string[]): Promise<string> {
 		const dir = await mkdtemp(path.join(tmpdir(), "topics-"));
+		topicDirs.push(dir);
 		const file = path.join(dir, "piece.md");
 		await writeFile(
 			file,
