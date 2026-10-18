@@ -28,7 +28,7 @@ function noteCover(note: Essay): string {
 	return `<a class="note-cover-link" href="${url}" aria-label="${escapeHtml(label)}">${cardCover(note, NOTE_IMAGE_SIZES)}</a>`;
 }
 
-/** A ruled row: text on the left, the cover on the right. */
+/** A note entry: a card below 42rem, then a ruled row with the cover on the right. */
 export function noteRow(note: Essay): string {
 	const topics = note.topics.map((topic) => topicLink(topic)).join("");
 	const draft = note.draft ? " note-row-draft" : "";

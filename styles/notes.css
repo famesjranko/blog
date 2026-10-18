@@ -1,14 +1,58 @@
 /*
- * Notes are shorter pieces, so they are not cards. The index lists them
- * as ruled rows with the cover beside the text.
+ * Below 42rem a note is a card like an essay's, so the index matches the
+ * other index pages on a phone. From 42rem notes are shorter pieces set
+ * apart from the cards: ruled rows with the cover beside the text.
  */
 @layer entries {
+	.note-rows {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		display: grid;
+		gap: 1.5rem;
+	}
+
+	/* The card values mirror .card in main.css. */
+	.note-row {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		overflow: clip;
+		border: 1px solid var(--color-border);
+		border-radius: 0.75rem;
+		background: var(--color-surface);
+	}
+
+	.note-row:has(.note-title a:focus-visible) {
+		outline: 2px solid var(--color-accent);
+		outline-offset: 3px;
+	}
+
+	/* Preview-only: drafts are never built for the published site. */
+	.note-row-draft {
+		border-style: dashed;
+	}
+
+	.note-text {
+		display: flex;
+		flex-direction: column;
+		gap: 0.6rem;
+		flex: 1;
+		padding: 1.25rem 1.25rem 1.1rem;
+	}
+
 	.note-title {
-		margin: 0 0 0.45rem;
+		margin: 0;
 		font-family: var(--font-reading);
 		font-weight: 400;
-		font-size: 1.3rem;
-		line-height: 1.25;
+		font-size: 1.35rem;
+		line-height: 1.3;
+		text-wrap: balance;
+		min-height: 2.6em;
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
 	}
 
 	.note-title a {
@@ -23,51 +67,26 @@
 		}
 	}
 
-	.note-row:has(.note-title a:focus-visible) {
-		outline: 2px solid var(--color-accent);
-		outline-offset: 4px;
+	/* The whole card opens the note, as an essay card does. */
+	.note-title a::after {
+		content: "";
+		position: absolute;
+		inset: 0;
 	}
 
 	.note-desc {
 		margin: 0;
-		max-width: 60ch;
+		min-height: 3.2em;
 		color: var(--color-muted);
-		line-height: 1.6;
-	}
-
-	.note-rows {
-		margin: 0;
-		padding: 0;
-		list-style: none;
-		border-top: 1px solid var(--color-border);
-	}
-
-	.note-row {
-		position: relative;
-		display: grid;
-		grid-template-columns: 1fr;
-		gap: 1rem;
-		padding-block: 1.75rem;
-		border-bottom: 1px solid var(--color-border);
-	}
-
-	/* Preview-only: drafts are never built for the published site. */
-	.note-row-draft {
-		border-bottom-style: dashed;
-	}
-
-	.note-row .entry-meta {
-		padding-top: 1.25rem;
-	}
-
-	.note-row .card-media {
-		border-radius: 0.5rem;
+		display: -webkit-box;
+		-webkit-line-clamp: 3;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
 	}
 
 	.note-cover-link {
 		order: -1;
 		min-width: 0;
-		border-radius: 0.5rem;
 	}
 
 	.note-row .card-media img {
@@ -126,14 +145,75 @@
 
 @layer responsive {
 	@media (min-width: 42rem) {
+		.note-rows {
+			display: block;
+			border-top: 1px solid var(--color-border);
+		}
+
 		.note-row {
+			display: grid;
 			grid-template-columns: 1fr 35%;
 			gap: 3rem;
 			align-items: center;
+			overflow: visible;
+			padding-block: 1.75rem;
+			border: 0;
+			border-bottom: 1px solid var(--color-border);
+			border-radius: 0;
+			background: none;
+		}
+
+		/* The footer's top rule closes the list. */
+		.note-row:last-child {
+			border-bottom: 0;
+		}
+
+		.note-row-draft {
+			border-bottom-style: dashed;
+		}
+
+		.note-row:has(.note-title a:focus-visible) {
+			outline-offset: 4px;
+		}
+
+		.note-text {
+			display: block;
+			padding: 0;
+		}
+
+		.note-title {
+			margin-bottom: 0.45rem;
+			font-size: 1.3rem;
+			line-height: 1.25;
+			text-wrap: wrap;
+			min-height: 0;
+			display: block;
+			overflow: visible;
+		}
+
+		.note-title a::after {
+			content: none;
+		}
+
+		.note-desc {
+			max-width: 60ch;
+			min-height: 0;
+			line-height: 1.6;
+			display: block;
+			overflow: visible;
+		}
+
+		.note-row .entry-meta {
+			padding-top: 1.25rem;
 		}
 
 		.note-cover-link {
 			order: 0;
+		}
+
+		.note-cover-link,
+		.note-row .card-media {
+			border-radius: 0.5rem;
 		}
 	}
 
