@@ -88,16 +88,6 @@
 		order: -1;
 		min-width: 0;
 	}
-
-	.note-row .card-media img {
-		transition: transform 400ms ease;
-	}
-
-	@media (hover: hover) {
-		.note-cover-link:hover .card-media img {
-			transform: scale(1.03);
-		}
-	}
 }
 
 @layer prose {
@@ -188,6 +178,7 @@
 			text-wrap: wrap;
 			min-height: 0;
 			display: block;
+			-webkit-line-clamp: unset;
 			overflow: visible;
 		}
 
@@ -200,6 +191,7 @@
 			min-height: 0;
 			line-height: 1.6;
 			display: block;
+			-webkit-line-clamp: unset;
 			overflow: visible;
 		}
 
@@ -215,6 +207,48 @@
 		.note-row .card-media {
 			border-radius: 0.5rem;
 		}
+
+		.note-row .card-media img {
+			transition: transform 400ms ease;
+		}
+
+		@media (hover: hover) {
+			.note-cover-link:hover .card-media img {
+				transform: scale(1.03);
+			}
+		}
+	}
+
+	/* Card states, as on .card. Kept below 42rem so the rows need no resets. */
+	@media not all and (min-width: 42rem) {
+		.note-row {
+			transition:
+				transform 160ms ease,
+				border-color 160ms ease,
+				box-shadow 160ms ease;
+		}
+
+		@media (hover: hover) {
+			.note-row:hover {
+				transform: translateY(-2px);
+				border-color: var(--color-muted);
+				box-shadow: 0 12px 32px rgb(0 0 0 / 0.08);
+			}
+		}
+
+		.note-row:has(.note-title a:active) {
+			border-color: var(--color-muted);
+		}
+
+		/* The card clips its cover, so the card shows the cover link's focus. */
+		.note-cover-link:focus-visible {
+			outline: none;
+		}
+
+		.note-row:has(.note-cover-link:focus-visible) {
+			outline: 2px solid var(--color-accent);
+			outline-offset: 3px;
+		}
 	}
 
 	@media (max-width: 42rem) {
@@ -228,11 +262,13 @@
 	}
 
 	@media (prefers-reduced-motion: reduce) {
+		.note-row,
 		.note-cover-link .card-media img {
 			transition: none;
 		}
 
 		@media (hover: hover) {
+			.note-row:hover,
 			.note-cover-link:hover .card-media img {
 				transform: none;
 			}
