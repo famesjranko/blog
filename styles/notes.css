@@ -81,8 +81,7 @@
 
 	.note-desc {
 		margin: 0;
-		/* Three lines at the inherited 1.6 line-height, so cards in a list match. */
-		min-height: 4.8em;
+		min-height: 3.2em;
 		color: var(--color-muted);
 		display: -webkit-box;
 		-webkit-line-clamp: 3;
@@ -223,6 +222,12 @@
 
 	/* Card states, as on .card. Kept below 42rem so the rows need no resets. */
 	@media not all and (min-width: 42rem) {
+		/* A card is as tall as its text, with no empty reserve. */
+		.note-title,
+		.note-desc {
+			min-height: 0;
+		}
+
 		.note-row {
 			transition:
 				transform 160ms ease,

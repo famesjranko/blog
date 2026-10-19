@@ -269,8 +269,7 @@
 
 	.entry-desc {
 		margin: 0;
-		/* Three lines at the inherited 1.6 line-height, so cards in a list match. */
-		min-height: 4.8em;
+		min-height: 3.2em;
 		color: var(--color-muted);
 		display: -webkit-box;
 		-webkit-line-clamp: 3;
@@ -354,6 +353,14 @@
 }
 
 @layer responsive {
+	/* One column: a card is as tall as its text, with no empty reserve. */
+	@media not all and (min-width: 42rem) {
+		.card-title,
+		.entry-desc {
+			min-height: 0;
+		}
+	}
+
 	@media (min-width: 42rem) {
 		.card-grid {
 			grid-template-columns: repeat(2, 1fr);

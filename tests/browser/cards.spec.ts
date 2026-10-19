@@ -2,29 +2,139 @@ import { expect, test } from "@playwright/test";
 
 // Notes render as `.note-row`; every other list uses `.card`.
 const routes = [
-	{ path: "/essays/", card: ".card" },
-	{ path: "/notes/", card: ".note-row" },
-	{ path: "/projects/", card: ".card" },
-	{ path: "/ai-engineering/", card: ".card" },
-	{ path: "/topics/heidegger/", card: ".card" },
+	{
+		path: "/essays/",
+		card: ".card",
+		title: ".card-title",
+		desc: ".entry-desc",
+	},
+	{
+		path: "/notes/",
+		card: ".note-row",
+		title: ".note-title",
+		desc: ".note-desc",
+	},
+	{
+		path: "/projects/",
+		card: ".card",
+		title: ".card-title",
+		desc: ".entry-desc",
+	},
+	{
+		path: "/ai-engineering/",
+		card: ".card",
+		title: ".card-title",
+		desc: ".entry-desc",
+	},
+	{
+		path: "/topics/heidegger/",
+		card: ".card",
+		title: ".card-title",
+		desc: ".entry-desc",
+	},
 ];
 
-test.use({ viewport: { width: 390, height: 844 } });
+type Spacing = { titleToDesc: number; descToBottom: number };
+type Selectors = { title: string; desc: string };
 
-for (const { path, card } of routes) {
-	test(`cards on ${path} have equal height on a narrow screen`, async ({
-		page,
-	}) => {
-		// Given a phone-width viewport on a list page.
-		await page.goto(path);
-
-		// When I measure the height of every card in the list.
-		const heights = await page
-			.locator(card)
-			.evaluateAll((els) => els.map((el) => el.getBoundingClientRect().height));
-
-		// Then the list has several cards and all heights match within 1px.
-		expect(heights.length, `cards found on ${path}`).toBeGreaterThan(1);
-		expect(Math.max(...heights) - Math.min(...heights)).toBeLessThanOrEqual(1);
+// Runs in the page. Text boxes, not element boxes: a reserved min-height leaves
+// the element tall but its text short. Lines clamped out of view are skipped.
+function measureCards(cards: Element[], sel: Selectors): Spacing[] {
+	const lines = (node: Element) => {
+		const range = document.createRange();
+		range.selectNodeContents(node);
+		const limit = node.getBoundingClientRect().bottom - 1;
+		return [...range.getClientRects()].filter((r) => r.top < limit);
+	};
+	return cards.map((el) => {
+		const titleEl = el.querySelector(sel.title);
+		const descEl = el.querySelector(sel.desc);
+		if (!titleEl || !descEl) {
+			throw new Error("card lacks title or desc");
+		}
+		// Project cards end with an origin line below the description.
+		const endEl = el.querySelector(".entry-meta") ?? descEl;
+		return {
+			titleToDesc:
+				Math.min(...lines(descEl).map((r) => r.top)) -
+				Math.max(...lines(titleEl).map((r) => r.bottom)),
+			descToBottom:
+				el.getBoundingClientRect().bottom -
+				Math.max(...lines(endEl).map((r) => r.bottom)),
+		};
 	});
 }
+
+test.describe("narrow screen", () => {
+	test.use({ viewport: { width: 390, height: 844 } });
+
+	for (const { path, card, title, desc } of routes) {
+		test(`cards on ${path} reserve no empty space`, async ({ page }) => {
+			// Given a phone-width viewport on a list page.
+			await page.goto(path);
+
+			// When I measure, on every card, the text gaps around the description.
+			const spacing = await page
+				.locator(card)
+				.evaluateAll(measureCards, { title, desc });
+
+			// Then there are several cards and both gaps match on all of them within 1px.
+			expect(spacing.length, `cards found on ${path}`).toBeGreaterThan(1);
+			for (const key of ["titleToDesc", "descToBottom"] as const) {
+				const values = spacing.map((s) => s[key]);
+				const spread = Math.max(...values) - Math.min(...values);
+				expect(
+					spread,
+					`${path} ${key}: ${values.join(", ")}`,
+				).toBeLessThanOrEqual(1);
+			}
+		});
+	}
+});
+
+test.describe("wide screen", () => {
+	test.use({ viewport: { width: 1080, height: 900 } });
+
+	test("cards sharing a row on /essays/ keep one height and one description line", async ({
+		page,
+	}) => {
+		// Given a desktop-width viewport on the essays list.
+		await page.goto("/essays/");
+
+		// When I measure every card, with its row, height and description start.
+		const cards = await page.locator(".card").evaluateAll((els) =>
+			els.map((el) => {
+				const box = el.getBoundingClientRect();
+				const desc = el.querySelector(".entry-desc");
+				if (!desc) {
+					throw new Error("card lacks desc");
+				}
+				return {
+					row: Math.round(box.top),
+					height: box.height,
+					descTop: desc.getBoundingClientRect().top - box.top,
+				};
+			}),
+		);
+
+		// Then in every row the cards are equally tall and their descriptions start together.
+		const rows = new Map<number, typeof cards>();
+		for (const c of cards) {
+			rows.set(c.row, [...(rows.get(c.row) ?? []), c]);
+		}
+		expect(rows.size, "rows found").toBeGreaterThan(1);
+		for (const [row, members] of rows) {
+			const heights = members.map((c) => c.height);
+			const starts = members.map((c) => c.descTop);
+			const spread = (v: number[]) => Math.max(...v) - Math.min(...v);
+			expect(
+				spread(heights),
+				`row ${row} heights ${heights}`,
+			).toBeLessThanOrEqual(1);
+			expect(
+				spread(starts),
+				`row ${row} description starts ${starts}`,
+			).toBeLessThanOrEqual(1);
+		}
+	});
+});
