@@ -197,8 +197,9 @@ describe("loadEssay topic cap", () => {
 		// When it is loaded
 		const load = loadEssay(file);
 
-		// Then loading rejects with a message that names the file
+		// Then loading rejects with a message that names the file and the limit
 		await expect(load).rejects.toThrow(file);
+		await expect(load).rejects.toThrow(/7 topics exceeds the limit of 6/);
 	});
 
 	it("loads a piece with exactly six topics", async () => {

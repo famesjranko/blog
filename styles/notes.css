@@ -70,7 +70,7 @@
 	/*
 	 * The whole card opens the note, as an essay card does. The positioned
 	 * cover would otherwise sit above the overlay and take its taps without
-	 * the card's feedback; topics stay on top as later z-index: 1 siblings.
+	 * the card's feedback.
 	 */
 	.note-title a::after {
 		content: "";

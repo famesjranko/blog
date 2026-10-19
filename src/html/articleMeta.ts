@@ -26,5 +26,5 @@ export function articleTopics(topics: string[]): string {
 		return "";
 	}
 	const links = topics.map((topic) => topicLink(topic)).join("");
-	return `<footer class="article-topics"><p class="article-topics-label">Topics</p><p class="entry-topics">${links}</p></footer>`;
+	return `<nav class="article-topics" aria-labelledby="article-topics-label"><p class="article-topics-label" id="article-topics-label">Topics</p><p class="entry-topics">${links}</p></nav>`;
 }

@@ -278,9 +278,6 @@
 	}
 
 	.entry-meta {
-		display: flex;
-		flex-direction: column;
-		gap: 0.5rem;
 		/* Cards in a row stretch to one height; keep the origin line on the bottom edge. */
 		margin: auto 0 0;
 		padding-top: 0.75rem;

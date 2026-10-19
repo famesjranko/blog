@@ -158,12 +158,17 @@ describe("essayPage topics", () => {
 
 			// Then the topics block follows the body and closes the article
 			const body = html.indexOf("<p>Body.</p>");
-			const block = html.indexOf('<footer class="article-topics">');
+			const block = html.indexOf('<nav class="article-topics"');
 			expect(block).toBeGreaterThan(body);
 			expect(html.indexOf("</article>")).toBeGreaterThan(block);
 
 			// And it labels the block and links each topic to its slugified page
-			expect(html).toContain('<p class="article-topics-label">Topics</p>');
+			expect(html).toContain(
+				'<nav class="article-topics" aria-labelledby="article-topics-label">',
+			);
+			expect(html).toContain(
+				'<p class="article-topics-label" id="article-topics-label">Topics</p>',
+			);
 			expect(html).toContain('href="/topics/ethics/"');
 			expect(html).toContain('href="/topics/privacy/"');
 		}
