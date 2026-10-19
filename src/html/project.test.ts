@@ -57,10 +57,9 @@ describe("projectEntry card", () => {
 		expect(html).toContain('<span class="nowrap">Connect-4</span> web');
 	});
 
-	it("shows the origin badge and stack without a date", () => {
+	it("shows the origin label without a date", () => {
 		const html = projectEntry(sampleProject());
 		expect(html).toContain("Personal project");
-		expect(html).toContain("lisp");
 		expect(html).not.toContain("<time");
 	});
 
@@ -124,18 +123,9 @@ describe("projectEntry content", () => {
 });
 
 describe("projectEntry meta structure", () => {
-	it("keeps the facets row with the origin when the project has no stack", () => {
+	it("shows the origin when the project has no stack", () => {
 		const html = projectEntry(sampleProject({ stack: [] }));
-		expect(html).toContain('<span class="nowrap">Connect-4</span> web');
-		expect(html).toContain("entry-topics");
-		expect(html).toContain("Personal project");
-		expect(html).not.toContain("<span>lisp</span>");
-	});
-
-	it("renders facets without a date row", () => {
-		const html = projectEntry(sampleProject());
-		expect(html).toContain("entry-topics");
-		expect(html).not.toContain("<time");
+		expect(html).toContain('<p class="entry-meta">Personal project</p>');
 	});
 });
 
@@ -304,22 +294,23 @@ describe("projectPage sidebar", () => {
 	});
 });
 
-describe("project stack cap", () => {
+describe("project cards and page stack", () => {
 	const stack = ["one", "two", "three", "four", "five"];
 
-	it("shows only the first three stack items after the origin pill on a card", () => {
+	it("shows only the origin as plain text on a card", () => {
 		// Given a project with five stack items
 		const project = sampleProject({ stack });
 
 		// When its card is rendered
 		const html = projectEntry(project);
 
-		// Then the origin pill is followed by exactly the first three items
-		expect(html).toContain(
-			"Personal project</span><span>one</span><span>two</span><span>three</span></span>",
-		);
-		expect(html).not.toContain("four");
-		expect(html).not.toContain("five");
+		// Then the meta line is the origin label alone
+		expect(html).toContain('<p class="entry-meta">Personal project</p>');
+		// And no stack item appears on the card
+		for (const item of stack) {
+			expect(html).not.toContain(item);
+		}
+		expect(html).not.toContain("entry-topics");
 	});
 
 	it("lists every stack item on the project page", () => {

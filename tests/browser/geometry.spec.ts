@@ -168,7 +168,7 @@ for (const { name, path, list, rem } of [
 	});
 }
 
-test("project card topics sit at the bottom of every card", async ({
+test("project card origin lines sit at the bottom of every card", async ({
 	page,
 }) => {
 	// Given a desktop viewport where project cards share rows.
@@ -177,7 +177,7 @@ test("project card topics sit at the bottom of every card", async ({
 	// When the projects index is opened.
 	await page.goto("/projects/");
 
-	// Then each card's topics end the same distance above its bottom edge.
+	// Then each card's origin line ends the same distance above its bottom edge.
 	const gaps = await page
 		.locator(".card")
 		.evaluateAll((cards) =>
@@ -188,11 +188,11 @@ test("project card topics sit at the bottom of every card", async ({
 						Number.NaN),
 			),
 		);
-	await attachMeasurement("topic-gaps", { gaps });
+	await attachMeasurement("origin-gaps", { gaps });
 	expect(gaps.length, "projects index has cards").toBeGreaterThan(1);
 	expect(
 		Math.max(...gaps) - Math.min(...gaps),
-		"topics align to card bottoms",
+		"origin lines align to card bottoms",
 	).toBeLessThan(2);
 });
 

@@ -1,7 +1,7 @@
 import { type Essay, writingPath } from "../content.js";
 import { siteUrl } from "../site.js";
 import { cardClass, cardCover } from "./cover.js";
-import { escapeHtml, page, topicLink } from "./layout.js";
+import { escapeHtml, page } from "./layout.js";
 import { titleHtml } from "./titleText.js";
 
 export function essayEntry(essay: Essay): string {
@@ -11,12 +11,10 @@ export function essayEntry(essay: Essay): string {
 		essay.description !== undefined
 			? `<p class="entry-desc">${escapeHtml(essay.description)}</p>`
 			: "";
-	const topics = `<span class="entry-topics">${essay.topics.map((topic) => topicLink(topic)).join("")}</span>`;
 	return `<li><article class="${cardClass(essay)}">
 ${cover}<div class="card-body">
 <h2 class="card-title"><a href="${url}">${titleHtml(essay.title)}</a></h2>
 ${description}
-<p class="entry-meta">${topics}</p>
 </div></article></li>`;
 }
 
