@@ -82,10 +82,13 @@ describe("generateSite topics", () => {
 		expect(sitemap).toContain("topics/philosophy-of-mind/");
 	});
 
-	it("links essay entries to slugified topic pages", async () => {
+	it("links article pages to slugified topic pages", async () => {
 		const dir = await generate([sampleEssay()]);
-		const index = await readFile(path.join(dir, "essays/index.html"), "utf8");
-		expect(index).toContain("/topics/philosophy-of-mind/");
+		const article = await readFile(
+			path.join(dir, "essays/on-mind/index.html"),
+			"utf8",
+		);
+		expect(article).toContain("/topics/philosophy-of-mind/");
 	});
 });
 

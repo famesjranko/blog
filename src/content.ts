@@ -49,7 +49,7 @@ export function makeSlug(filePath: string): string {
 }
 
 /** Most topics a piece may carry; more dilutes the topic pages. */
-const MAX_TOPICS = 3;
+const MAX_TOPICS = 6;
 
 /**
  * URL slug for a frontmatter topic. Throws on empty results so a

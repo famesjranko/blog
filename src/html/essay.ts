@@ -1,6 +1,6 @@
 import { type Essay, type WritingSection, writingPath } from "../content.js";
 import { siteUrl } from "../site.js";
-import { articleMeta } from "./articleMeta.js";
+import { articleMeta, articleTopics } from "./articleMeta.js";
 import { coverSrc } from "./cover.js";
 import { escapeHtml, page } from "./layout.js";
 import { titleHtml } from "./titleText.js";
@@ -55,6 +55,7 @@ ${meta}
 ${subtitle}
 </header>
 ${essay.html}
+${articleTopics(essay.topics)}
 </article></div>`,
 	});
 }
