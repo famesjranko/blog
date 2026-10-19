@@ -1,15 +1,14 @@
-import type MarkdownIt from "markdown-it";
+import type { MarkdownIt, Token } from "markdown-it";
+import { attrText } from "./markdownLinks.js";
 
-type MarkdownToken = ReturnType<MarkdownIt["parse"]>[number];
-
-function isTitledImage(token: MarkdownToken | undefined): boolean {
-	return token?.type === "image" && Boolean(token.attrGet("title")?.trim());
+function isTitledImage(token: Token | undefined): boolean {
+	return token?.type === "image" && Boolean(attrText(token, "title")?.trim());
 }
 
 function isFigureParagraph(
-	open: MarkdownToken | undefined,
-	inline: MarkdownToken | undefined,
-	close: MarkdownToken | undefined,
+	open: Token | undefined,
+	inline: Token | undefined,
+	close: Token | undefined,
 ): boolean {
 	const children = inline?.children ?? [];
 	return (
@@ -22,9 +21,9 @@ function isFigureParagraph(
 }
 
 function markDiagramPair(
-	open: MarkdownToken | undefined,
-	inline: MarkdownToken | undefined,
-	close: MarkdownToken | undefined,
+	open: Token | undefined,
+	inline: Token | undefined,
+	close: Token | undefined,
 ): boolean {
 	const children = (inline?.children ?? []).filter(
 		(child) => child.type !== "text" || child.content.trim() !== "",
@@ -44,7 +43,7 @@ function markDiagramPair(
 }
 
 export function markFigureParagraphs(md: MarkdownIt): void {
-	const markParagraph = (tokens: MarkdownToken[], index: number): void => {
+	const markParagraph = (tokens: Token[], index: number): void => {
 		const open = tokens[index];
 		const inline = tokens[index + 1];
 		const close = tokens[index + 2];

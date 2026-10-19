@@ -1,14 +1,13 @@
-import type MarkdownIt from "markdown-it";
+import type { MarkdownIt, RendererRule, Token } from "markdown-it";
 import { ARTICLE_IMAGE_SIZES, articleImagePlan } from "./articleImages.js";
 import { imageSize } from "./images.js";
+import { attrText } from "./markdownLinks.js";
 import { renditionSources } from "./renditions.js";
 import { internalUrl } from "./site.js";
 import { inlineSvg } from "./svgInline.js";
 
-type MarkdownToken = ReturnType<MarkdownIt["parse"]>[number];
-
 interface ImageSource {
-	tokens: MarkdownToken[];
+	tokens: Token[];
 	index: number;
 }
 
@@ -22,19 +21,16 @@ interface FigureImage extends ImageSource {
  * is copied first; mutating a parameter property is banned. A trailing
  * backslash inside the title starts a new caption line.
  */
-function asFigure(
-	tokens: MarkdownToken[],
-	index: number,
-): FigureImage | undefined {
+function asFigure(tokens: Token[], index: number): FigureImage | undefined {
 	const token = tokens[index];
 	if (token === undefined) {
 		return undefined;
 	}
-	const title = token.attrGet("title");
+	const title = attrText(token, "title");
 	if (title === null || title.trim() === "") {
 		return undefined;
 	}
-	const copy: MarkdownToken = Object.assign(
+	const copy: Token = Object.assign(
 		Object.create(Object.getPrototypeOf(token)),
 		token,
 	);
@@ -42,20 +38,16 @@ function asFigure(
 	return { tokens: [copy], index: 0, caption: title };
 }
 
-export type ImageRenderRule = NonNullable<
-	MarkdownIt["renderer"]["rules"]["image"]
->;
-
 interface ImageRenderContext {
 	md: MarkdownIt;
-	fallback: ImageRenderRule;
+	fallback: RendererRule;
 	source: ImageSource;
-	options: Parameters<ImageRenderRule>[2];
-	env: Parameters<ImageRenderRule>[3];
+	options: Parameters<RendererRule>[2];
+	env: Parameters<RendererRule>[3];
 }
 
 /** Rewrite src for the base path and reserve the box for shipped images. */
-function prepareImageToken(token: MarkdownToken, src: string): void {
+function prepareImageToken(token: Token, src: string): void {
 	token.attrSet("src", internalUrl(src));
 	if (src.toLowerCase().endsWith("/cover.jpg")) {
 		token.attrJoin("class", "article-cover-image");
@@ -105,8 +97,8 @@ function picture(md: MarkdownIt, src: string, img: string): string {
  */
 export function renderImage(
 	md: MarkdownIt,
-	fallback: ImageRenderRule,
-): ImageRenderRule {
+	fallback: RendererRule,
+): RendererRule {
 	return (tokens, idx, options, env) => {
 		const figure = asFigure(tokens, idx);
 		const source: ImageSource = figure ?? { tokens, index: idx };
