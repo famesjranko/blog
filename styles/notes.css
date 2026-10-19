@@ -81,7 +81,8 @@
 
 	.note-desc {
 		margin: 0;
-		min-height: 3.2em;
+		/* Three lines at the inherited 1.6 line-height, so cards in a list match. */
+		min-height: 4.8em;
 		color: var(--color-muted);
 		display: -webkit-box;
 		-webkit-line-clamp: 3;
