@@ -15,24 +15,12 @@ export function originLabel(origin: Project["origin"]): string {
 	return ORIGIN_LABELS[origin];
 }
 
-/** Stack items a card shows; the project page lists them all. */
-const CARD_STACK_LIMIT = 3;
-
 function stackList(stack: string[]): string {
 	if (stack.length === 0) {
 		return "";
 	}
 	const items = stack.map((s) => `<span>${escapeHtml(s)}</span>`).join("");
 	return `<span class="entry-topics">${items}</span>`;
-}
-
-function facetList(project: Project): string {
-	const origin = `<span class="project-origin">${originLabel(project.origin)}</span>`;
-	const items = project.stack
-		.slice(0, CARD_STACK_LIMIT)
-		.map((s) => `<span>${escapeHtml(s)}</span>`)
-		.join("");
-	return `<span class="entry-topics">${origin}${items}</span>`;
 }
 
 function repoLink(repo: string | undefined): string {
@@ -52,7 +40,7 @@ export function projectEntry(project: Project): string {
 	return `<li><article class="${cardClass(project)}">${cover}<div class="card-body">
 <h2 class="card-title"><a href="${url}">${titleHtml(project.title)}</a></h2>
 ${description}
-<p class="entry-meta">${facetList(project)}</p>
+<p class="entry-meta">${originLabel(project.origin)}</p>
 </div></article></li>`;
 }
 

@@ -26,16 +26,17 @@ function sampleEssay(overrides: Partial<Essay> = {}): Essay {
 }
 
 describe("essayEntry topic links", () => {
-	it("links entry topics to their slugified topic pages", () => {
-		const html = essayEntry(sampleEssay());
-		expect(html).toContain('href="/topics/ethics/"');
-		expect(html).toContain('href="/topics/privacy/"');
-	});
+	it("essay cards carry no topic links", () => {
+		// Given an essay with several topics, one with spaces and capitals.
+		const essay = sampleEssay({ topics: ["ethics", "Philosophy of Mind"] });
 
-	it("slugifies topic links with spaces and capitals", () => {
-		const html = essayEntry(sampleEssay({ topics: ["Philosophy of Mind"] }));
-		expect(html).toContain('href="/topics/philosophy-of-mind/"');
-		expect(html).toContain(">Philosophy of Mind</a>");
+		// When its card is rendered.
+		const html = essayEntry(essay);
+
+		// Then the card links to no topic page.
+		expect(html).not.toContain('href="/topics/');
+		// And the card shows no topic text.
+		expect(html).not.toContain("Philosophy of Mind");
 	});
 });
 
@@ -96,14 +97,10 @@ describe("essayEntry content", () => {
 		expect(html).not.toContain("entry-desc");
 	});
 
-	it("keeps the facets row even when the essay has no topics", () => {
-		const html = essayEntry(sampleEssay({ topics: [] }));
-		expect(html).toContain("entry-topics");
-	});
-
-	it("renders topics without a date row", () => {
+	it("renders no meta row and no date row", () => {
 		const html = essayEntry(sampleEssay());
-		expect(html).toContain("entry-topics");
+		expect(html).not.toContain("entry-meta");
+		expect(html).not.toContain("entry-topics");
 		expect(html).not.toContain("<time");
 	});
 });
@@ -206,8 +203,6 @@ describe("index page parity", () => {
 			"card-body",
 			"card-title",
 			"entry-desc",
-			"entry-meta",
-			"entry-topics",
 		];
 		const entries = [essayEntry(sampleEssay()), projectEntry(sampleProject())];
 		for (const html of entries) {

@@ -1,7 +1,7 @@
 import { type Essay, writingPath } from "../content.js";
 import { siteUrl } from "../site.js";
 import { cardCover } from "./cover.js";
-import { escapeHtml, page, topicLink } from "./layout.js";
+import { escapeHtml, page } from "./layout.js";
 import { titleHtml } from "./titleText.js";
 
 /**
@@ -30,13 +30,11 @@ function noteCover(note: Essay): string {
 
 /** A note entry: a card below 42rem, then a ruled row with the cover on the right. */
 export function noteRow(note: Essay): string {
-	const topics = note.topics.map((topic) => topicLink(topic)).join("");
 	const draft = note.draft ? " note-row-draft" : "";
 	return `<li class="note-row${draft}">
 <div class="note-text">
 ${noteTitle(note)}
 ${noteDescription(note)}
-<p class="entry-meta"><span class="entry-topics">${topics}</span></p>
 </div>
 ${noteCover(note)}
 </li>`;
