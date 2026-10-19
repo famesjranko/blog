@@ -10,6 +10,7 @@ showcase: true
 topics:
   - software engineering
   - coding agents
+  - ai
 ---
 
 ![Pixel-art ironworkers raise a steel girder on an unfinished skyscraper frame at sunset while others rest on a beam above the city](/img/ai-engineering/lead-team/cover.jpg)

@@ -8,7 +8,7 @@ topics:
   - sartre
   - de beauvoir
   - phenomenology
-  - television
+  - film and television
 ---
 
 ![First-person view of two pairs of feet in a flat beneath fractured profiles](/img/notes/peep-show/cover.jpg)

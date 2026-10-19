@@ -12,9 +12,7 @@ type:
 tags:
   - ethics
   - kant
-  - utilitarianism
   - privacy
-  - data
 ---
 
 ![Google Maps on a phone](/img/essays/ethics-google/cover.jpg)

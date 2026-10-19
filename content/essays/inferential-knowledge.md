@@ -15,7 +15,6 @@ type:
   - essay
 tags:
   - ai
-  - turing
 ---
 
 ![city](/img/essays/inferential-knowledge/cover.jpg)

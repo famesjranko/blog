@@ -13,7 +13,6 @@ type:
   - essay
 tags:
   - metaphilosophy
-  - self-knowledge
 ---
 
 ![rocks](/img/essays/descript-philosophy/cover.jpg)

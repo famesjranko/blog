@@ -6,8 +6,7 @@ cover: /img/notes/i-heart-huckabees/cover.jpg
 coverAlt: "A faceless businessman seated beside an empty chair and a sandwich"
 topics:
   - sartre
-  - bad faith
-  - film
+  - film and television
 ---
 
 ![A faceless businessman seated beside an empty chair and a sandwich](/img/notes/i-heart-huckabees/cover.jpg)
