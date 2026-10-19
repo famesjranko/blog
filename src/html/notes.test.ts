@@ -40,6 +40,19 @@ describe("noteIndexPage", () => {
 		expect(html).not.toContain("note-meta");
 	});
 
+	it("note rows carry no topic links", () => {
+		// Given a note with topics, one with spaces and capitals.
+		const note = sampleNote({ topics: ["sartre", "Philosophy of Mind"] });
+
+		// When the notes index renders.
+		const html = noteIndexPage([note]);
+
+		// Then the row links to no topic page.
+		expect(html).not.toContain('href="/topics/');
+		// And the row shows no meta line.
+		expect(html).not.toContain("entry-meta");
+	});
+
 	it("gives a coverless note its generated placeholder art", () => {
 		// Given a note without a cover image.
 		const note = sampleNote();

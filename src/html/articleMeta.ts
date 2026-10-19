@@ -1,4 +1,4 @@
-import { escapeHtml } from "./layout.js";
+import { escapeHtml, topicLink } from "./layout.js";
 
 interface ArticleMetaOptions {
 	label: string;
@@ -18,4 +18,13 @@ export function articleMeta({
 	const year = date.getUTCFullYear();
 	const draftLabel = draft ? '<span class="draft-eyebrow">Draft</span>' : "";
 	return `<p class="article-meta">${draftLabel}${escapeHtml(label)} <span aria-hidden="true">·</span> <time datetime="${isoDate}">${year}</time> <span aria-hidden="true">·</span> ${readingMinutes} min read</p>`;
+}
+
+/** Topic pills that close an article; empty when the piece has no topics. */
+export function articleTopics(topics: string[]): string {
+	if (topics.length === 0) {
+		return "";
+	}
+	const links = topics.map((topic) => topicLink(topic)).join("");
+	return `<nav class="article-topics" aria-labelledby="article-topics-label"><p class="article-topics-label" id="article-topics-label">Topics</p><p class="entry-topics">${links}</p></nav>`;
 }

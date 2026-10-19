@@ -1,7 +1,7 @@
-import { mkdtemp, writeFile } from "node:fs/promises";
+import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
 import {
 	loadEssay,
 	loadEssays,
@@ -167,5 +167,49 @@ describe("loadProjects draft filtering", () => {
 			"in-progress",
 			"published",
 		]);
+	});
+});
+
+describe("loadEssay topic cap", () => {
+	const topicDirs: string[] = [];
+
+	afterEach(async () => {
+		for (const dir of topicDirs.splice(0)) {
+			await rm(dir, { recursive: true, force: true });
+		}
+	});
+
+	async function writeTopicsFixture(topics: string[]): Promise<string> {
+		const dir = await mkdtemp(path.join(tmpdir(), "topics-"));
+		topicDirs.push(dir);
+		const file = path.join(dir, "piece.md");
+		await writeFile(
+			file,
+			`---\ntitle: "Piece"\ndate: 2024-01-01\ntopics: [${topics.join(", ")}]\n---\n\nBody.\n`,
+		);
+		return file;
+	}
+
+	it("fails the build naming the file when a piece has seven topics", async () => {
+		// Given a piece with seven topics
+		const file = await writeTopicsFixture(["a", "b", "c", "d", "e", "f", "g"]);
+
+		// When it is loaded
+		const load = loadEssay(file);
+
+		// Then loading rejects with a message that names the file and the limit
+		await expect(load).rejects.toThrow(file);
+		await expect(load).rejects.toThrow(/7 topics exceeds the limit of 6/);
+	});
+
+	it("loads a piece with exactly six topics", async () => {
+		// Given a piece with six topics
+		const file = await writeTopicsFixture(["a", "b", "c", "d", "e", "f"]);
+
+		// When it is loaded
+		const essay = await loadEssay(file);
+
+		// Then all six topics are kept
+		expect(essay.topics).toEqual(["a", "b", "c", "d", "e", "f"]);
 	});
 });

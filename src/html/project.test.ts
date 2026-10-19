@@ -57,10 +57,9 @@ describe("projectEntry card", () => {
 		expect(html).toContain('<span class="nowrap">Connect-4</span> web');
 	});
 
-	it("shows the origin badge and stack without a date", () => {
+	it("shows the origin label without a date", () => {
 		const html = projectEntry(sampleProject());
 		expect(html).toContain("Personal project");
-		expect(html).toContain("lisp");
 		expect(html).not.toContain("<time");
 	});
 
@@ -124,18 +123,9 @@ describe("projectEntry content", () => {
 });
 
 describe("projectEntry meta structure", () => {
-	it("keeps the facets row with the origin when the project has no stack", () => {
+	it("shows the origin when the project has no stack", () => {
 		const html = projectEntry(sampleProject({ stack: [] }));
-		expect(html).toContain('<span class="nowrap">Connect-4</span> web');
-		expect(html).toContain("entry-topics");
-		expect(html).toContain("Personal project");
-		expect(html).not.toContain("<span>lisp</span>");
-	});
-
-	it("renders facets without a date row", () => {
-		const html = projectEntry(sampleProject());
-		expect(html).toContain("entry-topics");
-		expect(html).not.toContain("<time");
+		expect(html).toContain('<p class="entry-meta">Personal project</p>');
 	});
 });
 
@@ -301,5 +291,38 @@ describe("projectPage sidebar", () => {
 	it("omits the predecessor block when absent", () => {
 		const html = projectPage(sampleProject());
 		expect(html).not.toContain("project-predecessor");
+	});
+});
+
+describe("project cards and page stack", () => {
+	const stack = ["one", "two", "three", "four", "five"];
+
+	it("shows only the origin as plain text on a card", () => {
+		// Given a project with five stack items
+		const project = sampleProject({ stack });
+
+		// When its card is rendered
+		const html = projectEntry(project);
+
+		// Then the meta line is the origin label alone
+		expect(html).toContain('<p class="entry-meta">Personal project</p>');
+		// And no stack item appears on the card
+		for (const item of stack) {
+			expect(html).not.toContain(item);
+		}
+		expect(html).not.toContain("entry-topics");
+	});
+
+	it("lists every stack item on the project page", () => {
+		// Given a project with five stack items
+		const project = sampleProject({ stack });
+
+		// When its page is rendered
+		const html = projectPage(project);
+
+		// Then all five items appear in the Stack fact
+		for (const item of stack) {
+			expect(html).toContain(`<span>${item}</span>`);
+		}
 	});
 });

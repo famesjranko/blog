@@ -146,3 +146,42 @@ function registerStylesheetOrderTest(): void {
 		expect(html).not.toContain("/css/project.css");
 	});
 }
+
+describe("essayPage topics", () => {
+	it("ends every article section with linked topic pills after the body", () => {
+		// Given an essay, a note and an AI engineering article with topics
+		const sections = ["essays", "notes", "ai-engineering"] as const;
+
+		for (const section of sections) {
+			// When each page is rendered
+			const html = essayPage({ ...sampleEssay(), section });
+
+			// Then the topics block follows the body and closes the article
+			const body = html.indexOf("<p>Body.</p>");
+			const block = html.indexOf('<nav class="article-topics"');
+			expect(block).toBeGreaterThan(body);
+			expect(html.indexOf("</article>")).toBeGreaterThan(block);
+
+			// And it labels the block and links each topic to its slugified page
+			expect(html).toContain(
+				'<nav class="article-topics" aria-labelledby="article-topics-label">',
+			);
+			expect(html).toContain(
+				'<p class="article-topics-label" id="article-topics-label">Topics</p>',
+			);
+			expect(html).toContain('href="/topics/ethics/"');
+			expect(html).toContain('href="/topics/privacy/"');
+		}
+	});
+
+	it("omits the topics block when the article has no topics", () => {
+		// Given an essay with no topics
+		const essay = { ...sampleEssay(), topics: [] };
+
+		// When its page is rendered
+		const html = essayPage(essay);
+
+		// Then no topics block appears
+		expect(html).not.toContain("article-topics");
+	});
+});
