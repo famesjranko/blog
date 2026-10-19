@@ -1,6 +1,6 @@
 ---
 title: "AR Telehealth with HoloLens 2"
-description: "A proof of concept that let a remote doctor see, hear and monitor a patient through a nurse's HoloLens 2."
+description: "A prototype that let a remote doctor see, hear and monitor a patient through a nurse's HoloLens 2."
 date: 2022-08-15
 draft: false
 origin: professional

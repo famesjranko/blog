@@ -1,6 +1,6 @@
 ---
 title: "On Knowing That and Knowing How"
-description: "A naive exploration on knowing that, knowing how, and counterfactuals."
+description: "A naive exploration of knowing that, knowing how, and counterfactuals."
 author:
   name: "Andrew McDonald"
 date: 2016-08-06
