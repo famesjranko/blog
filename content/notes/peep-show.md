@@ -7,6 +7,7 @@ coverAlt: "First-person view of two pairs of feet in a flat beneath fractured pr
 topics:
   - sartre
   - de beauvoir
+  - phenomenology
   - film and television
 ---
 
