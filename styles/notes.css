@@ -222,10 +222,16 @@
 
 	/* Card states, as on .card. Kept below 42rem so the rows need no resets. */
 	@media not all and (min-width: 42rem) {
-		/* A card is as tall as its text, with no empty reserve. */
+		/* A card is as tall as its text, with no empty reserve. A narrow column
+		   wraps text onto more lines, so descriptions may take 4; every current
+		   one fits at 360px, and the clamp stays as a guard. */
 		.note-title,
 		.note-desc {
 			min-height: 0;
+		}
+
+		.note-desc {
+			-webkit-line-clamp: 4;
 		}
 
 		.note-row {

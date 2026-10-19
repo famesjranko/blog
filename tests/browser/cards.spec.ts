@@ -92,6 +92,34 @@ test.describe("narrow screen", () => {
 	}
 });
 
+test.describe("small phone", () => {
+	test.use({ viewport: { width: 360, height: 800 } });
+
+	for (const { path, desc } of routes.slice(0, 4)) {
+		test(`descriptions on ${path} are not cut off`, async ({ page }) => {
+			// Given a 360px-wide viewport on a list page.
+			await page.goto(path);
+
+			// When I read every description's content height against its visible height.
+			const boxes = await page.locator(desc).evaluateAll((els) =>
+				els.map((el) => ({
+					text: el.textContent?.slice(0, 40) ?? "",
+					hidden: el.scrollHeight - el.clientHeight,
+				})),
+			);
+
+			// Then there are several descriptions and none hides a line within 1px.
+			expect(boxes.length, `descriptions found on ${path}`).toBeGreaterThan(1);
+			for (const { text, hidden } of boxes) {
+				expect(
+					hidden,
+					`${path} "${text}" hides ${hidden}px`,
+				).toBeLessThanOrEqual(1);
+			}
+		});
+	}
+});
+
 test.describe("wide screen", () => {
 	test.use({ viewport: { width: 1080, height: 900 } });
 
