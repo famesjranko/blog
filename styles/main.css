@@ -353,6 +353,20 @@
 }
 
 @layer responsive {
+	/* One column: a card is as tall as its text, with no empty reserve. A
+	   narrow column wraps text onto more lines, so descriptions may take 4;
+	   every current one fits at 360px, and the clamp stays as a guard. */
+	@media not all and (min-width: 42rem) {
+		.card-title,
+		.entry-desc {
+			min-height: 0;
+		}
+
+		.entry-desc {
+			-webkit-line-clamp: 4;
+		}
+	}
+
 	@media (min-width: 42rem) {
 		.card-grid {
 			grid-template-columns: repeat(2, 1fr);
