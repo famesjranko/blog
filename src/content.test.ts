@@ -190,9 +190,9 @@ describe("loadEssay topic cap", () => {
 		return file;
 	}
 
-	it("fails the build naming the file when a piece has four topics", async () => {
-		// Given a piece with four topics
-		const file = await writeTopicsFixture(["a", "b", "c", "d"]);
+	it("fails the build naming the file when a piece has seven topics", async () => {
+		// Given a piece with seven topics
+		const file = await writeTopicsFixture(["a", "b", "c", "d", "e", "f", "g"]);
 
 		// When it is loaded
 		const load = loadEssay(file);
@@ -201,14 +201,14 @@ describe("loadEssay topic cap", () => {
 		await expect(load).rejects.toThrow(file);
 	});
 
-	it("loads a piece with exactly three topics", async () => {
-		// Given a piece with three topics
-		const file = await writeTopicsFixture(["a", "b", "c"]);
+	it("loads a piece with exactly six topics", async () => {
+		// Given a piece with six topics
+		const file = await writeTopicsFixture(["a", "b", "c", "d", "e", "f"]);
 
 		// When it is loaded
 		const essay = await loadEssay(file);
 
-		// Then all three topics are kept
-		expect(essay.topics).toEqual(["a", "b", "c"]);
+		// Then all six topics are kept
+		expect(essay.topics).toEqual(["a", "b", "c", "d", "e", "f"]);
 	});
 });
