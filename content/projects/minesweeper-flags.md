@@ -5,6 +5,8 @@ date: 2026-09-21
 draft: false
 origin: personal
 repo: https://github.com/famesjranko/minesweeper-flags
+cover: /img/projects/minesweeper-flags/cover.jpg
+coverAlt: "A cream-beige PC running Minesweeper Flags on a desk beneath a rain-streaked attic window at night"
 stack:
   - typescript
   - react
@@ -13,6 +15,8 @@ stack:
   - webrtc
   - redis
 ---
+
+![Minesweeper Flags on a retro PC](/img/projects/minesweeper-flags/cover.jpg)
 
 The early-2000s internet came to life on a cream-beige PC with a big, boxy monitor. The dot-com craze was behind us. MySpace was just beginning, and YouTube was still to come. MSN Messenger sat open on the desktop, its list of names changing as friends signed in and out. I used XDCC to download files. Napster had set off a wave of music sharing, and torrents were still new. There was a whole world behind that screen, reached through familiar windows and usernames.
 
