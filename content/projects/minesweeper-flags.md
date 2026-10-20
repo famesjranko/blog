@@ -32,7 +32,7 @@ Each match takes place in a room. The chat belongs to the room, so it is there w
 
 ## The game window
 
-Hidden cells are blue, revealed cells are yellow, and claimed mines carry red or blue flags for their player. The scores sit beside the board in matching colours. Chat runs beneath the match rather than being a separate screen, which keeps the room present during a game.
+Hidden cells are blue, revealed cells are yellow, and claimed mines carry red or blue flags for their player. The scores sit beside the board in matching colours. Chat runs beneath the match rather than being a separate screen, so players can chat without leaving the board.
 
 <div class="minesweeper-game-figure">
 
