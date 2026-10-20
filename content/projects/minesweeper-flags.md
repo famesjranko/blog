@@ -32,7 +32,7 @@ Hidden cells are blue, revealed cells are yellow, and claimed mines carry red or
 
 <div class="minesweeper-game-figure">
 
-![A two-player Minesweeper Flags match in progress, with the board, player scores and room chat in one window.](/img/projects/minesweeper-flags/game.png "A two-player match in progress, with the board, player scores and room chat in one window.")
+![A two-player Minesweeper Flags match in progress, with the board, player scores and room chat in one window.](/img/projects/minesweeper-flags/game.jpg "A two-player match in progress, with the board, player scores and room chat in one window.")
 
 </div>
 
