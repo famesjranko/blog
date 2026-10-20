@@ -14,7 +14,7 @@ stack:
   - redis
 ---
 
-MSN Messenger and its games are gone. In the early 2000s, I used to play *Minesweeper Flags* with friends through Messenger, with the game open beside the chat window. I wanted to recreate that experience in a browser: a board for the match and a conversation running alongside it.
+In the early 2000s, I played *Minesweeper Flags* with friends through MSN Messenger, with the board open beside our chat. The game belongs, in my memory, to that particular version of the internet: a Messenger window where the match and the conversation occupied the same space. I built this browser recreation to revisit that small slice of it, with a match on the board and a conversation running alongside.
 
 ## Playing it
 
