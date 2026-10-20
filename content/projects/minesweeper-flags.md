@@ -2,7 +2,7 @@
 title: "Minesweeper Flags"
 description: "A browser recreation of the two-player Minesweeper Flags game from MSN Messenger."
 date: 2026-09-21
-draft: true
+draft: false
 origin: personal
 repo: https://github.com/famesjranko/minesweeper-flags
 stack:
@@ -14,7 +14,9 @@ stack:
   - redis
 ---
 
-*Minesweeper Flags* takes me back to the early 2000s, when I played it with friends through MSN Messenger. I miss the internet I knew in those years, and this game is one of the things I still associate with it. That was what made me want to recreate it in a browser: a chance to revisit a small piece of that time.
+The early-2000s internet came to life on a cream-beige PC with a big, boxy monitor. The dot-com craze was behind us; MySpace was just beginning, and YouTube was still to come. MSN Messenger sat open on the desktop, its list of names changing as friends signed in and out. I used XDCC to download files. Napster had set off a wave of music sharing, and torrents were still new. There was a whole world behind that screen, reached through familiar windows and usernames.
+
+*Minesweeper Flags* was a small part of that world. I played it with friends through MSN Messenger, and it still brings back the feeling of being online in those years. I miss that time, the places we went and the names we recognised. Recreating the game in a browser is my attempt to revisit a little of that early-2000s internet.
 
 ## Playing it
 
