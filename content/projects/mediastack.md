@@ -1,8 +1,8 @@
 ---
 title: "MediaStack"
-description: "A menu-driven installer that turns a bare Debian server into a home media stack, then manages it: Jellyfin, Sonarr, Radarr, qBittorrent, monitoring, and hardened remote access."
+description: "A menu-driven installer that turns a bare Debian server into a secure home media stack, then manages it day to day."
 date: 2026-10-30
-draft: true
+draft: false
 origin: personal
 repo: https://github.com/famesjranko/MediaStack
 stack:
