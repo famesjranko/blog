@@ -37,6 +37,8 @@ Sonarr and Radarr have many quality settings, but the wizard asks two questions:
 
 ## Installing
 
+![The MediaStack install menu in a terminal: a status box showing Not yet installed, the host, LAN, router and public IPs, above the options Install MediaStack, System readiness check, Test port forwarding, Check domain DNS and Quit](/img/projects/mediastack/install-menu.jpg "The menu before install. The checks can run before anything is changed.")
+
 The install is a clone and one command:
 
 ```bash
@@ -45,7 +47,7 @@ cd MediaStack
 ./mediastack
 ```
 
-The wizard builds the LAN stack first, then offers hardware transcoding if there is a GPU, then remote access. The owner can skip both and add them from the menu later. The same menu can first check the server's readiness, the router's port forwarding and a domain's DNS.
+The wizard builds the LAN stack first, then offers hardware transcoding if there is a GPU, then remote access. The owner can skip both and add them from the menu later. The checks above the install entry run before anything on the host changes.
 
 Images come from the Stable channel by default: the exact set the project last tested together. Because MediaStack configures every service through its API, an upstream change to an endpoint or a schema can break setup, and Stable installs only images those calls have passed against. Latest, which pulls whatever upstream published most recently, is the advanced choice.
 
