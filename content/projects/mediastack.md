@@ -65,7 +65,7 @@ Uninstall asks the owner to type `DESTROY`, then removes the containers and only
 
 ## Setting up again
 
-Setup is safe to run again. An installer that simply wrote its settings again would undo every change the owner had made in a service's own UI, so the configure step reads before it writes. Most settings are compared with the live value and written only when they are absent or still at the upstream default; a few are reapplied on every run. A value the owner has changed is reported and left alone: a quality profile edited in Sonarr stays as the owner left it, and the log names two ways to resolve the difference. A read that lacks the fields MediaStack expects stops the write, and no write is retried automatically, because a lost response can hide a write that succeeded.
+Setup is safe to run again. An installer that simply wrote its settings again would undo every change the owner had made in a service's own UI, so the configure step reads before it writes. Most settings are compared with the live value and written only when they are absent or still at the upstream default; a few are reapplied on every run. For settings checked this way, a value the owner has changed is reported and left alone: a quality profile edited in Sonarr stays as the owner left it, and the log names two ways to resolve the difference. A read that lacks the fields MediaStack expects stops the write, and no write is retried automatically, because a lost response can hide a write that succeeded.
 
 ## Storage and the NAS watchdog
 
