@@ -235,6 +235,22 @@
 		"width": 785,
 		"height": 571
 	},
+	"/img/projects/mediastack/pipeline-dark.svg": {
+		"width": 760,
+		"height": 496
+	},
+	"/img/projects/mediastack/pipeline.svg": {
+		"width": 760,
+		"height": 496
+	},
+	"/img/projects/mediastack/remote-dark.svg": {
+		"width": 760,
+		"height": 856
+	},
+	"/img/projects/mediastack/remote.svg": {
+		"width": 760,
+		"height": 856
+	},
 	"/img/projects/musicmeta/cover-article.jpg": {
 		"width": 1512,
 		"height": 630

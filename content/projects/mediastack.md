@@ -33,6 +33,18 @@ Jellyfin plays the library on phones, TVs and browsers. Seerr is a request page 
 
 When someone requests a film in Seerr, Radarr searches the indexers through Jackett, hands the result to qBittorrent, and files the finished download into the library, where Jellyfin finds it on its next scan. MediaStack enables no public trackers. The owner adds indexers only where they have the right to use them.
 
+<div class="theme-light-only">
+
+![Two-row pipeline: Seerr requests a film or show; Radarr or Sonarr searches through Jackett and manages the qBittorrent download; Unpackerr extracts archives; Radarr or Sonarr hardlinks the file from /data/torrents/ into /data/media/ on one filesystem; Jellyfin scans and plays the library](/img/projects/mediastack/pipeline.svg "A request passes from Seerr through search and download to Jellyfin. Radarr or Sonarr hardlinks the finished download into the library, so seeding continues without a second copy.")
+
+</div>
+
+<div class="theme-dark-only">
+
+![Two-row pipeline: Seerr requests a film or show; Radarr or Sonarr searches through Jackett and manages the qBittorrent download; Unpackerr extracts archives; Radarr or Sonarr hardlinks the file from /data/torrents/ into /data/media/ on one filesystem; Jellyfin scans and plays the library](/img/projects/mediastack/pipeline-dark.svg "A request passes from Seerr through search and download to Jellyfin. Radarr or Sonarr hardlinks the finished download into the library, so seeding continues without a second copy.")
+
+</div>
+
 Sonarr and Radarr have many quality settings, but the wizard asks two questions: how sharp (720p or 1080p) and how large (compact, balanced or large). The answers select a named profile such as "1080p Balanced", which sets the allowed tiers, the upgrade cutoff, and the size bounds for each. Every profile excludes Remux releases, which can reach 40 GB for one film.
 
 ## Installing
@@ -79,7 +91,19 @@ Docker's automatic restart is turned off for the services that touch media. A wa
 
 Remote access publishes only Jellyfin and Seerr, over HTTPS behind Nginx Proxy Manager with Let's Encrypt certificates. Every admin page stays on the LAN and the WireGuard VPN, and per-client firewall rules limit what each VPN device can reach: the whole LAN, the server, the containers, or, for a relative's TV, Jellyfin alone.
 
-One firewall rule holds that promise. When a container publishes a port, Docker opens it on every interface and bypasses the host firewall, so one forwarded port can expose an admin page by accident. MediaStack hooks its own chain into `DOCKER-USER`, the chain Docker keeps for the host's rules: private, loopback and Tailscale addresses reach the admin ports, and every other source is dropped. A systemd unit installs the chain before Docker starts, and if it cannot be applied, Docker does not start. Around it sit fail2ban, UFW and security-only unattended upgrades, each recorded in a root-owned ledger for uninstall.
+<div class="theme-light-only">
+
+![Three routes into MediaStack: a browser or app crosses the router on HTTPS to Nginx Proxy Manager, which holds a Let's Encrypt certificate and publishes only Jellyfin and Seerr; a WireGuard device crosses the router on UDP 51820 and receives one firewall tier, the whole LAN, the server, the containers, or Jellyfin only; a laptop at home reaches every service and admin page directly. A panel notes that admin ports accept only private, loopback and Tailscale sources, that other sources are dropped even after a mistaken port forward, and that Docker does not start unless the rules load](/img/projects/mediastack/remote.svg "Away from home, HTTPS reaches only Jellyfin and Seerr, and a WireGuard device gets one tier. The admin pages answer private addresses only, whatever the router forwards.")
+
+</div>
+
+<div class="theme-dark-only">
+
+![Three routes into MediaStack: a browser or app crosses the router on HTTPS to Nginx Proxy Manager, which holds a Let's Encrypt certificate and publishes only Jellyfin and Seerr; a WireGuard device crosses the router on UDP 51820 and receives one firewall tier, the whole LAN, the server, the containers, or Jellyfin only; a laptop at home reaches every service and admin page directly. A panel notes that admin ports accept only private, loopback and Tailscale sources, that other sources are dropped even after a mistaken port forward, and that Docker does not start unless the rules load](/img/projects/mediastack/remote-dark.svg "Away from home, HTTPS reaches only Jellyfin and Seerr, and a WireGuard device gets one tier. The admin pages answer private addresses only, whatever the router forwards.")
+
+</div>
+
+One firewall rule holds that promise. When a container publishes a port, Docker opens it on every interface and bypasses the host firewall, so one forwarded port can expose an admin page by accident. MediaStack's own chain in `DOCKER-USER` closes that gap, and Docker does not start without it. Around it sit fail2ban, UFW and security-only unattended upgrades, each recorded in a root-owned ledger for uninstall.
 
 ## Hardware transcoding
 
