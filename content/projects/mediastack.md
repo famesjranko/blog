@@ -77,9 +77,11 @@ Docker's automatic restart is turned off for the services that touch media. A wa
 
 ## Remote access and security
 
-Remote access publishes only Jellyfin and Seerr, over HTTPS behind Nginx Proxy Manager with Let's Encrypt certificates. Every admin page stays on the LAN and the WireGuard VPN, and per-client firewall rules limit what each VPN device can reach: the whole LAN, the server, the containers, or, for a relative's TV, Jellyfin alone.
+Remote access publishes only Jellyfin and Seerr, over HTTPS behind Nginx Proxy Manager with Let's Encrypt certificates. Every admin page stays on the LAN and the WireGuard VPN, and per-client firewall rules limit what each VPN device can reach: the whole LAN, the server, the containers, or just Jellyfin, with or without Seerr, for a relative's TV.
 
-One firewall rule holds that promise. When a container publishes a port, Docker opens it on every interface and bypasses the host firewall, so one forwarded port can expose an admin page by accident. MediaStack hooks its own chain into `DOCKER-USER`, the chain Docker keeps for the host's rules: private, loopback and Tailscale addresses reach the admin ports, and every other source is dropped. A systemd unit installs the chain before Docker starts, and if it cannot be applied, Docker does not start. Around it sit fail2ban, UFW and security-only unattended upgrades, each recorded in a root-owned ledger for uninstall.
+![How MediaStack is wired, from the internet to the filesystem](/img/projects/mediastack/stack.svg "The whole stack, from the router to the filesystem. Four forwarded ports, one chain that keeps the admin pages private, and one filesystem under downloads and media. The chain is on by default and can be switched off.")
+
+One firewall rule holds that promise. When a container publishes a port, Docker opens it on every interface and bypasses the host firewall, so one forwarded port can expose an admin page by accident. MediaStack's own chain in `DOCKER-USER` closes that gap, and Docker does not start without it. Around it sit fail2ban, UFW and security-only unattended upgrades, each recorded in a root-owned ledger for uninstall.
 
 ## Hardware transcoding
 

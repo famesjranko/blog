@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="diagram diagram-terminal" viewBox="0 0 624 810" role="img" aria-labelledby="stack-title stack-desc" xml:space="preserve">
+<title id="stack-title">How MediaStack is wired, from the internet to the filesystem</title>
+<desc id="stack-desc">The internet reaches the router, which forwards only ports 80 and 443 to the reverse proxy, 6881 to qBittorrent peers and 51820 UDP to WireGuard; every admin port stays unforwarded. On the Debian host a DOCKER-USER chain lets the forwarded ports through, lets only LAN, loopback and Tailscale addresses reach the admin ports, and drops every other source; fail2ban adds a ban to the same chain after repeated failed logins to the published pages; without the chain Docker does not start. Home LAN devices reach every port. On the Docker bridge the proxy publishes Jellyfin and Seerr, and WireGuard gives each device one tier: the whole LAN, the server, the containers, Jellyfin only, or Jellyfin and Seerr. Sonarr, Radarr, Jackett, FlareSolverr, Bazarr, the qBittorrent UI, Portainer, Homepage, Uptime Kuma, Beszel and the proxy and VPN admin pages are never reachable from the internet: only from the LAN, or from VPN devices on the LAN, server or containers tier. Downloads and media share one filesystem, so a finished download is hardlinked into the library.</desc>
+<path class="rule" d="M180 45 L372 45 M180 117 L372 117 M140 153 L204 153 M364 153 L396 153 M28 243 L444 243 M468 243 L604 243 M28 351 L444 351 M468 351 L604 351 M0 369 L16 369 M136 369 L624 369 M84 405 L196 405 M212 405 L324 405 M340 405 L452 405 M84 459 L196 459 M212 459 L324 459 M340 459 L452 459 M140 495 L244 495 M324 513 L556 513 M92 531 L188 531 M204 531 L284 531 M92 585 L188 585 M204 585 L284 585 M324 585 L556 585 M0 621 L16 621 M216 621 L624 621 M176 783 L192 783 M432 783 L448 783 M28 243 L28 351 M84 405 L84 459 M92 531 L92 585 M140 153 L140 243 M140 351 L140 378 M140 468 L140 504 M180 45 L180 117 M188 531 L188 585 M196 405 L196 459 M204 117 L204 153 M204 531 L204 585 M212 405 L212 459 M244 495 L244 504 M268 117 L268 243 M268 351 L268 378 M276 18 L276 36 M284 531 L284 585 M324 405 L324 459 M324 513 L324 585 M340 405 L340 459 M364 117 L364 153 M372 45 L372 117 M396 153 L396 243 M396 351 L396 378 M396 468 L396 486 M444 243 L444 351 M452 405 L452 459 M468 243 L468 351 M532 351 L532 378 M556 513 L556 585 M604 243 L604 351"/>
+<path class="rule" d="M0 205 L16 205 M120 205 L624 205 M0 209 L16 209 M120 209 L624 209 M0 745 L16 745 M144 745 L624 745 M0 749 L16 749 M144 749 L624 749"/>
+<polygon class="arrow" points="136.4,381.6 143.6,381.6 140.0,392.4"/>
+<polygon class="arrow" points="264.4,381.6 271.6,381.6 268.0,392.4"/>
+<polygon class="arrow" points="392.4,381.6 399.6,381.6 396.0,392.4"/>
+<polygon class="arrow" points="528.4,381.6 535.6,381.6 532.0,392.4"/>
+<polygon class="arrow" points="392.4,489.6 399.6,489.6 396.0,500.4"/>
+<polygon class="arrow" points="136.4,507.6 143.6,507.6 140.0,518.4"/>
+<polygon class="arrow" points="240.4,507.6 247.6,507.6 244.0,518.4"/>
+<polygon class="arrow" points="175.6,777.6 175.6,788.4 168.4,783.0"/>
+<text x="232" y="13.0" textLength="96" lengthAdjust="spacingAndGlyphs" class="heading">THE INTERNET</text>
+<text x="440" y="49.0" textLength="128" lengthAdjust="spacingAndGlyphs" class="no">never forwarded:</text>
+<text x="232" y="67.0" textLength="88" lengthAdjust="spacingAndGlyphs" class="heading">YOUR ROUTER</text>
+<text x="440" y="67.0" textLength="128" lengthAdjust="spacingAndGlyphs" class="no">81 · 3001 · 8000</text>
+<text x="200" y="85.0" textLength="152" lengthAdjust="spacingAndGlyphs" class="label">forwards four ports</text>
+<text x="440" y="85.0" textLength="128" lengthAdjust="spacingAndGlyphs" class="no">51821, and every</text>
+<text x="224" y="103.0" textLength="96" lengthAdjust="spacingAndGlyphs" class="label">nothing else</text>
+<text x="440" y="103.0" textLength="128" lengthAdjust="spacingAndGlyphs" class="no">other admin port</text>
+<text x="56" y="175.0" textLength="64" lengthAdjust="spacingAndGlyphs" class="ok">80 · 443</text>
+<text x="280" y="175.0" textLength="80" lengthAdjust="spacingAndGlyphs" class="ok">6881 peers</text>
+<text x="408" y="175.0" textLength="72" lengthAdjust="spacingAndGlyphs" class="ok">51820/udp</text>
+<text x="80" y="193.0" textLength="40" lengthAdjust="spacingAndGlyphs" class="label">https</text>
+<text x="408" y="193.0" textLength="72" lengthAdjust="spacingAndGlyphs" class="label">wireguard</text>
+<text x="24" y="211.0" textLength="88" lengthAdjust="spacingAndGlyphs" class="heading">DEBIAN HOST</text>
+<text x="40" y="265.0" textLength="136" lengthAdjust="spacingAndGlyphs" class="heading">DOCKER-USER chain</text>
+<text x="504" y="265.0" textLength="64" lengthAdjust="spacingAndGlyphs" class="heading">HOME LAN</text>
+<text x="40" y="283.0" textLength="384" lengthAdjust="spacingAndGlyphs" class="label">forwarded ports pass through; admin ports answer</text>
+<text x="488" y="283.0" textLength="96" lengthAdjust="spacingAndGlyphs" class="label">phones, TVs,</text>
+<text x="40" y="301.0" textLength="392" lengthAdjust="spacingAndGlyphs" class="label">LAN, loopback and Tailscale only; others dropped.</text>
+<text x="480" y="301.0" textLength="104" lengthAdjust="spacingAndGlyphs" class="label">laptops reach</text>
+<text x="40" y="319.0" textLength="352" lengthAdjust="spacingAndGlyphs" class="label">fail2ban bans an address here after repeated</text>
+<text x="496" y="319.0" textLength="80" lengthAdjust="spacingAndGlyphs" class="label">every port</text>
+<text x="40" y="337.0" textLength="112" lengthAdjust="spacingAndGlyphs" class="label">failed logins.</text>
+<text x="160" y="337.0" textLength="160" lengthAdjust="spacingAndGlyphs" class="no">No chain, no Docker.</text>
+<text x="472" y="337.0" textLength="120" lengthAdjust="spacingAndGlyphs" class="label">(host bindings)</text>
+<text x="24" y="373.0" textLength="104" lengthAdjust="spacingAndGlyphs" class="heading">docker bridge</text>
+<text x="120" y="427.0" textLength="40" lengthAdjust="spacingAndGlyphs" class="label">proxy</text>
+<text x="224" y="427.0" textLength="88" lengthAdjust="spacingAndGlyphs" class="label">qbittorrent</text>
+<text x="360" y="427.0" textLength="72" lengthAdjust="spacingAndGlyphs" class="label">wireguard</text>
+<text x="480" y="427.0" textLength="104" lengthAdjust="spacingAndGlyphs" class="label">every service</text>
+<text x="104" y="445.0" textLength="64" lengthAdjust="spacingAndGlyphs" class="ok">:80 :443</text>
+<text x="248" y="445.0" textLength="40" lengthAdjust="spacingAndGlyphs" class="ok">:6881</text>
+<text x="352" y="445.0" textLength="80" lengthAdjust="spacingAndGlyphs" class="ok">:51820/udp</text>
+<text x="480" y="445.0" textLength="96" lengthAdjust="spacingAndGlyphs" class="label">by host port</text>
+<text x="152" y="481.0" textLength="72" lengthAdjust="spacingAndGlyphs" class="label">publishes</text>
+<text x="408" y="481.0" textLength="152" lengthAdjust="spacingAndGlyphs" class="label">one tier per device</text>
+<text x="344" y="535.0" textLength="192" lengthAdjust="spacingAndGlyphs" class="label">whole LAN · the server ·</text>
+<text x="104" y="553.0" textLength="64" lengthAdjust="spacingAndGlyphs" class="label">jellyfin</text>
+<text x="224" y="553.0" textLength="40" lengthAdjust="spacingAndGlyphs" class="label">seerr</text>
+<text x="328" y="553.0" textLength="216" lengthAdjust="spacingAndGlyphs" class="label">the containers · jellyfin ·</text>
+<text x="120" y="571.0" textLength="40" lengthAdjust="spacingAndGlyphs" class="muted">:8096</text>
+<text x="224" y="571.0" textLength="40" lengthAdjust="spacingAndGlyphs" class="muted">:5055</text>
+<text x="376" y="571.0" textLength="128" lengthAdjust="spacingAndGlyphs" class="label">jellyfin + seerr</text>
+<text x="24" y="625.0" textLength="184" lengthAdjust="spacingAndGlyphs" class="heading">never from the internet</text>
+<text x="16" y="643.0" textLength="496" lengthAdjust="spacingAndGlyphs" class="label">the LAN, and VPN devices on the LAN, server or containers tier</text>
+<text x="16" y="679.0" textLength="48" lengthAdjust="spacingAndGlyphs" class="label">sonarr</text>
+<text x="72" y="679.0" textLength="40" lengthAdjust="spacingAndGlyphs" class="muted">:8989</text>
+<text x="136" y="679.0" textLength="48" lengthAdjust="spacingAndGlyphs" class="label">radarr</text>
+<text x="192" y="679.0" textLength="40" lengthAdjust="spacingAndGlyphs" class="muted">:7878</text>
+<text x="256" y="679.0" textLength="56" lengthAdjust="spacingAndGlyphs" class="label">jackett</text>
+<text x="320" y="679.0" textLength="40" lengthAdjust="spacingAndGlyphs" class="muted">:9117</text>
+<text x="384" y="679.0" textLength="96" lengthAdjust="spacingAndGlyphs" class="label">flaresolverr</text>
+<text x="488" y="679.0" textLength="40" lengthAdjust="spacingAndGlyphs" class="muted">:8191</text>
+<text x="16" y="697.0" textLength="48" lengthAdjust="spacingAndGlyphs" class="label">bazarr</text>
+<text x="72" y="697.0" textLength="40" lengthAdjust="spacingAndGlyphs" class="muted">:6767</text>
+<text x="136" y="697.0" textLength="112" lengthAdjust="spacingAndGlyphs" class="label">qbittorrent ui</text>
+<text x="256" y="697.0" textLength="40" lengthAdjust="spacingAndGlyphs" class="muted">:8080</text>
+<text x="320" y="697.0" textLength="72" lengthAdjust="spacingAndGlyphs" class="label">portainer</text>
+<text x="400" y="697.0" textLength="40" lengthAdjust="spacingAndGlyphs" class="muted">:9000</text>
+<text x="464" y="697.0" textLength="64" lengthAdjust="spacingAndGlyphs" class="label">homepage</text>
+<text x="536" y="697.0" textLength="40" lengthAdjust="spacingAndGlyphs" class="muted">:3000</text>
+<text x="16" y="715.0" textLength="88" lengthAdjust="spacingAndGlyphs" class="label">uptime-kuma</text>
+<text x="112" y="715.0" textLength="40" lengthAdjust="spacingAndGlyphs" class="muted">:3001</text>
+<text x="176" y="715.0" textLength="48" lengthAdjust="spacingAndGlyphs" class="label">beszel</text>
+<text x="232" y="715.0" textLength="40" lengthAdjust="spacingAndGlyphs" class="muted">:8090</text>
+<text x="296" y="715.0" textLength="88" lengthAdjust="spacingAndGlyphs" class="label">proxy admin</text>
+<text x="392" y="715.0" textLength="24" lengthAdjust="spacingAndGlyphs" class="muted">:81</text>
+<text x="440" y="715.0" textLength="72" lengthAdjust="spacingAndGlyphs" class="label">vpn admin</text>
+<text x="520" y="715.0" textLength="48" lengthAdjust="spacingAndGlyphs" class="muted">:51821</text>
+<text x="24" y="751.0" textLength="112" lengthAdjust="spacingAndGlyphs" class="heading">ONE FILESYSTEM</text>
+<text x="16" y="787.0" textLength="136" lengthAdjust="spacingAndGlyphs" class="label">media/{tv,movies}</text>
+<text x="200" y="787.0" textLength="224" lengthAdjust="spacingAndGlyphs" class="label">hardlinked: one file on disk</text>
+<text x="464" y="787.0" textLength="160" lengthAdjust="spacingAndGlyphs" class="label">torrents/{tv,movies}</text>
+<text x="16" y="805.0" textLength="136" lengthAdjust="spacingAndGlyphs" class="label">jellyfin plays it</text>
+<text x="216" y="805.0" textLength="184" lengthAdjust="spacingAndGlyphs" class="label">sonarr · radarr file it</text>
+<text x="456" y="805.0" textLength="168" lengthAdjust="spacingAndGlyphs" class="label">qbittorrent writes it</text>
+</svg>

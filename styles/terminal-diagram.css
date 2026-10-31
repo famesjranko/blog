@@ -1,0 +1,52 @@
+/* A terminal-style figure: a character grid rendered as an SVG, with the
+box-drawing characters as real line segments and the words as text, so the
+boxes join on any device. Every colour is a site token. The drawing sits
+on a surface card like the terminal screenshots beside it. */
+@layer prose {
+	.prose .diagram-terminal {
+		width: 100%;
+		height: auto;
+		padding: 1rem 1.1rem;
+		border: 1px solid var(--color-border);
+		border-radius: 10px;
+		background: var(--color-surface);
+		white-space: pre;
+	}
+
+	.prose .diagram-terminal text {
+		font-family: var(--font-mono);
+		font-size: 13px;
+		fill: var(--color-text);
+	}
+
+	.prose .diagram-terminal .heading {
+		font-weight: 700;
+		letter-spacing: 0.02em;
+	}
+
+	/* The four forwarded ports in the accent; what must stay closed in the
+	warm diagram colour; every other port number quiet. */
+	.prose .diagram-terminal .ok {
+		font-weight: 600;
+		fill: var(--color-accent);
+	}
+
+	.prose .diagram-terminal .no {
+		fill: var(--color-diagram-o);
+	}
+
+	.prose .diagram-terminal .muted {
+		fill: var(--color-muted);
+	}
+
+	.prose .diagram-terminal .rule {
+		fill: none;
+		stroke: var(--color-text);
+		stroke-width: 1.3;
+		stroke-linecap: square;
+	}
+
+	.prose .diagram-terminal .arrow {
+		fill: var(--color-text);
+	}
+}
