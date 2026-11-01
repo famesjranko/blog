@@ -59,6 +59,14 @@
 			grid-template-columns: minmax(0, 1fr) 15rem;
 		}
 
+		/* The header sits above the grid, so cap it at the article column's
+		width (the sidebar and its gap taken off) or the title and lede
+		overhang the sidebar between this breakpoint and the width where
+		the column reaches the prose measure. */
+		.project-header {
+			max-width: min(var(--prose-width), calc(100% - 17rem));
+		}
+
 		.project-main {
 			grid-column: 1;
 			grid-row: 1;
