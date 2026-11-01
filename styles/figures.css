@@ -73,8 +73,9 @@
 		mask-image: linear-gradient(to bottom, #000 72%, transparent);
 	}
 
-	/* The crop hides part of the image, so the caption says how to see it. */
-	.prose .fade-figure figcaption::after {
+	/* The crop hides part of the image, so the caption says how to see it.
+	Only once the lightbox has attached: without it, the image does not open. */
+	.prose .fade-figure:has(.zoomable) figcaption::after {
 		content: " Open the image to see it in full.";
 	}
 
