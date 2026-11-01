@@ -83,9 +83,10 @@ test("a modifier click opens the provider's page and keeps the poster", async ({
 }) => {
 	// Given an article with a video poster.
 	const providerRequests = await openPosterPage(page);
-	const newTab = page.context().waitForEvent("page");
-	// Playwright never reports the URL of a background tab opened with
-	// noopener, so the tab's request for the page is what shows it opened.
+	const pageUrl = page.url();
+	// Playwright 1.64 no longer emits "page" for a background tab opened with
+	// noopener, and its request has no frame yet. The tab's navigation request
+	// for the page is the one signal that it opened.
 	const watchPage = page
 		.context()
 		.waitForEvent("request", (request) => request.url() === WATCH_PAGE);
@@ -94,8 +95,9 @@ test("a modifier click opens the provider's page and keeps the poster", async ({
 	await page.locator(".video-poster").click({ modifiers: ["ControlOrMeta"] });
 
 	// Then the provider's page loads in a new tab.
-	const tab = await newTab;
-	expect((await watchPage).frame().page()).toBe(tab);
+	expect((await watchPage).isNavigationRequest()).toBe(true);
+	// And this page did not navigate away, so the request came from a new tab.
+	expect(page.url()).toBe(pageUrl);
 	// And the poster stays, with no player and no request to the player.
 	await expect(page.locator(".video-poster")).toHaveCount(1);
 	await expect(page.locator("iframe")).toHaveCount(0);
