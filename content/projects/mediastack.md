@@ -46,7 +46,7 @@ The wizard offers a list of public indexers I have selected and adds them only i
 
 ### The dashboard
 
-MediaStack configures Homepage's service links and supplies the API credentials for its widgets. The owner can check service status, media requests and downloads alongside the server's resource use.
+Homepage is the main dashboard, giving the owner one place to open the services' web interfaces without keeping track of separate addresses. It also shows which services are up, request and download activity, and the server's resource use. MediaStack generates the service links and configures the API widgets during setup.
 
 ![MediaStack's Homepage dashboard, with service links and status, request and download counts, and server resource readings](/img/projects/mediastack/dashboard.jpg "The Homepage dashboard on a development installation, with service status and server resources.")
 
