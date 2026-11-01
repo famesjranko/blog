@@ -25,7 +25,7 @@ stack:
 
 I have run a self-hosted media stack at home for years, and friends and family have asked for help with one or wanted one of their own. Setting one up by hand means a Compose file, half a dozen services, and the API keys that connect them. Then the owner needs enough explanation to look after it. MediaStack is my answer: a home media server that is practical to install and to look after, built from what running my own has taught me.
 
-MediaStack turns a bare Debian 12 or 13 server into a complete media stack from one menu. It starts up to 20 containers and configures each service through its own API, so the services already know about each other when setup exits. The same menu runs the server afterwards. The stack is opinionated: one set of services, one data layout, and security that is on by default.
+MediaStack turns a bare Debian 12 or 13 server into a complete media stack from one menu. It starts up to 20 containers and configures each service through its own API, so the services already know about each other when setup exits. The same menu runs the server afterwards. The services are upstream projects; MediaStack is the installer, the configuration that links them, the management menu, the recovery, and the host integration around them. The stack is opinionated: one set of services, one data layout, and security that is on by default.
 
 ## The media services
 
@@ -44,8 +44,6 @@ When someone requests a film in Seerr, Radarr searches the indexers through Jack
 
 MediaStack enables no public trackers. The owner adds indexers only where they have the right to use them.
 
-Sonarr and Radarr have many quality settings, but the wizard asks two questions: how sharp (720p or 1080p) and how large (compact, balanced or large). The answers select a named profile such as "1080p Balanced". Every profile excludes Remux releases, which can reach 40 GB for one film.
-
 ## Installing
 
 ![The MediaStack install menu in a terminal: a status box showing Not yet installed, the host, LAN, router and public IPs, above the options Install MediaStack, System readiness check, Test port forwarding, Check domain DNS and Quit](/img/projects/mediastack/install-menu.jpg "Installation and preflight checks.")
@@ -62,6 +60,8 @@ The wizard builds the LAN stack first, then offers hardware transcoding if there
 
 Images come from the Stable channel by default: the exact set the project last tested together. MediaStack configures every service through its API, so an upstream change to an endpoint or schema can break setup. Stable therefore installs only images that have passed MediaStack's API integration tests. Latest, which pulls whatever upstream published most recently, is the advanced choice.
 
+Sonarr and Radarr have many quality settings, but the wizard asks two questions: how sharp (720p or 1080p) and how large (compact, balanced or large). The answers select a named profile such as "1080p Balanced". Every profile excludes Remux releases, which can reach 40 GB for one film.
+
 ## Running it afterwards
 
 ![The MediaStack management menu in a terminal: a status box showing 11 of 11 containers running, the domain, host, LAN, router and public IPs, above a list of options from View access info to Uninstall MediaStack](/img/projects/mediastack/menu.jpg "Everyday management, updates and recovery.")
@@ -72,13 +72,11 @@ The owner updates individual services or the whole stack from the menu, rather t
 
 Uninstall removes the containers and only the host changes MediaStack recorded in its root-owned ledger. The media stays, and so does Docker.
 
-## Storage and the NAS watchdog
+## How the stack fits together
 
-Storage follows the TRaSH Guides layout: downloads and media share one filesystem, so a finished download is hardlinked into the library. The file exists once on disk, and deleting the torrent leaves the library alone. The wizard offers a local disk, a NAS over NFS, or a manual mode for owners who wire the apps' paths themselves.
+The drawing below is one install with remote access enabled, seen from the network: what the internet can reach, what stays private, and the one filesystem underneath. It shows the system MediaStack deploys, not the installer itself. The sections that follow explain the decisions in it.
 
-A NAS needs more care, because a network share can disappear while the server keeps running. An empty mount point is still an ordinary directory, so a container that writes into it fills the local disk instead, and a plain existence check never notices. MediaStack therefore tests the export before anything depends on it, records the mount's source and type, and writes a sentinel file inside the share. Every later start checks the live mount against those records.
-
-MediaStack disables Docker's automatic restart for the services that touch media. A watchdog, on by default for NAS installs and switchable from the menu, starts them only after the mount has passed its checks for a full minute and stops them when the share goes away. Each check has a time limit, because a hung NFS mount blocks any process that touches it. Remounting goes through a small root-owned helper that handles only the recorded export, so nothing in the repository checkout runs as root.
+![How MediaStack is wired, from the internet to the filesystem](/img/projects/mediastack/stack.svg "The stack with remote access enabled: public entry points, private administration and shared storage.")
 
 ## Remote access
 
@@ -92,7 +90,13 @@ By default, when a container publishes a port, Docker opens it on every interfac
 
 Access to Docker itself is limited too. Only Portainer and a proxy mount the Docker socket. Portainer needs it to manage the containers; monitoring and automatic recovery go through the proxy's short allowed list, which refuses inspect because inspecting a container exposes its environment, and the environment holds the secrets. fail2ban bans an address after repeated failed logins to the published pages.
 
-![How MediaStack is wired, from the internet to the filesystem](/img/projects/mediastack/stack.svg "The stack with remote access enabled: public entry points, private administration and shared storage.")
+## Storage and the NAS watchdog
+
+Storage follows the TRaSH Guides layout: downloads and media share one filesystem, so a finished download is hardlinked into the library. The file exists once on disk, and deleting the torrent leaves the library alone. The wizard offers a local disk, a NAS over NFS, or a manual mode for owners who wire the apps' paths themselves.
+
+A NAS needs more care, because a network share can disappear while the server keeps running. An empty mount point is still an ordinary directory, so a container that writes into it fills the local disk instead, and a plain existence check never notices. MediaStack therefore tests the export before anything depends on it, records the mount's source and type, and writes a sentinel file inside the share. Every later start checks the live mount against those records.
+
+MediaStack disables Docker's automatic restart for the services that touch media. A watchdog, on by default for NAS installs and switchable from the menu, starts them only after the mount has passed its checks for a full minute and stops them when the share goes away. Each check has a time limit, because a hung NFS mount blocks any process that touches it. Remounting goes through a small root-owned helper that handles only the recorded export, so nothing in the repository checkout runs as root.
 
 ## Hardware transcoding
 
