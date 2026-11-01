@@ -73,6 +73,20 @@
 		mask-image: linear-gradient(to bottom, #000 72%, transparent);
 	}
 
+	/* The game is shown as a compact portrait crop without changing other
+	project figures or the built-in image lightbox. */
+	.prose .minesweeper-game-figure {
+		max-width: 480px;
+		margin-inline: auto;
+	}
+
+	.prose .minesweeper-game-figure figure img {
+		width: 100%;
+		aspect-ratio: 4 / 5;
+		object-fit: cover;
+		object-position: center;
+	}
+
 	/* Project figures are mostly screenshots with white backgrounds; an
 	edge and a soft shadow keep them from merging into a light page. */
 	.prose.project figure img {
