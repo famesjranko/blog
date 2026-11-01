@@ -65,10 +65,6 @@ Updates run from the menu, one service at a time or all of them, rather than thr
 
 Uninstall asks the owner to type `DESTROY`, then removes the containers and only those host changes that still match the ledger kept at install. The media stays, and so does Docker.
 
-## Setting up again
-
-Setup is built to be run again. An installer that simply wrote its settings again would undo every change the owner had made in a service's own UI, so the configure step reads before it writes. MediaStack compares most settings with their live values and writes them only when they are absent or still at the upstream default; it reapplies a few on every run. For settings checked this way, a value the owner has changed is reported and left alone: a quality profile edited in Sonarr stays as the owner left it, and the log names two ways to resolve the difference. A read that lacks the fields MediaStack expects stops the write, and no write is retried automatically, because a lost response can hide a write that succeeded.
-
 ## Storage and the NAS watchdog
 
 Storage follows the TRaSH Guides layout: downloads and media share one filesystem, so a finished download is hardlinked into the library. The file exists once on disk, and deleting the torrent leaves the library alone. The wizard offers a local disk, a NAS over NFS, or a manual mode for owners who wire the apps' paths themselves.
