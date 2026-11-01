@@ -1,6 +1,7 @@
 // Open article images and diagrams at full size in a modal dialog. The markup
 // does not depend on this script: without it, images render as before.
-const ZOOMABLE = ".prose img, .prose svg.diagram";
+// The logo row is decoration, not a figure, so its marks do not open.
+const ZOOMABLE = ".prose img:not(.logo-row img), .prose svg.diagram";
 
 // Build-time id prefix from src/svgInline.ts. A copied diagram re-prefixes
 // its ids and every reference to them, so the document keeps unique ids.

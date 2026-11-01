@@ -240,8 +240,7 @@ def render(lines):
     body += arrows + texts
     return (
         f'<svg xmlns="http://www.w3.org/2000/svg" class="diagram diagram-terminal" '
-        f'viewBox="0 0 {width} {height}" role="img" aria-labelledby="stack-title stack-desc" '
-        f'xml:space="preserve">\n'
+        f'viewBox="0 0 {width} {height}" role="img" aria-labelledby="stack-title stack-desc">\n'
         f"<title id=\"stack-title\">{html.escape(TITLE)}</title>\n"
         f"<desc id=\"stack-desc\">{html.escape(DESC)}</desc>\n" + "\n".join(body) + "\n</svg>\n"
     )

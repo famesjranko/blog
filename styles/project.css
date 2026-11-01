@@ -103,15 +103,14 @@
 
 	.prose .logo-row .logo-plate {
 		border-radius: 50%;
+		background: light-dark(transparent, var(--color-text));
 	}
 
+	/* A filter cannot take light-dark(), so the inversion follows the same
+	media and data-theme pattern as figures.css. */
 	@media (prefers-color-scheme: dark) {
 		.prose .logo-row .logo-invert {
 			filter: invert(1);
-		}
-
-		.prose .logo-row .logo-plate {
-			background: var(--color-text);
 		}
 	}
 
@@ -119,15 +118,7 @@
 		filter: none;
 	}
 
-	:root[data-theme="light"] .prose .logo-row .logo-plate {
-		background: none;
-	}
-
 	:root[data-theme="dark"] .prose .logo-row .logo-invert {
 		filter: invert(1);
-	}
-
-	:root[data-theme="dark"] .prose .logo-row .logo-plate {
-		background: var(--color-text);
 	}
 }
