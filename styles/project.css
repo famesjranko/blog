@@ -84,25 +84,21 @@
 	disc. */
 	.prose .logo-row {
 		display: flex;
-		flex-wrap: wrap;
+		align-items: center;
 		justify-content: center;
-		gap: 1.25rem 2rem;
+		gap: clamp(0.75rem, 3vw, 2rem);
 		margin: 1.5rem 0 2rem;
 	}
 
+	/* One row at every width: the marks shrink evenly once the row is
+	narrower than six 3.5rem marks and their gaps, so a 320px phone still
+	shows them in one line. */
 	.prose .logo-row img {
-		width: 3.5rem;
-		height: 3.5rem;
-	}
-
-	/* Four marks and their gaps fill a phone column exactly, so the row
-	becomes a three-by-two grid there. */
-	@media (max-width: 48rem) {
-		.prose .logo-row {
-			display: grid;
-			grid-template-columns: repeat(3, 3.5rem);
-			justify-items: center;
-		}
+		flex: 0 1 3.5rem;
+		min-width: 0;
+		height: auto;
+		aspect-ratio: 1;
+		object-fit: contain;
 	}
 
 	.prose .logo-row .logo-plate {
