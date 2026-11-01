@@ -59,7 +59,7 @@ Images come from the Stable channel by default: the exact set the project last t
 
 After install, `./mediastack` opens the management menu. Its entries are the jobs an owner would otherwise ask me about, so it is the part of MediaStack I care about most.
 
-Updates run from the menu, one service at a time or all of them, rather than through an auto-updater. When an update breaks a service, the owner needs a way back. Before updating a service's image, MediaStack saves a restore point of the service's configuration while the old container is stopped. This avoids copying a running database. Revert puts back the old image and that configuration, then checks that the service is healthy and that MediaStack can still log in to it.
+The owner updates individual services or the whole stack from the menu, rather than through an auto-updater. When an update breaks a service, the owner needs a way back. Before updating a service's image, MediaStack saves a restore point of the service's configuration while the old container is stopped. This avoids copying a running database. Revert puts back the old image and that configuration, then checks that the service is healthy and that MediaStack can still log in to it.
 
 Uninstall removes the containers and only the host changes MediaStack made. The media stays, and so does Docker.
 
@@ -81,22 +81,22 @@ The admin-port filter keeps the admin pages off the public internet. When a cont
 
 ## Hardware transcoding
 
-When a phone or TV cannot play a file as it is, Jellyfin converts it on the fly, and a GPU does this far faster than a CPU. MediaStack sets up Intel, AMD and NVIDIA cards, including the driver install and reboot an NVIDIA card needs. The [setup documentation](https://github.com/famesjranko/MediaStack/blob/main/docs/setup/setup-flow.md) covers the full sequence.
+When a phone or TV cannot play a file as it is, Jellyfin converts it on the fly, and a GPU does this far faster than a CPU. MediaStack sets up Intel, AMD and NVIDIA cards. Intel and AMD need only the video acceleration packages and access to the render device. NVIDIA needs a kernel driver, and MediaStack handles the whole sequence: it looks the card up in NVIDIA's support table so an older card gets its legacy driver branch, refuses a card too old for Jellyfin's encoder before anything on the host changes, installs the kernel headers the driver build needs and confirms a built module for every installed kernel, then reboots past the open-source driver and resumes setup on the other side. The [setup documentation](https://github.com/famesjranko/MediaStack/blob/main/docs/setup/setup-flow.md) covers each step.
 
-Jellyfin gets the GPU only after a test encode has succeeded inside the Jellyfin container, and HEVC, AV1 and hardware decoding are each enabled only when their own test passes. Those tests showed me that the decoder on a Tesla P4 can hang and ignore the usual stop signal. Each decode test now has a time limit inside the container and another on the host. A failure anywhere turns hardware acceleration off, regenerates the Compose override without the GPU, and shows the reason in the status screen.
+Jellyfin gets the GPU only after a test encode has succeeded inside the Jellyfin container, and HEVC, AV1 and hardware decoding are each enabled only when their own test passes. Those tests showed me that the decoder on a Tesla P4 can hang and ignore the usual stop signal. Each decode test now has a time limit inside the container and another on the host.
 
 ## Testing it
 
 The test suite uses Docker-in-Docker to keep the test machine clean. Half the scenarios drive the real wizard prompts through a pseudo-terminal. Contract files declare every endpoint MediaStack calls on each service. A mock server uses those files to answer requests, so the configure script runs against a fake stack on every pull request without pulling an image. The NAS scenarios run a real NFS server and restart it to test the watchdog.
 
-Beyond the suite, I install on Google Cloud VMs, bare metal and Proxmox VMs, which cover real DNS, certificates, firewalls and GPU passthrough.
+Beyond the suite, I test installations on Google Cloud VMs, bare metal and Proxmox VMs to cover real DNS, certificates, firewalls and GPU passthrough.
 
-Weekly jobs check whether an upstream tag now points at a new image, rerun the installs against the new ones, and open a pull request to update the lock file. The workflow never merges it. That decision stays with me.
+Weekly jobs check whether upstream tags point at new images, rerun the installs against those images, and open a pull request to update the image lock file. The workflow never merges it. That decision stays with me.
 
 ## Where it stands
 
-MediaStack is at v0.3.0, source available under the PolyForm Noncommercial licence. It has taken over the part I used to do by hand for each person: the install is a clone and a menu, and the questions it asks are ones a household can answer. What it leaves with the owner is deliberate. A domain, the router's port forwarding and the choice of indexers are theirs, and when a health check reports a problem, the report is written for them to act on.
+MediaStack is at v0.3.1, source available under the PolyForm Noncommercial licence. It has taken over the part I used to do by hand for each person: the install is a clone and a menu, and the questions it asks are ones a household can answer. What it leaves with the owner is deliberate. The owner handles the domain, the router's port forwarding and the choice of indexers. Health checks report problems in terms the owner can act on.
 
-Handing a system to someone else turned out to be mostly a matter of deciding what to protect them from and what to leave in their hands. Each of those decisions needed a test that could fail before I trusted it.
+Handing a system to someone else turned out to be mostly a matter of deciding what to protect them from and what to leave in their hands. Each of those decisions earned my trust only once it had a test that could fail.
 
 [View on GitHub&nbsp;→](https://github.com/famesjranko/MediaStack)
