@@ -1,5 +1,8 @@
 @layer prose {
 	.prose.project {
+		--project-side-width: 15rem;
+		--project-gap: 2rem;
+
 		max-width: none;
 	}
 
@@ -13,7 +16,7 @@
 
 	.project-grid {
 		display: grid;
-		gap: 2rem;
+		gap: var(--project-gap);
 	}
 
 	.project-side {
@@ -56,7 +59,7 @@
 
 	@media (min-width: 52rem) {
 		.project-grid {
-			grid-template-columns: minmax(0, 1fr) 15rem;
+			grid-template-columns: minmax(0, 1fr) var(--project-side-width);
 		}
 
 		/* The header sits above the grid, so cap it at the article column's
@@ -64,7 +67,10 @@
 		overhang the sidebar between this breakpoint and the width where
 		the column reaches the prose measure. */
 		.project-header {
-			max-width: min(var(--prose-width), calc(100% - 17rem));
+			max-width: min(
+				var(--prose-width),
+				calc(100% - var(--project-side-width) - var(--project-gap))
+			);
 		}
 
 		.project-main {
