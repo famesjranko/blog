@@ -61,7 +61,7 @@ After install, `./mediastack` opens the management menu. Its entries are the job
 
 The owner updates individual services or the whole stack from the menu, rather than through an auto-updater. When an update breaks a service, the owner needs a way back. Before updating a service's image, MediaStack saves a restore point of the service's configuration while the old container is stopped. This avoids copying a running database. Revert puts back the old image and that configuration, then checks that the service is healthy and that MediaStack can still log in to it.
 
-Uninstall removes the containers and only the host changes MediaStack made. The media stays, and so does Docker.
+Uninstall removes the containers and only the host changes MediaStack recorded in its root-owned ledger. The media stays, and so does Docker.
 
 ## Storage and the NAS watchdog
 
@@ -71,13 +71,19 @@ A NAS needs more care, because a network share can disappear while the server ke
 
 MediaStack disables Docker's automatic restart for the services that touch media. A watchdog, on by default for NAS installs and switchable from the menu, starts them only after the mount has passed its checks for a full minute and stops them when the share goes away. Each check has a time limit, because a hung NFS mount blocks any process that touches it. Remounting goes through a small root-owned helper that handles only the recorded export, so nothing in the repository checkout runs as root.
 
-## Remote access and security
+## Remote access
 
 Remote access publishes only Jellyfin and Seerr, over HTTPS behind Nginx Proxy Manager with Let's Encrypt certificates. Every admin page stays on the LAN and the WireGuard VPN, and per-client firewall rules limit what each VPN device can reach: the whole LAN, the server, the containers, or just Jellyfin, with or without Seerr, for a relative's TV.
 
 ![How MediaStack is wired, from the internet to the filesystem](/img/projects/mediastack/stack.svg "The stack with remote access enabled: public entry points, private administration and shared storage.")
 
-The admin-port filter keeps the admin pages off the public internet. When a container publishes a port, Docker opens it on every interface and bypasses the host firewall, so one forwarded port can expose an admin page by accident. MediaStack's own chain in `DOCKER-USER` closes that gap. The filter is on by default and can be switched off; while it is on, a failure to apply it stops Docker from starting. Around it sit fail2ban, UFW and security-only unattended upgrades, each recorded in a root-owned ledger for uninstall.
+## Security defaults
+
+The wizard defaults to the UFW firewall, the admin-port filter and system hardening. UFW denies incoming traffic except the ports the stack needs. Hardening limits automatic updates to security fixes and tightens the kernel's network settings. Every container runs with no-new-privileges, the linuxserver images run their services as the user who ran the install, and the secrets file is readable only by that user.
+
+By default, when a container publishes a port, Docker opens it on every interface and bypasses the host firewall, so one forwarded port can expose an admin page by accident. MediaStack's own chain in `DOCKER-USER` closes that gap and keeps the admin pages off the public internet. The filter is on by default and can be switched off; while it is on, a failure to apply it stops Docker from starting.
+
+Access to Docker itself is limited too. Only Portainer and a proxy mount the Docker socket. Portainer needs it to manage the containers; monitoring and automatic recovery go through the proxy's short allowed list, which refuses inspect because inspecting a container exposes its environment, and the environment holds the secrets. fail2ban bans an address after repeated failed logins to the published pages.
 
 ## Hardware transcoding
 
