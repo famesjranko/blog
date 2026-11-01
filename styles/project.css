@@ -76,3 +76,52 @@
 		}
 	}
 }
+
+@layer prose {
+	/* A row of the main services' marks under the services heading. Decoration,
+	not a figure: no frame, no caption, wraps on a phone. Two marks are dark on
+	dark, so the dark theme inverts Jackett's jacket and puts Sonarr on a pale
+	disc. */
+	.prose .logo-row {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 1.25rem 2rem;
+		margin: 1.5rem 0 2rem;
+	}
+
+	.prose .logo-row img {
+		width: 3.5rem;
+		height: 3.5rem;
+	}
+
+	.prose .logo-row .logo-plate {
+		border-radius: 50%;
+	}
+
+	@media (prefers-color-scheme: dark) {
+		.prose .logo-row .logo-invert {
+			filter: invert(1);
+		}
+
+		.prose .logo-row .logo-plate {
+			background: var(--color-text);
+		}
+	}
+
+	:root[data-theme="light"] .prose .logo-row .logo-invert {
+		filter: none;
+	}
+
+	:root[data-theme="light"] .prose .logo-row .logo-plate {
+		background: none;
+	}
+
+	:root[data-theme="dark"] .prose .logo-row .logo-invert {
+		filter: invert(1);
+	}
+
+	:root[data-theme="dark"] .prose .logo-row .logo-plate {
+		background: var(--color-text);
+	}
+}

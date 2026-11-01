@@ -29,6 +29,15 @@ MediaStack turns a bare Debian 12 or 13 server into a complete media stack from 
 
 ## The media services
 
+<div class="logo-row">
+<img src="/img/projects/mediastack/logos/jellyfin.svg" alt="Jellyfin" width="56" height="56" loading="lazy" decoding="async">
+<img src="/img/projects/mediastack/logos/seerr.svg" alt="Seerr" width="56" height="56" loading="lazy" decoding="async">
+<img src="/img/projects/mediastack/logos/sonarr.svg" alt="Sonarr" width="56" height="56" loading="lazy" decoding="async" class="logo-plate">
+<img src="/img/projects/mediastack/logos/radarr.svg" alt="Radarr" width="56" height="56" loading="lazy" decoding="async">
+<img src="/img/projects/mediastack/logos/jackett.svg" alt="Jackett" width="56" height="56" loading="lazy" decoding="async" class="logo-invert">
+<img src="/img/projects/mediastack/logos/qbittorrent.svg" alt="qBittorrent" width="56" height="56" loading="lazy" decoding="async">
+</div>
+
 Jellyfin plays the films and shows in the library. Seerr takes requests from the household. Sonarr and Radarr manage the shows and films, Jackett searches the indexers, qBittorrent downloads, and Unpackerr unpacks. Around them sit a dashboard, monitoring, container management and, if enabled, subtitles.
 
 When someone requests a film in Seerr, Radarr searches the indexers through Jackett, hands the result to qBittorrent, and files the finished download into the library, where Jellyfin finds it on its next scan.

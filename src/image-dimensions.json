@@ -231,6 +231,30 @@
 		"width": 785,
 		"height": 436
 	},
+	"/img/projects/mediastack/logos/jackett.svg": {
+		"width": 457,
+		"height": 512
+	},
+	"/img/projects/mediastack/logos/jellyfin.svg": {
+		"width": 512,
+		"height": 512
+	},
+	"/img/projects/mediastack/logos/qbittorrent.svg": {
+		"width": 1024,
+		"height": 1024
+	},
+	"/img/projects/mediastack/logos/radarr.svg": {
+		"width": 512,
+		"height": 512
+	},
+	"/img/projects/mediastack/logos/seerr.svg": {
+		"width": 96,
+		"height": 96
+	},
+	"/img/projects/mediastack/logos/sonarr.svg": {
+		"width": 512,
+		"height": 512
+	},
 	"/img/projects/mediastack/menu.jpg": {
 		"width": 785,
 		"height": 571
