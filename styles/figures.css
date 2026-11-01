@@ -73,6 +73,11 @@
 		mask-image: linear-gradient(to bottom, #000 72%, transparent);
 	}
 
+	/* The crop hides part of the image, so the caption says how to see it. */
+	.prose .fade-figure figcaption::after {
+		content: " Open the image to see it in full.";
+	}
+
 	/* Project figures are mostly screenshots with white backgrounds; an
 	edge and a soft shadow keep them from merging into a light page. */
 	.prose.project figure img {

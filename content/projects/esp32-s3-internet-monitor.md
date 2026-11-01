@@ -63,11 +63,19 @@ The display task requests a 16-millisecond cadence, roughly sixty frames a secon
 
 With the default empty WiFi credentials, first boot opens an access point named `InternetMonitor-Setup`. Its portal scans for nearby networks and takes the network password. Credentials can instead be compiled into the firmware, and the portal also opens if the initial WiFi connection fails.
 
+<div class="fade-figure">
+
 ![The setup portal: a list of five nearby WiFi networks with signal bars, a Scan Again button, a dashboard password field and a Connect button](/img/projects/esp32-s3-internet-monitor/portal.jpg "The setup portal preview.")
+
+</div>
 
 After joining the network, the board serves a password-protected dashboard. It lets you change the effect, brightness, speed and rotation, and shows check statistics alongside WiFi signal and chip temperature. Display settings are saved to flash after three seconds without another change, then restored at boot; restarting before that save can lose the latest adjustment.
 
+<div class="fade-figure">
+
 ![The full dashboard: an ONLINE status banner, the effects card, statistics, network details for HomeNetwork at 192.168.1.50, collapsed MQTT, System and Diagnostics sections, and a Factory Reset button](/img/projects/esp32-s3-internet-monitor/dashboard.jpg "The dashboard preview as it first loads.")
+
+</div>
 
 The statistics describe checks during the current run. Downtime accumulates from entering Down until returning to Online, and the displayed total excludes an interval still in progress. Losing WiFi alone does not start that counter. These figures reset on reboot, so the dashboard needs to be read with the same limits as the check itself.
 
