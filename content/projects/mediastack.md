@@ -42,7 +42,13 @@ Jellyfin plays the films and shows in the library. Seerr takes requests from the
 
 When someone requests a film in Seerr, Radarr searches the indexers through Jackett, hands the result to qBittorrent, and files the finished download into the library, where Jellyfin finds it on its next scan.
 
-MediaStack enables no public trackers. The owner adds indexers only where they have the right to use them.
+The wizard offers a list of public indexers I have selected and adds them only if the owner opts in. The owner can change the list or add other indexers, including private ones, after installation.
+
+### The dashboard
+
+The Homepage dashboard links to each service and shows its status. The owner can check media requests and downloads alongside the server's resource use.
+
+![MediaStack's Homepage dashboard, with service links and status, request and download counts, and server resource readings](/img/projects/mediastack/dashboard.jpg "The Homepage dashboard, with service status and server resources.")
 
 ## Installing
 
