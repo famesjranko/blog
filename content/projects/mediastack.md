@@ -99,6 +99,6 @@ Beyond the suite, I test installations on Google Cloud VMs, bare metal and Proxm
 
 Weekly jobs check whether upstream tags point at new images, rerun the installs against those images, and open a pull request to update the image lock file. The workflow never merges it. That decision stays with me.
 
-MediaStack is at v0.3.1, source available under the PolyForm Noncommercial licence.
+The source is public under the PolyForm Noncommercial licence.
 
 [View on GitHub&nbsp;→](https://github.com/famesjranko/MediaStack)
