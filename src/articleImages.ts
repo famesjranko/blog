@@ -6,16 +6,19 @@ const ARTICLE_WIDTHS = [480, 720, 960, 1280];
 /**
  * Rendered width of a body image: the `.wrap` column
  * (`100% - 2 * clamp(1rem, 4vw, 2.5rem)`) until `--prose-width` caps it.
- * That cap is `65ch` of the reading font, and the font is whatever serif
- * the client has: Georgia gives about 737px, Noto Serif about 674px,
- * DejaVu Serif about 767px. `sizes` cannot follow the font (`ch` here
- * resolves against the initial font), so the cap is an upper bound with
- * margin, 50rem. Overestimating picks a rendition one rung larger on
- * high-density screens, a few kilobytes. Underestimating would serve a
- * blurry image, so the bound must stay above the widest serif.
+ * That cap is `65ch` of the reading font: "Georgia Installed", then the
+ * self-hosted Gelasio, then the generic serif. Georgia gives a column of
+ * about 739px and Gelasio 715px. Noto Serif (674px) and DejaVu Serif
+ * (767px) apply only if the webfont fails to load. `sizes` cannot follow
+ * the font (`ch` here resolves against the initial font), so the cap is
+ * 48rem, the smallest rem bound at or above the widest of these columns.
+ * Both scale with the user's font size. Underestimating would serve a
+ * blurry image, so the bound must not drop below the widest serif.
+ * The 92vw slot is the exact `.wrap` width from 25rem to 62.5rem, and it
+ * stays below 48rem until 52.2rem, where the cap takes over.
  */
 export const ARTICLE_IMAGE_SIZES =
-	"(min-width: 40rem) 50rem, (min-width: 25rem) 92vw, calc(100vw - 2rem)";
+	"(min-width: 52.2rem) 48rem, (min-width: 25rem) 92vw, calc(100vw - 2rem)";
 
 /**
  * Widths a source can provide without upscaling: the ladder widths
