@@ -99,10 +99,6 @@ Beyond the suite, I test installations on Google Cloud VMs, bare metal and Proxm
 
 Weekly jobs check whether upstream tags point at new images, rerun the installs against those images, and open a pull request to update the image lock file. The workflow never merges it. That decision stays with me.
 
-## Where it stands
-
-MediaStack is at v0.3.1, source available under the PolyForm Noncommercial licence. It has taken over the part I used to do by hand for each person: the install is a clone and a menu, and the questions it asks are ones a household can answer. What it leaves with the owner is deliberate. The owner handles the domain, the router's port forwarding and the choice of indexers. Health checks report problems in terms the owner can act on.
-
-Handing a system to someone else turned out to be mostly a matter of deciding what to protect them from and what to leave in their hands. Each of those decisions earned my trust only once it had a test that could fail.
+MediaStack is at v0.3.1, source available under the PolyForm Noncommercial licence.
 
 [View on GitHub&nbsp;→](https://github.com/famesjranko/MediaStack)
