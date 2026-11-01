@@ -1,4 +1,11 @@
+import type { Token } from "markdown-it";
 import { internalUrl } from "./site.js";
+
+/** markdown-it 15 types attribute values as string or number; ours are text. */
+export function attrText(token: Token, name: string): string | null {
+	const value = token.attrGet(name);
+	return value === null ? null : String(value);
+}
 
 export function isExternalLink(href: string): boolean {
 	return (
