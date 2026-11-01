@@ -46,9 +46,9 @@ The wizard offers a list of public indexers I have selected and adds them only i
 
 ### The dashboard
 
-The Homepage dashboard links to each service and shows its status. The owner can check media requests and downloads alongside the server's resource use.
+MediaStack configures Homepage's service links and supplies the API credentials for its widgets. The owner can check service status, media requests and downloads alongside the server's resource use.
 
-![MediaStack's Homepage dashboard, with service links and status, request and download counts, and server resource readings](/img/projects/mediastack/dashboard.jpg "The Homepage dashboard, with service status and server resources.")
+![MediaStack's Homepage dashboard, with service links and status, request and download counts, and server resource readings](/img/projects/mediastack/dashboard.jpg "The Homepage dashboard on a development installation, with service status and server resources.")
 
 ## Installing
 
