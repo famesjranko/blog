@@ -29,13 +29,13 @@ MediaStack turns a bare Debian 12 or 13 server into a complete media stack from 
 
 ## The media services
 
-Jellyfin plays the films and shows in the library. Seerr takes requests from the household. Sonarr and Radarr manage the shows and films, Jackett searches the indexers, qBittorrent downloads, and Unpackerr unpacks. Homepage provides a dashboard, Uptime Kuma and Beszel monitor the stack, Portainer manages the containers, and Bazarr supplies subtitles.
+Jellyfin plays the films and shows in the library. Seerr takes requests from the household. Sonarr and Radarr manage the shows and films, Jackett searches the indexers, qBittorrent downloads, and Unpackerr unpacks. Around them sit a dashboard, monitoring, container management and, if enabled, subtitles.
 
 When someone requests a film in Seerr, Radarr searches the indexers through Jackett, hands the result to qBittorrent, and files the finished download into the library, where Jellyfin finds it on its next scan.
 
 MediaStack enables no public trackers. The owner adds indexers only where they have the right to use them.
 
-Sonarr and Radarr have many quality settings, but the wizard asks two questions: how sharp (720p or 1080p) and how large (compact, balanced or large). The answers select a named profile such as "1080p Balanced", which sets the allowed quality tiers, the upgrade cutoff, and the size bounds for each tier. Every profile excludes Remux releases, which can reach 40 GB for one film.
+Sonarr and Radarr have many quality settings, but the wizard asks two questions: how sharp (720p or 1080p) and how large (compact, balanced or large). The answers select a named profile such as "1080p Balanced". Every profile excludes Remux releases, which can reach 40 GB for one film.
 
 ## Installing
 
@@ -53,8 +53,6 @@ The wizard builds the LAN stack first, then offers hardware transcoding if there
 
 Images come from the Stable channel by default: the exact set the project last tested together. MediaStack configures every service through its API, so an upstream change to an endpoint or schema can break setup. Stable therefore installs only images that have passed MediaStack's API integration tests. Latest, which pulls whatever upstream published most recently, is the advanced choice.
 
-Three files control the stack. The Compose file says how the services run. The owner edits `config.yml` to say what to configure. `.env` holds the secrets and is readable only by the install user.
-
 ## Running it afterwards
 
 ![The MediaStack management menu in a terminal: a status box showing 11 of 11 containers running, the domain, host, LAN, router and public IPs, above a list of options from View access info to Uninstall MediaStack](/img/projects/mediastack/menu.jpg "Everyday management, updates and recovery.")
@@ -63,7 +61,7 @@ After install, `./mediastack` opens the management menu. Its entries are the job
 
 Updates run from the menu, one service at a time or all of them, rather than through an auto-updater. When an update breaks a service, the owner needs a way back. Before updating a service's image, MediaStack saves a restore point of the service's configuration while the old container is stopped. This avoids copying a running database. Revert puts back the old image and that configuration, then checks that the service is healthy and that MediaStack can still log in to it.
 
-Uninstall asks the owner to type `DESTROY`, then removes the containers and only those host changes that still match the ledger kept at install. The media stays, and so does Docker.
+Uninstall removes the containers and only the host changes MediaStack made. The media stays, and so does Docker.
 
 ## Storage and the NAS watchdog
 
@@ -88,8 +86,6 @@ When a phone or TV cannot play a file as it is, Jellyfin converts it on the fly,
 Jellyfin gets the GPU only after a test encode has succeeded inside the Jellyfin container, and HEVC, AV1 and hardware decoding are each enabled only when their own test passes. Those tests showed me that the decoder on a Tesla P4 can hang and ignore the usual stop signal. Each decode test now has a time limit inside the container and another on the host. A failure anywhere turns hardware acceleration off, regenerates the Compose override without the GPU, and shows the reason in the status screen.
 
 ## Testing it
-
-MediaStack began as a Bash installer script and has stayed Bash, with standard-library Python for JSON, because Bash is already on every Debian server and needs no build step.
 
 The test suite uses Docker-in-Docker to keep the test machine clean. Half the scenarios drive the real wizard prompts through a pseudo-terminal. Contract files declare every endpoint MediaStack calls on each service. A mock server uses those files to answer requests, so the configure script runs against a fake stack on every pull request without pulling an image. The NAS scenarios run a real NFS server and restart it to test the watchdog.
 
