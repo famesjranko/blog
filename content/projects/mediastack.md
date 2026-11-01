@@ -84,8 +84,6 @@ MediaStack disables Docker's automatic restart for the services that touch media
 
 Remote access publishes only Jellyfin and Seerr, over HTTPS behind Nginx Proxy Manager with Let's Encrypt certificates. Every admin page stays on the LAN and the WireGuard VPN, and per-client firewall rules limit what each VPN device can reach: the whole LAN, the server, the containers, or just Jellyfin, with or without Seerr, for a relative's TV.
 
-![How MediaStack is wired, from the internet to the filesystem](/img/projects/mediastack/stack.svg "The stack with remote access enabled: public entry points, private administration and shared storage.")
-
 ## Security defaults
 
 The wizard defaults to the UFW firewall, the admin-port filter and system hardening. UFW denies incoming traffic except the ports the stack needs. Hardening limits automatic updates to security fixes and tightens the kernel's network settings. Every container runs with no-new-privileges, the linuxserver images run their services as the user who ran the install, and the secrets file is readable only by that user.
@@ -93,6 +91,8 @@ The wizard defaults to the UFW firewall, the admin-port filter and system harden
 By default, when a container publishes a port, Docker opens it on every interface and bypasses the host firewall, so one forwarded port can expose an admin page by accident. MediaStack's own chain in `DOCKER-USER` closes that gap and keeps the admin pages off the public internet. The filter is on by default and can be switched off; while it is on, a failure to apply it stops Docker from starting.
 
 Access to Docker itself is limited too. Only Portainer and a proxy mount the Docker socket. Portainer needs it to manage the containers; monitoring and automatic recovery go through the proxy's short allowed list, which refuses inspect because inspecting a container exposes its environment, and the environment holds the secrets. fail2ban bans an address after repeated failed logins to the published pages.
+
+![How MediaStack is wired, from the internet to the filesystem](/img/projects/mediastack/stack.svg "The stack with remote access enabled: public entry points, private administration and shared storage.")
 
 ## Hardware transcoding
 
