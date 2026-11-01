@@ -95,6 +95,16 @@
 		height: 3.5rem;
 	}
 
+	/* Four marks and their gaps fill a phone column exactly, so the row
+	becomes a three-by-two grid there. */
+	@media (max-width: 48rem) {
+		.prose .logo-row {
+			display: grid;
+			grid-template-columns: repeat(3, 3.5rem);
+			justify-items: center;
+		}
+	}
+
 	.prose .logo-row .logo-plate {
 		border-radius: 50%;
 	}
