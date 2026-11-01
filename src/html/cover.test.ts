@@ -121,8 +121,8 @@ describe("cardCover", () => {
 	});
 
 	it("emits the placeholder's size once it is in the table", () => {
-		// mediastack ships a rendered placeholder, so its size is known.
-		const html = cardCover(piece(undefined, undefined, "mediastack"));
+		// minesweeper-flags ships a rendered placeholder, so its size is known.
+		const html = cardCover(piece(undefined, undefined, "minesweeper-flags"));
 		expect(html).toContain('width="640" height="360"');
 	});
 

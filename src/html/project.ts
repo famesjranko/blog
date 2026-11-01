@@ -116,6 +116,7 @@ export function projectPage(project: Project): string {
 			siteUrl("/css/figures.css"),
 			siteUrl("/css/project.css"),
 			siteUrl("/css/diagrams.css"),
+			siteUrl("/css/terminal-diagram.css"),
 			siteUrl("/css/lightbox.css"),
 		],
 		scripts: [siteUrl("/js/lightbox.js"), siteUrl("/js/video-embed.js")],

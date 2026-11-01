@@ -63,12 +63,12 @@ describe("cardImagePlan", () => {
 describe("cardImagePlans", () => {
 	it("resolves placeholders and deduplicates repeated card sources", () => {
 		const pieces = [
-			{ slug: "mediastack" },
-			{ slug: "mediastack" },
-			{ slug: "other", cover: "/img/placeholders/mediastack.jpg" },
+			{ slug: "minesweeper-flags" },
+			{ slug: "minesweeper-flags" },
+			{ slug: "other", cover: "/img/placeholders/minesweeper-flags.jpg" },
 		];
 		expect(cardImageSource(pieces[0] ?? { slug: "missing" })).toBe(
-			"/img/placeholders/mediastack.jpg",
+			"/img/placeholders/minesweeper-flags.jpg",
 		);
 		expect(cardImagePlans(pieces)).toHaveLength(1);
 	});

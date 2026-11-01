@@ -64,10 +64,10 @@ describe("projectEntry card", () => {
 	});
 
 	it("renders the slug's placeholder art when no cover is set", () => {
-		const html = projectEntry(sampleProject({ slug: "mediastack" }));
-		expect(html).toContain('src="/img/placeholders/mediastack.jpg"');
+		const html = projectEntry(sampleProject({ slug: "minesweeper-flags" }));
+		expect(html).toContain('src="/img/placeholders/minesweeper-flags.jpg"');
 		expect(html).toContain(
-			'srcset="/img/placeholders/mediastack.card-480w.webp 480w, /img/placeholders/mediastack.card-640w.webp 640w"',
+			'srcset="/img/placeholders/minesweeper-flags.card-480w.webp 480w, /img/placeholders/minesweeper-flags.card-640w.webp 640w"',
 		);
 		expect(html).toContain('alt=""');
 	});

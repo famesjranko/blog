@@ -139,10 +139,6 @@
 		"width": 1600,
 		"height": 900
 	},
-	"/img/placeholders/mediastack.jpg": {
-		"width": 640,
-		"height": 360
-	},
 	"/img/placeholders/minesweeper-flags.jpg": {
 		"width": 640,
 		"height": 360
@@ -226,6 +222,46 @@
 	"/img/projects/extracting-pdf-tables/engine-arch.jpg": {
 		"width": 1600,
 		"height": 599
+	},
+	"/img/projects/mediastack/cover.jpg": {
+		"width": 1600,
+		"height": 667
+	},
+	"/img/projects/mediastack/install-menu.jpg": {
+		"width": 785,
+		"height": 436
+	},
+	"/img/projects/mediastack/logos/jackett.svg": {
+		"width": 457,
+		"height": 512
+	},
+	"/img/projects/mediastack/logos/jellyfin.svg": {
+		"width": 512,
+		"height": 512
+	},
+	"/img/projects/mediastack/logos/qbittorrent.svg": {
+		"width": 1024,
+		"height": 1024
+	},
+	"/img/projects/mediastack/logos/radarr.svg": {
+		"width": 512,
+		"height": 512
+	},
+	"/img/projects/mediastack/logos/seerr.svg": {
+		"width": 96,
+		"height": 96
+	},
+	"/img/projects/mediastack/logos/sonarr.svg": {
+		"width": 512,
+		"height": 512
+	},
+	"/img/projects/mediastack/menu.jpg": {
+		"width": 785,
+		"height": 571
+	},
+	"/img/projects/mediastack/stack.svg": {
+		"width": 624,
+		"height": 810
 	},
 	"/img/projects/musicmeta/cover-article.jpg": {
 		"width": 1512,

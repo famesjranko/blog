@@ -84,3 +84,49 @@
 		}
 	}
 }
+
+@layer prose {
+	/* A row of the main services' marks under the services heading. Decoration,
+	not a figure: no frame, no caption, wraps on a phone. Two marks are dark on
+	dark, so the dark theme inverts Jackett's jacket and puts Sonarr on a pale
+	disc. */
+	.prose .logo-row {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: clamp(0.75rem, 3vw, 2rem);
+		margin: 1.5rem 0 2rem;
+	}
+
+	/* One row at every width: the marks shrink evenly once the row is
+	narrower than six 3.5rem marks and their gaps, so a 320px phone still
+	shows them in one line. */
+	.prose .logo-row img {
+		flex: 0 1 3.5rem;
+		min-width: 0;
+		height: auto;
+		aspect-ratio: 1;
+		object-fit: contain;
+	}
+
+	.prose .logo-row .logo-plate {
+		border-radius: 50%;
+		background: light-dark(transparent, var(--color-text));
+	}
+
+	/* A filter cannot take light-dark(), so the inversion follows the same
+	media and data-theme pattern as figures.css. */
+	@media (prefers-color-scheme: dark) {
+		.prose .logo-row .logo-invert {
+			filter: invert(1);
+		}
+	}
+
+	:root[data-theme="light"] .prose .logo-row .logo-invert {
+		filter: none;
+	}
+
+	:root[data-theme="dark"] .prose .logo-row .logo-invert {
+		filter: invert(1);
+	}
+}

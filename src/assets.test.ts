@@ -36,6 +36,10 @@ function registerMissingStylesheetTest(): void {
 			path.join(root, "styles/infrastructure-diagrams.css"),
 			".diagram-infra {}\n",
 		);
+		await writeFile(
+			path.join(root, "styles/terminal-diagram.css"),
+			".diagram-terminal {}\n",
+		);
 		await writeFile(path.join(root, "styles/lightbox.css"), ".lightbox {}\n");
 
 		await expect(copySiteAssets(root, outDir)).rejects.toThrow(/hero\.css/);
@@ -58,6 +62,7 @@ function registerEssayStylesheetTest(): void {
 			"project.css",
 			"diagrams.css",
 			"infrastructure-diagrams.css",
+			"terminal-diagram.css",
 			"lightbox.css",
 			"hero.css",
 			"home.css",
@@ -98,6 +103,7 @@ function registerDeclarationExclusionTest(): void {
 			"project.css",
 			"diagrams.css",
 			"infrastructure-diagrams.css",
+			"terminal-diagram.css",
 			"lightbox.css",
 			"hero.css",
 			"home.css",

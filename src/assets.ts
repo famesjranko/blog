@@ -12,6 +12,7 @@ const STYLES = [
 	"project.css",
 	"diagrams.css",
 	"infrastructure-diagrams.css",
+	"terminal-diagram.css",
 	"lightbox.css",
 	"hero.css",
 	"home.css",
